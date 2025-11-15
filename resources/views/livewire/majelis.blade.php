@@ -103,7 +103,7 @@
                                 <div class="text-left">{{ $item->nama_majelis }}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left"></div>
+                                <div class="text-left">{{ $item->teacher->name }}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left">{{ $item->alamat }}</div>

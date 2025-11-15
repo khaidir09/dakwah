@@ -55,14 +55,16 @@ class JadwalMajelis extends Component
     public function render()
     {
         $schedules_count = Schedule::count();
-        $query = Schedule::latest();
+        $query = Schedule::with('teacher')->latest();
 
         // Jika ada pencarian, tambahkan kondisi where
         if ($this->search) {
             $searchTerm = '%' . $this->search . '%';
 
             $query->where(function ($subQuery) use ($searchTerm) {
-                $subQuery->where('nama_jadwal', 'like', $searchTerm);
+                $subQuery->where('nama_jadwal', 'like', $searchTerm)->orWhereHas('teacher', function ($teacherQuery) use ($searchTerm) {
+                    $teacherQuery->where('name', 'like', $searchTerm);
+                });;
             });
         }
 

@@ -12,4 +12,9 @@ class Assembly extends Model
     {
         return $this->hasMany(Schedule::class);
     }
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
 }

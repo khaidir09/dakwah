@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Teacher extends Model
 {
     protected $guarded = [];
+
+    public function assemblies()
+    {
+        return $this->hasMany(Assembly::class);
+    }
 }

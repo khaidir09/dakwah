@@ -55,7 +55,7 @@ class Majelis extends Component
     public function render()
     {
         $assemblies_count = Assembly::count();
-        $query = Assembly::latest();
+        $query = Assembly::with('teacher')->latest();
 
         // Jika ada pencarian, tambahkan kondisi where
         if ($this->search) {
@@ -63,7 +63,9 @@ class Majelis extends Component
 
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('nama_majelis', 'like', $searchTerm)
-                    ->orWhere('guru', 'like', $searchTerm);
+                    ->orWhereHas('teacher', function ($teacherQuery) use ($searchTerm) {
+                        $teacherQuery->where('name', 'like', $searchTerm);
+                    });
             });
         }
 

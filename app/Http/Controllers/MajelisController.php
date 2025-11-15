@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assembly;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class MajelisController extends Controller
@@ -21,7 +22,8 @@ class MajelisController extends Controller
      */
     public function create()
     {
-        return view('pages/majelis/create');
+        $teachers = Teacher::where('wafat_masehi', null)->get();
+        return view('pages/majelis/create', compact('teachers'));
     }
 
     /**
