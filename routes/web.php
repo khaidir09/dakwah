@@ -13,6 +13,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\JadwalMajelisController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\DependantDropdownController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,11 @@ use App\Http\Controllers\TransactionController;
 */
 
 Route::redirect('/', 'login');
+
+Route::get('provinces', [DependantDropdownController::class, 'provinces'])->name('provinces');
+Route::get('cities', [DependantDropdownController::class, 'cities'])->name('cities');
+Route::get('districts', [DependantDropdownController::class, 'districts'])->name('districts');
+Route::get('villages', [DependantDropdownController::class, 'villages'])->name('villages');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 

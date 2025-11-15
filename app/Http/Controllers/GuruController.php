@@ -30,17 +30,20 @@ class GuruController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'nama_guru' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-            'guru' => 'required|string|max:255',
-            'alamat' => 'required|string',
-            'maps' => 'required|string|max:255',
-            'gambar' => 'nullable|image|max:2048',
+            'name' => 'required|string|max:255',
+            'biografi' => 'required|string',
+            'foto' => 'nullable|image|max:2048',
+            'domisili' => 'required|string|max:255',
+            'tahun_lahir' => 'nullable|integer',
+            'wafat_masehi' => 'nullable|integer',
+            'wafat_hijriah_day' => 'nullable|integer',
+            'wafat_hijriah_month' => 'nullable|integer',
+            'wafat_hijriah_year' => 'nullable|integer',
         ]);
 
-        if ($request->hasFile('gambar')) {
-            $imagePath = $request->file('gambar')->store('guru_images', 'public');
-            $validatedData['gambar'] = $imagePath;
+        if ($request->hasFile('foto')) {
+            $imagePath = $request->file('foto')->store('teacher_photos', 'public');
+            $validatedData['foto'] = $imagePath;
         }
 
         Teacher::create($validatedData);

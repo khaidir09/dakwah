@@ -106,7 +106,13 @@
                                 <div class="text-left">{{ $item->name }}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">{{ $item->tahun_lahir }}</div>
+                                <div class="text-left">
+                                    @if ($item->wafat_masehi === null && $item->tahun_lahir)
+                                        {{ $item->tahun_lahir }} ({{ date('Y') - $item->tahun_lahir }} tahun)
+                                    @else
+                                        {{ $item->tahun_lahir }}
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left">{{ $item->domisili }}</div>

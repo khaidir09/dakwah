@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
+        Laravolt\Indonesia\ServiceProvider::class
     ])->toArray(),
 
     /*
@@ -184,6 +185,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'Indonesia' => Laravolt\Indonesia\Facade::class
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
