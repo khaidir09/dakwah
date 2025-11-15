@@ -4,31 +4,29 @@
         <!-- Page header -->
         <div class="sm:flex sm:justify-between sm:items-center mb-8">
             <div class="mb-4 sm:mb-0">
-                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Profil Anda</h1>
-                <p>Perbarui informasi profil Anda di sini.</p>
+                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Edit Majelis</h1>
             </div>
              <div class="flex space-x-3">
-                <a href="{{ route('nasabah.dashboard') }}" class="btn bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
-                    Kembali ke Dashboard
+                <a href="{{ route('majelis.index') }}" class="btn bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
+                    Kembali
                 </a>
             </div>
         </div>
 
         <div>
-            <form action="{{ route('nasabah.profile.update') }}" method="POST">
+            <form action="{{ route('majelis.update', $majelis->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                
                 <div class="bg-white dark:bg-gray-800 p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
-                    <div class="grid grid-cols-6 gap-6">
+                    <div class="grid md:grid-cols-2 gap-6">
                         @if (session('status'))
-                            <div class="col-span-6 px-4 py-2 rounded-lg text-sm bg-green-500 text-white relative" role="alert">
+                            <div class="px-4 py-2 rounded-lg text-sm bg-green-500 text-white relative" role="alert">
                                 <span class="block sm:inline">{{ session('status') }}</span>
                             </div>
                         @endif
 
                         @if ($errors->any())
-                            <div class="col-span-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                                 <ul>
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -37,35 +35,51 @@
                             </div>
                         @endif
 
-                        <!-- Birth Place -->
-                        <div class="col-span-6">
-                            <x-label for="birth_place" value="Tempat Lahir" />
-                            <x-input id="birth_place" type="text" class="mt-1 block w-full" name="birth_place" :value="old('birth_place', $customer->birth_place)" required />
-                            <x-input-error for="birth_place" class="mt-2" />
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="nama_majelis">Nama Majelis <span class="text-red-500">*</span></label>
+                            <input id="nama_majelis" class="form-input w-full @error('nama_majelis') is-invalid @enderror" type="text" name="nama_majelis" value="{{ old('nama_majelis', $majelis->nama_majelis) }}" required/>
+                            @error('nama_majelis')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <!-- Birthday -->
-                        <div class="col-span-6">
-                            <x-label for="birthday" value="Tanggal Lahir" />
-                            <x-input id="birthday" type="date" class="mt-1 block w-full" name="birthday" :value="old('birthday', $customer->birthday ? \Carbon\Carbon::parse($customer->birthday)->format('Y-m-d') : '')" required />
-                            <x-input-error for="birthday" class="mt-2" />
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="guru">Nama Guru <span class="text-red-500">*</span></label>
+                            <input id="guru" class="form-input w-full @error('guru') is-invalid @enderror" type="text" name="guru" value="{{ old('guru', $majelis->guru) }}" required/>
+                            @error('guru')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <!-- Parent -->
-                        <div class="col-span-6">
-                            <x-label for="parent" value="Nama Orang Tua" />
-                            <x-input id="parent" type="text" class="mt-1 block w-full" name="parent" :value="old('parent', $customer->parent)" required />
-                            <x-input-error for="parent" class="mt-2" />
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="alamat">Alamat <span class="text-red-500">*</span></label>
+                            <input id="alamat" class="form-input w-full @error('alamat') is-invalid @enderror" type="text" name="alamat" value="{{ old('alamat', $majelis->alamat) }}" required/>
+                            @error('alamat')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <!-- PIN -->
-                        <div class="col-span-6">
-                            <x-label for="pin" value="PIN Baru (opsional)" />
-                            <x-input id="pin" type="password" class="mt-1 block w-full" name="pin" />
-                            <x-input-error for="pin" class="mt-2" />
-                            <p class="mt-2 text-sm text-gray-500">Kosongkan jika tidak ingin mengubah PIN.</p>
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="maps">Maps</label>
+                            <input id="maps" class="form-input w-full @error('maps') is-invalid @enderror" type="text" name="maps" value="{{ old('maps', $majelis->maps) }}" required/>
+                            @error('maps')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                    </div>
+                    
+                    <div class="grid grid-cols-1 mt-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="deskripsi">Deskripsi <span class="text-red-500">*</span></label>
+                            <textarea class="form-input w-full @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" cols="30" rows="10" required>{{ old('deskripsi', $majelis->deskripsi) }}</textarea>
+                            @error('deskripsi')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
+
+
                 </div>
 
                 <div class="flex items-center justify-end px-4 py-3 bg-gray-50 dark:bg-gray-800 text-end sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">

@@ -10,6 +10,7 @@ use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DataFeedController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JadwalMajelisController;
 use App\Http\Controllers\TransactionController;
 
 /*
@@ -29,6 +30,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
     Route::resource('/majelis', MajelisController::class);
+    Route::resource('/jadwal-majelis', JadwalMajelisController::class);
     // Route for the getting the data feed
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
 

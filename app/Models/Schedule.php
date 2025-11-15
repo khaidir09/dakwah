@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Assembly extends Model
+class Schedule extends Model
 {
     protected $guarded = [];
 
-    public function schedule()
+    public function assembly()
     {
-        return $this->hasMany(Schedule::class);
+        return $this->belongsTo(Assembly::class);
     }
 }

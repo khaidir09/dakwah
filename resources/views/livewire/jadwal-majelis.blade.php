@@ -4,7 +4,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Majelis</h1>
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Jadwal Majelis</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -23,11 +23,11 @@
             <x-search-form placeholder="Masukkan nama majelis/guru" />
 
             <!-- Add customer button -->
-            <a href="{{ route('majelis.create') }}" class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
+            <a href="{{ route('jadwal-majelis.create') }}" class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
                 <svg class="fill-current shrink-0 xs:hidden" width="16" height="16" viewBox="0 0 16 16">
                     <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                 </svg>
-                <span class="max-xs:sr-only">Tambah Majelis</span>
+                <span class="max-xs:sr-only">Tambah Jadwal Majelis</span>
             </a>                      
             
         </div>
@@ -59,7 +59,7 @@
 
     <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Semua Majelis <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $assemblies_count }}</span></h2>
+            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Semua Jadwal Majelis <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $schedules_count }}</span></h2>
         </header>
 
         <!-- Table -->
@@ -72,13 +72,13 @@
                                 <div class="font-semibold text-center">No.</div>
                             </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Nama Majelis</div>
+                            <div class="font-semibold text-left">Nama Jadwal Majelis</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Guru</div>
+                            <div class="font-semibold text-left">Majelis</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Alamat</div>
+                            <div class="font-semibold text-left">Waktu</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">Status</div>
@@ -94,19 +94,19 @@
                         $i = 1;
                     @endphp
                     <!-- Row -->
-                    @foreach($assemblies as $item)
+                    @foreach($schedules as $item)
                         <tr>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-medium text-center">{{ $i++ }}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">{{ $item->nama_majelis }}</div>
+                                <div class="text-left">{{ $item->nama_jadwal }}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left"></div>
+                                <div class="text-left">{{ $item->assembly->nama_majelis }}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">{{ $item->alamat }}</div>
+                                <div class="text-left">{{ $item->hari }}, {{ $item->waktu }}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 @if ($item->status === 'Aktif')
@@ -117,7 +117,7 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1 flex">
-                                    <a href="{{ route('majelis.edit', $item->id) }}" class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 rounded-full">
+                                    <a href="{{ route('jadwal-majelis.edit', $item->id) }}" class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 rounded-full">
                                         <span class="sr-only">Edit</span>
                                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                             <path d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
@@ -184,13 +184,13 @@
                                             <button class="btn-sm border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300" @click="deleteOpen = false">Batal</button>
                                             
                                             <button 
-                                                wire:click="deleteAssembly" 
+                                                wire:click="deleteSchedule" 
                                                 wire:loading.attr="disabled"
-                                                wire:target="deleteAssembly"
+                                                wire:target="deleteSchedule"
                                                 class="btn-sm bg-red-500 hover:bg-red-600 text-white"
                                             >
-                                                <span wire:loading.remove wire:target="deleteAssembly">Ya, Hapus</span>
-                                                <span wire:loading wire:target="deleteAssembly">Menghapus...</span>
+                                                <span wire:loading.remove wire:target="deleteSchedule">Ya, Hapus</span>
+                                                <span wire:loading wire:target="deleteSchedule">Menghapus...</span>
                                             </button>
                                         </div>
                                     </div>
@@ -205,6 +205,6 @@
     </div>
 
     <div class="mt-8">
-        {{ $assemblies->links() }}
+        {{ $schedules->links() }}
     </div>
 </div>

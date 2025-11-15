@@ -45,7 +45,7 @@ class MajelisController extends Controller
 
         Assembly::create($validatedData);
 
-        return redirect()->route('majelis.index')->with('status', 'Majelis berhasil ditambahkan!');
+        return redirect()->route('majelis.index')->with('message', 'Majelis berhasil ditambahkan!');
     }
 
     /**
@@ -61,7 +61,8 @@ class MajelisController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $majelis = Assembly::findOrFail($id);
+        return view('pages.majelis.edit', compact('majelis'));
     }
 
     /**
@@ -69,7 +70,25 @@ class MajelisController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'nama_majelis' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'guru' => 'required|string|max:255',
+            'alamat' => 'required|string',
+            'maps' => 'required|string|max:255',
+            'gambar' => 'nullable|image|max:2048',
+        ]);
+
+        $majelis = Assembly::findOrFail($id);
+
+        if ($request->hasFile('gambar')) {
+            $imagePath = $request->file('gambar')->store('majelis_images', 'public');
+            $validatedData['gambar'] = $imagePath;
+        }
+
+        $majelis->update($validatedData);
+
+        return redirect()->route('majelis.index')->with('message', 'Majelis berhasil diperbarui!');
     }
 
     /**
