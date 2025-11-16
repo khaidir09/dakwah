@@ -4,26 +4,38 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Laravolt\Indonesia\Models\City;
+use Laravolt\Indonesia\Models\Village;
 use Laravolt\Indonesia\Models\District;
+use Laravolt\Indonesia\Models\Province;
 
 class DependantDropdownController extends Controller
 {
-    public function cities(Request $request)
+    public function provinces()
     {
-        $cities = City::where('province_code', $request->get('code'))->pluck('name', 'code');
+        $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
+        return view('pages.guru.create', compact('provinces'));
+    }
 
+    // --- PERBAIKAN DI SINI ---
+    // Terima $province_code langsung dari URL
+    public function getCities($province_code)
+    {
+        // Gunakan $province_code untuk query
+        $cities = City::where('province_code', $province_code)->pluck('name', 'code');
         return response()->json($cities);
     }
 
-    public function districts(Request $request)
+    // Terima $city_code langsung dari URL
+    public function getDistricts($city_code)
     {
-        $districts = District::where('city_code', $request->get('code'))->pluck('name', 'code');
-
+        $districts = District::where('city_code', $city_code)->pluck('name', 'code');
         return response()->json($districts);
     }
 
-    public function villages(Request $request)
+    // Terima $district_code langsung dari URL
+    public function getVillages($district_code)
     {
-        return \Indonesia::findDistrict($request->id, ['villages'])->villages->pluck('name', 'id');
+        $villages = Village::where('district_code', $district_code)->pluck('name', 'code');
+        return response()->json($villages);
     }
 }

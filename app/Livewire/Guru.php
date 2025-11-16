@@ -55,7 +55,7 @@ class Guru extends Component
     public function render()
     {
         $teachers_count = Teacher::count();
-        $query = Teacher::latest();
+        $query = Teacher::with('province', 'city', 'district', 'village')->latest();
 
         // Jika ada pencarian, tambahkan kondisi where
         if ($this->search) {
