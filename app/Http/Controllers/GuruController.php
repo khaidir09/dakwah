@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Laravolt\Indonesia\Models\Province;
 
 class GuruController extends Controller
 {
@@ -21,7 +22,8 @@ class GuruController extends Controller
      */
     public function create()
     {
-        return view('pages/guru/create');
+        $provinces = Province::pluck('name', 'code');
+        return view('pages/guru/create', compact('provinces'));
     }
 
     /**

@@ -79,31 +79,44 @@
 
                     <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold my-4">Domisili</h2>
                     <div class="grid grid-cols-4 gap-4">
-                        @php
-                            $provinces = new App\Http\Controllers\DependantDropdownController;
-                            $provinces= $provinces->provinces();
-                        @endphp
                         <div>
-                            <label class="block text-sm font-medium mb-2" for="provinsi">Provinsi <span class="text-red-500">*</span></label>
-                            <select id="provinsi" class="form-select w-full @error('provinsi') is-invalid @enderror" name="provinsi" required>
+                            <label class="block text-sm font-medium mb-2" for="province">Provinsi <span class="text-red-500">*</span></label>
+                            <select id="province" class="form-select w-full @error('province') is-invalid @enderror" name="province" required>
                                 <option>==Pilih Salah Satu==</option>
-                                @foreach($provinces as $item)
-                                    <option value="{{ $item->id ?? '' }}">{{ $item->name ?? '' }}</option>
+                                @foreach($provinces as $code => $name)
+                                    <option value="{{ $code ?? '' }}">{{ $name ?? '' }}</option>
                                 @endforeach
                             </select>
-                            @error('provinsi')
+                            @error('province')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-2" for="kota">Kabupaten/Kota <span class="text-red-500">*</span></label>
-                            <select id="kota" class="form-select w-full @error('kota') is-invalid @enderror" name="kota" required>
+                            <label class="block text-sm font-medium mb-2" for="city">Kabupaten/Kota <span class="text-red-500">*</span></label>
+                            <select id="city" class="form-select w-full @error('city') is-invalid @enderror" name="city" required>
                                 <option>==Pilih Salah Satu==</option>
                             </select>
-                            @error('kota')
+                            @error('city')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="district">Kecamatan</label>
+                            <select id="district" class="form-select w-full" name="district">
+                                <option>==Pilih Salah Satu==</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            {{-- Ubah 'for' dari "desa" menjadi "village" --}}
+                            <label class="block text-sm font-medium mb-2" for="village">Desa/Kelurahan</label>
+                            {{-- Ubah 'id' dari "desa" menjadi "village" --}}
+                            {{-- Ubah 'name' dari "desa" menjadi "village" --}}
+                            <select id="village" class="form-select w-full" name="village">
+                                <option>==Pilih Salah Satu==</option>
+                            </select>
                         </div>
                     </div>
 
@@ -165,40 +178,84 @@
 
 @push('scripts')
     <script>
-        function onChangeSelect(url, id, name) {
-            // send ajax request to get the cities of the selected province and append to the select tag
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: {
-                    id: id
-                },
-                success: function (data) {
-                    $('#' + name).empty();
-                    $('#' + name).append('<option>==Pilih Salah Satu==</option>');
+        // Menunggu DOM siap
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // Ambil elemen dropdown
+            const provinceSelect = document.getElementById('province');
+            const citySelect = document.getElementById('city');
+            const districtSelect = document.getElementById('district');
 
-                    $.each(data, function (key, value) {
-                        $('#' + name).append('<option value="' + key + '">' + value + '</option>');
-                    });
-                }
-            });
-        }
-        $(function () {
-            $('#provinsi').on('change', function () {
-                onChangeSelect('{{ route("cities") }}', $(this).val(), 'kota');
-            });
-            $('#kota').on('change', function () {
-                onChangeSelect('{{ route("districts") }}', $(this).val(), 'kecamatan');
-            })
-            $('#kecamatan').on('change', function () {
-                onChangeSelect('{{ route("villages") }}', $(this).val(), 'desa');
-            })
+            // Fungsi untuk mengosongkan dan mengisi ulang dropdown
+            function populateSelect(selectElement, items) {
+                // Kosongkan
+                selectElement.innerHTML = ''; 
+                
+                // Tambah opsi default
+                const defaultOption = document.createElement('option');
+                defaultOption.text = '==Pilih Salah Satu==';
+                defaultOption.value = '';
+                selectElement.add(defaultOption);
+
+                // Isi dengan data baru
+                Object.entries(items).forEach(([code, name]) => {
+                    const option = document.createElement('option');
+                    option.text = name;
+                    option.value = code;
+                    selectElement.add(option);
+                });
+            }
+
+            // Fungsi untuk mengosongkan select
+            function clearSelect(selectElement) {
+                selectElement.innerHTML = '<option>==Pilih Salah Satu==</option>';
+            }
+
+            // 1. Pasang Event Listener ke Provinsi
+            if (provinceSelect) {
+                provinceSelect.addEventListener('change', function () {
+                    const provinceCode = this.value;
+
+                    // Kosongkan kota dan kecamatan
+                    clearSelect(citySelect);
+                    clearSelect(districtSelect);
+                    
+                    if (provinceCode) {
+                        // Panggil route 'cities' menggunakan POST
+                        axios.post('{{ route("cities") }}', { code: provinceCode })
+                            .then(function (response) {
+                                // Isi dropdown kota
+                                populateSelect(citySelect, response.data);
+                            })
+                            .catch(function (error) {
+                                console.error('Error memuat kota:', error);
+                            });
+                    }
+                });
+            }
+
+            // 2. Pasang Event Listener ke Kota
+            if (citySelect) {
+                citySelect.addEventListener('change', function () {
+                    const cityCode = this.value;
+
+                    // Kosongkan kecamatan
+                    clearSelect(districtSelect);
+
+                    if (cityCode) {
+                        // Panggil route 'districts' menggunakan POST
+                        axios.post('{{ route("districts") }}', { code: cityCode })
+                            .then(function (response) {
+                                // Isi dropdown kecamatan
+                                populateSelect(districtSelect, response.data);
+                            })
+                            .catch(function (error) {
+                                console.error('Error memuat kecamatan:', error);
+                            });
+                    }
+                });
+            }
+
         });
     </script>
-    
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 @endpush

@@ -28,10 +28,10 @@ use App\Http\Controllers\DependantDropdownController;
 
 Route::redirect('/', 'login');
 
-Route::get('provinces', [DependantDropdownController::class, 'provinces'])->name('provinces');
-Route::get('cities', [DependantDropdownController::class, 'cities'])->name('cities');
-Route::get('districts', [DependantDropdownController::class, 'districts'])->name('districts');
-Route::get('villages', [DependantDropdownController::class, 'villages'])->name('villages');
+Route::get('/provinces', [DependantDropdownController::class, 'provinces'])->name('provinces');
+Route::post('/cities', [DependantDropdownController::class, 'cities'])->name('cities');
+Route::post('/districts', [DependantDropdownController::class, 'districts'])->name('districts');
+Route::get('/villages', [DependantDropdownController::class, 'villages'])->name('villages');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
