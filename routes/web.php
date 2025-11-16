@@ -15,6 +15,7 @@ use App\Http\Controllers\JadwalMajelisController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\DependantDropdownController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\User\MajelisController as UserMajelisController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,13 +31,14 @@ use App\Http\Controllers\HomeController;
 Route::redirect('/', 'beranda');
 
 Route::get('/beranda', [HomeController::class, 'index'])->name('beranda');
+Route::get('/majelis', [UserMajelisController::class, 'list'])->name('majelis-list');
 
 Route::get('/provinces', [DependantDropdownController::class, 'provinces'])->name('provinces');
 Route::get('/get-cities/{province_code}', [DependantDropdownController::class, 'getCities'])->name('get-cities');
 Route::get('/get-districts/{city_code}', [DependantDropdownController::class, 'getDistricts'])->name('get-districts');
 Route::get('/get-villages/{district_code}', [DependantDropdownController::class, 'getVillages'])->name('get-villages');
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function () {
 
 
     Route::resource('/majelis', MajelisController::class);

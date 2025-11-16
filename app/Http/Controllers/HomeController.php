@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Assembly;
 use App\Models\Schedule;
 
 class HomeController extends Controller
@@ -30,11 +29,5 @@ class HomeController extends Controller
             ->where('hari', $hariIni)
             ->get();
         return view('pages/home', compact('schedules'));
-    }
-
-    public function majelis()
-    {
-        $assemblies = Assembly::with('teacher')->get();
-        return view('pages/home', compact('assemblies'));
     }
 }
