@@ -64,6 +64,8 @@ class JadwalMajelis extends Component
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('nama_jadwal', 'like', $searchTerm)->orWhereHas('teacher', function ($teacherQuery) use ($searchTerm) {
                     $teacherQuery->where('name', 'like', $searchTerm);
+                })->orWhereHas('assembly', function ($assemblyQuery) use ($searchTerm) {
+                    $assemblyQuery->where('nama_majelis', 'like', $searchTerm);
                 });;
             });
         }

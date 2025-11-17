@@ -3,7 +3,7 @@
         <div class="md:py-8">
 
             <!-- Search form -->
-            <div class="mb-6">
+            {{-- <div class="mb-6">
                 <form class="relative">
                     <label for="feed-search-desktop" class="sr-only">Search</label>
                     <input id="feed-search-desktop" class="form-input w-full pl-9 bg-white dark:bg-gray-800" type="search" placeholder="Search…" />
@@ -14,7 +14,7 @@
                         </svg>
                     </button>
                 </form>
-            </div>
+            </div> --}}
 
             <!-- Blocks -->
             <div class="space-y-4">

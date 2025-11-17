@@ -17,14 +17,12 @@
                         <div class="space-y-4">
 
                             <!-- Title -->
-                            <header class="mb-6">
+                            <header>
                                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Majelis</h1>
                             </header>
 
                             <!-- Posts -->
-                            <div class="grid grid-cols-12 gap-4">
-                                <x-home.list-majelis :assemblies="$assemblies" />
-                            </div>
+                            <livewire:list-majelis />
 
                         </div>
 
