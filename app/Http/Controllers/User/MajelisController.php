@@ -16,7 +16,7 @@ class MajelisController extends Controller
     public function detail($id)
     {
         $assembly = Assembly::findOrFail($id);
-        $schedules = Schedule::with('teacher')->where('assembly_id', $assembly->id)->get();
+        $schedules = Schedule::with('teacher')->where('assembly_id', $assembly->id)->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')")->get();
         return view('pages/user/majelis/detail', compact('assembly', 'schedules'));
     }
 }
