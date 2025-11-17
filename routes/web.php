@@ -15,6 +15,7 @@ use App\Http\Controllers\JadwalMajelisController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\DependantDropdownController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\User\JadwalMajelisController as UserJadwalMajelisController;
 use App\Http\Controllers\User\MajelisController as UserMajelisController;
 
 /*
@@ -32,6 +33,7 @@ Route::redirect('/', 'beranda');
 
 Route::get('/beranda', [HomeController::class, 'index'])->name('beranda');
 Route::get('/majelis', [UserMajelisController::class, 'list'])->name('majelis-list');
+Route::get('/jadwal-majelis', [UserJadwalMajelisController::class, 'list'])->name('jadwal-majelis-list');
 Route::get('/majelis/{id}', [UserMajelisController::class, 'detail'])->name('majelis-detail');
 
 Route::get('/provinces', [DependantDropdownController::class, 'provinces'])->name('provinces');

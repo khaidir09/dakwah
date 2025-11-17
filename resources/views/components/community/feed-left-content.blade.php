@@ -25,11 +25,11 @@
                             </a>
                         </li>
                         <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                            <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap" href="#0">
-                                <svg class="shrink-0 fill-current text-gray-400 dark:text-gray-500 mr-2" width="16" height="16" viewBox="0 0 16 16">
-                                    <path d="M5 9a1 1 0 1 1 0-2h6a1 1 0 0 1 0 2H5ZM1 4a1 1 0 1 1 0-2h14a1 1 0 0 1 0 2H1Zm0 10a1 1 0 0 1 0-2h14a1 1 0 0 1 0 2H1Z" />
+                             <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('jadwal-majelis-list')) bg-white dark:bg-gray-800 @endif" href="{{ route('jadwal-majelis-list') }}">
+                                <svg class="shrink-0 fill-current @if(request()->routeIs('jadwal-majelis-list')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 16 16">
+                                    <path d="M8 3.414V6a1 1 0 1 1-2 0V1a1 1 0 0 1 1-1h5a1 1 0 0 1 0 2H9.414l6.293 6.293a1 1 0 1 1-1.414 1.414L8 3.414Zm0 9.172V10a1 1 0 1 1 2 0v5a1 1 0 0 1-1 1H4a1 1 0 0 1 0-2h2.586L.293 7.707a1 1 0 0 1 1.414-1.414L8 12.586Z" />
                                 </svg>
-                                <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Notifications</span>
+                                <span class="text-sm font-medium @if(request()->routeIs('jadwal-majelis-list')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Jadwal Majelis</span>
                             </a>
                         </li>
                         <li class="mr-0.5 md:mr-0 md:mb-0.5">
