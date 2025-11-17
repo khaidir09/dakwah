@@ -32,6 +32,7 @@ Route::redirect('/', 'beranda');
 
 Route::get('/beranda', [HomeController::class, 'index'])->name('beranda');
 Route::get('/majelis', [UserMajelisController::class, 'list'])->name('majelis-list');
+Route::get('/majelis/{id}', [UserMajelisController::class, 'detail'])->name('majelis-detail');
 
 Route::get('/provinces', [DependantDropdownController::class, 'provinces'])->name('provinces');
 Route::get('/get-cities/{province_code}', [DependantDropdownController::class, 'getCities'])->name('get-cities');

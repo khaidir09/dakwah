@@ -22,7 +22,9 @@
                             </header>
 
                             <!-- Posts -->
-                            <x-home.jadwal-majelis :schedules="$schedules" />
+                            <div class="grid grid-cols-12 gap-4">
+                                <x-home.jadwal-majelis :schedules="$schedules" />
+                            </div>
 
                         </div>
 

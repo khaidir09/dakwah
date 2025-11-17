@@ -1,6 +1,6 @@
 @foreach ($assemblies as $assembly)
     <!-- Card 2 -->
-    <div class="col-span-full md:col-span-6 xl:col-span-4 bg-white dark:bg-gray-800 shadow-xs rounded-xl overflow-hidden">
+    <div class="col-span-full md:col-span-6 lg:col-span-4 bg-white dark:bg-gray-800 shadow-xs rounded-xl overflow-hidden">
         <div class="flex flex-col h-full">
             <!-- Image -->
             <div class="relative">
@@ -20,7 +20,7 @@
                 <!-- Card body -->
                 <div class="grow">
                     <header class="mb-2">
-                        <a href="#0">
+                        <a href="{{ route('majelis-detail', $assembly->id) }}">
                             <h3 class="text-lg text-gray-800 dark:text-gray-100 font-semibold mb-1">{{ $assembly->nama_majelis }}</h3>
                         </a>
                         <div class="font-semibold">Pengasuh : {{ $assembly->teacher->name }}</div>

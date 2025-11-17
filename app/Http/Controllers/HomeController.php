@@ -26,8 +26,7 @@ class HomeController extends Controller
 
         // 5. Ubah query untuk memfilter berdasarkan $hariIni
         $schedules = Schedule::with('teacher', 'assembly')
-            ->where('hari', $hariIni)
             ->get();
-        return view('pages/home', compact('schedules'));
+        return view('pages/user/home', compact('schedules'));
     }
 }

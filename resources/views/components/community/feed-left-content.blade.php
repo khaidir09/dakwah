@@ -9,19 +9,19 @@
                     <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-3 md:sr-only">Menu</div>
                     <ul class="flex flex-nowrap md:block mr-3 md:mr-0">
                         <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                            <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap bg-white dark:bg-gray-800" href="{{ route('beranda') }}">
-                                <svg class="shrink-0 fill-current text-violet-500 mr-2" width="16" height="16" viewBox="0 0 16 16">
+                            <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('beranda')) bg-white dark:bg-gray-800 @endif" href="{{ route('beranda') }}">
+                                <svg class="shrink-0 fill-current @if(request()->routeIs('beranda')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 16 16">
                                     <path d="M4.904 10.114a.98.98 0 0 1 0-1.961h5.886a.98.98 0 0 1 0 1.961H4.904ZM2.863 5.166a1.962 1.962 0 0 0-.901 1.651v5.26c0 1.083.878 1.961 1.961 1.961h7.85a1.962 1.962 0 0 0 1.961-1.961v-5.26c0-.668-.34-1.29-.901-1.65L7.848 1.961 2.863 5.166ZM6.786.312a1.962 1.962 0 0 1 2.123 0l4.985 3.204a3.923 3.923 0 0 1 1.802 3.301v5.26A3.923 3.923 0 0 1 11.772 16H3.923A3.923 3.923 0 0 1 0 12.077v-5.26c0-1.335.679-2.579 1.802-3.3L6.786.311Z" />
                                 </svg>
-                                <span class="text-sm font-medium text-violet-500">Beranda</span>
+                                <span class="text-sm font-medium @if(request()->routeIs('beranda')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Beranda</span>
                             </a>
                         </li>
                         <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                            <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap" href="{{ route('majelis-list') }}">
-                                <svg class="shrink-0 fill-current text-gray-400 dark:text-gray-500 mr-2" width="16" height="16" viewBox="0 0 16 16">
+                             <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('majelis*')) bg-white dark:bg-gray-800 @endif" href="{{ route('majelis-list') }}">
+                                <svg class="shrink-0 fill-current @if(request()->routeIs('majelis*')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 16 16">
                                     <path d="M8 3.414V6a1 1 0 1 1-2 0V1a1 1 0 0 1 1-1h5a1 1 0 0 1 0 2H9.414l6.293 6.293a1 1 0 1 1-1.414 1.414L8 3.414Zm0 9.172V10a1 1 0 1 1 2 0v5a1 1 0 0 1-1 1H4a1 1 0 0 1 0-2h2.586L.293 7.707a1 1 0 0 1 1.414-1.414L8 12.586Z" />
                                 </svg>
-                                <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Majelis</span>
+                                <span class="text-sm font-medium @if(request()->routeIs('majelis*')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Majelis</span>
                             </a>
                         </li>
                         <li class="mr-0.5 md:mr-0 md:mb-0.5">

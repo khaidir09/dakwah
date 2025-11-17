@@ -5,19 +5,7 @@
 
     <!-- Profile background -->
     <div class="relative h-56 bg-gray-200 dark:bg-gray-900">
-        <img class="object-cover h-full w-full" src="{{ asset('images/profile-bg.jpg') }}" width="979" height="220" alt="Profile background" />
-        <!-- Close button -->
-        <button
-            class="md:hidden absolute top-4 left-4 sm:left-6 text-white opacity-80 hover:opacity-100"
-            @click.stop="profileSidebarOpen = !profileSidebarOpen"
-            aria-controls="profile-sidebar"
-            :aria-expanded="profileSidebarOpen"
-        >
-            <span class="sr-only">Close sidebar</span>
-            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10.7 18.7l1.4-1.4L7.8 13H20v-2H7.8l4.3-4.3-1.4-1.4L4 12z" />
-            </svg>
-        </button>        
+        <img class="object-cover h-full w-full" src="{{ asset('images/profile-bg.jpg') }}" width="979" height="220" alt="Profile background" />    
     </div>
 
     <!-- Content -->
@@ -35,18 +23,6 @@
     
                 <!-- Actions -->
                 <div class="flex space-x-2 sm:mb-2">
-                    <button class="p-1.5 shrink-0 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 shadow-xs">
-                        <svg class="w-4 h-1 fill-current text-gray-400" viewBox="0 0 16 4">
-                            <circle cx="8" cy="2" r="2" />
-                            <circle cx="2" cy="2" r="2" />
-                            <circle cx="14" cy="2" r="2" />
-                        </svg>
-                    </button>
-                    <button class="p-1.5 shrink-0 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 shadow-xs">
-                        <svg class="fill-current text-violet-500" width="16" height="16" viewBox="0 0 16 16">
-                            <path d="M8 0C3.6 0 0 3.1 0 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7Zm4 10.8v2.3L8.9 12H8c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8Z" />
-                        </svg>
-                    </button>
                     <button class="btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
                         <svg class="fill-current shrink-0" width="11" height="8" viewBox="0 0 11 8">
                             <path d="m.457 4.516.969-.99 2.516 2.481L9.266.702l.985.99-6.309 6.284z" />
@@ -63,10 +39,7 @@
         <header class="text-center sm:text-left mb-6">
             <!-- Name -->
             <div class="inline-flex items-start mb-2">
-                <h1 class="text-2xl text-gray-800 dark:text-gray-100 font-bold">Carolyn McNeail</h1>
-                <svg class="fill-current shrink-0 text-yellow-500 ml-2" width="16" height="16" viewBox="0 0 16 16">
-                    <path d="M13 6a.75.75 0 0 1-.75-.75 1.5 1.5 0 0 0-1.5-1.5.75.75 0 1 1 0-1.5 1.5 1.5 0 0 0 1.5-1.5.75.75 0 1 1 1.5 0 1.5 1.5 0 0 0 1.5 1.5.75.75 0 1 1 0 1.5 1.5 1.5 0 0 0-1.5 1.5A.75.75 0 0 1 13 6ZM6 16a1 1 0 0 1-1-1 4 4 0 0 0-4-4 1 1 0 0 1 0-2 4 4 0 0 0 4-4 1 1 0 1 1 2 0 4 4 0 0 0 4 4 1 1 0 0 1 0 2 4 4 0 0 0-4 4 1 1 0 0 1-1 1Z" />
-                </svg>
+                <h1 class="text-2xl text-gray-800 dark:text-gray-100 font-bold">{{ $assembly->name }}</h1>
             </div>
             <!-- Bio -->
             <div class="text-sm mb-3">Fitness Fanatic, Design Enthusiast, Mentor, Meetup Organizer & PHP Lover.</div>

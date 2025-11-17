@@ -22,7 +22,9 @@
                             </header>
 
                             <!-- Posts -->
-                            <x-home.list-majelis :assemblies="$assemblies" />
+                            <div class="grid grid-cols-12 gap-4">
+                                <x-home.list-majelis :assemblies="$assemblies" />
+                            </div>
 
                         </div>
 
