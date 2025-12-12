@@ -35,7 +35,7 @@
 
                                 <!-- Profile background -->
                                 <div class="relative h-56 bg-gray-200 dark:bg-gray-900">
-                                    <img class="object-cover h-full w-full" src="{{ Storage::url($assembly->gambar_large_url) }}" width="979" height="220" alt="Profile background" />    
+                                    <img class="object-cover h-full w-full" src="{{ $assembly->gambar_large_url }}" width="979" height="220" alt="Profile background" />
                                 </div>
 
                                 <!-- Content -->
