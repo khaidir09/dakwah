@@ -44,9 +44,14 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-2" for="guru">Nama Guru <span class="text-red-500">*</span></label>
-                            <input id="guru" class="form-input w-full @error('guru') is-invalid @enderror" type="text" name="guru" value="{{ old('guru', $majelis->guru) }}" required/>
-                            @error('guru')
+                            <label class="block text-sm font-medium mb-2" for="teacher_id">Nama Guru <span class="text-red-500">*</span></label>
+                            <select id="teacher_id" class="form-select w-full @error('teacher_id') is-invalid @enderror" name="teacher_id" required>
+                                <option value="">Pilih Guru</option>
+                                @foreach($teachers as $item)
+                                    <option value="{{ $item->id }}" @if($item->id == $majelis->teacher_id) selected @endif>{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('teacher_id')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
                         </div>
@@ -63,6 +68,28 @@
                             <label class="block text-sm font-medium mb-2" for="maps">Maps</label>
                             <input id="maps" class="form-input w-full @error('maps') is-invalid @enderror" type="text" name="maps" value="{{ old('maps', $majelis->maps) }}" required/>
                             @error('maps')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="gambar">Gambar</label>
+                            
+                            {{-- Tampilkan gambar lama jika ada --}}
+                            @if($majelis->gambar)
+                                <div class="mb-4">
+                                    <img src="{{ Storage::url($majelis->gambar) }}" alt="Gambar Majelis" class="w-48 h-auto rounded-lg shadow-sm border border-gray-200">
+                                    <p class="text-xs text-gray-500 mt-1">Gambar saat ini.</p>
+                                </div>
+                            @else
+                                <div class="mb-4 p-4 border border-dashed border-gray-300 rounded-lg bg-gray-50 text-center">
+                                    <p class="text-sm text-gray-500">Belum ada gambar yang diunggah.</p>
+                                </div>
+                            @endif
+
+                            <input id="gambar" class="form-input w-full @error('gambar') is-invalid @enderror" type="file" name="gambar" accept="image/*"/>
+                            <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah gambar.</p>
+                            @error('gambar')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
                         </div>

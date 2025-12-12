@@ -19,7 +19,7 @@
                 <div class="flex flex-col h-full">
                     <!-- Image -->
                     <div class="relative">
-                        <img class="w-full" src="{{ asset('images/applications-image-22.jpg') }}" width="301" height="226" alt="Application 22" />
+                        <img class="w-full" src="{{ Storage::url($assembly->gambar_thumb_url) }}" width="301" height="226" alt="Application 22" />
                         <!-- Like button -->
                         {{-- <button class="absolute top-0 right-0 mt-4 mr-4">
                             <div class="text-gray-100 bg-gray-900/60 rounded-full">

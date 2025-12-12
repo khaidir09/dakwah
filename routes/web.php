@@ -41,6 +41,8 @@ Route::get('/get-cities/{province_code}', [DependantDropdownController::class, '
 Route::get('/get-districts/{city_code}', [DependantDropdownController::class, 'getDistricts'])->name('get-districts');
 Route::get('/get-villages/{district_code}', [DependantDropdownController::class, 'getVillages'])->name('get-villages');
 
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth:sanctum', 'verified'])->name('dashboard');
+
 Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function () {
 
 
@@ -49,8 +51,6 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function
     Route::resource('/guru', GuruController::class);
     // Route for the getting the data feed
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/analytics', [DashboardController::class, 'analytics'])->name('analytics');
     Route::get('/dashboard/fintech', [DashboardController::class, 'fintech'])->name('fintech');
     Route::get('/ecommerce/customers', [CustomerController::class, 'index'])->name('customers');

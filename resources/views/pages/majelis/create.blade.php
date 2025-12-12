@@ -71,6 +71,14 @@
                             @enderror
                         </div>
 
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="gambar">Gambar Majelis</label>
+                            <input id="gambar" class="form-input w-full @error('gambar') is-invalid @enderror" type="file" name="gambar" />
+                            @error('gambar')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                     </div>
                     
                     <div class="grid grid-cols-1 mt-6">
