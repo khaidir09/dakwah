@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Teacher;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Laravolt\Indonesia\Models\Province;
+use Intervention\Image\Laravel\Facades\Image;
 
 class GuruController extends Controller
 {
@@ -50,8 +52,18 @@ class GuruController extends Controller
         $dataToCreate = $validatedData;
 
         if ($request->hasFile('foto')) {
-            $imagePath = $request->file('foto')->store('teacher_photos', 'public');
-            $validatedData['foto'] = $imagePath;
+            $file = $request->file('foto');
+            $filename = Str::uuid() . '.webp';
+
+            // 1. Buat Versi THUMBNAIL (Untuk List/Avatar) - Crop Persegi
+            $thumb = Image::read($file)
+                ->cover(600, 600)
+                ->toWebp(80);
+
+            // 3. Simpan ke Storage (Folder public)
+            Storage::disk('public')->put('guru/' . $filename, $thumb);
+
+            $dataToCreate['foto'] = 'guru/' . $filename;
         }
 
         $dataToCreate['province_code'] = $validatedData['province'] ?? null;
@@ -116,14 +128,25 @@ class GuruController extends Controller
         $dataToUpdate = $validatedData;
 
         if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
+            $file = $request->file('foto');
+            $filename = Str::uuid() . '.webp';
+
+            // A. Proses Gambar Baru (Sama seperti store)
+            $thumb = Image::read($file)
+                ->cover(600, 600)
+                ->toWebp(80);
+
+            // B. Simpan Gambar Baru
+            Storage::disk('public')->put('guru/' . $filename, (string) $thumb);
+
+            // C. Hapus Gambar Lama (PENTING)
             if ($guru->foto) {
+                // Hapus file 'large' (sesuai path di database)
                 Storage::disk('public')->delete($guru->foto);
             }
 
-            // Simpan foto baru
-            $imagePath = $request->file('foto')->store('teacher_photos', 'public');
-            $dataToUpdate['foto'] = $imagePath;
+            // D. Update array data dengan path baru
+            $dataToUpdate['foto'] = 'guru/' . $filename;
         } else {
             // Jika tidak ada file baru, hapus 'foto' dari array
             // agar tidak menimpa file yang ada dengan nilai null.

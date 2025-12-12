@@ -35,7 +35,7 @@
 
                                 <!-- Profile background -->
                                 <div class="relative h-56 bg-gray-200 dark:bg-gray-900">
-                                    <img class="object-cover h-full w-full" src="{{ Storage::url($assembly->gambar_large_url) }}" width="979" height="220" alt="Profile background" />    
+                                    <img class="object-cover h-full w-full" src="{{ $assembly->gambar_large_url }}" width="979" height="220" alt="Profile background" />    
                                 </div>
 
                                 <!-- Content -->
@@ -124,7 +124,7 @@
                                                                 </div>
                                                                 <!-- Avatars group -->
                                                                 <div class="flex items-center">
-                                                                    <img class="rounded-full border-2 border-white dark:border-gray-800 box-content mr-1" src="{{ asset('images/avatar-02.jpg') }}" width="24" height="24" alt="Avatar" /> <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->teacher->name }}</span>
+                                                                    <img class="rounded-full border-2 border-white w-8 h-8 object-cover dark:border-gray-800 box-content mr-1" src="{{ Storage::url($item->teacher->foto) }}" alt="{{ $item->teacher->name }}" /> <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->teacher->name }}</span>
                                                                 </div>
                                                             </div>
                                                         </div>

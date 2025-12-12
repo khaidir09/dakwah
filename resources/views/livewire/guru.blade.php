@@ -125,7 +125,17 @@
                                 @endif
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left"></div>
+                                <div class="text-left">
+                                    @if ($item->foto)
+                                        <img class="w-16 h-16 object-cover rounded-md" src="{{ Storage::url($item->foto) }}" alt="{{ $item->name }}">
+                                    @else
+                                        <div class="w-16 h-16 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-md text-gray-400">
+                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
+                                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                            </svg>
+                                        </div>
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1 flex">

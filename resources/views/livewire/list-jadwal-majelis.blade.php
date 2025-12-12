@@ -24,9 +24,13 @@
                             <div class="flex mb-2">
                                 <a class="relative inline-flex items-start mr-5" href="#0">
                                     @if($schedule->teacher->foto != null)
-                                        <img class="rounded-full" src="{{ asset('images/' . $schedule->teacher->foto) }}" width="64" height="64" alt="{{ $schedule->teacher->name }}" />
+                                        <img class="rounded-full w-16 h-16 object-cover" src="{{ Storage::url($schedule->teacher->foto) }}" alt="{{ $schedule->teacher->name }}" />
                                     @else
-                                        <img class="rounded-full" src="{{ asset('images/user-64-06.jpg') }}" width="64" height="64" alt="{{ $schedule->teacher->name }}" />
+                                        <div class="w-16 h-16 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-full text-gray-400">
+                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
+                                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                            </svg>
+                                        </div>
                                     @endif
                                 </a>
                                 <div class="mt-1 pr-1">
