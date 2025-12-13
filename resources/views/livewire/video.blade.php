@@ -103,7 +103,9 @@
                                 <div class="text-left">{{ $item->title }}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">{{ $item->link }}</div>
+                                <div class="text-left">
+                                    <a href="{{ $item->link }}" target="__blank" class="text-blue-500">{{ $item->link }}</a>
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left">{{ $item->type }}</div>

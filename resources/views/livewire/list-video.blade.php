@@ -21,7 +21,7 @@
                     wire:click="$set('category', null)"
                     class="whitespace-nowrap {{ is_null($category) ? 'text-violet-500' : 'text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300' }}"
                 >
-                    View All
+                    Semua
                 </button>
             </li>
             @foreach(['Taklim', 'Maulid', 'Dzikir', 'Haul', 'Tabligh Akbar'] as $cat)
@@ -54,27 +54,6 @@
                                     <header class="mb-3">
                                         <h3 class="text-lg text-gray-800 dark:text-gray-100 font-semibold">{{ $video->title }}</h3>
                                     </header>
-                                    <!-- Rating and price -->
-                                    <div class="flex flex-wrap justify-between items-center mb-4">
-                                        <!-- Rating -->
-                                        <div class="flex items-center space-x-2 mr-2">
-                                            <!-- Stars -->
-                                            <div class="flex space-x-1">
-                                                <button>
-                                                    <span class="sr-only">1 star</span>
-                                                    <svg class="fill-current text-yellow-500" width="16" height="16" viewBox="0 0 16 16">
-                                                        <path d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            <!-- Rate -->
-                                            <div class="inline-flex text-sm font-medium text-yellow-600">4.2</div>
-                                        </div>
-                                        <!-- Price -->
-                                        <div>
-                                            <div class="inline-flex text-sm font-medium bg-green-500/20 text-green-700 rounded-full text-center px-2 py-0.5">$89.00</div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
