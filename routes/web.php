@@ -15,8 +15,11 @@ use App\Http\Controllers\JadwalMajelisController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\DependantDropdownController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\User\GuruController as UserGuruController;
 use App\Http\Controllers\User\JadwalMajelisController as UserJadwalMajelisController;
 use App\Http\Controllers\User\MajelisController as UserMajelisController;
+use App\Http\Controllers\User\VideoController as UserVideoController;
+use App\Http\Controllers\VideoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +38,9 @@ Route::get('/beranda', [HomeController::class, 'index'])->name('beranda');
 Route::get('/majelis', [UserMajelisController::class, 'list'])->name('majelis-list');
 Route::get('/jadwal-majelis', [UserJadwalMajelisController::class, 'list'])->name('jadwal-majelis-list');
 Route::get('/majelis/{id}', [UserMajelisController::class, 'detail'])->name('majelis-detail');
+Route::get('/guru', [UserGuruController::class, 'list'])->name('guru-list');
+Route::get('/guru/{id}', [UserGuruController::class, 'detail'])->name('guru-detail');
+Route::get('/video', [UserVideoController::class, 'list'])->name('video-list');
 
 Route::get('/provinces', [DependantDropdownController::class, 'provinces'])->name('provinces');
 Route::get('/get-cities/{province_code}', [DependantDropdownController::class, 'getCities'])->name('get-cities');
@@ -49,6 +55,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function
     Route::resource('/majelis', MajelisController::class);
     Route::resource('/jadwal-majelis', JadwalMajelisController::class);
     Route::resource('/guru', GuruController::class);
+    Route::resource('/video', VideoController::class);
     // Route for the getting the data feed
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
     Route::get('/dashboard/analytics', [DashboardController::class, 'analytics'])->name('analytics');

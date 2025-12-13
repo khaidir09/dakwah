@@ -33,6 +33,22 @@
                             </a>
                         </li>
                         <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                             <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('guru*')) bg-white dark:bg-gray-800 @endif" href="{{ route('guru-list') }}">
+                                <svg class="shrink-0 fill-current @if(request()->routeIs('guru*')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 16 16">
+                                    <path d="M8 3.414V6a1 1 0 1 1-2 0V1a1 1 0 0 1 1-1h5a1 1 0 0 1 0 2H9.414l6.293 6.293a1 1 0 1 1-1.414 1.414L8 3.414Zm0 9.172V10a1 1 0 1 1 2 0v5a1 1 0 0 1-1 1H4a1 1 0 0 1 0-2h2.586L.293 7.707a1 1 0 0 1 1.414-1.414L8 12.586Z" />
+                                </svg>
+                                <span class="text-sm font-medium @if(request()->routeIs('guru*')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Guru</span>
+                            </a>
+                        </li>
+                        <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                             <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('video*')) bg-white dark:bg-gray-800 @endif" href="{{ route('video-list') }}">
+                                <svg class="shrink-0 fill-current @if(request()->routeIs('video*')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 16 16">
+                                    <path d="M8 3.414V6a1 1 0 1 1-2 0V1a1 1 0 0 1 1-1h5a1 1 0 0 1 0 2H9.414l6.293 6.293a1 1 0 1 1-1.414 1.414L8 3.414Zm0 9.172V10a1 1 0 1 1 2 0v5a1 1 0 0 1-1 1H4a1 1 0 0 1 0-2h2.586L.293 7.707a1 1 0 0 1 1.414-1.414L8 12.586Z" />
+                                </svg>
+                                <span class="text-sm font-medium @if(request()->routeIs('video*')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Video</span>
+                            </a>
+                        </li>
+                        <li class="mr-0.5 md:mr-0 md:mb-0.5">
                             <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap" href="#0">
                                 <svg class="shrink-0 fill-current text-gray-400 dark:text-gray-500 mr-2" width="16" height="16" viewBox="0 0 16 16">
                                     <path d="M13 4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9.131l4.445-2.963a1 1 0 0 1 1.11 0L13 13.13V4Zm-5 8.202-5.445 3.63A1 1 0 0 1 1 15V4a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v11a1 1 0 0 1-1.555.832L8 12.202Z"/>
