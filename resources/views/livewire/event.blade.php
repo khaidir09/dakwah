@@ -4,7 +4,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Event</h1>
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Acara</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -18,7 +18,7 @@
                 <svg class="fill-current shrink-0 xs:hidden" width="16" height="16" viewBox="0 0 16 16">
                     <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                 </svg>
-                <span class="max-xs:sr-only">Tambah Event</span>
+                <span class="max-xs:sr-only">Tambah Acara</span>
             </a>
 
         </div>
@@ -47,7 +47,7 @@
 
     <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Semua Event <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $events_count }}</span></h2>
+            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Semua Acara <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $events_count }}</span></h2>
         </header>
 
         <!-- Table -->
@@ -60,7 +60,7 @@
                             <div class="font-semibold text-center">No.</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Nama Event</div>
+                            <div class="font-semibold text-left">Nama Acara</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">Waktu</div>
@@ -116,7 +116,7 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left">
                                     @if ($item->image)
-                                        <img class="w-16 h-10 object-cover rounded-md" src="{{ Storage::url($item->image) }}" alt="{{ $item->name }}">
+                                        <img class="rounded-md" src="{{ Storage::url($item->image) }}" alt="{{ $item->name }}">
                                     @else
                                         <div class="w-16 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-md text-gray-400">
                                             <span class="text-xs">No Img</span>

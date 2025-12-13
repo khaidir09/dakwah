@@ -22,7 +22,6 @@ return new class extends Migration
             $table->char('village_code', 10)->nullable()->after('district_code');
 
             $table->string('image')->nullable()->after('name');
-            $table->longText('description')->nullable()->after('name');
         });
     }
 
@@ -37,7 +36,7 @@ return new class extends Migration
             $table->string('district', 20)->nullable();
             $table->string('village', 20)->nullable();
 
-            $table->dropColumn(['province_code', 'city_code', 'district_code', 'village_code', 'image', 'description']);
+            $table->dropColumn(['province_code', 'city_code', 'district_code', 'village_code', 'image']);
         });
     }
 };

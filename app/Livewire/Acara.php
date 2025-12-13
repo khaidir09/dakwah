@@ -6,7 +6,7 @@ use App\Models\Event;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Event extends Component
+class Acara extends Component
 {
     use WithPagination;
 
@@ -63,8 +63,8 @@ class Event extends Component
 
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('name', 'like', $searchTerm)
-                         ->orWhere('location', 'like', $searchTerm)
-                         ->orWhere('category', 'like', $searchTerm);
+                    ->orWhere('location', 'like', $searchTerm)
+                    ->orWhere('category', 'like', $searchTerm);
             });
         }
 

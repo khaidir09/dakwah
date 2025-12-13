@@ -35,16 +35,15 @@ class EventController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
             'image' => 'nullable|image|max:2048',
             'date' => 'required|date',
             'location' => 'required|string|max:255',
             'access' => 'required|in:Umum,Khusus',
             'category' => 'required|string|max:255',
-            'province' => 'nullable|string',
-            'city' => 'nullable|string',
-            'district' => 'nullable|string',
-            'village' => 'nullable|string',
+            'province' => 'nullable|string|max:20',
+            'city' => 'nullable|string|max:20',
+            'district' => 'nullable|string|max:20',
+            'village' => 'nullable|string|max:20',
         ]);
 
         $dataToCreate = $validatedData;
@@ -59,7 +58,7 @@ class EventController extends Controller
             // But to "mimic guru", I'll use similar logic but maybe different dimensions if appropriate?
             // "Guru" uses 600x600 cover. Let's use that for now to be safe, or 800x600.
             $thumb = Image::read($file)
-                ->cover(800, 600)
+                ->scaleDown(800)
                 ->toWebp(80);
 
             // 3. Simpan ke Storage (Folder public)
@@ -112,16 +111,15 @@ class EventController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
             'image' => 'nullable|image|max:2048',
             'date' => 'required|date',
             'location' => 'required|string|max:255',
             'access' => 'required|in:Umum,Khusus',
             'category' => 'required|string|max:255',
-            'province' => 'nullable|string',
-            'city' => 'nullable|string',
-            'district' => 'nullable|string',
-            'village' => 'nullable|string',
+            'province' => 'nullable|string|max:20',
+            'city' => 'nullable|string|max:20',
+            'district' => 'nullable|string|max:20',
+            'village' => 'nullable|string|max:20',
         ]);
 
         $event = Event::findOrFail($id);
@@ -134,7 +132,7 @@ class EventController extends Controller
 
             // A. Proses Gambar Baru (Sama seperti store)
             $thumb = Image::read($file)
-                ->cover(800, 600)
+                ->scaleDown(800)
                 ->toWebp(80);
 
             // B. Simpan Gambar Baru

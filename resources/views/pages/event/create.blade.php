@@ -4,7 +4,7 @@
         <!-- Page header -->
         <div class="sm:flex sm:justify-between sm:items-center mb-8">
             <div class="mb-4 sm:mb-0">
-                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Tambah Event</h1>
+                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Tambah Acara</h1>
             </div>
              <div class="flex space-x-3">
                 <a href="{{ route('event.index') }}" class="btn bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
@@ -36,7 +36,7 @@
                     <div class="grid md:grid-cols-2 gap-6">
 
                         <div>
-                            <label class="block text-sm font-medium mb-2" for="name">Nama Event <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium mb-2" for="name">Nama Acara <span class="text-red-500">*</span></label>
                             <input id="name" class="form-input w-full @error('name') is-invalid @enderror" type="text" name="name" value="{{ old('name') }}" required placeholder="Contoh: Maulid Akbar"/>
                             @error('name')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
@@ -45,7 +45,14 @@
 
                         <div>
                             <label class="block text-sm font-medium mb-2" for="category">Kategori <span class="text-red-500">*</span></label>
-                            <input id="category" class="form-input w-full @error('category') is-invalid @enderror" type="text" name="category" value="{{ old('category') }}" required placeholder="Contoh: Taklim, Maulid, Haul"/>
+                            <select id="category" class="form-select w-full @error('category') is-invalid @enderror" name="category" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="Taklim">Taklim</option>
+                                <option value="Maulid">Maulid</option>
+                                <option value="Dzikir">Dzikir</option>
+                                <option value="Haul">Haul</option>
+                                <option value="Tabligh Akbar">Tabligh Akbar</option>
+                            </select>
                             @error('category')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
@@ -86,16 +93,6 @@
                             @enderror
                         </div>
 
-                    </div>
-
-                    <div class="grid grid-cols-1 mt-6">
-                        <div>
-                            <label class="block text-sm font-medium mb-2" for="description">Deskripsi <span class="text-red-500">*</span></label>
-                            <textarea class="form-input w-full @error('description') is-invalid @enderror" name="description" id="description" cols="30" rows="5" required>{{ old('description') }}</textarea>
-                            @error('description')
-                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                            @enderror
-                        </div>
                     </div>
 
                     <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold my-4">Alamat Lengkap</h2>

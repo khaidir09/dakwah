@@ -39,7 +39,13 @@
 
                          <div>
                             <label class="block text-sm font-medium mb-2" for="category">Kategori <span class="text-red-500">*</span></label>
-                            <input id="category" class="form-input w-full @error('category') is-invalid @enderror" type="text" name="category" value="{{ old('category', $event->category) }}" required placeholder="Contoh: Taklim, Maulid, Haul"/>
+                            <select id="category" name="category" class="form-select w-full @error('category') is-invalid @enderror" required>
+                                <option value="Taklim" {{ old('category', $event->category) == 'Taklim' ? 'selected' : '' }}>Taklim</option>
+                                <option value="Maulid" {{ old('category', $event->category) == 'Maulid' ? 'selected' : '' }}>Maulid</option>
+                                <option value="Dzikir" {{ old('category', $event->category) == 'Dzikir' ? 'selected' : '' }}>Dzikir</option>
+                                <option value="Haul" {{ old('category', $event->category) == 'Haul' ? 'selected' : '' }}>Haul</option>
+                                <option value="Tabligh Akbar" {{ old('category', $event->category) == 'Tabligh Akbar' ? 'selected' : '' }}>Tabligh Akbar</option>
+                            </select>
                             @error('category')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
@@ -82,16 +88,6 @@
                             <label class="block text-sm font-medium mb-2" for="location">Nama Lokasi (Tempat) <span class="text-red-500">*</span></label>
                             <input id="location" class="form-input w-full @error('location') is-invalid @enderror" type="text" name="location" value="{{ old('location', $event->location) }}" required placeholder="Contoh: Masjid Raya"/>
                             @error('location')
-                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 mt-6">
-                        <div>
-                            <label class="block text-sm font-medium mb-2" for="description">Deskripsi <span class="text-red-500">*</span></label>
-                            <textarea class="form-input w-full @error('description') is-invalid @enderror" name="description" id="description" cols="30" rows="5" required>{{ old('description', $event->description) }}</textarea>
-                            @error('description')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
                         </div>
