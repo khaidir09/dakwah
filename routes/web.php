@@ -19,6 +19,7 @@ use App\Http\Controllers\User\GuruController as UserGuruController;
 use App\Http\Controllers\User\JadwalMajelisController as UserJadwalMajelisController;
 use App\Http\Controllers\User\MajelisController as UserMajelisController;
 use App\Http\Controllers\User\VideoController as UserVideoController;
+use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\VideoController;
 
 /*
@@ -41,6 +42,7 @@ Route::get('/majelis/{id}', [UserMajelisController::class, 'detail'])->name('maj
 Route::get('/guru', [UserGuruController::class, 'list'])->name('guru-list');
 Route::get('/guru/{id}', [UserGuruController::class, 'detail'])->name('guru-detail');
 Route::get('/video', [UserVideoController::class, 'list'])->name('video-list');
+Route::get('/event', [UserEventController::class, 'list'])->name('event-list');
 
 Route::get('/provinces', [DependantDropdownController::class, 'provinces'])->name('provinces');
 Route::get('/get-cities/{province_code}', [DependantDropdownController::class, 'getCities'])->name('get-cities');
