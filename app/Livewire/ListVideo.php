@@ -12,15 +12,22 @@ class ListVideo extends Component
 
     public $paginate = 10;
     public $search;
+    public $category;
 
-    protected $updatesQueryString = ['search'];
+    protected $updatesQueryString = ['search', 'category'];
 
     public function mount()
     {
         $this->search = request()->query('search', $this->search);
+        $this->category = request()->query('category', $this->category);
     }
 
     public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingCategory()
     {
         $this->resetPage();
     }
@@ -37,6 +44,10 @@ class ListVideo extends Component
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('title', 'like', $searchTerm)->orWhere('category', 'like', $searchTerm);
             });
+        }
+
+        if ($this->category) {
+            $query->where('category', $this->category);
         }
 
         // Ambil hasil akhir dengan paginasi
