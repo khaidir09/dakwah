@@ -55,6 +55,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function
     Route::resource('/majelis', MajelisController::class);
     Route::resource('/jadwal-majelis', JadwalMajelisController::class);
     Route::resource('/guru', GuruController::class);
+    Route::resource('/event', \App\Http\Controllers\EventController::class);
     Route::resource('/video', VideoController::class);
     // Route for the getting the data feed
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
