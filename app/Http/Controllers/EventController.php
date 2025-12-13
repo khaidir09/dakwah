@@ -53,9 +53,9 @@ class EventController extends Controller
             $file = $request->file('image');
             $filename = Str::uuid() . '.webp';
 
-            // 1. Buat Versi Poster (16:9)
+            // 1. Buat Versi Poster (Original Aspect Ratio, Scaled Down)
             $thumb = Image::read($file)
-                ->cover(1280, 720)
+                ->scaleDown(800)
                 ->toWebp(80);
 
             // 3. Simpan ke Storage (Folder public)
@@ -128,9 +128,9 @@ class EventController extends Controller
             $file = $request->file('image');
             $filename = Str::uuid() . '.webp';
 
-            // A. Proses Gambar Baru (Sama seperti store) - 16:9
+            // A. Proses Gambar Baru (Sama seperti store) - Scaled Down
             $thumb = Image::read($file)
-                ->cover(1280, 720)
+                ->scaleDown(800)
                 ->toWebp(80);
 
             // B. Simpan Gambar Baru
