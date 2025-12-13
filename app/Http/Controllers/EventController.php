@@ -53,13 +53,9 @@ class EventController extends Controller
             $file = $request->file('image');
             $filename = Str::uuid() . '.webp';
 
-            // 1. Buat Versi THUMBNAIL (Untuk List/Avatar) - Crop Persegi
-            // Note: Adjust size as needed for events (maybe landscape?)
-            // Guru uses 600x600. Events often need 16:9. Let's stick to cover style or standard.
-            // But to "mimic guru", I'll use similar logic but maybe different dimensions if appropriate?
-            // "Guru" uses 600x600 cover. Let's use that for now to be safe, or 800x600.
+            // 1. Buat Versi Poster (16:9)
             $thumb = Image::read($file)
-                ->cover(800, 600)
+                ->cover(1280, 720)
                 ->toWebp(80);
 
             // 3. Simpan ke Storage (Folder public)
@@ -132,9 +128,9 @@ class EventController extends Controller
             $file = $request->file('image');
             $filename = Str::uuid() . '.webp';
 
-            // A. Proses Gambar Baru (Sama seperti store)
+            // A. Proses Gambar Baru (Sama seperti store) - 16:9
             $thumb = Image::read($file)
-                ->cover(800, 600)
+                ->cover(1280, 720)
                 ->toWebp(80);
 
             // B. Simpan Gambar Baru
