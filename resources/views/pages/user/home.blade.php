@@ -21,10 +21,13 @@
                                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Majelis Hari Ini</h1>
                             </header>
 
-                            <!-- Posts -->
-                            <div class="grid grid-cols-12 gap-4">
-                                <x-home.jadwal-majelis :schedules="$schedules" />
-                            </div>
+                            <!-- Jadwal Majelis -->
+                            <livewire:home-jadwal-majelis />
+
+                            @if ($events->count() > 0)
+                                <!-- Acara Akan Datang -->
+                                <livewire:home-event />    
+                            @endif
 
                         </div>
 

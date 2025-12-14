@@ -56,22 +56,6 @@
                                 <span class="text-sm font-medium @if(request()->routeIs('event*')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Acara</span>
                             </a>
                         </li>
-                        <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                            <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap" href="#0">
-                                <svg class="shrink-0 fill-current text-gray-400 dark:text-gray-500 mr-2" width="16" height="16" viewBox="0 0 16 16">
-                                    <path d="M13 4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9.131l4.445-2.963a1 1 0 0 1 1.11 0L13 13.13V4Zm-5 8.202-5.445 3.63A1 1 0 0 1 1 15V4a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v11a1 1 0 0 1-1.555.832L8 12.202Z"/>
-                                </svg>
-                                <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Bookmarks</span>
-                            </a>
-                        </li>
-                        <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                            <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap" href="#0">
-                                <svg class="shrink-0 fill-current text-gray-400 dark:text-gray-500 mr-2" width="16" height="16" viewBox="0 0 16 16">
-                                    <path d="M8 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm-5.143 7.91a1 1 0 1 1-1.714-1.033A7.996 7.996 0 0 1 8 10a7.996 7.996 0 0 1 6.857 3.877 1 1 0 1 1-1.714 1.032A5.996 5.996 0 0 0 8 12a5.996 5.996 0 0 0-5.143 2.91Z" />
-                                </svg>
-                                <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Profile</span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>

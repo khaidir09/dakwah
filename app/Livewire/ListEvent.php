@@ -45,6 +45,8 @@ class ListEvent extends Component
             $query->where('category', $this->category);
         }
 
+        $query->where('date', '>=', now());
+
         $events_count = $query->count();
         $events = $query->simplePaginate($this->paginate);
 
