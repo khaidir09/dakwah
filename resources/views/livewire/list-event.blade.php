@@ -30,6 +30,7 @@
     <div class="text-sm text-gray-500 dark:text-gray-400 italic mb-4">{{ $events_count }} Acara</div>
 
     <!-- Content -->
+    @if($events->count() > 0)
     <div class="grid xl:grid-cols-2 gap-6 mb-8">
         @foreach($events as $event)
         <article class="flex flex-col sm:flex-row bg-white dark:bg-gray-800 shadow-xs rounded-xl overflow-hidden">
@@ -72,6 +73,22 @@
         </article>
         @endforeach
     </div>
+    @else
+    <div class="flex flex-col items-center justify-center py-12 text-center">
+        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Belum ada acara akan datang</h3>
+        <p class="text-gray-500 dark:text-gray-400 mb-6">Saat ini belum ada jadwal acara terbaru. Silakan lihat koleksi video pengajian kami.</p>
+        <a href="{{ route('video-list') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 transition-colors">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Lihat Video
+        </a>
+    </div>
+    @endif
 
     <!-- Pagination -->
     <div class="mt-8">
