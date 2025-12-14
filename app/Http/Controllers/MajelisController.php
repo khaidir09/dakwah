@@ -7,6 +7,7 @@ use App\Models\Assembly;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Laravolt\Indonesia\Models\Province;
 use Intervention\Image\Laravel\Facades\Image;
 
 class MajelisController extends Controller
@@ -26,7 +27,8 @@ class MajelisController extends Controller
     public function create()
     {
         $teachers = Teacher::where('wafat_masehi', null)->get();
-        return view('pages/majelis/create', compact('teachers'));
+        $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
+        return view('pages/majelis/create', compact('teachers', 'provinces'));
     }
 
     /**
@@ -41,6 +43,10 @@ class MajelisController extends Controller
             'alamat' => 'required|string',
             'maps' => 'required|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'province' => 'nullable|string|max:20',
+            'city' => 'nullable|string|max:20',
+            'district' => 'nullable|string|max:20',
+            'village' => 'nullable|string|max:20',
         ]);
 
         if ($request->hasFile('gambar')) {
@@ -66,6 +72,18 @@ class MajelisController extends Controller
             unset($validatedData['gambar']);
         }
 
+        $validatedData['province_code'] = $validatedData['province'] ?? null;
+        $validatedData['city_code'] = $validatedData['city'] ?? null;
+        $validatedData['district_code'] = $validatedData['district'] ?? null;
+        $validatedData['village_code'] = $validatedData['village'] ?? null;
+
+        unset(
+            $validatedData['province'],
+            $validatedData['city'],
+            $validatedData['district'],
+            $validatedData['village']
+        );
+
         Assembly::create($validatedData);
 
         return redirect()->route('majelis.index')->with('message', 'Majelis berhasil ditambahkan!');
@@ -86,7 +104,8 @@ class MajelisController extends Controller
     {
         $majelis = Assembly::findOrFail($id);
         $teachers = Teacher::where('wafat_masehi', null)->get();
-        return view('pages.majelis.edit', compact('majelis', 'teachers'));
+        $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
+        return view('pages.majelis.edit', compact('majelis', 'teachers', 'provinces'));
     }
 
     /**
@@ -101,6 +120,10 @@ class MajelisController extends Controller
             'alamat'       => 'required|string',
             'maps'         => 'required|string|max:255',
             'gambar'       => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'province' => 'nullable|string|max:20',
+            'city' => 'nullable|string|max:20',
+            'district' => 'nullable|string|max:20',
+            'village' => 'nullable|string|max:20',
         ]);
 
         $majelis = Assembly::findOrFail($id);
@@ -145,6 +168,18 @@ class MajelisController extends Controller
         }
 
         // 4. Update Database
+        $validatedData['province_code'] = $validatedData['province'] ?? null;
+        $validatedData['city_code'] = $validatedData['city'] ?? null;
+        $validatedData['district_code'] = $validatedData['district'] ?? null;
+        $validatedData['village_code'] = $validatedData['village'] ?? null;
+
+        unset(
+            $validatedData['province'],
+            $validatedData['city'],
+            $validatedData['district'],
+            $validatedData['village']
+        );
+
         $majelis->update($validatedData);
 
         return redirect()->route('majelis.index')->with('message', 'Majelis berhasil diperbarui!');
