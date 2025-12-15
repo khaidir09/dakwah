@@ -10,9 +10,11 @@ class PrayerSchedule extends Component
 {
     public $schedule;
     public $location;
+    public $layout = 'sidebar'; // 'sidebar' or 'horizontal'
 
-    public function mount()
+    public function mount($layout = 'sidebar')
     {
+        $this->layout = $layout;
         $this->fetchPrayerSchedule();
     }
 
@@ -71,7 +73,11 @@ class PrayerSchedule extends Component
             }
         }
 
-        return view('livewire.prayer-schedule', [
+        $view = $this->layout === 'horizontal'
+            ? 'livewire.prayer-schedule-horizontal'
+            : 'livewire.prayer-schedule';
+
+        return view($view, [
             'activePrayer' => $activePrayer,
             'nextPrayer' => $nextPrayer,
             'prayerList' => $prayerTimes
