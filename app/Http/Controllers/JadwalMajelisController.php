@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Schedule;
+use App\Models\Teacher;
 use App\Models\Assembly;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 
 class JadwalMajelisController extends Controller
@@ -23,7 +24,8 @@ class JadwalMajelisController extends Controller
     public function create()
     {
         $majelis = Assembly::all();
-        return view('pages.jadwal-majelis.create', compact('majelis'));
+        $teachers = Teacher::where('wafat_masehi', null)->get();
+        return view('pages.jadwal-majelis.create', compact('majelis', 'teachers'));
     }
 
     /**
@@ -34,6 +36,7 @@ class JadwalMajelisController extends Controller
         $validatedData = $request->validate([
             'nama_jadwal' => 'required|string|max:255',
             'assembly_id' => 'required|exists:assemblies,id',
+            'teacher_id' => 'required|exists:teachers,id',
             'waktu' => 'required',
             'deskripsi' => 'string|nullable',
             'hari' => 'required|string|max:50',
@@ -70,6 +73,7 @@ class JadwalMajelisController extends Controller
         $validatedData = $request->validate([
             'nama_jadwal' => 'required|string|max:255',
             'assembly_id' => 'required|exists:assemblies,id',
+            'teacher_id' => 'required|exists:teachers,id',
             'deskripsi' => 'string|nullable',
             'waktu' => 'required',
             'hari' => 'required',
