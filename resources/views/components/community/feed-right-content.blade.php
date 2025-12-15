@@ -20,70 +20,7 @@
             <div class="space-y-4">
                 
                 <!-- Block 1 -->
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl">
-                    <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-4">Top Communities</div>
-                    <ul class="space-y-3">
-                        <li>
-                            <div class="flex items-center justify-between">
-                                <div class="grow flex items-center">
-                                    <div class="relative mr-3">
-                                        <img class="w-8 h-8 rounded-full" src="{{ asset('images/group-avatar-01.png') }}" width="32" height="32" alt="Group 01" />
-                                    </div>
-                                    <div class="truncate">
-                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100">Introductions</span>
-                                    </div>
-                                </div>
-                                <button class="btn-xs text-xs border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300 px-2.5 py-1 rounded-full shadow-none">Join</button>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="flex items-center justify-between">
-                                <div class="grow flex items-center">
-                                    <div class="relative mr-3">
-                                        <img class="w-8 h-8 rounded-full" src="{{ asset('images/group-avatar-02.png') }}" width="32" height="32" alt="Group 02" />
-                                    </div>
-                                    <div class="truncate">
-                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100">HackerNews</span>
-                                    </div>
-                                </div>
-                                <button class="btn-xs text-xs border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300 px-2.5 py-1 rounded-full shadow-none">Join</button>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="flex items-center justify-between">
-                                <div class="grow flex items-center">
-                                    <div class="relative mr-3">
-                                        <img class="w-8 h-8 rounded-full" src="{{ asset('images/group-avatar-03.png') }}" width="32" height="32" alt="Group 03" />
-                                    </div>
-                                    <div class="truncate">
-                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100">ReactJs</span>
-                                    </div>
-                                </div>
-                                <button class="text-xs inline-flex font-medium bg-green-500/20 text-green-700 rounded-full text-center px-2.5 py-1">
-                                    <svg class="fill-current shrink-0" width="16" height="16" viewBox="0 0 16 16">
-                                        <path d="m2.457 8.516.969-.99 2.516 2.481 5.324-5.304.985.989-6.309 6.284z"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="flex items-center justify-between">
-                                <div class="grow flex items-center">
-                                    <div class="relative mr-3">
-                                        <img class="w-8 h-8 rounded-full" src="{{ asset('images/group-avatar-04.png') }}" width="32" height="32" alt="Group 04" />
-                                    </div>
-                                    <div class="truncate">
-                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-100">JustChatting</span>
-                                    </div>
-                                </div>
-                                <button class="btn-xs text-xs border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300 px-2.5 py-1 rounded-full shadow-none">Join</button>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="mt-4">
-                        <button class="btn-sm w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">View All</button>
-                    </div>
-                </div>
+                <livewire:prayer-schedule />
 
                 <!-- Block 2 -->
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-xl">
