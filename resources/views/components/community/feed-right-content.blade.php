@@ -23,7 +23,7 @@
                 <livewire:prayer-schedule />
 
                 <!-- Block 2 -->
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl">
+                {{-- <div class="bg-white dark:bg-gray-800 p-4 rounded-xl">
                     <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-4">Who to follow</div>
                     <ul class="space-y-3">
                         <li>
@@ -82,10 +82,10 @@
                     <div class="mt-4">
                         <button class="btn-sm w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">View All</button>
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Block 3 -->
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl">
+                {{-- <div class="bg-white dark:bg-gray-800 p-4 rounded-xl">
                     <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-4">Trends for you</div>
                     <ul class="space-y-3">
                         <li>
@@ -122,7 +122,7 @@
                     <div class="mt-4">
                         <button class="btn-sm w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">View All</button>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>

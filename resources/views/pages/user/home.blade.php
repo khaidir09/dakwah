@@ -16,6 +16,11 @@
                         <!-- Blocks -->
                         <div class="space-y-4">
 
+                            <!-- Prayer Schedule (Mobile/Tablet) -->
+                            <div class="xl:hidden">
+                                <livewire:prayer-schedule layout="horizontal" />
+                            </div>
+
                             <!-- Title -->
                             <header class="mb-6">
                                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Majelis Hari Ini</h1>
