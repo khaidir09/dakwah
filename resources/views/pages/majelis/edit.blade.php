@@ -95,6 +95,16 @@
                         </div>
 
                     </div>
+                    
+                    <div class="grid grid-cols-1 mt-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="deskripsi">Deskripsi <span class="text-red-500">*</span></label>
+                            <textarea class="form-input w-full @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" cols="30" rows="10" required>{{ old('deskripsi', $majelis->deskripsi) }}</textarea>
+                            @error('deskripsi')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
 
                     <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold my-4">Domisili</h2>
                     <div class="grid grid-cols-4 gap-4">
@@ -140,16 +150,6 @@
                             <select id="village" class="form-select w-full" name="village" data-selected="{{ old('village', $majelis->village_code) }}">
                                 <option value="">==Pilih Salah Satu==</option>
                             </select>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 mt-6">
-                        <div>
-                            <label class="block text-sm font-medium mb-2" for="deskripsi">Deskripsi <span class="text-red-500">*</span></label>
-                            <textarea class="form-input w-full @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" cols="30" rows="10" required>{{ old('deskripsi', $majelis->deskripsi) }}</textarea>
-                            @error('deskripsi')
-                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                            @enderror
                         </div>
                     </div>
 
