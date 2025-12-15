@@ -20,7 +20,7 @@ class PrayerSchedule extends Component
     {
         // Default Jakarta ID: 1301
         $cityId = 1301;
-        $date = now();
+        $date = now(); // We use server time for date, assuming it's reasonably aligned or just daily
         $cacheKey = "prayer_schedule_{$cityId}_" . $date->format('Y-m-d');
 
         // Try to get from cache first
@@ -52,6 +52,29 @@ class PrayerSchedule extends Component
 
     public function render()
     {
-        return view('livewire.prayer-schedule');
+        $activePrayer = null;
+        $nextPrayer = null;
+        $prayerTimes = ['imsak', 'subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
+
+        if ($this->schedule) {
+            // Use Jakarta time for comparison as the schedule is for Jakarta
+            $now = now()->setTimezone('Asia/Jakarta')->format('H:i');
+
+            foreach ($prayerTimes as $key) {
+                $time = $this->schedule[$key] ?? '00:00';
+                if ($now >= $time) {
+                    $activePrayer = $key;
+                } else {
+                    $nextPrayer = $key;
+                    break;
+                }
+            }
+        }
+
+        return view('livewire.prayer-schedule', [
+            'activePrayer' => $activePrayer,
+            'nextPrayer' => $nextPrayer,
+            'prayerList' => $prayerTimes
+        ]);
     }
 }
