@@ -30,7 +30,7 @@ class PrayerSchedule extends Component
 
         if (! $data) {
             try {
-                $response = Http::timeout(5)->get("https://api.myquran.com/v3/sholat/jadwal/{$cityId}/today?utc=Asia%2FMakassar");
+                $response = Http::timeout(5)->get("https://api.myquran.com/v3/sholat/jadwal/{$cityId}/today");
 
                 if ($response->successful()) {
                     $data = $response->json('data');
