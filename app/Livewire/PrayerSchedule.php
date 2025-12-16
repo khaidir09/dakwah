@@ -34,7 +34,7 @@ class PrayerSchedule extends Component
             $day = $date->format('d');
 
             try {
-                $response = Http::timeout(5)->get("https://api.myquran.com/v3/sholat/jadwal/{$cityId}/{$year}-{$month}-{$day}");
+                $response = Http::timeout(5)->get("https://api.myquran.com/v2/sholat/jadwal/{$cityId}/{$year}/{$month}/{$day}");
 
                 if ($response->successful()) {
                     $data = $response->json('data');
