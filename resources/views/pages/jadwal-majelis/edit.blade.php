@@ -61,7 +61,7 @@
                             <select id="teacher_id" class="form-select w-full @error('teacher_id') is-invalid @enderror" name="teacher_id" required>
                                 <option value="">Pilih Guru</option>
                                 @foreach($teachers as $item)
-                                    <option value="{{ $item->id }}" @if($item->id == $majelis->teacher_id) selected @endif>{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}" @if($item->id == $jadwal->teacher_id) selected @endif>{{ $item->name }}</option>
                                 @endforeach
                             </select>
                             @error('teacher_id')
