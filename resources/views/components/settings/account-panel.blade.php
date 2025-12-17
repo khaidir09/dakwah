@@ -71,6 +71,9 @@
                 <div class="text-sm text-gray-400 dark:text-gray-500 italic ml-2" x-text="checked ? 'On' : 'Off'"></div>
             </div>
         </section>
+
+        <!-- Daily Surah Reading Preference -->
+        <livewire:settings.toggle-daily-surah />
     </div>
 
     <!-- Panel footer -->

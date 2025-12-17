@@ -22,6 +22,9 @@
                 <!-- Block 1 -->
                 <livewire:prayer-schedule />
 
+                <!-- Block 1b: Daily Surah Reading -->
+                <livewire:daily-surah />
+
                 <!-- Block 2 -->
                 {{-- <div class="bg-white dark:bg-gray-800 p-4 rounded-xl">
                     <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-4">Who to follow</div>
