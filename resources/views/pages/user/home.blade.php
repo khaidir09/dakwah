@@ -17,8 +17,9 @@
                         <div class="space-y-4">
 
                             <!-- Prayer Schedule (Mobile/Tablet) -->
-                            <div class="xl:hidden">
+                            <div class="xl:hidden space-y-4">
                                 <livewire:prayer-schedule layout="horizontal" />
+                                <livewire:daily-surah />
                             </div>
 
                             <!-- Title -->
