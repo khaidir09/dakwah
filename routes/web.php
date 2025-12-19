@@ -21,6 +21,7 @@ use App\Http\Controllers\User\MajelisController as UserMajelisController;
 use App\Http\Controllers\User\VideoController as UserVideoController;
 use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\WiridController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +60,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function
     Route::resource('/guru', GuruController::class);
     Route::resource('/event', \App\Http\Controllers\EventController::class);
     Route::resource('/video', VideoController::class);
+    Route::resource('/wirid', WiridController::class);
     // Route for the getting the data feed
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
     Route::get('/dashboard/analytics', [DashboardController::class, 'analytics'])->name('analytics');
