@@ -51,10 +51,10 @@
                                             <!-- Meta -->
                                             <div class="flex flex-wrap justify-center sm:justify-start space-x-4">
                                                 <div class="flex items-center">
-                                                    <svg class="fill-current shrink-0 text-gray-400 dark:text-gray-500" width="16" height="16" viewBox="0 0 16 16">
+                                                    <svg class="fill-current shrink-0 text-gray-400 dark:text-gray-500 hidden lg:block mr-2" width="16" height="16" viewBox="0 0 16 16">
                                                         <path d="M8 8.992a2 2 0 1 1-.002-3.998A2 2 0 0 1 8 8.992Zm-.7 6.694c-.1-.1-4.2-3.696-4.2-3.796C1.7 10.69 1 8.892 1 6.994 1 3.097 4.1 0 8 0s7 3.097 7 6.994c0 1.898-.7 3.697-2.1 4.996-.1.1-4.1 3.696-4.2 3.796-.4.3-1 .3-1.4-.1Zm-2.7-4.995L8 13.688l3.4-2.997c1-1 1.6-2.198 1.6-3.597 0-2.798-2.2-4.996-5-4.996S3 4.196 3 6.994c0 1.399.6 2.698 1.6 3.697 0-.1 0-.1 0 0Z" />
                                                     </svg>
-                                                    <span class="text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400 ml-2">{{ $assembly->alamat }}, {{ $assembly->village->name }}, {{ $assembly->district->name }}</span>
+                                                    <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ $assembly->alamat }}, {{ $assembly->village->name }}, {{ $assembly->district->name }}</span>
                                                 </div>
                                             </div>
                                         </header>
@@ -97,7 +97,7 @@
                                             <div>
                                                 <h2 class="text-gray-800 dark:text-gray-100 font-semibold mb-2">Tentang Majelis</h2>
                                                 <div class="text-sm space-y-2">
-                                                    <p>{{ $assembly->deskripsi }}</p>
+                                                    <p class="text-justify">{{ $assembly->deskripsi }}</p>
                                                 </div>
                                             </div>
                                 
@@ -123,9 +123,11 @@
                                                                     {{ $item->hari }}, {{ $item->waktu_formatted }} WITA
                                                                 </div>
                                                                 <!-- Avatars group -->
-                                                                <div class="flex items-center">
-                                                                    <img class="rounded-full border-2 border-white w-8 h-8 object-cover dark:border-gray-800 box-content mr-1" src="{{ Storage::url($item->teacher->foto) }}" alt="{{ $item->teacher->name }}" /> <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->teacher->name }}</span>
-                                                                </div>
+                                                                <a href="{{ route('guru-detail', $item->teacher->id) }}">
+                                                                    <div class="flex items-center">
+                                                                        <img class="rounded-full border-2 border-white w-8 h-8 object-cover dark:border-gray-800 box-content mr-1" src="{{ Storage::url($item->teacher->foto) }}" alt="{{ $item->teacher->name }}" /> <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->teacher->name }}</span>
+                                                                    </div>
+                                                                </a>
                                                             </div>
                                                         </div>
                                                     @endforeach
