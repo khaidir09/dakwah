@@ -20,6 +20,7 @@ use App\Http\Controllers\User\JadwalMajelisController as UserJadwalMajelisContro
 use App\Http\Controllers\User\MajelisController as UserMajelisController;
 use App\Http\Controllers\User\VideoController as UserVideoController;
 use App\Http\Controllers\User\EventController as UserEventController;
+use App\Http\Controllers\User\WiridController as UserWiridController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WiridController;
 
@@ -44,6 +45,7 @@ Route::get('/guru', [UserGuruController::class, 'list'])->name('guru-list');
 Route::get('/guru/{id}', [UserGuruController::class, 'detail'])->name('guru-detail');
 Route::get('/video', [UserVideoController::class, 'list'])->name('video-list');
 Route::get('/event', [UserEventController::class, 'list'])->name('event-list');
+Route::get('/wirid', [UserWiridController::class, 'list'])->name('wirid-list');
 
 Route::get('/provinces', [DependantDropdownController::class, 'provinces'])->name('provinces');
 Route::get('/get-cities/{province_code}', [DependantDropdownController::class, 'getCities'])->name('get-cities');
