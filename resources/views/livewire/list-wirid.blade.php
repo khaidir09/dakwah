@@ -13,10 +13,8 @@
         </form>
     </div>
     <!-- Middle content -->
-    <div class="flex-1 mt-5 md:mt-0">
-        <div class="md:py-8">
-
-            <!-- Blocks -->
+    <div class="flex-1 mt-5">
+        <!-- Blocks -->
             <div class="space-y-4">
 
                 <!-- Wirid -->
@@ -44,7 +42,7 @@
                         <!-- Footer -->
                         <footer class="flex justify-between items-center space-x-3">
                             <div class="flex items-start space-x-3">
-                                <div class="text-sm inline-flex font-medium bg-green-500/20 text-green-700 rounded-full text-center px-2.5 py-1">Dibaca {{ $wirid->jumlah }} kali pada waktu {{ $wirid->waktu }}</div>
+                                <div class="text-xs inline-flex font-medium bg-green-500/20 text-green-700 rounded-full text-center px-2.5 py-1">Dibaca {{ $wirid->jumlah }} kali pada waktu {{ $wirid->waktu }}</div>
                             </div>
                             <div>
                                 <!-- Like button -->
@@ -60,8 +58,6 @@
                 @endforeach
 
             </div>
-
-        </div>
     </div>
 
     <div class="mt-8">
