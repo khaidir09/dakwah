@@ -1,7 +1,7 @@
 <div>
     <!-- Search form -->
-    <div class="mb-6">
-        <form class="relative">
+    <div class="mb-6 flex flex-col sm:flex-row justify-between items-center gap-2">
+        <form class="relative w-full">
             <label for="feed-search-mobile" class="sr-only">Search</label>
             <input wire:model.live="search" id="feed-search-mobile" class="form-input w-full pl-9 bg-white dark:bg-gray-800" type="search" placeholder="Cari nama pengajian/majelis/guru/hari" />
             <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
@@ -11,6 +11,32 @@
                 </svg>
             </button>
         </form>
+        <x-dropdown-filter align="right">
+            <li class="py-1 px-3">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox" wire:click="$set('access', '')" @if($access === '') checked @endif />
+                    <span class="text-sm font-medium ml-2">Semua</span>
+                </label>
+            </li>
+            <li class="py-1 px-3">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox" wire:click="$set('access', 'Umum')" @if($access === 'Umum') checked @endif />
+                    <span class="text-sm font-medium ml-2">Umum</span>
+                </label>
+            </li>
+            <li class="py-1 px-3">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox" wire:click="$set('access', 'Ikhwan')" @if($access === 'Ikhwan') checked @endif />
+                    <span class="text-sm font-medium ml-2">Ikhwan</span>
+                </label>
+            </li>
+            <li class="py-1 px-3">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox" wire:click="$set('access', 'Akhwat')" @if($access === 'Akhwat') checked @endif />
+                    <span class="text-sm font-medium ml-2">Akhwat</span>
+                </label>
+            </li>
+        </x-dropdown-filter>
     </div>
     <div class="grid grid-cols-12 gap-4">
         @foreach ($schedules as $schedule)
