@@ -87,6 +87,19 @@
                         </div>
 
                         <div>
+                            <label class="block text-sm font-medium mb-2" for="access">Akses Jamaah <span class="text-red-500">*</span></label>
+                            <select id="access" class="form-select w-full @error('access') is-invalid @enderror" name="access" required>
+                                <option value="">Pilih Akses</option>
+                                <option value="Umum" @if(old('access', $jadwal->access) == 'Umum') selected @endif>Umum</option>
+                                <option value="Ikhwan" @if(old('access', $jadwal->access) == 'Ikhwan') selected @endif>Ikhwan</option>
+                                <option value="Akhwat" @if(old('access', $jadwal->access) == 'Akhwat') selected @endif>Akhwat</option>
+                            </select>
+                            @error('access')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div>
                             <label class="block text-sm font-medium mb-2" for="waktu">Waktu <span class="text-red-500">*</span></label>
                             <input id="waktu" class="form-input w-full @error('waktu') is-invalid @enderror" type="time" name="waktu" value="{{ old('waktu', $jadwal->waktu) }}" required/>
                             @error('waktu')
