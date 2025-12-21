@@ -107,6 +107,11 @@
                                                 <h2 class="text-gray-800 dark:text-gray-100 font-semibold mb-2">Tentang Guru</h2>
                                                 <div class="text-sm space-y-2">
                                                     <p class="text-justify">{{ $teacher->biografi }}</p>
+                                                    @if($teacher->source)
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400 italic">
+                                                            Sumber: {{ $teacher->source }}
+                                                        </p>
+                                                    @endif
                                                 </div>
                                             </div>
                                 
