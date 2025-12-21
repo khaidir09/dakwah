@@ -37,7 +37,9 @@ class GuruController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'biografi' => 'required|string',
-            'source' => 'nullable|string',
+            'source' => 'nullable|array',
+            'source.*.name' => 'required_with:source|string',
+            'source.*.url' => 'nullable|url',
             'foto' => 'nullable|image|max:2048',
             'tahun_lahir' => 'nullable|integer',
             'wafat_masehi' => 'nullable|integer',
@@ -112,7 +114,9 @@ class GuruController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'biografi' => 'required|string',
-            'source' => 'nullable|string',
+            'source' => 'nullable|array',
+            'source.*.name' => 'required_with:source|string',
+            'source.*.url' => 'nullable|url',
             'foto' => 'nullable|image|max:2048',
             'tahun_lahir' => 'nullable|integer',
             'wafat_masehi' => 'nullable|integer',

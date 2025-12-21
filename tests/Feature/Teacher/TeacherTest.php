@@ -13,28 +13,35 @@ class TeacherTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_can_create_teacher_with_source()
+    public function test_admin_can_create_teacher_with_multiple_sources()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
 
         Storage::fake('public');
 
+        $sources = [
+            ['name' => 'Source 1', 'url' => 'http://source1.com'],
+            ['name' => 'Source 2', 'url' => 'http://source2.com'],
+        ];
+
         $response = $this->post(route('guru.store'), [
             'name' => 'Test Teacher',
             'biografi' => 'Test Biography',
-            'source' => 'Wikipedia',
+            'source' => $sources,
             'foto' => UploadedFile::fake()->image('teacher.jpg'),
         ]);
 
         $response->assertRedirect(route('guru.index'));
-        $this->assertDatabaseHas('teachers', [
-            'name' => 'Test Teacher',
-            'source' => 'Wikipedia',
-        ]);
+
+        // Assert stored as JSON/Array
+        $teacher = Teacher::where('name', 'Test Teacher')->first();
+        $this->assertIsArray($teacher->source);
+        $this->assertCount(2, $teacher->source);
+        $this->assertEquals('Source 1', $teacher->source[0]['name']);
     }
 
-    public function test_admin_can_update_teacher_with_source()
+    public function test_admin_can_update_teacher_with_sources()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -43,20 +50,25 @@ class TeacherTest extends TestCase
             'name' => 'Old Name',
             'biografi' => 'Old Bio',
             'foto' => 'guru/old.jpg',
-            'source' => 'Old Source',
+            'source' => [['name' => 'Old Source', 'url' => '']],
         ]);
+
+        $newSources = [
+            ['name' => 'New Source', 'url' => 'http://new.com'],
+        ];
 
         $response = $this->put(route('guru.update', $teacher->id), [
             'name' => 'New Name',
             'biografi' => 'New Bio',
-            'source' => 'New Source',
+            'source' => $newSources,
         ]);
 
         $response->assertRedirect(route('guru.index'));
-        $this->assertDatabaseHas('teachers', [
-            'id' => $teacher->id,
-            'source' => 'New Source',
-        ]);
+
+        $teacher->refresh();
+        $this->assertEquals('New Name', $teacher->name);
+        $this->assertCount(1, $teacher->source);
+        $this->assertEquals('New Source', $teacher->source[0]['name']);
     }
 
     public function test_source_is_nullable()
@@ -68,7 +80,7 @@ class TeacherTest extends TestCase
             'name' => 'Teacher No Source',
             'biografi' => 'Bio',
             'foto' => UploadedFile::fake()->image('teacher.jpg'),
-            // source is missing
+            // source missing or empty
         ]);
 
         $response->assertRedirect(route('guru.index'));

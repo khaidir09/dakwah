@@ -13,6 +13,10 @@ class Teacher extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'source' => 'array',
+    ];
+
     public function assemblies()
     {
         return $this->hasMany(Assembly::class);
