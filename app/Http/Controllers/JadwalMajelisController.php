@@ -40,6 +40,7 @@ class JadwalMajelisController extends Controller
             'waktu' => 'required',
             'deskripsi' => 'string|nullable',
             'hari' => 'required|string|max:50',
+            'access' => 'required|string|in:Umum,Ikhwan,Akhwat',
         ]);
 
         Schedule::create($validatedData);
@@ -78,6 +79,7 @@ class JadwalMajelisController extends Controller
             'deskripsi' => 'string|nullable',
             'waktu' => 'required',
             'hari' => 'required',
+            'access' => 'required|string|in:Umum,Ikhwan,Akhwat',
         ]);
 
         $jadwal = Schedule::findOrFail($id);
