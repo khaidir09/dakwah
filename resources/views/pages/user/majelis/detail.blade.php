@@ -111,8 +111,19 @@
                                                     @foreach ($schedules as $item)
                                                         <div class="bg-white dark:bg-gray-900 p-4 border border-gray-200 dark:border-gray-700/60 rounded-lg shadow-xs">
                                                             <!-- Card header -->
-                                                            <div class="text-sm font-medium text-gray-800 dark:text-gray-100 mb-2">
-                                                                {{ $item->nama_jadwal }}
+                                                            <div class="flex items-center gap-2 mb-2">
+                                                                <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->nama_jadwal }}</span>
+                                                                @php
+                                                                    $accessColor = match($item->access) {
+                                                                        'Umum' => 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+                                                                        'Ikhwan' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                                                                        'Akhwat' => 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+                                                                        default => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
+                                                                    };
+                                                                @endphp
+                                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $accessColor }}">
+                                                                    {{ $item->access }}
+                                                                </span>
                                                             </div>
                                                             <!-- Card content -->
                                                             <div class="text-sm mb-3">{!! $item->deskripsi !!}</div>

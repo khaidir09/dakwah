@@ -1,6 +1,6 @@
 <div>
     <!-- Search form -->
-    <div class="mb-6 flex flex-col sm:flex-row justify-between items-center gap-2">
+    <div class="mb-6 flex flex-col sm:flex-row justify-between items-start gap-2">
         <form class="relative w-full">
             <label for="feed-search-mobile" class="sr-only">Search</label>
             <input wire:model.live="search" id="feed-search-mobile" class="form-input w-full pl-9 bg-white dark:bg-gray-800" type="search" placeholder="Cari nama pengajian/majelis/guru/hari" />
@@ -11,32 +11,60 @@
                 </svg>
             </button>
         </form>
-        <x-dropdown-filter align="right">
-            <li class="py-1 px-3">
-                <label class="flex items-center">
-                    <input type="checkbox" class="form-checkbox" wire:click="$set('access', '')" @if($access === '') checked @endif />
-                    <span class="text-sm font-medium ml-2">Semua</span>
-                </label>
-            </li>
-            <li class="py-1 px-3">
-                <label class="flex items-center">
-                    <input type="checkbox" class="form-checkbox" wire:click="$set('access', 'Umum')" @if($access === 'Umum') checked @endif />
-                    <span class="text-sm font-medium ml-2">Umum</span>
-                </label>
-            </li>
-            <li class="py-1 px-3">
-                <label class="flex items-center">
-                    <input type="checkbox" class="form-checkbox" wire:click="$set('access', 'Ikhwan')" @if($access === 'Ikhwan') checked @endif />
-                    <span class="text-sm font-medium ml-2">Ikhwan</span>
-                </label>
-            </li>
-            <li class="py-1 px-3">
-                <label class="flex items-center">
-                    <input type="checkbox" class="form-checkbox" wire:click="$set('access', 'Akhwat')" @if($access === 'Akhwat') checked @endif />
-                    <span class="text-sm font-medium ml-2">Akhwat</span>
-                </label>
-            </li>
-        </x-dropdown-filter>
+        <div class="relative inline-flex" x-data="{ open: false }">
+            <button
+                class="btn px-2.5 bg-white dark:bg-gray-800 border-gray-200 hover:border-gray-300 dark:border-gray-700/60 dark:hover:border-gray-600 text-gray-400 dark:text-gray-500"
+                aria-haspopup="true"
+                @click.prevent="open = !open"
+                :aria-expanded="open"
+            >
+                <span class="sr-only">Filter</span><wbr>
+                <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16">
+                    <path d="M0 3a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1ZM3 8a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1ZM7 12a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2H7Z" />
+                </svg>
+            </button>
+            <div
+                class="origin-top-right z-10 absolute top-full left-0 right-auto min-w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 pt-1.5 rounded-lg shadow-lg overflow-hidden mt-1 md:left-auto md:right-0"                
+                @click.outside="open = false"
+                @keydown.escape.window="open = false"
+                x-show="open"
+                x-transition:enter="transition ease-out duration-200 transform"
+                x-transition:enter-start="opacity-0 -translate-y-2"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-out duration-200"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                x-cloak                
+            >
+                <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase pt-1.5 pb-2 px-3">Filter</div>
+                <ul class="mb-4">
+                    <li class="py-1 px-3">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox" wire:click="$set('access', '')" @if($access === '') checked @endif />
+                            <span class="text-sm font-medium ml-2">Semua</span>
+                        </label>
+                    </li>
+                    <li class="py-1 px-3">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox" wire:click="$set('access', 'Umum')" @if($access === 'Umum') checked @endif />
+                            <span class="text-sm font-medium ml-2">Umum</span>
+                        </label>
+                    </li>
+                    <li class="py-1 px-3">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox" wire:click="$set('access', 'Ikhwan')" @if($access === 'Ikhwan') checked @endif />
+                            <span class="text-sm font-medium ml-2">Ikhwan</span>
+                        </label>
+                    </li>
+                    <li class="py-1 px-3">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox" wire:click="$set('access', 'Akhwat')" @if($access === 'Akhwat') checked @endif />
+                            <span class="text-sm font-medium ml-2">Akhwat</span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="grid grid-cols-12 gap-4">
         @foreach ($schedules as $schedule)
@@ -60,7 +88,7 @@
                                     @endif
                                 </a>
                                 <div class="mt-1 pr-1">
-                                    <a class="inline-flex text-gray-800 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white" href="#0">
+                                    <a class="inline-flex text-gray-800 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white" href="{{ route('guru-detail', $schedule->teacher->id) }}">
                                         <h2 class="text-xl leading-snug justify-center font-semibold">{{ $schedule->teacher->name }}</h2>
                                     </a>
                                     <div>{{ $schedule->nama_jadwal }}</div>
