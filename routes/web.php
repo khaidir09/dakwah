@@ -70,6 +70,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function
     Route::resource('/event', \App\Http\Controllers\EventController::class);
     Route::resource('/video', VideoController::class);
     Route::resource('/wirid', WiridController::class);
+    Route::resource('/roles', \App\Http\Controllers\RoleController::class);
+    Route::resource('/permissions', \App\Http\Controllers\PermissionController::class);
     // Route for the getting the data feed
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
     Route::get('/dashboard/analytics', [DashboardController::class, 'analytics'])->name('analytics');
