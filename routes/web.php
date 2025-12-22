@@ -21,6 +21,7 @@ use App\Http\Controllers\User\MajelisController as UserMajelisController;
 use App\Http\Controllers\User\VideoController as UserVideoController;
 use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\User\WiridController as UserWiridController;
+use App\Http\Controllers\User\ManagedMajelisController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WiridController;
 
@@ -53,6 +54,12 @@ Route::get('/get-districts/{city_code}', [DependantDropdownController::class, 'g
 Route::get('/get-villages/{district_code}', [DependantDropdownController::class, 'getVillages'])->name('get-villages');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth:sanctum', 'verified'])->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/majelis-ku', [ManagedMajelisController::class, 'index'])->name('majelis-ku.index');
+    Route::get('/majelis-ku/{id}/edit', [ManagedMajelisController::class, 'edit'])->name('majelis-ku.edit');
+    Route::put('/majelis-ku/{id}', [ManagedMajelisController::class, 'update'])->name('majelis-ku.update');
+});
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function () {
 
