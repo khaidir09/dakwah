@@ -23,6 +23,7 @@ use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\User\WiridController as UserWiridController;
 use App\Http\Controllers\User\ManagedMajelisController;
 use App\Http\Controllers\User\SettingController;
+use App\Http\Controllers\User\ProfileSettingsController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WiridController;
 
@@ -152,9 +153,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function
     Route::get('/calendar', function () {
         return view('pages/calendar');
     })->name('calendar');
-    Route::get('/settings/account', function () {
-        return view('pages/settings/account');
-    })->name('account');
+    Route::get('/settings/account', [ProfileSettingsController::class, 'edit'])->name('account');
+    Route::put('/settings/account', [ProfileSettingsController::class, 'update'])->name('settings.profile.update');
     Route::get('/settings/notifications', function () {
         return view('pages/settings/notifications');
     })->name('notifications');
