@@ -57,6 +57,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/majelis-ku', [ManagedMajelisController::class, 'index'])->name('majelis-ku.index');
+    Route::get('/majelis-ku/create', [ManagedMajelisController::class, 'create'])->name('majelis-ku.create');
+    Route::post('/majelis-ku', [ManagedMajelisController::class, 'store'])->name('majelis-ku.store');
     Route::get('/majelis-ku/{id}/edit', [ManagedMajelisController::class, 'edit'])->name('majelis-ku.edit');
     Route::put('/majelis-ku/{id}', [ManagedMajelisController::class, 'update'])->name('majelis-ku.update');
 });
