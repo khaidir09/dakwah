@@ -18,6 +18,57 @@ class ManagedMajelisController extends Controller
         return view('pages.user.majelis-ku.index', compact('assemblies'));
     }
 
+    public function create()
+    {
+        $teachers = Teacher::all();
+        $provinces = Province::pluck('name', 'code');
+
+        return view('pages.user.majelis-ku.create', compact('teachers', 'provinces'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_majelis' => 'required',
+            'teacher_id' => 'required',
+            'alamat' => 'required',
+            'deskripsi' => 'required',
+            'province' => 'required',
+            'city' => 'required',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $data = $request->except(['gambar', 'province', 'city', 'district', 'village']);
+
+        $data['user_id'] = auth()->id();
+        $data['province_code'] = $request->province;
+        $data['city_code'] = $request->city;
+        $data['district_code'] = $request->district;
+        $data['village_code'] = $request->village;
+
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+
+            $pathLarge = $file->storeAs('public/majelis/large', $filename);
+            $thumbPath = 'public/majelis/thumb/' . $filename;
+
+            $image = Image::read($file);
+            $image->scaleDown(width: 800);
+            Storage::put($pathLarge, $image->toJpeg(80));
+
+            $imageThumb = Image::read($file);
+            $imageThumb->scaleDown(width: 400);
+            Storage::put($thumbPath, $imageThumb->toJpeg(80));
+
+            $data['gambar'] = $pathLarge;
+        }
+
+        Assembly::create($data);
+
+        return redirect()->route('majelis-ku.index')->with('status', 'Majelis berhasil ditambahkan');
+    }
+
     public function edit($id)
     {
         $majelis = Assembly::where('user_id', auth()->id())->findOrFail($id);
