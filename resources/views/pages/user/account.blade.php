@@ -29,7 +29,7 @@
                                 <x-settings.settings-sidebar />
 
                                 <!-- Panel -->
-                                <x-settings.account-panel />
+                                <x-settings.account-panel :provinces="$provinces" />
 
                             </div>
                         </div>
