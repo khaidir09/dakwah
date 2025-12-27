@@ -22,12 +22,12 @@ class IsAdmin
 
             // Check if user has admin-like roles.
             // Using strict check for 'admin' as primary, but allowing 'Super Admin' if it exists in the system.
-            if ($user->hasRole('admin') || $user->hasRole('Super Admin')) {
+            if ($user->hasRole('Super Admin')) {
                 return $next($request);
             }
         }
 
         // If not admin, abort with 403 Forbidden
-        abort(403, 'User does not have the right roles.');
+        abort(403, 'Anda tidak memiliki akses ke halaman ini.');
     }
 }

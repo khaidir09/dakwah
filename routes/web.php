@@ -56,8 +56,6 @@ Route::get('/get-cities/{province_code}', [DependantDropdownController::class, '
 Route::get('/get-districts/{city_code}', [DependantDropdownController::class, 'getDistricts'])->name('get-districts');
 Route::get('/get-villages/{district_code}', [DependantDropdownController::class, 'getVillages'])->name('get-villages');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth:sanctum', 'verified'])->name('dashboard');
-
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/majelis-ku', [ManagedMajelisController::class, 'index'])->name('majelis-ku.index');
     Route::get('/majelis-ku/create', [ManagedMajelisController::class, 'create'])->name('majelis-ku.create');
@@ -67,8 +65,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
-
-
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth:sanctum', 'verified'])->name('dashboard');
     Route::resource('/majelis', MajelisController::class);
     Route::resource('/jadwal-majelis', JadwalMajelisController::class);
     Route::resource('/guru', GuruController::class);
