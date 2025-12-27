@@ -84,7 +84,7 @@
                     <div>
                         <label class="block text-sm font-medium mb-2" for="city">Kabupaten/Kota</label>
                         <select id="city" class="form-select w-full" name="city_code" x-model="city">
-                            <option value="">Pilih Kabupaten/Kota</option>
+                        <option value="{{ Auth::user()->city_code }}">{{ Auth::user()->city_code ? Auth::user()->city->name : 'Pilih Kabupaten/Kota'}}</option>
                             <template x-for="(name, code) in cities" :key="code">
                                 <option :value="code" x-text="name"></option>
                             </template>
@@ -94,7 +94,7 @@
                     <div>
                         <label class="block text-sm font-medium mb-2" for="district">Kecamatan</label>
                         <select id="district" class="form-select w-full" name="district_code" x-model="district">
-                            <option value="">Pilih Kecamatan</option>
+                            <option value="{{ Auth::user()->district_code }}">{{ Auth::user()->district_code ? Auth::user()->district->name : 'Pilih Kecamatan'}}</option>
                             <template x-for="(name, code) in districts" :key="code">
                                 <option :value="code" x-text="name"></option>
                             </template>
@@ -104,7 +104,7 @@
                     <div>
                         <label class="block text-sm font-medium mb-2" for="village">Desa/Kelurahan</label>
                         <select id="village" class="form-select w-full" name="village_code" x-model="village">
-                            <option value="">Pilih Desa/Kelurahan</option>
+                            <option value="{{ Auth::user()->village_code }}">{{ Auth::user()->village_code ? Auth::user()->village->name : 'Pilih Desa/Kelurahan'}}</option>
                             <template x-for="(name, code) in villages" :key="code">
                                 <option :value="code" x-text="name"></option>
                             </template>
@@ -152,9 +152,9 @@
                 city: initialData.city,
                 district: initialData.district,
                 village: initialData.village,
-                cities: [],
-                districts: [],
-                villages: [],
+                cities: initialData.city ? { [initialData.city]: 'Loading...' } : {},
+                districts: initialData.district ? { [initialData.district]: 'Loading...' } : {},
+                villages: initialData.village ? { [initialData.village]: 'Loading...' } : {},
 
                 init() {
                     // Initial load chain
