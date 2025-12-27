@@ -152,9 +152,9 @@
                 city: initialData.city,
                 district: initialData.district,
                 village: initialData.village,
-                cities: [],
-                districts: [],
-                villages: [],
+                cities: initialData.city ? { [initialData.city]: 'Loading...' } : {},
+                districts: initialData.district ? { [initialData.district]: 'Loading...' } : {},
+                villages: initialData.village ? { [initialData.village]: 'Loading...' } : {},
 
                 init() {
                     // Initial load chain
