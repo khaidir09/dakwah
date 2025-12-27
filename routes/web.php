@@ -66,7 +66,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::put('/majelis-ku/{id}', [ManagedMajelisController::class, 'update'])->name('majelis-ku.update');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function () {
+Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
 
 
     Route::resource('/majelis', MajelisController::class);
