@@ -44,4 +44,9 @@ class Event extends Model
     {
         return $this->belongsTo(Village::class, 'village_code', 'code');
     }
+
+    public function assembly()
+    {
+        return $this->belongsTo(Assembly::class);
+    }
 }
