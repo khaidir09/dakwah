@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\Assembly;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Laravolt\Indonesia\Models\Province;
 use Intervention\Image\Laravel\Facades\Image;
 
 class ManageEventController extends Controller
@@ -25,8 +26,7 @@ class ManageEventController extends Controller
      */
     public function create()
     {
-        $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
-        return view('pages.user.kelola-acara.tambah-acara', compact('provinces'));
+        return view('pages.user.kelola-acara.tambah-acara');
     }
 
     /**
@@ -38,16 +38,23 @@ class ManageEventController extends Controller
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
             'date' => 'required|date',
-            'location' => 'required|string|max:255',
             'access' => 'required|in:Umum,Khusus',
             'category' => 'required|string|max:255',
-            'province' => 'nullable|string|max:20',
-            'city' => 'nullable|string|max:20',
-            'district' => 'nullable|string|max:20',
-            'village' => 'nullable|string|max:20',
         ]);
 
+        $assembly = Assembly::where('user_id', Auth::id())->first();
+        if (!$assembly) {
+            return redirect()->back()->withErrors(['message' => 'Anda belum memiliki Majelis.']);
+        }
+
         $dataToCreate = $validatedData;
+
+        $dataToCreate['assembly_id'] = $assembly->id;
+        $dataToCreate['location'] = $assembly->alamat;
+        $dataToCreate['province_code'] = $assembly->province_code;
+        $dataToCreate['city_code'] = $assembly->city_code;
+        $dataToCreate['district_code'] = $assembly->district_code;
+        $dataToCreate['village_code'] = $assembly->village_code;
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -68,23 +75,10 @@ class ManageEventController extends Controller
             $dataToCreate['image'] = 'events/' . $filename;
         }
 
-        $dataToCreate['province_code'] = $validatedData['province'] ?? null;
-        $dataToCreate['city_code'] = $validatedData['city'] ?? null;
-        $dataToCreate['district_code'] = $validatedData['district'] ?? null;
-        $dataToCreate['village_code'] = $validatedData['village'] ?? null;
-
-        // 5. Hapus key lama agar tidak error saat create
-        unset(
-            $dataToCreate['province'],
-            $dataToCreate['city'],
-            $dataToCreate['district'],
-            $dataToCreate['village']
-        );
-
         // 6. Buat record baru di database
         Event::create($dataToCreate);
 
-        return redirect()->route('event.index')->with('message', 'Event berhasil ditambahkan!');
+        return redirect()->route('kelola-acara-majelis')->with('message', 'Event berhasil ditambahkan!');
     }
 
     /**
@@ -100,9 +94,12 @@ class ManageEventController extends Controller
      */
     public function edit(string $id)
     {
-        $event = Event::findOrFail($id);
-        $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
-        return view('pages.user.kelola-acara.edit-acara', compact('event', 'provinces'));
+        $event = Event::where('id', $id)->firstOrFail();
+        $assembly = Assembly::where('user_id', Auth::id())->first();
+        if (!$assembly || $event->assembly_id !== $assembly->id) {
+            abort(403, 'Unauthorized');
+        }
+        return view('pages.user.kelola-acara.edit-acara', compact('event'));
     }
 
     /**
@@ -114,16 +111,16 @@ class ManageEventController extends Controller
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
             'date' => 'required|date',
-            'location' => 'required|string|max:255',
             'access' => 'required|in:Umum,Khusus',
             'category' => 'required|string|max:255',
-            'province' => 'nullable|string|max:20',
-            'city' => 'nullable|string|max:20',
-            'district' => 'nullable|string|max:20',
-            'village' => 'nullable|string|max:20',
         ]);
 
         $event = Event::findOrFail($id);
+
+        $assembly = Assembly::where('user_id', Auth::id())->first();
+        if (!$assembly || $event->assembly_id !== $assembly->id) {
+            abort(403, 'Unauthorized');
+        }
 
         $dataToUpdate = $validatedData;
 
@@ -153,24 +150,10 @@ class ManageEventController extends Controller
             unset($dataToUpdate['image']);
         }
 
-        // 5. Map data wilayah
-        $dataToUpdate['province_code'] = $validatedData['province'] ?? null;
-        $dataToUpdate['city_code'] = $validatedData['city'] ?? null;
-        $dataToUpdate['district_code'] = $validatedData['district'] ?? null;
-        $dataToUpdate['village_code'] = $validatedData['village'] ?? null;
-
-        // 6. Hapus key form
-        unset(
-            $dataToUpdate['province'],
-            $dataToUpdate['city'],
-            $dataToUpdate['district'],
-            $dataToUpdate['village']
-        );
-
         // 7. Update data event
         $event->update($dataToUpdate);
 
-        return redirect()->route('event.index')->with('message', 'Event berhasil diperbarui!');
+        return redirect()->route('kelola-acara-majelis')->with('message', 'Event berhasil diperbarui!');
     }
 
     /**

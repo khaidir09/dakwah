@@ -79,4 +79,9 @@ class Assembly extends Model
     {
         return $this->belongsTo(Village::class, 'village_code', 'code');
     }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

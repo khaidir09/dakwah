@@ -15,7 +15,7 @@
             </div>
 
             <div>
-                <form action="{{ route('kelola-acara-majelis.update', $schedule->id) }}" method="POST">
+                <form action="{{ route('kelola-acara-majelis.update', $event->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     
@@ -78,57 +78,6 @@
                                 @error('image')
                                     <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                                 @enderror
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium mb-2" for="location">Nama Lokasi (Tempat) <span class="text-red-500">*</span></label>
-                                <input id="location" class="form-input w-full @error('location') is-invalid @enderror" type="text" name="location" value="{{ old('location', $event->location) }}" required placeholder="Contoh: Masjid Raya"/>
-                                @error('location')
-                                    <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold my-4">Alamat Lengkap</h2>
-                        <div class="grid grid-cols-4 gap-4">
-
-                            <div>
-                                <label class="block text-sm font-medium mb-2" for="province">Provinsi</label>
-                                <select id="province" class="form-select w-full @error('province') is-invalid @enderror" name="province">
-                                    <option value="">==Pilih Salah Satu==</option>
-                                    @foreach($provinces as $code => $name)
-                                        <option value="{{ $code }}" {{ old('province', $event->province_code) == $code ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('province')
-                                    <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium mb-2" for="city">Kabupaten/Kota</label>
-                                <select id="city" class="form-select w-full @error('city') is-invalid @enderror" name="city" data-selected="{{ old('city', $event->city_code) }}">
-                                    <option value="">==Pilih Salah Satu==</option>
-                                </select>
-                                @error('city')
-                                    <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium mb-2" for="district">Kecamatan</label>
-                                <select id="district" class="form-select w-full" name="district" data-selected="{{ old('district', $event->district_code) }}">
-                                    <option value="">==Pilih Salah Satu==</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium mb-2" for="village">Desa/Kelurahan</label>
-                                <select id="village" class="form-select w-full" name="village" data-selected="{{ old('village', $event->village_code) }}">
-                                    <option value="">==Pilih Salah Satu==</option>
-                                </select>
                             </div>
                         </div>
                     </div>

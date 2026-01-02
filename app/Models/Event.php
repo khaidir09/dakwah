@@ -12,6 +12,11 @@ class Event extends Model
 {
     protected $guarded = [];
 
+    public function assembly()
+    {
+        return $this->belongsTo(Assembly::class);
+    }
+
     public function province()
     {
         // Parameter: (Model Tujuan, foreign_key_lokal, owner_key_di_tabel_tujuan)

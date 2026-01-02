@@ -17,6 +17,7 @@
             <div>
                 <form action="{{ route('kelola-acara-majelis.store') }}" method="POST">
                     @csrf
+                    <input type="hidden" name="assembly_id" value="{{ Auth::user()->assembly->id }}">
                     <div class="text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60 p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
                         <div class="grid md:grid-cols-2 gap-6">
 
@@ -70,48 +71,6 @@
                                 @enderror
                             </div>
 
-                            <div>
-                                <label class="block text-sm font-medium mb-2" for="location">Nama Lokasi (Tempat) <span class="text-red-500">*</span></label>
-                                <input id="location" class="form-input w-full @error('location') is-invalid @enderror" type="text" name="location" value="{{ old('location') }}" required placeholder="Contoh: Masjid Raya"/>
-                                @error('location')
-                                    <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                        </div>
-
-                        <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold my-4">Alamat Lengkap</h2>
-                        <div class="grid grid-cols-4 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-2" for="province">Provinsi</label>
-                                <select id="province" class="form-select w-full @error('province') is-invalid @enderror" name="province">
-                                    <option value="">Pilih Provinsi</option>
-                                    @foreach($provinces as $code => $name)
-                                        <option value="{{ $code ?? '' }}">{{ $name ?? '' }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium mb-2" for="city">Kabupaten/Kota</label>
-                                <select id="city" class="form-select w-full @error('city') is-invalid @enderror" name="city">
-                                    <option value="">Pilih Kabupaten/Kota</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium mb-2" for="district">Kecamatan</label>
-                                <select id="district" class="form-select w-full" name="district">
-                                    <option value="">Pilih Kecamatan</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium mb-2" for="village">Desa/Kelurahan</label>
-                                <select id="village" class="form-select w-full" name="village">
-                                    <option value="">Pilih Desa/Kelurahan</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
 
@@ -125,86 +84,4 @@
         </div>
 
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-
-    <script>
-        // Jalankan saat dokumen siap
-        $(document).ready(function() {
-
-            // 1. Event Listener untuk PROVINSI
-            $('#province').on('change', function() {
-                var provinceCode = $(this).val(); // Ambil code provinsi
-
-                // Kosongkan dropdown di bawahnya
-                $('#city').empty().append('<option value="">Pilih Kabupaten/Kota</option>');
-                $('#district').empty().append('<option value="">Pilih Kecamatan</option>');
-                $('#village').empty().append('<option value="">Pilih Desa/Kelurahan</option>');
-
-                if (provinceCode) {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/get-cities/' + provinceCode,
-                        dataType: 'json',
-                        success: function(data) {
-                            $.each(data, function(code, name) {
-                                $('#city').append('<option value="' + code + '">' + name + '</option>');
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Error memuat kota:", error);
-                        }
-                    });
-                }
-            });
-
-            // 2. Event Listener untuk KOTA/KABUPATEN
-            $('#city').on('change', function() {
-                var cityCode = $(this).val();
-
-                $('#district').empty().append('<option value="">Pilih Kecamatan</option>');
-                $('#village').empty().append('<option value="">Pilih Desa/Kelurahan</option>');
-
-                if (cityCode) {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/get-districts/' + cityCode,
-                        dataType: 'json',
-                        success: function(data) {
-                            $.each(data, function(code, name) {
-                                $('#district').append('<option value="' + code + '">' + name + '</option>');
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Error memuat kecamatan:", error);
-                        }
-                    });
-                }
-            });
-
-            // 3. Event Listener untuk KECAMATAN
-            $('#district').on('change', function() {
-                var districtCode = $(this).val();
-
-                $('#village').empty().append('<option value="">Pilih Desa/Kelurahan</option>');
-
-                if (districtCode) {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/get-villages/' + districtCode,
-                        dataType: 'json',
-                        success: function(data) {
-                            $.each(data, function(code, name) {
-                                $('#village').append('<option value="' + code + '">' + name + '</option>');
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Error memuat desa:", error);
-                        }
-                    });
-                }
-            });
-
-        });
-    </script>
 </x-dashboard-layout>

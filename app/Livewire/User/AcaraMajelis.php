@@ -45,11 +45,10 @@ class AcaraMajelis extends Component
         $events_count = Event::whereHas('assembly', function ($assemblyQuery) {
             $assemblyQuery->where('user_id', Auth::user()->id);
         })->count();
-        $query = Event::with(['teacher', 'assembly'])
+        $query = Event::with('assembly')
             ->whereHas('assembly', function ($assemblyQuery) {
                 $assemblyQuery->where('user_id', Auth::user()->id);
-            })
-            ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')");
+            })->latest();
 
         // Ambil hasil akhir dengan paginasi
         $events = $query->simplePaginate($this->paginate);
