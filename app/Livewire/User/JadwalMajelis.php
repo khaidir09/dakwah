@@ -12,22 +12,9 @@ class JadwalMajelis extends Component
     use WithPagination;
 
     public $paginate = 10;
-    public $search;
 
     public $confirmingDeletion = false;
     public $schedule_id_to_delete;
-
-    protected $updatesQueryString = ['search'];
-
-    public function mount()
-    {
-        $this->search = request()->query('search', $this->search);
-    }
-
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
 
     public function confirmDelete($scheduleId)
     {
@@ -63,19 +50,6 @@ class JadwalMajelis extends Component
                 $assemblyQuery->where('user_id', Auth::user()->id);
             })
             ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')");
-
-        // Jika ada pencarian, tambahkan kondisi where
-        if ($this->search) {
-            $searchTerm = '%' . $this->search . '%';
-
-            $query->where(function ($subQuery) use ($searchTerm) {
-                $subQuery->where('nama_jadwal', 'like', $searchTerm)->orWhereHas('teacher', function ($teacherQuery) use ($searchTerm) {
-                    $teacherQuery->where('name', 'like', $searchTerm);
-                })->orWhereHas('assembly', function ($assemblyQuery) use ($searchTerm) {
-                    $assemblyQuery->where('nama_majelis', 'like', $searchTerm);
-                });;
-            });
-        }
 
         // Ambil hasil akhir dengan paginasi
         $schedules = $query->simplePaginate($this->paginate);
