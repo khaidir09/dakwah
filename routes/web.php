@@ -62,6 +62,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/kelola-jadwal-majelis', [ManagedMajelisController::class, 'list'])->name('kelola-jadwal-majelis');
     Route::get('/kelola-jadwal-majelis/create', [ManagedMajelisController::class, 'create'])->name('kelola-jadwal-majelis.create');
     Route::post('/kelola-jadwal-majelis', [ManagedMajelisController::class, 'store'])->name('kelola-jadwal-majelis.store');
+    Route::get('/kelola-jadwal-majelis/{id}/edit', [ManagedMajelisController::class, 'editSchedule'])->name('kelola-jadwal-majelis.edit');
+    Route::put('/kelola-jadwal-majelis/{id}', [ManagedMajelisController::class, 'updateSchedule'])->name('kelola-jadwal-majelis.update');
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {

@@ -148,4 +148,40 @@ class ManagedMajelisController extends Controller
 
         return redirect()->route('kelola-jadwal-majelis')->with('message', 'Jadwal majelis berhasil ditambahkan!');
     }
+
+    public function editSchedule($id)
+    {
+        $schedule = Schedule::with('assembly')->findOrFail($id);
+
+        // Authorization check
+        if ($schedule->assembly->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $teachers = Teacher::where('wafat_masehi', null)->get();
+        return view('pages.user.kelola-majelis.edit-jadwal', compact('schedule', 'teachers'));
+    }
+
+    public function updateSchedule(Request $request, $id)
+    {
+        $schedule = Schedule::with('assembly')->findOrFail($id);
+
+        // Authorization check
+        if ($schedule->assembly->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $validatedData = $request->validate([
+            'nama_jadwal' => 'required|string|max:255',
+            'teacher_id' => 'required|exists:teachers,id',
+            'waktu' => 'required',
+            'deskripsi' => 'string|nullable',
+            'hari' => 'required|string|max:50',
+            'access' => 'required|string|in:Umum,Ikhwan,Akhwat',
+        ]);
+
+        $schedule->update($validatedData);
+
+        return redirect()->route('kelola-jadwal-majelis')->with('message', 'Jadwal majelis berhasil diperbarui!');
+    }
 }
