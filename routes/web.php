@@ -57,11 +57,11 @@ Route::get('/get-districts/{city_code}', [DependantDropdownController::class, 'g
 Route::get('/get-villages/{district_code}', [DependantDropdownController::class, 'getVillages'])->name('get-villages');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/majelis-ku', [ManagedMajelisController::class, 'index'])->name('majelis-ku.index');
-    Route::get('/majelis-ku/create', [ManagedMajelisController::class, 'create'])->name('majelis-ku.create');
-    Route::post('/majelis-ku', [ManagedMajelisController::class, 'store'])->name('majelis-ku.store');
-    Route::get('/majelis-ku/{id}/edit', [ManagedMajelisController::class, 'edit'])->name('majelis-ku.edit');
-    Route::put('/majelis-ku/{id}', [ManagedMajelisController::class, 'update'])->name('majelis-ku.update');
+    Route::get('/kelola-majelis/{id}', [ManagedMajelisController::class, 'edit'])->name('kelola-majelis.edit');
+    Route::put('/kelola-majelis/{id}', [ManagedMajelisController::class, 'update'])->name('kelola-majelis.update');
+    Route::get('/kelola-jadwal-majelis', [ManagedMajelisController::class, 'list'])->name('kelola-jadwal-majelis');
+    Route::get('/kelola-jadwal-majelis/create', [ManagedMajelisController::class, 'create'])->name('kelola-jadwal-majelis.create');
+    Route::post('/kelola-jadwal-majelis', [ManagedMajelisController::class, 'store'])->name('kelola-jadwal-majelis.store');
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {

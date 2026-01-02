@@ -2,102 +2,79 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Models\Assembly;
 use App\Models\Teacher;
+use App\Models\Assembly;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Laravolt\Indonesia\Models\Province;
 use Intervention\Image\Laravel\Facades\Image;
 
 class ManagedMajelisController extends Controller
 {
-    public function index()
-    {
-        $assemblies = Assembly::where('user_id', auth()->id())->latest()->get();
-        return view('pages.user.majelis-ku.index', compact('assemblies'));
-    }
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'nama_majelis' => 'required',
+    //         'teacher_id' => 'required',
+    //         'alamat' => 'required',
+    //         'deskripsi' => 'required',
+    //         'province' => 'required',
+    //         'city' => 'required',
+    //         'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //     ]);
 
-    public function create()
-    {
-        $teachers = Teacher::all();
-        $provinces = Province::pluck('name', 'code');
+    //     $data = $request->except(['gambar', 'province', 'city', 'district', 'village']);
 
-        return view('pages.user.majelis-ku.create', compact('teachers', 'provinces'));
-    }
+    //     $data['user_id'] = auth()->id();
+    //     $data['province_code'] = $request->province;
+    //     $data['city_code'] = $request->city;
+    //     $data['district_code'] = $request->district;
+    //     $data['village_code'] = $request->village;
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama_majelis' => 'required',
-            'teacher_id' => 'required',
-            'alamat' => 'required',
-            'deskripsi' => 'required',
-            'province' => 'required',
-            'city' => 'required',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+    //     if ($request->hasFile('gambar')) {
+    //         $file = $request->file('gambar');
+    //         $filename = time() . '.' . $file->getClientOriginalExtension();
 
-        $data = $request->except(['gambar', 'province', 'city', 'district', 'village']);
+    //         $pathLarge = $file->storeAs('public/majelis/large', $filename);
+    //         $thumbPath = 'public/majelis/thumb/' . $filename;
 
-        $data['user_id'] = auth()->id();
-        $data['province_code'] = $request->province;
-        $data['city_code'] = $request->city;
-        $data['district_code'] = $request->district;
-        $data['village_code'] = $request->village;
+    //         $image = Image::read($file);
+    //         $image->scaleDown(width: 800);
+    //         Storage::put($pathLarge, $image->toJpeg(80));
 
-        if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+    //         $imageThumb = Image::read($file);
+    //         $imageThumb->scaleDown(width: 400);
+    //         Storage::put($thumbPath, $imageThumb->toJpeg(80));
 
-            $pathLarge = $file->storeAs('public/majelis/large', $filename);
-            $thumbPath = 'public/majelis/thumb/' . $filename;
+    //         $data['gambar'] = $pathLarge;
+    //     }
 
-            $image = Image::read($file);
-            $image->scaleDown(width: 800);
-            Storage::put($pathLarge, $image->toJpeg(80));
+    //     Assembly::create($data);
 
-            $imageThumb = Image::read($file);
-            $imageThumb->scaleDown(width: 400);
-            Storage::put($thumbPath, $imageThumb->toJpeg(80));
-
-            $data['gambar'] = $pathLarge;
-        }
-
-        Assembly::create($data);
-
-        return redirect()->route('majelis-ku.index')->with('status', 'Majelis berhasil ditambahkan');
-    }
+    //     return redirect()->route('kelola-majelis.index')->with('status', 'Majelis berhasil ditambahkan');
+    // }
 
     public function edit($id)
     {
-        $majelis = Assembly::where('user_id', auth()->id())->findOrFail($id);
-        $teachers = Teacher::all();
-        $provinces = Province::pluck('name', 'code');
+        $majelis = Assembly::where('user_id', Auth::user()->id)->findOrFail($id);
 
-        return view('pages.user.majelis-ku.edit', compact('majelis', 'teachers', 'provinces'));
+        return view('pages.user.kelola-majelis.edit', compact('majelis'));
     }
 
     public function update(Request $request, $id)
     {
-        $majelis = Assembly::where('user_id', auth()->id())->findOrFail($id);
+        $majelis = Assembly::where('user_id', Auth::user()->id)->findOrFail($id);
 
         $request->validate([
             'nama_majelis' => 'required',
-            'teacher_id' => 'required',
             'alamat' => 'required',
             'deskripsi' => 'required',
-            'province' => 'required',
-            'city' => 'required',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->except(['gambar', 'province', 'city', 'district', 'village']);
-
-        $data['province_code'] = $request->province;
-        $data['city_code'] = $request->city;
-        $data['district_code'] = $request->district;
-        $data['village_code'] = $request->village;
+        $data = $request->except(['gambar']);
 
         if ($request->hasFile('gambar')) {
             // Delete old image
@@ -140,6 +117,35 @@ class ManagedMajelisController extends Controller
 
         $majelis->update($data);
 
-        return redirect()->route('majelis-ku.index')->with('status', 'Data majelis berhasil diperbarui');
+        return redirect()->back()->with('status', 'Data majelis berhasil diperbarui');
+    }
+
+    public function list()
+    {
+        return view('pages.user.kelola-majelis.jadwal');
+    }
+
+    public function create()
+    {
+        $majelis = Assembly::where('user_id', Auth::user()->id)->first();
+        $teachers = Teacher::where('wafat_masehi', null)->get();
+        return view('pages.user.kelola-majelis.tambah-jadwal', compact('majelis', 'teachers'));
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'nama_jadwal' => 'required|string|max:255',
+            'assembly_id' => 'required|exists:assemblies,id',
+            'teacher_id' => 'required|exists:teachers,id',
+            'waktu' => 'required',
+            'deskripsi' => 'string|nullable',
+            'hari' => 'required|string|max:50',
+            'access' => 'required|string|in:Umum,Ikhwan,Akhwat',
+        ]);
+
+        Schedule::create($validatedData);
+
+        return redirect()->route('kelola-jadwal-majelis')->with('message', 'Jadwal majelis berhasil ditambahkan!');
     }
 }

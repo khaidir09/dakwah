@@ -65,11 +65,6 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function assemblies()
-    {
-        return $this->hasMany(Assembly::class);
-    }
-
     public function province()
     {
         // Parameter: (Model Tujuan, foreign_key_lokal, owner_key_di_tabel_tujuan)
@@ -101,5 +96,10 @@ class User extends Authenticatable
     public function village()
     {
         return $this->belongsTo(Village::class, 'village_code', 'code');
+    }
+
+    public function assembly()
+    {
+        return $this->hasOne(Assembly::class);
     }
 }

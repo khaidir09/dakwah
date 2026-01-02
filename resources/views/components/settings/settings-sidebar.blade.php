@@ -1,7 +1,6 @@
 <div class="flex flex-nowrap overflow-x-scroll no-scrollbar md:block md:overflow-auto px-3 py-6 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700/60 min-w-60 md:space-y-3">
     <!-- Group 1 -->
     <div>
-        <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-3">Pengaturan Akun</div>
         <ul class="flex flex-nowrap md:block mr-3 md:mr-0">
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('pengaturan-akun')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('pengaturan-akun') }}">
@@ -11,6 +10,24 @@
                     <span class="text-sm font-medium @if(Route::is('pengaturan-akun')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Profil</span>
                 </a>
             </li>
+            @if (Auth::user()->assembly != null)
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('kelola-majelis.edit')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kelola-majelis.edit', Auth::user()->assembly->id) }}">
+                        <svg class="shrink-0 fill-current mr-2 @if(Route::is('kelola-majelis.edit')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">
+                            <path d="m9 12.614 4.806 1.374a.15.15 0 0 0 .174-.21L8.133 2.082a.15.15 0 0 0-.268 0L2.02 13.777a.149.149 0 0 0 .174.21L7 12.614V9a1 1 0 1 1 2 0v3.614Zm-1 1.794-5.257 1.503c-1.798.514-3.35-1.355-2.513-3.028L6.076 1.188c.791-1.584 3.052-1.584 3.845 0l5.848 11.695c.836 1.672-.714 3.54-2.512 3.028L8 14.408Z" />
+                        </svg>
+                        <span class="text-sm font-medium @if(Route::is('kelola-majelis.edit')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Majelis</span>
+                    </a>
+                </li>
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('kelola-jadwal-majelis')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kelola-jadwal-majelis')}}">
+                        <svg class="shrink-0 fill-current mr-2 @if(Route::is('kelola-majelis.edit')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">
+                            <path d="m9 12.614 4.806 1.374a.15.15 0 0 0 .174-.21L8.133 2.082a.15.15 0 0 0-.268 0L2.02 13.777a.149.149 0 0 0 .174.21L7 12.614V9a1 1 0 1 1 2 0v3.614Zm-1 1.794-5.257 1.503c-1.798.514-3.35-1.355-2.513-3.028L6.076 1.188c.791-1.584 3.052-1.584 3.845 0l5.848 11.695c.836 1.672-.714 3.54-2.512 3.028L8 14.408Z" />
+                        </svg>
+                        <span class="text-sm font-medium @if(Route::is('kelola-jadwal-majelis')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Jadwal Majelis</span>
+                    </a>
+                </li>
+            @endif
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('notifications')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="#">
                     <svg class="shrink-0 fill-current mr-2 @if(Route::is('notifications')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">
@@ -43,12 +60,6 @@
                     <span class="text-sm font-medium @if(Route::is('billing')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Pembayaran</span>
                 </a>
             </li>
-        </ul>
-    </div>
-    <!-- Group 2 -->
-    <div>
-        <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-3">Pengalaman</div>
-        <ul class="flex flex-nowrap md:block mr-3 md:mr-0">
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('feedback')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('feedback') }}">
                     <svg class="shrink-0 fill-current mr-2 @if(Route::is('feedback')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">
