@@ -22,6 +22,7 @@ use App\Http\Controllers\User\VideoController as UserVideoController;
 use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\User\WiridController as UserWiridController;
 use App\Http\Controllers\User\ManagedMajelisController;
+use App\Http\Controllers\User\ManageEventController;
 use App\Http\Controllers\User\SettingController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WiridController;
@@ -64,6 +65,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/kelola-jadwal-majelis', [ManagedMajelisController::class, 'store'])->name('kelola-jadwal-majelis.store');
     Route::get('/kelola-jadwal-majelis/{id}/edit', [ManagedMajelisController::class, 'editSchedule'])->name('kelola-jadwal-majelis.edit');
     Route::put('/kelola-jadwal-majelis/{id}', [ManagedMajelisController::class, 'updateSchedule'])->name('kelola-jadwal-majelis.update');
+
+    Route::get('/kelola-acara-majelis', [ManageEventController::class, 'index'])->name('kelola-acara-majelis');
+    Route::get('/kelola-acara-majelis/create', [ManageEventController::class, 'create'])->name('kelola-acara-majelis.create');
+    Route::post('/kelola-acara-majelis', [ManageEventController::class, 'store'])->name('kelola-acara-majelis.store');
+    Route::get('/kelola-acara-majelis/{id}/edit', [ManageEventController::class, 'edit'])->name('kelola-acara-majelis.edit');
+    Route::put('/kelola-acara-majelis/{id}', [ManageEventController::class, 'update'])->name('kelola-acara-majelis.update');
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
