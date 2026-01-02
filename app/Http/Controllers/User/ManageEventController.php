@@ -4,8 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\Assembly;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Laravolt\Indonesia\Models\Province;
 use Intervention\Image\Laravel\Facades\Image;
@@ -47,7 +49,13 @@ class ManageEventController extends Controller
             'village' => 'nullable|string|max:20',
         ]);
 
+        $assembly = Assembly::where('user_id', Auth::id())->first();
+        if (!$assembly) {
+            return redirect()->back()->withErrors(['message' => 'Anda belum memiliki Majelis.']);
+        }
+
         $dataToCreate = $validatedData;
+        $dataToCreate['assembly_id'] = $assembly->id;
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -84,7 +92,7 @@ class ManageEventController extends Controller
         // 6. Buat record baru di database
         Event::create($dataToCreate);
 
-        return redirect()->route('event.index')->with('message', 'Event berhasil ditambahkan!');
+        return redirect()->route('kelola-acara-majelis')->with('message', 'Event berhasil ditambahkan!');
     }
 
     /**
@@ -100,7 +108,14 @@ class ManageEventController extends Controller
      */
     public function edit(string $id)
     {
-        $event = Event::findOrFail($id);
+        $event = Event::where('id', $id)->firstOrFail();
+
+        // Authorization check: Ensure the event belongs to an assembly owned by the user
+        $assembly = Assembly::where('user_id', Auth::id())->first();
+        if (!$assembly || $event->assembly_id !== $assembly->id) {
+            abort(403, 'Unauthorized');
+        }
+
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
         return view('pages.user.kelola-acara.edit-acara', compact('event', 'provinces'));
     }
@@ -124,6 +139,12 @@ class ManageEventController extends Controller
         ]);
 
         $event = Event::findOrFail($id);
+
+        // Authorization check
+        $assembly = Assembly::where('user_id', Auth::id())->first();
+        if (!$assembly || $event->assembly_id !== $assembly->id) {
+            abort(403, 'Unauthorized');
+        }
 
         $dataToUpdate = $validatedData;
 
@@ -170,7 +191,7 @@ class ManageEventController extends Controller
         // 7. Update data event
         $event->update($dataToUpdate);
 
-        return redirect()->route('event.index')->with('message', 'Event berhasil diperbarui!');
+        return redirect()->route('kelola-acara-majelis')->with('message', 'Event berhasil diperbarui!');
     }
 
     /**

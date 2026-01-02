@@ -18,6 +18,11 @@ class Assembly extends Model
         return $this->hasMany(Schedule::class);
     }
 
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+
     public function teacher()
     {
         return $this->belongsTo(Teacher::class);
