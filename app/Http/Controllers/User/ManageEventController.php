@@ -27,8 +27,7 @@ class ManageEventController extends Controller
      */
     public function create()
     {
-        $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
-        return view('pages.user.kelola-acara.tambah-acara', compact('provinces'));
+        return view('pages.user.kelola-acara.tambah-acara');
     }
 
     /**
@@ -40,13 +39,8 @@ class ManageEventController extends Controller
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
             'date' => 'required|date',
-            'location' => 'required|string|max:255',
             'access' => 'required|in:Umum,Khusus',
             'category' => 'required|string|max:255',
-            'province' => 'nullable|string|max:20',
-            'city' => 'nullable|string|max:20',
-            'district' => 'nullable|string|max:20',
-            'village' => 'nullable|string|max:20',
         ]);
 
         $assembly = Assembly::where('user_id', Auth::id())->first();
@@ -56,6 +50,11 @@ class ManageEventController extends Controller
 
         $dataToCreate = $validatedData;
         $dataToCreate['assembly_id'] = $assembly->id;
+        $dataToCreate['location'] = $assembly->alamat;
+        $dataToCreate['province_code'] = $assembly->province_code;
+        $dataToCreate['city_code'] = $assembly->city_code;
+        $dataToCreate['district_code'] = $assembly->district_code;
+        $dataToCreate['village_code'] = $assembly->village_code;
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -76,18 +75,6 @@ class ManageEventController extends Controller
             $dataToCreate['image'] = 'events/' . $filename;
         }
 
-        $dataToCreate['province_code'] = $validatedData['province'] ?? null;
-        $dataToCreate['city_code'] = $validatedData['city'] ?? null;
-        $dataToCreate['district_code'] = $validatedData['district'] ?? null;
-        $dataToCreate['village_code'] = $validatedData['village'] ?? null;
-
-        // 5. Hapus key lama agar tidak error saat create
-        unset(
-            $dataToCreate['province'],
-            $dataToCreate['city'],
-            $dataToCreate['district'],
-            $dataToCreate['village']
-        );
 
         // 6. Buat record baru di database
         Event::create($dataToCreate);
