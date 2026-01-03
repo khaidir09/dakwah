@@ -152,42 +152,48 @@
                                                 <h2 class="text-gray-800 dark:text-gray-100 font-semibold mb-2">Acara Akan Datang</h2>
                                                 <div class="bg-white dark:bg-gray-900 p-4 border border-gray-200 dark:border-gray-700/60 rounded-lg shadow-xs">
                                                     <ul class="space-y-3">
-
-                                                        <li class="sm:flex sm:items-center sm:justify-between">
-                                                            <div class="font-medium text-gray-800 dark:text-gray-100">Belum ada</div>
-                                                        </li>
-
-                                                        <!-- Item -->
-                                                        {{-- <li class="sm:flex sm:items-center sm:justify-between">
-                                                            <div class="sm:grow flex items-center text-sm">
-                                                                <!-- Icon -->
-                                                                <div class="w-8 h-8 rounded-full shrink-0 bg-yellow-500 my-2 mr-3">
-                                                                    <svg class="w-8 h-8 fill-current text-yellow-50" viewBox="0 0 32 32">
-                                                                        <path d="M21 14a.75.75 0 0 1-.75-.75 1.5 1.5 0 0 0-1.5-1.5.75.75 0 1 1 0-1.5 1.5 1.5 0 0 0 1.5-1.5.75.75 0 1 1 1.5 0 1.5 1.5 0 0 0 1.5 1.5.75.75 0 1 1 0 1.5 1.5 1.5 0 0 0-1.5 1.5.75.75 0 0 1-.75.75Zm-7 10a1 1 0 0 1-1-1 4 4 0 0 0-4-4 1 1 0 0 1 0-2 4 4 0 0 0 4-4 1 1 0 0 1 2 0 4 4 0 0 0 4 4 1 1 0 0 1 0 2 4 4 0 0 0-4 4 1 1 0 0 1-1 1Z" />
-                                                                    </svg>
-                                                                </div>
-                                                                <!-- Position -->
-                                                                <div>
-                                                                    <div class="font-medium text-gray-800 dark:text-gray-100">Senior Product Designer</div>
-                                                                    <div class="flex flex-nowrap items-center space-x-2 whitespace-nowrap">
-                                                                        <div>Remote</div>
-                                                                        <div class="text-gray-400 dark:text-gray-600">·</div>
-                                                                        <div>April, 2020 - Today</div>
+                                                        @forelse ($upcomingEvents as $event)
+                                                            <li class="sm:flex sm:items-center sm:justify-between border-b border-gray-100 dark:border-gray-700/60 pb-3 last:border-0 last:pb-0">
+                                                                <div class="sm:grow flex items-center text-sm">
+                                                                    <!-- Icon/Image -->
+                                                                    @if($event->image)
+                                                                        <div class="w-10 h-10 rounded-lg shrink-0 overflow-hidden my-2 mr-3">
+                                                                            <img src="{{ Storage::url($event->image) }}" alt="{{ $event->name }}" class="w-full h-full object-cover">
+                                                                        </div>
+                                                                    @else
+                                                                        <div class="w-10 h-10 rounded-lg shrink-0 bg-emerald-500 flex items-center justify-center my-2 mr-3 text-white">
+                                                                            <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">
+                                                                                 <path d="M21 14a.75.75 0 0 1-.75-.75 1.5 1.5 0 0 0-1.5-1.5.75.75 0 1 1 0-1.5 1.5 1.5 0 0 0 1.5-1.5.75.75 0 1 1 1.5 0 1.5 1.5 0 0 0 1.5 1.5.75.75 0 1 1 0 1.5 1.5 1.5 0 0 0-1.5 1.5.75.75 0 0 1-.75.75Zm-7 10a1 1 0 0 1-1-1 4 4 0 0 0-4-4 1 1 0 0 1 0-2 4 4 0 0 0 4-4 1 1 0 0 1 2 0 4 4 0 0 0 4 4 1 1 0 0 1 0 2 4 4 0 0 0-4 4 1 1 0 0 1-1 1Z" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    @endif
+                                                                    <!-- Position -->
+                                                                    <div>
+                                                                        <div class="font-medium text-gray-800 dark:text-gray-100">
+                                                                            {{-- Since we don't have a dedicated event detail page yet, we link to the list or use a modal in future --}}
+                                                                            <a href="{{ route('event-list') }}" class="hover:text-violet-500 transition-colors">
+                                                                                {{ $event->name }}
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="flex flex-nowrap items-center space-x-2 whitespace-nowrap">
+                                                                            <div>{{ \Carbon\Carbon::parse($event->date)->translatedFormat('d F Y, H:i') }}</div>
+                                                                            <div class="text-gray-400 dark:text-gray-600">·</div>
+                                                                            <div class="truncate max-w-[150px]">{{ $event->location }}</div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <!-- Tags -->
-                                                            <div class="sm:ml-2 mt-2 sm:mt-0">
-                                                                <ul class="flex flex-wrap sm:justify-end -m-1">
-                                                                    <li class="m-1">
-                                                                        <button class="inline-flex items-center justify-center text-xs font-medium leading-5 rounded-full px-2.5 py-0.5 border border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 shadow-xs bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 transition">Marketing</button>
-                                                                    </li>
-                                                                    <li class="m-1">
-                                                                        <button class="inline-flex items-center justify-center text-xs font-medium leading-5 rounded-full px-2.5 py-0.5 border border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 shadow-xs bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 transition">+4</button>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li> --}}
+                                                                <!-- Tags/Type -->
+                                                                <div class="sm:ml-2 mt-2 sm:mt-0">
+                                                                    <span class="inline-flex items-center justify-center text-xs font-medium leading-5 rounded-full px-2.5 py-0.5 border border-gray-200 dark:border-gray-700/60 shadow-xs bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                                                                        {{ $event->category }}
+                                                                    </span>
+                                                                </div>
+                                                            </li>
+                                                        @empty
+                                                            <li class="sm:flex sm:items-center sm:justify-between">
+                                                                <div class="font-medium text-gray-800 dark:text-gray-100">Belum ada</div>
+                                                            </li>
+                                                        @endforelse
 
                                                     </ul>
                                                 </div>
