@@ -23,7 +23,7 @@
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6 font-serif">Muqaddimah</h2>
                 <div class="prose prose-lg mx-auto text-gray-600 dark:text-gray-300">
                     <p>
-                        Kalimantan, khususnya Tanah Banjar, adalah serambi ulama. Dari Syekh Muhammad Arsyad Al-Banjari (Datu Kalampayan) hingga KH. Muhammad Zaini bin Abdul Ghani (Abah Guru Sekumpul), tanah ini tidak pernah kering dari majelis ilmu dan lantunan zikir & sholawat. Namun, di era informasi yang begitu cepat, seringkali kita tertinggal kabar. Jadwal majelis yang berubah, informasi haul yang simpang siur, hingga kerinduan akan bacaan wirid yang otentik, menjadi tantangan tersendiri bagi kita para pencari ilmu.
+                        Kalimantan, khususnya Tanah Banjar, adalah serambi ulama. Dari Syekh Muhammad Arsyad Al-Banjari (Datu Kalampayan) hingga KH. Muhammad Zaini bin Abdul Ghani (Abah Guru Sekumpul), tanah ini tidak pernah kering dari majelis ilmu dan lantunan zikir & sholawat. Namun, di era informasi yang begitu cepat, seringkali kita tertinggal kabar. Jadwal majelis yang berubah, informasi acara yang simpang siur, hingga kerinduan akan bacaan wirid yang otentik, menjadi tantangan tersendiri bagi kita para pencari ilmu.
                         <strong>Syaikhuna</strong> hadir bukan untuk menggantikan kehadiran fisik di majelis, melainkan sebagai khadam (pelayan) digital. Kami berikhtiar menyambungkan kembali informasi yang terputus, memastikan setiap langkah kaki Anda menuju majelis ilmu terbimbing oleh informasi yang valid dan terpercaya.
                     </p>
                     <p class="mt-4">
@@ -112,7 +112,7 @@
                     Syaikhuna dibangun dengan semangat gotong royong (Ta'awun). Kami terbuka untuk kolaborasi dengan berbagai pihak, baik pengurus majelis, komunitas IT, maupun donatur yang ingin berkontribusi dalam dakwah digital ini.
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="#" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 md:text-lg transition-colors">
+                    <a href="https://wa.me/6283199450909" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 md:text-lg transition-colors">
                         Hubungi Kami
                     </a>
                     <a href="#" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 md:text-lg transition-colors">
