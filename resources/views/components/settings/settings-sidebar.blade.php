@@ -55,7 +55,7 @@
                     <span class="text-sm font-medium @if(Route::is('apps')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Aplikasi Terhubung</span>
                 </a>
             </li>
-            <li class="mr-0.5 md:mr-0 md:mb-0.5">
+            {{-- <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('plans')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="#">                
                     <svg class="shrink-0 fill-current mr-2 @if(Route::is('plans')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">
                         <path d="M5 9a1 1 0 1 1 0-2h6a1 1 0 0 1 0 2H5ZM1 4a1 1 0 1 1 0-2h14a1 1 0 0 1 0 2H1Zm0 10a1 1 0 0 1 0-2h14a1 1 0 0 1 0 2H1Z" />
@@ -70,7 +70,7 @@
                     </svg>
                     <span class="text-sm font-medium @if(Route::is('billing')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Pembayaran</span>
                 </a>
-            </li>
+            </li> --}}
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('feedback')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('feedback') }}">
                     <svg class="shrink-0 fill-current mr-2 @if(Route::is('feedback')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">

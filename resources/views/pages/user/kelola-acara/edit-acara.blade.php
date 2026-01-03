@@ -15,7 +15,7 @@
             </div>
 
             <div>
-                <form action="{{ route('kelola-acara-majelis.update', $event->id) }}" method="POST">
+                <form action="{{ route('kelola-acara-majelis.update', $event->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     
