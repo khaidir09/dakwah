@@ -15,7 +15,7 @@
             </div>
 
             <div>
-                <form action="{{ route('kelola-acara-majelis.store') }}" method="POST">
+                <form action="{{ route('kelola-acara-majelis.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="assembly_id" value="{{ Auth::user()->assembly->id }}">
                     <div class="text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60 p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
