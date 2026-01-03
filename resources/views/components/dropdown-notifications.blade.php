@@ -35,7 +35,7 @@
             <li class="border-b border-gray-200 dark:border-gray-700/60 last:border-0">
                 <a class="block py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/20" href="#0" @click="open = false" @focus="open = true" @focusout="open = false">
                     <span class="block text-sm mb-2">📣 <span class="font-medium text-gray-800 dark:text-gray-100">Launching</span> Platform Syaikhuna.</span>
-                    <span class="block text-xs font-medium text-gray-400 dark:text-gray-500">26 Desember 2025</span>
+                    {{-- <span class="block text-xs font-medium text-gray-400 dark:text-gray-500">26 Desember 2025</span> --}}
                 </a>
             </li>
         </ul>                
