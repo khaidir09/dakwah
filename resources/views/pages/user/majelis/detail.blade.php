@@ -63,7 +63,7 @@
                                             <button class="btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
                                                 Ikuti
                                             </button>
-                                            <a href="" class="btn-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
+                                            <a href="{{ $assembly->maps }}" class="btn-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
                                                 Maps
                                             </a>
                                         </div>
@@ -148,7 +148,7 @@
                                             </div>
                                 
                                             <!-- Work History -->
-                                            <div>
+                                            <div x-data="{ previewOpen: false, previewImage: '' }">
                                                 <h2 class="text-gray-800 dark:text-gray-100 font-semibold mb-2">Acara Akan Datang</h2>
                                                 <div class="bg-white dark:bg-gray-900 p-4 border border-gray-200 dark:border-gray-700/60 rounded-lg shadow-xs">
                                                     <ul class="space-y-3">
@@ -157,8 +157,9 @@
                                                                 <div class="sm:grow flex items-center text-sm">
                                                                     <!-- Icon/Image -->
                                                                     @if($event->image)
-                                                                        <div class="w-10 h-10 rounded-lg shrink-0 overflow-hidden my-2 mr-3">
-                                                                            <img src="{{ Storage::url($event->image) }}" alt="{{ $event->name }}" class="w-full h-full object-cover">
+                                                                        <div class="w-10 h-10 rounded-lg shrink-0 overflow-hidden my-2 mr-3 group relative cursor-pointer"
+                                                                             @click="previewImage = '{{ Storage::url($event->image) }}'; previewOpen = true">
+                                                                            <img src="{{ Storage::url($event->image) }}" alt="{{ $event->name }}" class="w-full h-full object-cover transition-opacity group-hover:opacity-90">
                                                                         </div>
                                                                     @else
                                                                         <div class="w-10 h-10 rounded-lg shrink-0 bg-emerald-500 flex items-center justify-center my-2 mr-3 text-white">
@@ -170,13 +171,10 @@
                                                                     <!-- Position -->
                                                                     <div>
                                                                         <div class="font-medium text-gray-800 dark:text-gray-100">
-                                                                            {{-- Since we don't have a dedicated event detail page yet, we link to the list or use a modal in future --}}
-                                                                            <a href="{{ route('event-list') }}" class="hover:text-violet-500 transition-colors">
-                                                                                {{ $event->name }}
-                                                                            </a>
+                                                                            {{ $event->name }}
                                                                         </div>
                                                                         <div class="flex flex-nowrap items-center space-x-2 whitespace-nowrap">
-                                                                            <div>{{ \Carbon\Carbon::parse($event->date)->translatedFormat('d F Y, H:i') }}</div>
+                                                                            <div>{{ \Carbon\Carbon::parse($event->date)->locale('id')->translatedFormat('d F Y, H:i') }}</div>
                                                                             <div class="text-gray-400 dark:text-gray-600">·</div>
                                                                             <div class="truncate max-w-[150px]">{{ $event->location }}</div>
                                                                         </div>
@@ -197,6 +195,28 @@
 
                                                     </ul>
                                                 </div>
+
+                                                <!-- Image Preview Modal -->
+                                                <div
+                                                    x-show="previewOpen"
+                                                    style="display: none"
+                                                    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
+                                                    x-transition:enter="transition ease-out duration-300"
+                                                    x-transition:enter-start="opacity-0"
+                                                    x-transition:enter-end="opacity-100"
+                                                    x-transition:leave="transition ease-in duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0"
+                                                >
+                                                    <!-- Modal Content -->
+                                                    <div @click.outside="previewOpen = false" class="relative max-w-5xl w-full max-h-full flex items-center justify-center">
+                                                         <button @click="previewOpen = false" class="absolute -top-12 right-0 text-white hover:text-gray-300 focus:outline-none">
+                                                            <span class="sr-only">Close</span>
+                                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                         </button>
+                                                         <img :src="previewImage" class="rounded shadow-2xl object-contain max-h-[85vh] w-auto" alt="Event Preview">
+                                                    </div>
+                                                </div>
                                             </div>
                                 
                                         </div>
@@ -208,8 +228,12 @@
                                                 <div>{{$assembly->teacher->name }}</div>
                                             </div>
                                             <div class="text-sm">
-                                                <h3 class="font-medium text-gray-800 dark:text-gray-100">Kontak</h3>
-                                                <div>+62</div>
+                                                <h3 class="font-medium text-gray-800 dark:text-gray-100">Kontak Penanggung Jawab</h3>
+                                                @if ($assembly->user != null)
+                                                    <div>{{ $assembly->user->phone }}</div>
+                                                @else
+                                                    <div>-</div>
+                                                @endif
                                         </aside>
 
                                     </div>
