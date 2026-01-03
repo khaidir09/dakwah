@@ -52,13 +52,17 @@
                 <!-- General Info -->
                 <section>
                     <div class="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                        <div class="sm:w-1/2">
+                        <div class="sm:w-1/3">
                             <label class="block text-sm font-medium mb-1" for="name">Nama Lengkap</label>
                             <input id="name" name="name" class="form-input w-full" type="text" value="{{ old('name', Auth::user()->name) }}" />
                         </div>
-                        <div class="sm:w-1/2">
+                        <div class="sm:w-1/3">
                             <label class="block text-sm font-medium mb-1" for="email">Alamat Email</label>
                             <input id="email" name="email" class="form-input w-full" type="email" value="{{ old('email', Auth::user()->email) }}" />
+                        </div>
+                        <div class="sm:w-1/3">
+                            <label class="block text-sm font-medium mb-1" for="phone">Nomor Telepon/WA</label>
+                            <input id="phone" name="phone" class="form-input w-full" type="number" placeholder="Awali dengan 62 untuk pengganti 0." value="{{ old('phone', Auth::user()->phone) }}" />
                         </div>
                     </div>
                 </section>

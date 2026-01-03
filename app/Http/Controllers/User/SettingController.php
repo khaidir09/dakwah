@@ -25,6 +25,7 @@ class SettingController extends Controller
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8'],
             'current_password' => ['nullable', 'required_with:password', 'current_password'],
+            'phone' => ['nullable', 'string', 'max:20'],
             'photo' => ['nullable', 'image', 'max:1024'], // 1MB Max
             'province_code' => ['nullable', 'exists:indonesia_provinces,code'],
             'city_code' => ['nullable', 'exists:indonesia_cities,code'],
@@ -35,6 +36,7 @@ class SettingController extends Controller
         $user->forceFill([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
         ]);
 
         if ($request->filled('password')) {
