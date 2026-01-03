@@ -17,6 +17,7 @@ class MajelisController extends Controller
     {
         $assembly = Assembly::findOrFail($id);
         $schedules = Schedule::with('teacher')->where('assembly_id', $assembly->id)->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')")->get();
-        return view('pages/user/majelis/detail', compact('assembly', 'schedules'));
+        $upcomingEvents = $assembly->events()->where('date', '>=', now())->orderBy('date', 'asc')->take(5)->get();
+        return view('pages/user/majelis/detail', compact('assembly', 'schedules', 'upcomingEvents'));
     }
 }
