@@ -173,7 +173,7 @@
                                                                         <div class="font-medium text-gray-800 dark:text-gray-100">
                                                                             {{ $event->name }}
                                                                         </div>
-                                                                        <div class="flex flex-nowrap items-center space-x-2 whitespace-nowrap">
+                                                                        <div class="flex flex-wrap items-center space-x-2">
                                                                             <div>{{ \Carbon\Carbon::parse($event->date)->locale('id')->translatedFormat('d F Y, H:i') }}</div>
                                                                             <div class="text-gray-400 dark:text-gray-600">·</div>
                                                                             <div class="truncate max-w-[150px]">{{ $event->location }}</div>
