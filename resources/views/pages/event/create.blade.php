@@ -77,6 +77,21 @@
                             @enderror
                         </div>
 
+                        <!-- Assembly Dropdown -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="assembly_id">Pilih Majelis (Opsional)</label>
+                            <select id="assembly_id" class="form-select w-full @error('assembly_id') is-invalid @enderror" name="assembly_id">
+                                <option value="">Tidak Ada / Lokasi Manual</option>
+                                @foreach($assemblies as $id => $name)
+                                    <option value="{{ $id }}" {{ old('assembly_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                @endforeach
+                            </select>
+                            <p class="text-xs text-gray-500 mt-1">Jika dipilih, lokasi akan mengikuti data Majelis.</p>
+                             @error('assembly_id')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div>
                             <label class="block text-sm font-medium mb-2" for="image">Poster (Gambar)</label>
                             <input id="image" class="form-input w-full @error('image') is-invalid @enderror" type="file" name="image" accept="image/*" />
@@ -85,9 +100,10 @@
                             @enderror
                         </div>
 
-                         <div>
+                        <!-- Location Name (Conditional) -->
+                        <div id="location-wrapper">
                             <label class="block text-sm font-medium mb-2" for="location">Nama Lokasi (Tempat) <span class="text-red-500">*</span></label>
-                            <input id="location" class="form-input w-full @error('location') is-invalid @enderror" type="text" name="location" value="{{ old('location') }}" required placeholder="Contoh: Masjid Raya"/>
+                            <input id="location" class="form-input w-full @error('location') is-invalid @enderror" type="text" name="location" value="{{ old('location') }}" placeholder="Contoh: Masjid Raya"/>
                             @error('location')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
@@ -95,38 +111,46 @@
 
                     </div>
 
-                    <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold my-4">Alamat Lengkap</h2>
-                    <div class="grid grid-cols-4 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-2" for="province">Provinsi</label>
-                            <select id="province" class="form-select w-full @error('province') is-invalid @enderror" name="province">
-                                <option value="">Pilih Provinsi</option>
-                                @foreach($provinces as $code => $name)
-                                    <option value="{{ $code ?? '' }}">{{ $name ?? '' }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <!-- Address/Regions (Conditional) -->
+                    <div id="region-wrapper">
+                        <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold my-4">Alamat Lengkap</h2>
+                        <div class="grid grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2" for="province">Provinsi</label>
+                                <select id="province" class="form-select w-full @error('province') is-invalid @enderror" name="province">
+                                    <option value="">Pilih Provinsi</option>
+                                    @foreach($provinces as $code => $name)
+                                        <option value="{{ $code ?? '' }}">{{ $name ?? '' }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-2" for="city">Kabupaten/Kota</label>
-                            <select id="city" class="form-select w-full @error('city') is-invalid @enderror" name="city">
-                                <option value="">Pilih Kabupaten/Kota</option>
-                            </select>
-                        </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2" for="city">Kabupaten/Kota</label>
+                                <select id="city" class="form-select w-full @error('city') is-invalid @enderror" name="city">
+                                    <option value="">Pilih Kabupaten/Kota</option>
+                                </select>
+                            </div>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-2" for="district">Kecamatan</label>
-                            <select id="district" class="form-select w-full" name="district">
-                                <option value="">Pilih Kecamatan</option>
-                            </select>
-                        </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2" for="district">Kecamatan</label>
+                                <select id="district" class="form-select w-full" name="district">
+                                    <option value="">Pilih Kecamatan</option>
+                                </select>
+                            </div>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-2" for="village">Desa/Kelurahan</label>
-                            <select id="village" class="form-select w-full" name="village">
-                                <option value="">Pilih Desa/Kelurahan</option>
-                            </select>
+                            <div>
+                                <label class="block text-sm font-medium mb-2" for="village">Desa/Kelurahan</label>
+                                <select id="village" class="form-select w-full" name="village">
+                                    <option value="">Pilih Desa/Kelurahan</option>
+                                </select>
+                            </div>
                         </div>
+                    </div>
+
+                    <!-- Inherited Info Message -->
+                    <div id="inherited-info" class="hidden mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                        <p class="text-blue-700 font-medium">Lokasi dan alamat akan otomatis diambil dari data Majelis yang dipilih.</p>
                     </div>
 
                 </div>
@@ -146,6 +170,33 @@
     <script>
         // Jalankan saat dokumen siap
         $(document).ready(function() {
+
+            function toggleLocationFields() {
+                var assemblyId = $('#assembly_id').val();
+                if (assemblyId) {
+                    $('#location-wrapper').hide();
+                    $('#region-wrapper').hide();
+                    $('#inherited-info').removeClass('hidden');
+
+                    // Remove required attribute when hidden
+                    $('#location').removeAttr('required');
+                } else {
+                    $('#location-wrapper').show();
+                    $('#region-wrapper').show();
+                    $('#inherited-info').addClass('hidden');
+
+                    // Add required attribute when shown
+                    $('#location').attr('required', 'required');
+                }
+            }
+
+            // Init on load
+            toggleLocationFields();
+
+            // On Change Assembly
+            $('#assembly_id').on('change', function() {
+                toggleLocationFields();
+            });
 
             // 1. Event Listener untuk PROVINSI
             $('#province').on('change', function() {
