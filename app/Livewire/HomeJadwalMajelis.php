@@ -27,6 +27,21 @@ class HomeJadwalMajelis extends Component
     public function mount()
     {
         $this->search = request()->query('search', $this->search);
+
+        if (auth()->check()) {
+            $user = auth()->user();
+            if ($user->province_code) {
+                $this->selectedProvince = $user->province_code;
+
+                if ($user->city_code) {
+                    $this->selectedCity = $user->city_code;
+
+                    if ($user->district_code) {
+                        $this->selectedDistrict = $user->district_code;
+                    }
+                }
+            }
+        }
     }
 
     public function updatedSearch()
