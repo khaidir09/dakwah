@@ -74,19 +74,19 @@ class HomeJadwalMajelis extends Component
 
         // Apply Region Filters
         if ($this->selectedProvince) {
-            $query->whereHas('assembly', function($q) {
+            $query->whereHas('assembly', function ($q) {
                 $q->where('province_code', $this->selectedProvince);
             });
         }
 
         if ($this->selectedCity) {
-            $query->whereHas('assembly', function($q) {
+            $query->whereHas('assembly', function ($q) {
                 $q->where('city_code', $this->selectedCity);
             });
         }
 
         if ($this->selectedDistrict) {
-            $query->whereHas('assembly', function($q) {
+            $query->whereHas('assembly', function ($q) {
                 $q->where('district_code', $this->selectedDistrict);
             });
         }
@@ -111,7 +111,7 @@ class HomeJadwalMajelis extends Component
         $schedules = $query->simplePaginate($this->paginate);
 
         // Fetch Data for Dropdowns
-        $provinces = Province::pluck('name', 'code');
+        $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
 
         $cities = $this->selectedProvince
             ? City::where('province_code', $this->selectedProvince)->pluck('name', 'code')
