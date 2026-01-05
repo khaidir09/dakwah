@@ -77,7 +77,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Route khusus onboarding majelis (hanya bisa diakses via link khusus)
     Route::get('/registrasi-majelis/baru', \App\Livewire\Majelis\Onboarding::class)
-        ->middleware('signed')
         ->name('majelis.onboarding');
 });
 

@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Hero Section -->
         <div class="relative bg-emerald-900 overflow-hidden">
-            <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+            <div class="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
             <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
                 <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4 font-serif">
                     Syaikhuna
