@@ -28,8 +28,20 @@ class Onboarding extends Component
     // Step 2: Create Teacher (if needed)
     public $teacherName;
     public $teacherBio;
-    public $teacherDomisili;
+    // public $teacherDomisili; // Removed as requested
     public $teacherPhoto;
+    public $teacherBirthYear; // Added
+
+    // Teacher Region Data
+    public $teacherProvinces = []; // Should be same as global provinces really, but keep separate if logic needs it
+    public $teacherCities = [];
+    public $teacherDistricts = [];
+    public $teacherVillages = [];
+
+    public $selectedTeacherProvince = null;
+    public $selectedTeacherCity = null;
+    public $selectedTeacherDistrict = null;
+    public $selectedTeacherVillage = null;
 
     // Step 3: Create Majelis
     public $majelisName;
@@ -38,7 +50,7 @@ class Onboarding extends Component
     public $majelisMaps;
     public $majelisImage;
 
-    // Region Data
+    // Majelis Region Data
     public $provinces = [];
     public $cities = [];
     public $districts = [];
@@ -52,6 +64,8 @@ class Onboarding extends Component
     public function mount()
     {
         $this->provinces = Province::pluck('name', 'code');
+        // Teacher uses same source
+        $this->teacherProvinces = $this->provinces;
     }
 
     // --- Step 1 Logic ---
@@ -82,31 +96,61 @@ class Onboarding extends Component
 
     // --- Step 2 Logic ---
 
+    // Dependent Dropdowns for Teacher
+    public function updatedSelectedTeacherProvince($value)
+    {
+        $this->teacherCities = City::where('province_code', $value)->pluck('name', 'code');
+        $this->selectedTeacherCity = null;
+        $this->selectedTeacherDistrict = null;
+        $this->selectedTeacherVillage = null;
+    }
+
+    public function updatedSelectedTeacherCity($value)
+    {
+        $this->teacherDistricts = District::where('city_code', $value)->pluck('name', 'code');
+        $this->selectedTeacherDistrict = null;
+        $this->selectedTeacherVillage = null;
+    }
+
+    public function updatedSelectedTeacherDistrict($value)
+    {
+        $this->teacherVillages = Village::where('district_code', $value)->pluck('name', 'code');
+        $this->selectedTeacherVillage = null;
+    }
+
     public function saveTeacherAndProceed()
     {
         $this->validate([
             'teacherName' => 'required|string|max:100',
             'teacherBio' => 'required|string',
-            'teacherDomisili' => 'required|string|max:100',
             'teacherPhoto' => 'required|image|max:2048', // 2MB Max
+            'selectedTeacherProvince' => 'required',
+            'selectedTeacherCity' => 'required',
+            'selectedTeacherDistrict' => 'required',
+            'selectedTeacherVillage' => 'required',
+            'teacherBirthYear' => 'nullable|integer|digits:4',
         ]);
 
         // Upload Photo
         $photoPath = $this->teacherPhoto->store('public/teachers');
-        // Clean path to be relative for storage link if needed, but standard `store` returns path.
-        // Usually we want just the filename or the relative path without 'public/' if we use `Storage::url`.
-        // Teacher model logic not shown for mutators, assume standard path.
-        // However, standard Laravel storage symlink maps `public/storage` to `storage/app/public`.
-        // If I store in `public/teachers`, the path is `public/teachers/xyz.jpg`.
-        // Storage::url('public/teachers/xyz.jpg') -> `/storage/teachers/xyz.jpg`. Correct.
+
+        // Resolve Domisili Name from City Code
+        $city = City::where('code', $this->selectedTeacherCity)->first();
+        $domisiliName = $city ? $city->name : '-';
 
         $teacher = Teacher::create([
             'name' => $this->teacherName,
             'biografi' => $this->teacherBio,
-            'domisili' => $this->teacherDomisili,
-            'foto' => $photoPath, // Full path
-            // Nullables
-            'tahun_lahir' => null,
+            'domisili' => $domisiliName, // Fill legacy column
+            'foto' => $photoPath,
+            'tahun_lahir' => $this->teacherBirthYear,
+
+            // New Region Codes
+            'province_code' => $this->selectedTeacherProvince,
+            'city_code' => $this->selectedTeacherCity,
+            'district_code' => $this->selectedTeacherDistrict,
+            'village_code' => $this->selectedTeacherVillage,
+
             'wafat_masehi' => null,
             'wafat_hijriah' => null,
         ]);
@@ -161,17 +205,11 @@ class Onboarding extends Component
 
         $imagePath = null;
         if ($this->majelisImage) {
-            // Replicating logic from ManagedMajelisController
             $file = $this->majelisImage;
             $filename = time() . '.' . $file->getClientOriginalExtension();
 
-            // Paths
             $pathLarge = 'public/majelis/large/' . $filename;
             $pathThumb = 'public/majelis/thumb/' . $filename;
-
-            // Processing
-            // Note: In Livewire temporary upload, $file is a TemporaryUploadedFile wrapper.
-            // We need the real path for Intervention Image.
 
             $image = Image::read($file->getRealPath());
             $image->scaleDown(width: 800);
@@ -193,7 +231,7 @@ class Onboarding extends Component
             'maps' => $this->majelisMaps,
             'gambar' => $imagePath,
             'status' => 'Aktif',
-            'guru' => $this->selectedTeacherName, // Legacy fallback
+            'guru' => $this->selectedTeacherName,
 
             // Region Codes
             'province_code' => $this->selectedProvince,

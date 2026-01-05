@@ -83,26 +83,71 @@
                     <p class="mt-1 text-sm text-gray-600">Lengkapi data guru pembina baru.</p>
                 </div>
 
-                <div class="grid grid-cols-1 gap-6">
-                    <div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="col-span-2">
                         <label class="block font-medium text-sm text-gray-700">Nama Guru / Syaikh</label>
                         <input wire:model="teacherName" type="text" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full">
                         @error('teacherName') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                     </div>
 
-                    <div>
+                    <div class="col-span-2">
                         <label class="block font-medium text-sm text-gray-700">Biografi Singkat</label>
                         <textarea wire:model="teacherBio" rows="3" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full"></textarea>
                         @error('teacherBio') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                     </div>
 
+                    <!-- Teacher Region Selectors -->
                     <div>
-                        <label class="block font-medium text-sm text-gray-700">Domisili (Kota/Kabupaten)</label>
-                        <input wire:model="teacherDomisili" type="text" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full">
-                        @error('teacherDomisili') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                        <label class="block font-medium text-sm text-gray-700">Provinsi</label>
+                        <select wire:model.live="selectedTeacherProvince" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full">
+                            <option value="">Pilih Provinsi</option>
+                            @foreach($teacherProvinces as $code => $name)
+                                <option value="{{ $code }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        @error('selectedTeacherProvince') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
+                        <label class="block font-medium text-sm text-gray-700">Kota/Kabupaten</label>
+                        <select wire:model.live="selectedTeacherCity" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full" {{ empty($teacherCities) ? 'disabled' : '' }}>
+                            <option value="">Pilih Kota/Kab</option>
+                            @foreach($teacherCities as $code => $name)
+                                <option value="{{ $code }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        @error('selectedTeacherCity') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block font-medium text-sm text-gray-700">Kecamatan</label>
+                        <select wire:model.live="selectedTeacherDistrict" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full" {{ empty($teacherDistricts) ? 'disabled' : '' }}>
+                            <option value="">Pilih Kecamatan</option>
+                            @foreach($teacherDistricts as $code => $name)
+                                <option value="{{ $code }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        @error('selectedTeacherDistrict') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block font-medium text-sm text-gray-700">Desa/Kelurahan</label>
+                        <select wire:model.live="selectedTeacherVillage" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full" {{ empty($teacherVillages) ? 'disabled' : '' }}>
+                            <option value="">Pilih Kelurahan</option>
+                            @foreach($teacherVillages as $code => $name)
+                                <option value="{{ $code }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        @error('selectedTeacherVillage') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="col-span-2 md:col-span-1">
+                        <label class="block font-medium text-sm text-gray-700">Tahun Lahir <span class="text-gray-400 font-normal">(Opsional)</span></label>
+                        <input wire:model="teacherBirthYear" type="number" placeholder="Contoh: 1980" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full">
+                        @error('teacherBirthYear') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="col-span-2">
                         <label class="block font-medium text-sm text-gray-700">Foto</label>
                         <input wire:model="teacherPhoto" type="file" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
                         @error('teacherPhoto') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
