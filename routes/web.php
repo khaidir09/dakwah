@@ -74,6 +74,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/kelola-acara-majelis', [ManageEventController::class, 'store'])->name('kelola-acara-majelis.store');
     Route::get('/kelola-acara-majelis/{id}/edit', [ManageEventController::class, 'edit'])->name('kelola-acara-majelis.edit');
     Route::put('/kelola-acara-majelis/{id}', [ManageEventController::class, 'update'])->name('kelola-acara-majelis.update');
+
+    // Route khusus onboarding majelis (hanya bisa diakses via link khusus)
+    Route::get('/registrasi-majelis/baru', \App\Livewire\Majelis\Onboarding::class)
+        ->middleware('signed')
+        ->name('majelis.onboarding');
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
