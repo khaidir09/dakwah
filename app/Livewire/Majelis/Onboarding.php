@@ -6,6 +6,7 @@ use App\Models\Teacher;
 use App\Models\Assembly;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Laravolt\Indonesia\Models\Province;
@@ -131,8 +132,20 @@ class Onboarding extends Component
             'teacherBirthYear' => 'nullable|integer|digits:4',
         ]);
 
-        // Upload Photo
-        $photoPath = $this->teacherPhoto->store('public/teachers');
+        // Process Photo (Match GuruController logic)
+        $file = $this->teacherPhoto;
+        $filename = Str::uuid() . '.webp';
+
+        // 1. Create Thumbnail Version - Square Crop (600x600)
+        // Since Livewire gives us a TemporaryUploadedFile, we use getRealPath()
+        $thumb = Image::read($file->getRealPath())
+            ->cover(600, 600)
+            ->toWebp(80);
+
+        // 2. Save to Storage (public disk)
+        Storage::disk('public')->put('guru/' . $filename, $thumb);
+
+        $photoPath = 'guru/' . $filename;
 
         // Resolve Domisili Name from City Code
         $city = City::where('code', $this->selectedTeacherCity)->first();
