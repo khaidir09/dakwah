@@ -63,7 +63,7 @@ class ManagedMajelisController extends Controller
             $image->scaleDown(width: 800);
 
             // Save resized large image to storage
-            Storage::put($pathLarge, $image->toJpeg(80));
+            Storage::put($pathLarge, $image->toWebp(80));
 
             // Untuk thumb, kita buat lebih kecil, misal 200px
             $imageThumb = Image::read($file);
@@ -71,7 +71,7 @@ class ManagedMajelisController extends Controller
 
             // Simpan manual ke storage (karena Intervention Image biasanya save ke local path)
             // Disini kita perlu simpan stream ke Storage facade agar kompatibel dengan filesystem driver (S3/Local)
-            Storage::put($thumbPath, $imageThumb->toJpeg(80)); // Simpan sebagai JPEG kualitas 80
+            Storage::put($thumbPath, $imageThumb->toWebp(80)); // Simpan sebagai JPEG kualitas 80
 
             // Kita simpan path large ke database
             $data['gambar'] = $pathLarge;

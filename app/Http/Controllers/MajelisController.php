@@ -55,12 +55,12 @@ class MajelisController extends Controller
 
             // 1. Buat Versi THUMBNAIL (Untuk List/Avatar) - Crop Persegi
             $thumb = Image::read($file)
-                ->cover(300, 300)
+                ->scaleDown(width: 400)
                 ->toWebp(80);
 
             // 2. Buat Versi LARGE (Untuk Detail) - Resize Lebar, Tinggi menyesuaikan
             $large = Image::read($file)
-                ->scale(width: 979)
+                ->scaleDown(width: 800)
                 ->toWebp(80);
 
             // 3. Simpan ke Storage (Folder public)
@@ -134,11 +134,11 @@ class MajelisController extends Controller
 
             // A. Proses Gambar Baru (Sama seperti store)
             $thumb = Image::read($file)
-                ->cover(300, 300)
+                ->scaleDown(width: 400)
                 ->toWebp(80);
 
             $large = Image::read($file)
-                ->scale(width: 979)
+                ->scaleDown(width: 800)
                 ->toWebp(80);
 
             // B. Simpan Gambar Baru

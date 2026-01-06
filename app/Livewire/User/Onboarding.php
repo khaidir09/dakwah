@@ -213,7 +213,7 @@ class Onboarding extends Component
 
         // Replicating logic from ManagedMajelisController
         $file = $this->gambar;
-        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $filename = Str::uuid() . '.webp';
 
         // Paths
         $pathLarge = 'public/majelis/large/' . $filename;
@@ -225,11 +225,11 @@ class Onboarding extends Component
 
         $image = Image::read($file->getRealPath());
         $image->scaleDown(width: 800);
-        Storage::put($pathLarge, $image->toJpeg(80));
+        Storage::put($pathLarge, $image->toWebp(80));
 
         $imageThumb = Image::read($file->getRealPath());
         $imageThumb->scaleDown(width: 400);
-        Storage::put($pathThumb, $imageThumb->toJpeg(80));
+        Storage::put($pathThumb, $imageThumb->toWebp(80));
 
         $imagePath = $pathLarge;
 
