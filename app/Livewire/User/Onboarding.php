@@ -63,6 +63,10 @@ class Onboarding extends Component
 
     public function mount()
     {
+        if (Assembly::where('user_id', Auth::id())->exists()) {
+            return redirect()->route('kelola-jadwal-majelis')->with('error', 'Anda sudah memiliki majelis terdaftar.');
+        }
+
         $this->provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
         $this->teacherProvinces = $this->provinces;
     }
