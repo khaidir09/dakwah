@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Majelis;
+namespace App\Livewire\User;
 
 use App\Models\Teacher;
 use Livewire\Component;
@@ -48,7 +48,7 @@ class Onboarding extends Component
     public $majelisDesc;
     public $majelisAddress;
     public $majelisMaps;
-    public $majelisImage;
+    public $gambar;
 
     // Region Data
     public $provinces = [];
@@ -200,37 +200,34 @@ class Onboarding extends Component
             'majelisDesc' => 'required|string',
             'majelisAddress' => 'required|string',
             'majelisMaps' => 'required|string|max:255',
-            'majelisImage' => 'nullable|image|max:2048',
+            'gambar' => 'nullable|image|max:2048',
             'selectedProvince' => 'required',
             'selectedCity' => 'required',
             'selectedDistrict' => 'required',
             'selectedVillage' => 'required',
         ]);
 
-        $imagePath = null;
-        if ($this->majelisImage) {
-            // Replicating logic from ManagedMajelisController
-            $file = $this->majelisImage;
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+        // Replicating logic from ManagedMajelisController
+        $file = $this->gambar;
+        $filename = time() . '.' . $file->getClientOriginalExtension();
 
-            // Paths
-            $pathLarge = 'public/majelis/large/' . $filename;
-            $pathThumb = 'public/majelis/thumb/' . $filename;
+        // Paths
+        $pathLarge = 'public/majelis/large/' . $filename;
+        $pathThumb = 'public/majelis/thumb/' . $filename;
 
-            // Processing
-            // Note: In Livewire temporary upload, $file is a TemporaryUploadedFile wrapper.
-            // We need the real path for Intervention Image.
+        // Processing
+        // Note: In Livewire temporary upload, $file is a TemporaryUploadedFile wrapper.
+        // We need the real path for Intervention Image.
 
-            $image = Image::read($file->getRealPath());
-            $image->scaleDown(width: 800);
-            Storage::put($pathLarge, $image->toJpeg(80));
+        $image = Image::read($file->getRealPath());
+        $image->scaleDown(width: 800);
+        Storage::put($pathLarge, $image->toJpeg(80));
 
-            $imageThumb = Image::read($file->getRealPath());
-            $imageThumb->scaleDown(width: 400);
-            Storage::put($pathThumb, $imageThumb->toJpeg(80));
+        $imageThumb = Image::read($file->getRealPath());
+        $imageThumb->scaleDown(width: 400);
+        Storage::put($pathThumb, $imageThumb->toJpeg(80));
 
-            $imagePath = $pathLarge;
-        }
+        $imagePath = $pathLarge;
 
         Assembly::create([
             'user_id' => Auth::id(),
@@ -261,7 +258,7 @@ class Onboarding extends Component
                 ->get();
         }
 
-        return view('livewire.majelis.onboarding', [
+        return view('livewire.user.onboarding', [
             'teachers' => $teachers
         ]);
     }

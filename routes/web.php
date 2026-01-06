@@ -76,7 +76,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::put('/kelola-acara-majelis/{id}', [ManageEventController::class, 'update'])->name('kelola-acara-majelis.update');
 
     // Route khusus onboarding majelis (hanya bisa diakses via link khusus)
-    Route::get('/registrasi-majelis/baru', \App\Livewire\Majelis\Onboarding::class)
+    Route::get('/registrasi-majelis/baru', [ManagedMajelisController::class, 'register'])
         ->name('majelis.onboarding');
 });
 
