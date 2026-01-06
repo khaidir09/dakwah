@@ -63,6 +63,11 @@ class Onboarding extends Component
 
     public function mount()
     {
+        // Check if user already has an assembly
+        if (Assembly::where('user_id', Auth::id())->exists()) {
+            return redirect()->route('kelola-jadwal-majelis')->with('error', 'Anda sudah memiliki majelis terdaftar.');
+        }
+
         $this->provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
         $this->teacherProvinces = $this->provinces;
     }
@@ -194,6 +199,11 @@ class Onboarding extends Component
 
     public function saveMajelis()
     {
+        // Double check before saving
+        if (Assembly::where('user_id', Auth::id())->exists()) {
+            return redirect()->route('kelola-jadwal-majelis')->with('error', 'Anda sudah memiliki majelis terdaftar.');
+        }
+
         $this->validate([
             'selectedTeacherId' => 'required|exists:teachers,id',
             'majelisName' => 'required|string|max:255',
