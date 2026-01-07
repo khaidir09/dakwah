@@ -46,14 +46,17 @@ class ListWirid extends Component
     public function render()
     {
         $wirids_count = Wirid::count();
-        $query = Wirid::latest();
+        $query = Wirid::query();
 
         // Jika user login, cek apakah dilike
         if (auth()->check()) {
             $query->withExists(['likedByUsers as is_liked' => function ($q) {
                 $q->where('user_id', auth()->id());
             }]);
+            $query->orderByDesc('is_liked');
         }
+
+        $query->latest();
 
         // Jika ada pencarian, tambahkan kondisi where
         if ($this->search) {
