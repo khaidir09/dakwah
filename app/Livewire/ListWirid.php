@@ -25,10 +25,35 @@ class ListWirid extends Component
         $this->resetPage();
     }
 
+    public function toggleLike($wiridId)
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $user = auth()->user();
+        $wirid = Wirid::findOrFail($wiridId);
+
+        if ($user->likedWirids()->where('wirid_id', $wiridId)->exists()) {
+            $user->likedWirids()->detach($wiridId);
+            $wirid->decrement('likes');
+        } else {
+            $user->likedWirids()->attach($wiridId);
+            $wirid->increment('likes');
+        }
+    }
+
     public function render()
     {
         $wirids_count = Wirid::count();
         $query = Wirid::latest();
+
+        // Jika user login, cek apakah dilike
+        if (auth()->check()) {
+            $query->withExists(['likedByUsers as is_liked' => function ($q) {
+                $q->where('user_id', auth()->id());
+            }]);
+        }
 
         // Jika ada pencarian, tambahkan kondisi where
         if ($this->search) {

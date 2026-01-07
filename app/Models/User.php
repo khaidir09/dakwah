@@ -107,4 +107,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Assembly::class, 'assembly_user');
     }
+
+    public function likedWirids()
+    {
+        return $this->belongsToMany(Wirid::class, 'wirid_user');
+    }
 }
