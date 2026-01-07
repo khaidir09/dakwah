@@ -70,6 +70,12 @@ class ListMajelis extends Component
     {
         $query = Assembly::with('teacher')->latest();
 
+        if (auth()->check()) {
+            $query->withExists(['followers as is_followed' => function ($q) {
+                $q->where('user_id', auth()->id());
+            }]);
+        }
+
         // Apply Region Filters
         if ($this->selectedProvince) {
             $query->where('province_code', $this->selectedProvince);

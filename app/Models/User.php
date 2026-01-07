@@ -102,4 +102,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Assembly::class);
     }
+
+    public function followingAssemblies()
+    {
+        return $this->belongsToMany(Assembly::class, 'assembly_user');
+    }
 }
