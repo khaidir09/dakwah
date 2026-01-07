@@ -57,15 +57,16 @@
                     <!-- Image -->
                     <div class="relative">
                         <img class="w-full" src="{{ $assembly->gambar_thumb_url }}" width="301" height="226" alt="Application 22" />
-                        <!-- Like button -->
-                        {{-- <button class="absolute top-0 right-0 mt-4 mr-4">
-                            <div class="text-gray-100 bg-gray-900/60 rounded-full">
-                                <span class="sr-only">Like</span>
-                                <svg class="h-8 w-8 fill-current" viewBox="0 0 32 32">
-                                    <path d="M22.682 11.318A4.485 4.485 0 0019.5 10a4.377 4.377 0 00-3.5 1.707A4.383 4.383 0 0012.5 10a4.5 4.5 0 00-3.182 7.682L16 24l6.682-6.318a4.5 4.5 0 000-6.364zm-1.4 4.933L16 21.247l-5.285-5A2.5 2.5 0 0112.5 12c1.437 0 2.312.681 3.5 2.625C17.187 12.681 18.062 12 19.5 12a2.5 2.5 0 011.785 4.251h-.003z" />
-                                </svg>
+                        @if($assembly->is_followed)
+                            <div class="absolute top-0 right-0 mt-2 mr-2">
+                                <div class="text-xs font-semibold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-full shadow flex items-center gap-1 border border-emerald-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    Diikuti
+                                </div>
                             </div>
-                        </button> --}}
+                        @endif
                     </div>
                     <!-- Card Content -->
                     <div class="grow flex flex-col p-5">
