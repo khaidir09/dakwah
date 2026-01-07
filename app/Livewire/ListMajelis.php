@@ -68,13 +68,16 @@ class ListMajelis extends Component
 
     public function render()
     {
-        $query = Assembly::with('teacher')->latest();
+        $query = Assembly::with('teacher');
 
         if (auth()->check()) {
             $query->withExists(['followers as is_followed' => function ($q) {
                 $q->where('user_id', auth()->id());
             }]);
+            $query->orderByDesc('is_followed');
         }
+
+        $query->latest();
 
         // Apply Region Filters
         if ($this->selectedProvince) {
