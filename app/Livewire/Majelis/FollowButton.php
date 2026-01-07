@@ -22,6 +22,8 @@ class FollowButton extends Component
     public function toggleFollow()
     {
         if (!Auth::check()) {
+            // toast
+            session()->flash('message', 'Silakan login terlebih dahulu untuk mengikuti majelis.');
             return redirect()->route('login');
         }
 

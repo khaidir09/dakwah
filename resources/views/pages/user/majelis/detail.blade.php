@@ -60,9 +60,7 @@
                                         </header>
                                         <!-- Actions -->
                                         <div class="flex space-x-2 mt-3">
-                                            <button class="btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
-                                                Ikuti
-                                            </button>
+                                            <livewire:majelis.follow-button :assembly="$assembly" />
                                             <a href="{{ $assembly->maps }}" class="btn-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
                                                 Maps
                                             </a>
@@ -230,7 +228,11 @@
                                             <div class="text-sm">
                                                 <h3 class="font-medium text-gray-800 dark:text-gray-100">Kontak Penanggung Jawab</h3>
                                                 @if ($assembly->user != null)
-                                                    <div>{{ $assembly->user->phone }}</div>
+                                                    @if (Auth::check())
+                                                        <div>{{ $assembly->user->phone }}</div>
+                                                    @else
+                                                        <a href="{{ route('login') }}" class="underline text-emerald-600">Login</a> untuk melihat kontak penanggung jawab
+                                                    @endif
                                                 @else
                                                     <div>-</div>
                                                 @endif

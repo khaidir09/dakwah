@@ -2,10 +2,11 @@
 
 namespace App\Livewire;
 
-use App\Models\Assembly;
 use Livewire\Component;
+use App\Models\Assembly;
 use Livewire\WithPagination;
 use Laravolt\Indonesia\Models\City;
+use Illuminate\Support\Facades\Auth;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
 
@@ -68,7 +69,16 @@ class ListMajelis extends Component
 
     public function render()
     {
-        $query = Assembly::with('teacher')->latest();
+        $query = Assembly::with('teacher');
+
+        if (auth()->check()) {
+            $query->withExists(['followers as is_followed' => function ($q) {
+                $q->where('user_id', Auth::user()->id);
+            }]);
+            $query->orderByDesc('is_followed');
+        }
+
+        $query->latest();
 
         // Apply Region Filters
         if ($this->selectedProvince) {
