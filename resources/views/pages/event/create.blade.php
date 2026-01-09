@@ -52,6 +52,7 @@
                                 <option value="Dzikir">Dzikir</option>
                                 <option value="Haul">Haul</option>
                                 <option value="Tabligh Akbar">Tabligh Akbar</option>
+                                <option value="Peringatan Hari Besar Islam">Peringatan Hari Besar Islam</option>
                             </select>
                             @error('category')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
