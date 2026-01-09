@@ -28,6 +28,7 @@ class ListWirid extends Component
     public function toggleLike($wiridId)
     {
         if (!auth()->check()) {
+            session()->flash('message', 'Silakan login terlebih dahulu untuk menambahkan wirid ke favorit.');
             return redirect()->route('login');
         }
 
