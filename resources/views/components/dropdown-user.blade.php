@@ -48,7 +48,7 @@
                 {{-- Favorit --}}
                 @if (Auth::user()->hasRole('User'))
                     <li>
-                        <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3" href="" @click="open = false" @focus="open = true" @focusout="open = false">
+                        <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3" href="{{ route('favorit-saya') }}" @click="open = false" @focus="open = true" @focusout="open = false">
                             Favorit Saya
                         </a>
                     </li>
