@@ -78,6 +78,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Route khusus onboarding majelis (hanya bisa diakses via link khusus)
     Route::get('/registrasi-majelis/baru', [ManagedMajelisController::class, 'register'])
         ->name('majelis.onboarding');
+
+    Route::get('/favorit-saya', [\App\Http\Controllers\User\FavoriteController::class, 'index'])->name('favorit-saya');
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
