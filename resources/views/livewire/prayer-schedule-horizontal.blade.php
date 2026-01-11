@@ -15,7 +15,7 @@
 
     <div x-show="open" x-collapse class="mt-4">
         @if($schedule)
-            <div class="space-y-3">
+            <div class="space-y-1">
                 @foreach($prayerList as $key)
                     @php
                         $isGreen = ($key === $activePrayer);

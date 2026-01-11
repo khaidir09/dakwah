@@ -7,7 +7,7 @@
     </div>
 
     @if($schedule)
-        <div class="space-y-3">
+        <div class="space-y-1">
             @foreach($prayerList as $key)
                 @php
                     $isGreen = ($key === $activePrayer);

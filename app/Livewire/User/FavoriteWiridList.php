@@ -51,7 +51,7 @@ class FavoriteWiridList extends Component
         if ($this->search) {
             $searchTerm = '%' . $this->search . '%';
             $query->where(function ($subQuery) use ($searchTerm) {
-                $subQuery->where('nama', 'like', $searchTerm);
+                $subQuery->where('nama', 'like', $searchTerm)->orWhere('waktu', 'like', $searchTerm);
             });
         }
 

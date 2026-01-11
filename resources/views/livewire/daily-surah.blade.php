@@ -1,4 +1,4 @@
-<div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm mb-4" x-data="{ open: false }">
+<div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm" x-data="{ open: false }">
     <button class="w-full flex items-center justify-between" @click="open = !open">
         <div class="flex items-center space-x-2">
             <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase">Bacaan Sholat Hari Ini</div>
@@ -15,7 +15,7 @@
 
     <div x-show="open" x-collapse class="mt-4">
         @if($readings->count() > 0)
-            <div class="space-y-3">
+            <div class="space-y-2">
                 @foreach($readings as $reading)
                     <div class="flex flex-col p-2 rounded-lg bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/20">
                         <div class="flex justify-between items-center mb-1">
