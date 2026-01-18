@@ -39,6 +39,13 @@ class SettingController extends Controller
             'phone' => $request->phone,
         ]);
 
+        $sendVerification = false;
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+            $sendVerification = true;
+        }
+
         if ($request->filled('password')) {
             $user->forceFill([
                 'password' => Hash::make($request->password),
@@ -56,7 +63,13 @@ class SettingController extends Controller
             'city_code' => $request->city_code,
             'district_code' => $request->district_code,
             'village_code' => $request->village_code,
-        ])->save();
+        ]);
+
+        $user->save();
+
+        if ($sendVerification) {
+            $user->sendEmailVerificationNotification();
+        }
 
         return back()->with('status', 'profile-updated');
     }
