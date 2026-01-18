@@ -49,8 +49,12 @@ Route::get('/guru/{id}', [UserGuruController::class, 'detail'])->name('guru-deta
 Route::get('/video', [UserVideoController::class, 'list'])->name('video-list');
 Route::get('/event', [UserEventController::class, 'list'])->name('event-list');
 Route::get('/wirid', [UserWiridController::class, 'list'])->name('wirid-list');
-Route::get('/pengaturan-akun', [SettingController::class, 'index'])->name('pengaturan-akun');
-Route::put('/pengaturan-akun', [SettingController::class, 'update'])->name('pengaturan-akun.update');
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/pengaturan-akun', [SettingController::class, 'index'])->name('pengaturan-akun');
+    Route::put('/pengaturan-akun', [SettingController::class, 'update'])->name('pengaturan-akun.update');
+});
+
 Route::get('/tentang-kami', function () {
     return view('pages/user/tentang-kami');
 })->name('tentang-kami');
