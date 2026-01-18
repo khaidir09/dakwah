@@ -47,17 +47,14 @@
                                             </div>
                                 
                                             <!-- Actions -->
-                                            <div class="flex space-x-2 sm:mb-2">
-                                                {{-- <button class="btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
+                                            {{-- <div class="flex space-x-2 sm:mb-2">
+                                                <button class="btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
                                                     <svg class="fill-current shrink-0" width="11" height="8" viewBox="0 0 11 8">
                                                         <path d="m.457 4.516.969-.99 2.516 2.481L9.266.702l.985.99-6.309 6.284z" />
                                                     </svg>
                                                     <span class="ml-2">Ikuti</span>
-                                                </button> --}}
-                                                <button class="btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
-                                                    Ikuti
                                                 </button>
-                                            </div>
+                                            </div> --}}
 
                                         </div>
 
