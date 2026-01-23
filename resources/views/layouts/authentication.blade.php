@@ -51,7 +51,7 @@
                             </div>
                         </div>
 
-                        <div class="max-w-sm mx-auto w-full px-4 py-8">
+                        <div class="max-w-xl mx-auto w-full px-4 py-8">
                             {{ $slot }}
                         </div>
 

@@ -27,7 +27,7 @@ class CreateNewUser implements CreatesNewUsers
             'city_code' => ['required'],
             'district_code' => ['required'],
             'village_code' => ['required'],
-            'gender' => ['required', 'in:male,female'],
+            'gender' => ['required', 'in:Laki-laki,Perempuan'],
             'birth_year' => ['required', 'integer', 'digits:4'],
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
