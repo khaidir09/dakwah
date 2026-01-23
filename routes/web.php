@@ -26,6 +26,8 @@ use App\Http\Controllers\User\ManageEventController;
 use App\Http\Controllers\User\SettingController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WiridController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +53,20 @@ Route::get('/event', [UserEventController::class, 'list'])->name('event-list');
 Route::get('/wirid', [UserWiridController::class, 'list'])->name('wirid-list');
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect('/beranda');
+    })->middleware('signed')->name('verification.verify');
+
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('status', 'verification-link-sent');
+    })->middleware('throttle:6,1')->name('verification.send');
+
     Route::get('/pengaturan-akun', [SettingController::class, 'index'])->name('pengaturan-akun');
     Route::put('/pengaturan-akun', [SettingController::class, 'update'])->name('pengaturan-akun.update');
 });
