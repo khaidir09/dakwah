@@ -33,83 +33,7 @@
             <p class="text-sm text-gray-500 mb-4">Informasi tambahan ini berguna untuk memberikan personalisasi fitur nantinya.</p>
         </div>
 
-        <div class="space-y-4" x-data="{
-            province: '{{ old('province_code') }}',
-            city: '{{ old('city_code') }}',
-            district: '{{ old('district_code') }}',
-            village: '{{ old('village_code') }}',
-            cities: [],
-            districts: [],
-            villages: [],
-            isLoadingCities: false,
-            isLoadingDistricts: false,
-            isLoadingVillages: false,
-
-            async fetchCities(provinceCode) {
-                if (!provinceCode) return;
-                this.isLoadingCities = true;
-                this.cities = [];
-                try {
-                    const url = "{{ route('get-cities', ':code') }}".replace(':code', provinceCode);
-                    const response = await fetch(url);
-                    this.cities = await response.json();
-                } catch (e) { console.error(e); }
-                this.isLoadingCities = false;
-            },
-            async fetchDistricts(cityCode) {
-                if (!cityCode) return;
-                this.isLoadingDistricts = true;
-                this.districts = [];
-                try {
-                    const url = "{{ route('get-districts', ':code') }}".replace(':code', cityCode);
-                    const response = await fetch(url);
-                    this.districts = await response.json();
-                } catch (e) { console.error(e); }
-                this.isLoadingDistricts = false;
-            },
-            async fetchVillages(districtCode) {
-                if (!districtCode) return;
-                this.isLoadingVillages = true;
-                this.villages = [];
-                try {
-                    const url = "{{ route('get-villages', ':code') }}".replace(':code', districtCode);
-                    const response = await fetch(url);
-                    this.villages = await response.json();
-                } catch (e) { console.error(e); }
-                this.isLoadingVillages = false;
-            },
-
-            init() {
-                if(this.province) this.fetchCities(this.province).then(() => {
-                    this.city = '{{ old('city_code') }}';
-                    if(this.city) this.fetchDistricts(this.city).then(() => {
-                        this.district = '{{ old('district_code') }}';
-                         if(this.district) this.fetchVillages(this.district).then(() => {
-                            this.village = '{{ old('village_code') }}';
-                         });
-                    });
-                });
-
-                $watch('province', value => {
-                    this.fetchCities(value);
-                    this.districts = [];
-                    this.villages = [];
-                    this.city = '';
-                    this.district = '';
-                    this.village = '';
-                });
-                $watch('city', value => {
-                    this.fetchDistricts(value);
-                    this.villages = [];
-                    this.district = '';
-                    this.village = '';
-                });
-                $watch('district', value => {
-                    this.fetchVillages(value);
-                    this.village = '';
-                });
-            }
-        }">
+        <div class="space-y-4" x-data="registrationForm">
             @php
                 $provinces = \Laravolt\Indonesia\Models\Province::pluck('name', 'code');
             @endphp
@@ -195,4 +119,86 @@
             {{ __('Sudah punya akun?') }} <a class="font-medium text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-400" href="{{ route('login') }}">{{ __('Masuk Sekarang') }}</a>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('registrationForm', () => ({
+                province: '{{ old('province_code') }}',
+                city: '{{ old('city_code') }}',
+                district: '{{ old('district_code') }}',
+                village: '{{ old('village_code') }}',
+                cities: [],
+                districts: [],
+                villages: [],
+                isLoadingCities: false,
+                isLoadingDistricts: false,
+                isLoadingVillages: false,
+
+                async fetchCities(provinceCode) {
+                    if (!provinceCode) return;
+                    this.isLoadingCities = true;
+                    this.cities = [];
+                    try {
+                        const url = "{{ route('get-cities', ':code') }}".replace(':code', provinceCode);
+                        const response = await fetch(url);
+                        this.cities = await response.json();
+                    } catch (e) { console.error(e); }
+                    this.isLoadingCities = false;
+                },
+                async fetchDistricts(cityCode) {
+                    if (!cityCode) return;
+                    this.isLoadingDistricts = true;
+                    this.districts = [];
+                    try {
+                        const url = "{{ route('get-districts', ':code') }}".replace(':code', cityCode);
+                        const response = await fetch(url);
+                        this.districts = await response.json();
+                    } catch (e) { console.error(e); }
+                    this.isLoadingDistricts = false;
+                },
+                async fetchVillages(districtCode) {
+                    if (!districtCode) return;
+                    this.isLoadingVillages = true;
+                    this.villages = [];
+                    try {
+                        const url = "{{ route('get-villages', ':code') }}".replace(':code', districtCode);
+                        const response = await fetch(url);
+                        this.villages = await response.json();
+                    } catch (e) { console.error(e); }
+                    this.isLoadingVillages = false;
+                },
+
+                init() {
+                    if(this.province) this.fetchCities(this.province).then(() => {
+                        this.city = '{{ old('city_code') }}';
+                        if(this.city) this.fetchDistricts(this.city).then(() => {
+                            this.district = '{{ old('district_code') }}';
+                             if(this.district) this.fetchVillages(this.district).then(() => {
+                                this.village = '{{ old('village_code') }}';
+                             });
+                        });
+                    });
+
+                    this.$watch('province', value => {
+                        this.fetchCities(value);
+                        this.districts = [];
+                        this.villages = [];
+                        this.city = '';
+                        this.district = '';
+                        this.village = '';
+                    });
+                    this.$watch('city', value => {
+                        this.fetchDistricts(value);
+                        this.villages = [];
+                        this.district = '';
+                        this.village = '';
+                    });
+                    this.$watch('district', value => {
+                        this.fetchVillages(value);
+                        this.village = '';
+                    });
+                }
+            }));
+        });
+    </script>
 </x-authentication-layout>
