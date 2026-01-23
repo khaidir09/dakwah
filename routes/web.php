@@ -1,8 +1,13 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\GuruController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\VideoController;
+use App\Http\Controllers\WiridController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MajelisController;
@@ -10,22 +15,19 @@ use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DataFeedController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\GuruController;
-use App\Http\Controllers\JadwalMajelisController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\DependantDropdownController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\User\GuruController as UserGuruController;
-use App\Http\Controllers\User\JadwalMajelisController as UserJadwalMajelisController;
-use App\Http\Controllers\User\MajelisController as UserMajelisController;
-use App\Http\Controllers\User\VideoController as UserVideoController;
-use App\Http\Controllers\User\EventController as UserEventController;
-use App\Http\Controllers\User\WiridController as UserWiridController;
-use App\Http\Controllers\User\ManagedMajelisController;
-use App\Http\Controllers\User\ManageEventController;
 use App\Http\Controllers\User\SettingController;
-use App\Http\Controllers\VideoController;
-use App\Http\Controllers\WiridController;
+use App\Http\Controllers\JadwalMajelisController;
+use App\Http\Controllers\User\ManageEventController;
+use App\Http\Controllers\DependantDropdownController;
+use App\Http\Controllers\User\ManagedMajelisController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\User\GuruController as UserGuruController;
+use App\Http\Controllers\User\EventController as UserEventController;
+use App\Http\Controllers\User\VideoController as UserVideoController;
+use App\Http\Controllers\User\WiridController as UserWiridController;
+use App\Http\Controllers\User\MajelisController as UserMajelisController;
+use App\Http\Controllers\User\JadwalMajelisController as UserJadwalMajelisController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +53,20 @@ Route::get('/event', [UserEventController::class, 'list'])->name('event-list');
 Route::get('/wirid', [UserWiridController::class, 'list'])->name('wirid-list');
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect('/beranda');
+    })->middleware('signed')->name('verification.verify');
+
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('status', 'verification-link-sent');
+    })->middleware('throttle:6,1')->name('verification.send');
+
     Route::get('/pengaturan-akun', [SettingController::class, 'index'])->name('pengaturan-akun');
     Route::put('/pengaturan-akun', [SettingController::class, 'update'])->name('pengaturan-akun.update');
 });
