@@ -14,6 +14,7 @@ use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\Village;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
+use App\Notifications\VerifyEmail;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -111,5 +112,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function likedWirids()
     {
         return $this->belongsToMany(Wirid::class, 'wirid_user');
+    }
+
+    /**
+     * Send the email verification notification.
+     *
+     * @return void
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmail);
     }
 }
