@@ -30,6 +30,8 @@
     </head>
     <body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400">
 
+        @props(['contentClass' => 'max-w-sm mx-auto w-full px-4 py-8'])
+
         <main class="bg-white dark:bg-gray-900">
 
             <div class="relative flex">
@@ -51,7 +53,7 @@
                             </div>
                         </div>
 
-                        <div class="max-w-sm mx-auto w-full px-4 py-8">
+                        <div class="{{ $contentClass }}">
                             {{ $slot }}
                         </div>
 

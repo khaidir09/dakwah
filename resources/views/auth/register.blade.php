@@ -1,4 +1,4 @@
-<x-authentication-layout>
+<x-authentication-layout content-class="max-w-2xl mx-auto w-full px-4 py-8">
     <div class="mb-8">
         <h1 class="text-3xl text-emerald-900 dark:text-emerald-400 font-serif font-bold mb-2">Mari Bergabung</h1>
         <p class="text-gray-600 dark:text-gray-400">Daftarkan akun baru untuk menikmati fitur lengkap.</p>
@@ -6,25 +6,25 @@
     <!-- Form -->
     <form method="POST" action="{{ route('register') }}">
         @csrf
-        <div class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <x-label for="name">{{ __('Nama Lengkap') }} <span class="text-red-500">*</span></x-label>
-                <x-input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" class="focus:border-emerald-500 focus:ring-emerald-500" />
+                <x-input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" class="focus:border-emerald-500 focus:ring-emerald-500 w-full" />
             </div>
 
             <div>
                 <x-label for="email">{{ __('Alamat Email') }} <span class="text-red-500">*</span></x-label>
-                <x-input id="email" type="email" name="email" :value="old('email')" required class="focus:border-emerald-500 focus:ring-emerald-500" />
+                <x-input id="email" type="email" name="email" :value="old('email')" required class="focus:border-emerald-500 focus:ring-emerald-500 w-full" />
             </div>
 
             <div>
                 <x-label for="password">Password <span class="text-red-500">*</span></x-label>
-                <x-input id="password" type="password" name="password" required autocomplete="new-password" class="focus:border-emerald-500 focus:ring-emerald-500" />
+                <x-input id="password" type="password" name="password" required autocomplete="new-password" class="focus:border-emerald-500 focus:ring-emerald-500 w-full" />
             </div>
 
             <div>
                 <x-label for="password_confirmation">Konfirmasi Password <span class="text-red-500">*</span></x-label>
-                <x-input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" class="focus:border-emerald-500 focus:ring-emerald-500" />
+                <x-input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" class="focus:border-emerald-500 focus:ring-emerald-500 w-full" />
             </div>
         </div>
 
@@ -33,7 +33,7 @@
             <p class="text-sm text-gray-500 mb-4">Informasi tambahan ini berguna untuk memberikan personalisasi fitur nantinya.</p>
         </div>
 
-        <div class="space-y-4" x-data="registrationForm">
+        <div x-data="registrationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @php
                 $provinces = \Laravolt\Indonesia\Models\Province::pluck('name', 'code');
             @endphp
@@ -89,7 +89,7 @@
 
             <div>
                 <x-label for="birth_year">{{ __('Tahun Lahir') }} <span class="text-red-500">*</span></x-label>
-                <x-input id="birth_year" type="number" name="birth_year" :value="old('birth_year')" required min="1900" max="{{ date('Y') }}" class="focus:border-emerald-500 focus:ring-emerald-500" placeholder="Contoh: 1990" />
+                <x-input id="birth_year" type="number" name="birth_year" :value="old('birth_year')" required min="1900" max="{{ date('Y') }}" class="focus:border-emerald-500 focus:ring-emerald-500 w-full" placeholder="Contoh: 1990" />
             </div>
 
         </div>
