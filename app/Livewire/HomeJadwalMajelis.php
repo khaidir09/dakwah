@@ -35,10 +35,6 @@ class HomeJadwalMajelis extends Component
 
                 if ($user->city_code) {
                     $this->selectedCity = $user->city_code;
-
-                    if ($user->district_code) {
-                        $this->selectedDistrict = $user->district_code;
-                    }
                 }
             }
         }
