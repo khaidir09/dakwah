@@ -29,12 +29,8 @@ class PrayerSchedule extends Component
         $data = Cache::get($cacheKey);
 
         if (! $data) {
-            $year = $date->format('Y');
-            $month = $date->format('m');
-            $day = $date->format('d');
-
             try {
-                $response = Http::timeout(5)->get("https://api.myquran.com/v2/sholat/jadwal/{$cityId}/{$year}/{$month}/{$day}");
+                $response = Http::timeout(5)->get("https://api.myquran.com/v3/sholat/jadwal/2f2b265625d76a6704b08093c652fd79/today?utc=Asia/Makassar");
 
                 if ($response->successful()) {
                     $data = $response->json('data');
