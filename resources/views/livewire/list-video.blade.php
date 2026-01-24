@@ -19,7 +19,7 @@
             <li class="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
                 <button
                     wire:click="$set('category', null)"
-                    class="whitespace-nowrap {{ is_null($category) ? 'text-violet-500' : 'text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300' }}"
+                    class="whitespace-nowrap {{ is_null($category) ? 'text-emerald-500' : 'text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300' }}"
                 >
                     Semua
                 </button>
@@ -28,7 +28,7 @@
             <li class="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
                 <button
                     wire:click="$set('category', '{{ $cat }}')"
-                    class="whitespace-nowrap {{ $category === $cat ? 'text-violet-500' : 'text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300' }}"
+                    class="whitespace-nowrap {{ $category === $cat ? 'text-emerald-500' : 'text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300' }}"
                 >
                     {{ $cat }}
                 </button>

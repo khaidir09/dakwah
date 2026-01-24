@@ -53,7 +53,7 @@
                 <!-- Content -->
                 <div class="grow p-5 flex flex-col">
                     <div class="grow">
-                        <div class="text-sm font-semibold text-violet-500 uppercase mb-2">{{ \Carbon\Carbon::parse($event->date)->locale('id')->translatedFormat('D, d M Y') }}</div>
+                        <div class="text-sm font-semibold text-emerald-500 uppercase mb-2">{{ \Carbon\Carbon::parse($event->date)->locale('id')->translatedFormat('D, d M Y') }}</div>
                         <div class="inline-flex mb-2">
                             <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $event->name }}</h3>
                         </div>
@@ -77,7 +77,7 @@
             </svg>
             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Belum ada acara akan datang</h3>
             <p class="text-gray-500 dark:text-gray-400 mb-6">Saat ini belum ada jadwal acara terbaru. Silakan lihat koleksi video pengajian kami.</p>
-            <a href="{{ route('video-list') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 transition-colors">
+            <a href="{{ route('video-list') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>

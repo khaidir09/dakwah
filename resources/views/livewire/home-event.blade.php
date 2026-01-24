@@ -27,7 +27,7 @@
             <!-- Content -->
             <div class="grow p-5 flex flex-col">
                 <div class="grow">
-                    <div class="text-sm font-semibold text-violet-500 uppercase mb-2">{{ \Carbon\Carbon::parse($event->date)->locale('id')->translatedFormat('D, d M Y') }}</div>
+                    <div class="text-sm font-semibold text-emerald-500 uppercase mb-2">{{ \Carbon\Carbon::parse($event->date)->locale('id')->translatedFormat('D, d M Y') }}</div>
                     <div class="inline-flex mb-2">
                         <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $event->name }}</h3>
                     </div>

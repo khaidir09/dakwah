@@ -23,7 +23,7 @@
                                 </header>
 
                                 <div>
-                                    <a class="text-sm font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="{{ route('majelis-list') }}">&lt;- Kembali</a>
+                                    <a class="text-sm font-medium text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400" href="{{ route('majelis-list') }}">&lt;- Kembali</a>
                                 </div>
                             </div>
 
@@ -76,7 +76,7 @@
                                         <div class="absolute bottom-0 w-full h-px bg-gray-200 dark:bg-gray-700/60" aria-hidden="true"></div>
                                         <ul class="relative text-sm font-medium flex flex-nowrap -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-scroll no-scrollbar">
                                             <li class="mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
-                                                <a class="block pb-3 text-violet-500 whitespace-nowrap border-b-2 border-violet-500" href="#0">Umum</a>
+                                                <a class="block pb-3 text-emerald-500 whitespace-nowrap border-b-2 border-emerald-500" href="#0">Umum</a>
                                             </li>
                                             {{-- <li class="mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
                                                 <a class="block pb-3 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 whitespace-nowrap" href="#0">Connections</a>
@@ -119,7 +119,7 @@
                                                             <!-- Card footer -->
                                                             <div class="flex justify-between items-center">
                                                                 <!-- Link -->
-                                                                <div class="text-sm font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400">
+                                                                <div class="text-sm font-medium text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400">
                                                                     {{ $item->hari }}, {{ $item->waktu_formatted }} WITA
                                                                 </div>
                                                                 <!-- Avatars group -->
