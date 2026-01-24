@@ -1,4 +1,6 @@
 <x-user-layout>
+    @section('title', 'Tentang Kami')
+
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Hero Section -->
         <div class="relative bg-emerald-900 overflow-hidden">
