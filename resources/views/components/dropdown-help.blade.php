@@ -29,7 +29,7 @@
         x-transition:leave-end="opacity-0"
         x-cloak                    
     >
-        <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase pt-1.5 pb-2 px-3">Butuh bantuan?</div>
+        <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase pt-1.5 pb-2 px-3">Informasi</div>
         <ul>
             {{-- <li>
                 <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3" href="#0" @click="open = false" @focus="open = true" @focusout="open = false">
