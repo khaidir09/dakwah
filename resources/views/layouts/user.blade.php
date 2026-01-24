@@ -5,7 +5,24 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Syaikhuna</title>
+        <title>@yield('title', config('app.name', 'Syaikhuna'))</title>
+        <meta name="description" content="@yield('meta_description', 'Platform informasi jadwal majelis & acara terkini, profil ulama, dan konten islami.')">
+        <meta name="keywords" content="@yield('meta_keywords', 'majelis, muallim, banjar, jadwal pengajian, syaikhuna, acara haul, wirid')">
+        <meta name="author" content="@yield('meta_author', config('app.name', 'Syaikhuna'))">
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="@yield('og_type', 'website')">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="@yield('title', config('app.name', 'Syaikhuna'))">
+        <meta property="og:description" content="@yield('meta_description', 'Platform informasi jadwal majelis & acara terkini, profil ulama, dan konten islami.')">
+        {{-- <meta property="og:image" content="@yield('meta_image', asset('images/auth-image.jpg'))"> --}}
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="{{ url()->current() }}">
+        <meta property="twitter:title" content="@yield('title', config('app.name', 'Syaikhuna'))">
+        <meta property="twitter:description" content="@yield('meta_description', 'Platform informasi jadwal majelis & acara terkini, profil ulama, dan konten islami.')">
+        {{-- <meta property="twitter:image" content="@yield('meta_image', asset('images/auth-image.jpg'))"> --}}
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
