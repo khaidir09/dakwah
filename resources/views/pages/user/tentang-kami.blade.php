@@ -40,7 +40,7 @@
                         <div class="aspect-video bg-emerald-50 rounded-xl flex items-center justify-center border-2 border-emerald-100 relative overflow-hidden">
                              <!-- Decorative pattern -->
                              <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
-                             <h3 class="text-6xl font-serif text-emerald-800 italic z-10">Syaikhuna</h3>
+                             <h3 class="text-6xl font-serif text-emerald-800 z-10">Syaikhuna</h3>
                         </div>
                     </div>
                     <div class="md:w-1/2">
