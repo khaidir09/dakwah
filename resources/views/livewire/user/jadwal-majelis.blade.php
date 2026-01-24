@@ -95,7 +95,7 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 @if ($item->status === 'Aktif')
-                                    <div class="text-sm inline-flex font-medium bg-violet-500/20 text-violet-600 rounded-full text-center px-2.5 py-1">{{ $item->status }}</div>
+                                    <div class="text-sm inline-flex font-medium bg-emerald-500/20 text-emerald-600 rounded-full text-center px-2.5 py-1">{{ $item->status }}</div>
                                 @else
                                     <div class="text-sm inline-flex font-medium bg-red-500/20 text-red-700 rounded-full text-center px-2.5 py-1">{{ $item->status }}</div>
                                 @endif

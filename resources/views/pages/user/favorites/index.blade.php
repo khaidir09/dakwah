@@ -21,7 +21,7 @@
                 <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
                     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
                         <li class="mr-2" role="presentation">
-                            <button class="inline-block p-4 border-b-2 rounded-t-lg text-violet-600 hover:text-violet-600 dark:text-violet-500 dark:hover:text-violet-500 border-violet-600 dark:border-violet-500" id="wirid-tab" data-tabs-target="#wirid" type="button" role="tab" aria-controls="wirid" aria-selected="true">Wirid</button>
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg text-emerald-600 hover:text-emerald-600 dark:text-emerald-500 dark:hover:text-emerald-500 border-emerald-600 dark:border-emerald-500" id="wirid-tab" data-tabs-target="#wirid" type="button" role="tab" aria-controls="wirid" aria-selected="true">Wirid</button>
                         </li>
                         <!-- Placeholder for future tabs like "Do'a" -->
                         {{--
