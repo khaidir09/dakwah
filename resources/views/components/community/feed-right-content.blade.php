@@ -18,9 +18,6 @@
 
             <!-- Blocks -->
             <div class="space-y-4">
-                
-                <!-- Block 1 -->
-                <livewire:prayer-schedule />
 
                 <!-- Block 1b: Daily Surah Reading -->
                 <livewire:daily-surah />
