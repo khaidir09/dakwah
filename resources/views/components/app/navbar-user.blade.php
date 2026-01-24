@@ -3,21 +3,21 @@
         <div class="flex items-center justify-between h-16 {{ $variant === 'v2' || $variant === 'v3' ? '' : 'lg:border-b border-gray-200 dark:border-gray-700/60' }}">
 
             <!-- Header: Left side -->
-            <a href="{{ route('beranda') }}" class="flex items-center gap-2">
+            <a href="{{ route('beranda') }}" class="flex items-center gap-1 md:gap-2">
                 <!-- Logo Icon -->
                 <svg class="text-emerald-600 fill-current w-9 h-9" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                     <path d="M2 30H30V28H28V16C28 9.37 22.63 4 16 4C9.37 4 4 9.37 4 16V28H2V30ZM16 6C21.52 6 26 10.48 26 16V28H22V20C22 16.69 19.31 14 16 14C12.69 14 10 16.69 10 20V28H6V16C6 10.48 10.48 6 16 6Z"/>
                 </svg>
                 
                 <!-- Logo Text -->
-                <span class="text-2xl font-bold font-serif text-gray-800 tracking-tight dark:text-gray-100 pt-1">
+                <span class="text-lg md:text-2xl font-bold font-serif text-gray-800 tracking-tight dark:text-gray-100 pt-1">
                     Syaikhuna
                 </span>
             </a>
            
 
             <!-- Header: Right side -->
-            <div class="flex items-center space-x-1">
+            <div class="flex items-center space-x-0 md:space-x-1">
 
                 <!-- Notifications button -->
                 <x-dropdown-notifications align="right" />
