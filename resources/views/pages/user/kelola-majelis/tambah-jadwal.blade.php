@@ -46,12 +46,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium mb-2" for="teacher_id">Nama Guru <span class="text-red-500">*</span></label>
-                                <select id="teacher_id" class="form-select w-full @error('teacher_id') is-invalid @enderror" name="teacher_id" required>
-                                    <option value="">Pilih Guru</option>
-                                    @foreach($teachers as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                </select>
+                                <livewire:partials.teacher-select field-name="teacher_id" :selected-id="old('teacher_id')" />
                                 @error('teacher_id')
                                     <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                                 @enderror

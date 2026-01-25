@@ -94,8 +94,7 @@ class ManagedMajelisController extends Controller
     public function create()
     {
         $majelis = Assembly::where('user_id', Auth::user()->id)->first();
-        $teachers = Teacher::where('wafat_masehi', null)->get();
-        return view('pages.user.kelola-majelis.tambah-jadwal', compact('majelis', 'teachers'));
+        return view('pages.user.kelola-majelis.tambah-jadwal', compact('majelis'));
     }
 
     public function store(Request $request)
