@@ -41,7 +41,7 @@ class MajelisController extends Controller
             'deskripsi' => 'required|string',
             'teacher_id' => 'required|exists:teachers,id',
             'alamat' => 'required|string',
-            'maps' => 'required|string|max:255',
+            'maps' => 'nullable|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
             'province' => 'nullable|string|max:20',
             'city' => 'nullable|string|max:20',
