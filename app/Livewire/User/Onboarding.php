@@ -69,7 +69,22 @@ class Onboarding extends Component
 
     public function mount()
     {
-        if (Assembly::where('user_id', Auth::id())->exists()) {
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        if (!$user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
+        if (empty($user->phone)) {
+            return redirect()->route('pengaturan-akun')
+                ->with('error', 'Silakan lengkapi nomor handphone Anda pada pengaturan akun sebelum mendaftarkan majelis.');
+        }
+
+        if (Assembly::where('user_id', $user->id)->exists()) {
             return redirect()->route('kelola-jadwal-majelis')->with('error', 'Anda sudah memiliki majelis terdaftar.');
         }
 
