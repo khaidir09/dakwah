@@ -37,8 +37,11 @@
                         <p class="text-justify line-clamp-3">{!! $wirid->deskripsi !!}</p>
 
                         {{-- Arab Preview --}}
-                        <div class="text-right text-xl font-semibold truncate" dir="rtl">
-                            {!! $wirid->arab !!}
+                        <div x-data="{ expanded: false }">
+                            <div class="text-right text-xl font-semibold" :class="expanded ? '' : 'truncate'" dir="rtl">
+                                {!! $wirid->arab !!}
+                            </div>
+                            <button @click="expanded = ! expanded" class="text-xs font-medium text-emerald-600 hover:text-emerald-500 mt-1 focus:outline-none" x-text="expanded ? 'Tutup' : 'Baca Selengkapnya'"></button>
                         </div>
                     </div>
                     <!-- Footer -->
