@@ -23,10 +23,9 @@
                              <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('majelis*')) bg-white dark:bg-gray-800 @endif" href="{{ route('majelis-list') }}">
                                 <svg class="shrink-0 @if(request()->routeIs('majelis*')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                                    <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+                                    <path d="M12 5c-3.333 0 -6 3 -6 6v9h12v-9c0 -3 -2.667 -6 -6 -6z" />
+                                    <path d="M12 3l0 2" />
+                                    <path d="M10 20v-5c0 -1.333 1.333 -2 2 -2s2 .667 2 2v5" />
                                 </svg>
                                 <span class="text-sm font-medium @if(request()->routeIs('majelis*')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Majelis</span>
                             </a>
