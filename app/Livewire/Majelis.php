@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Assembly;
+use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,6 +13,9 @@ class Majelis extends Component
 
     public $paginate = 10;
     public $search;
+
+    public $generatedLink;
+    public $showLinkModal = false;
 
     public $confirmingDeletion = false;
     public $assembly_id_to_delete;
@@ -50,6 +54,15 @@ class Majelis extends Component
         // Tutup modal dan reset ID
         $this->confirmingDeletion = false;
         $this->assembly_id_to_delete = null;
+    }
+
+    public function generateInviteLink()
+    {
+        $this->generatedLink = URL::temporarySignedRoute(
+            'majelis.onboarding',
+            now()->addMinutes(1440)
+        );
+        $this->showLinkModal = true;
     }
 
     public function render()
