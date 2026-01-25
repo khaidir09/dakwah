@@ -12,6 +12,43 @@
             </button>
         </form>
     </div>
+
+    <!-- Region Filters -->
+    <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Province Filter -->
+        <div>
+            <label for="province" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Provinsi</label>
+            <select wire:model.live="selectedProvince" id="province" class="block w-full form-select rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 sm:text-sm">
+                <option value="">Semua Provinsi</option>
+                @foreach($provinces as $code => $name)
+                    <option value="{{ $code }}">{{ $name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- City Filter -->
+        <div>
+            <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kabupaten/Kota</label>
+            <select wire:model.live="selectedCity" id="city" class="block w-full form-select rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 sm:text-sm" {{ empty($selectedProvince) ? 'disabled' : '' }}>
+                <option value="">{{ empty($selectedProvince) ? 'Pilih Provinsi Terlebih Dahulu' : 'Semua Kabupaten/Kota' }}</option>
+                @foreach($cities as $code => $name)
+                    <option value="{{ $code }}">{{ $name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- District Filter -->
+        <div>
+            <label for="district" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kecamatan</label>
+            <select wire:model.live="selectedDistrict" id="district" class="block w-full form-select rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 sm:text-sm" {{ empty($selectedCity) ? 'disabled' : '' }}>
+                <option value="">{{ empty($selectedCity) ? 'Pilih Kabupaten/Kota Terlebih Dahulu' : 'Semua Kecamatan' }}</option>
+                @foreach($districts as $code => $name)
+                    <option value="{{ $code }}">{{ $name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
     <div class="grid grid-cols-12 gap-4">
         @foreach ($teachers as $teacher)
             <div class="col-span-full sm:col-span-6 xl:col-span-3 bg-white dark:bg-gray-800 shadow-xs rounded-xl">
@@ -33,7 +70,7 @@
                             @if ($teacher->tahun_lahir != null)
                                 <div class="flex justify-center items-center text-xs">({{ date('Y') - $teacher->tahun_lahir }} tahun)</div>
                             @endif
-                            <div class="flex justify-center items-center text-sm font-medium mt-2">{{ $teacher->village->name }}</div>
+                            <div class="flex justify-center items-center text-sm font-medium mt-2">{{ $teacher->village?->name }}</div>
                         </header>
                         <!-- Bio -->
                         {{-- <div class="text-center mt-2">
