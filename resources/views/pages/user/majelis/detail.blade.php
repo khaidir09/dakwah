@@ -241,44 +241,32 @@
                                             @if($assembly->youtube || $assembly->instagram || $assembly->facebook || $assembly->tiktok)
                                                 <div class="text-sm">
                                                     <h3 class="font-medium text-gray-800 dark:text-gray-100 mb-2">Media Sosial</h3>
-                                                    <div class="flex space-x-3">
+                                                    <ul class="space-y-1">
                                                         @if($assembly->youtube)
-                                                            <a href="{{ Str::startsWith($assembly->youtube, 'http') ? $assembly->youtube : 'https://youtube.com/' . $assembly->youtube }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-red-600 transition-colors">
-                                                                <span class="sr-only">YouTube</span>
-                                                                <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M29.41 9.2a3.55 3.55 0 0 0-2.5-2.5C24.72 6.09 16 6.09 16 6.09s-8.72 0-10.91.61a3.55 3.55 0 0 0-2.5 2.5C2 11.41 2 16 2 16s0 4.59.59 6.8a3.55 3.55 0 0 0 2.5 2.5c2.19.61 10.91.61 10.91.61s8.72 0 10.91-.61a3.55 3.55 0 0 0 2.5-2.5C30 20.59 30 16 30 16s0-4.59-.59-6.8ZM13.2 20.2v-8.4l7.28 4.2-7.28 4.2Z"/>
-                                                                </svg>
-                                                            </a>
+                                                            <li>
+                                                                <span class="text-gray-500">YouTube:</span>
+                                                                <a href="{{ Str::startsWith($assembly->youtube, 'http') ? $assembly->youtube : 'https://youtube.com/' . $assembly->youtube }}" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:underline">{{ $assembly->youtube }}</a>
+                                                            </li>
                                                         @endif
-
                                                         @if($assembly->instagram)
-                                                            <a href="{{ Str::startsWith($assembly->instagram, 'http') ? $assembly->instagram : 'https://instagram.com/' . $assembly->instagram }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-pink-600 transition-colors">
-                                                                <span class="sr-only">Instagram</span>
-                                                                <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                                                                    <circle cx="16" cy="16" r="4"/>
-                                                                    <path d="M22.5 7.5h-13a5 5 0 0 0-5 5v13a5 5 0 0 0 5 5h13a5 5 0 0 0 5-5v-13a5 5 0 0 0-5-5Zm2.5 18a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 7 25.5v-13A2.5 2.5 0 0 1 9.5 10h13a2.5 2.5 0 0 1 2.5 2.5ZM23.5 11a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm-7.5-1a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z"/>
-                                                                </svg>
-                                                            </a>
+                                                            <li>
+                                                                <span class="text-gray-500">Instagram:</span>
+                                                                <a href="{{ Str::startsWith($assembly->instagram, 'http') ? $assembly->instagram : 'https://instagram.com/' . $assembly->instagram }}" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:underline">{{ $assembly->instagram }}</a>
+                                                            </li>
                                                         @endif
-
                                                         @if($assembly->facebook)
-                                                            <a href="{{ Str::startsWith($assembly->facebook, 'http') ? $assembly->facebook : 'https://facebook.com/' . $assembly->facebook }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-600 transition-colors">
-                                                                <span class="sr-only">Facebook</span>
-                                                                <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M17.5 30v-9.5h3.2l.5-3.7h-3.7V14.4c0-1.1.3-1.8 1.8-1.8h1.9v-3.3c-.3 0-1.5-.1-2.8-.1-2.8 0-4.7 1.7-4.7 4.8v2.7h-3.2v3.7h3.2V30h6.1Z"/>
-                                                                </svg>
-                                                            </a>
+                                                            <li>
+                                                                <span class="text-gray-500">Facebook:</span>
+                                                                <a href="{{ Str::startsWith($assembly->facebook, 'http') ? $assembly->facebook : 'https://facebook.com/' . $assembly->facebook }}" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:underline">{{ $assembly->facebook }}</a>
+                                                            </li>
                                                         @endif
-
                                                         @if($assembly->tiktok)
-                                                            <a href="{{ Str::startsWith($assembly->tiktok, 'http') ? $assembly->tiktok : 'https://tiktok.com/' . $assembly->tiktok }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-black dark:hover:text-white transition-colors">
-                                                                <span class="sr-only">TikTok</span>
-                                                                <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M23.6 11.5a6.76 6.76 0 0 1-3.6-1V6.9A10.5 10.5 0 0 0 16 7.7a7.28 7.28 0 0 0-3.1 3.2 8.35 8.35 0 0 0-1 4 8.79 8.79 0 0 0 .5 3 8.36 8.36 0 0 0 2.2 3.2 8.65 8.65 0 0 0 3.8 2 10.38 10.38 0 0 0 5 .2v-4a6.45 6.45 0 0 1-2.9.2 4.41 4.41 0 0 1-2.1-.9 4.31 4.31 0 0 1-1.3-1.7 5.09 5.09 0 0 1-.4-2.1 4.3 4.3 0 0 1 .4-1.9 4.28 4.28 0 0 1 1.2-1.5 4.67 4.67 0 0 1 1.9-.9 6.07 6.07 0 0 1 2.5.1V2.1H29v13.5a10 10 0 0 1-1.4 5 10.74 10.74 0 0 1-4.2 3.8 12.18 12.18 0 0 1-6.1 1.6 12 12 0 0 1-4.7-.9 11.59 11.59 0 0 1-3.8-2.5 12.06 12.06 0 0 1-2.6-3.8 11.75 11.75 0 0 1-1-4.7 12 12 0 0 1 .5-3.5 12.08 12.08 0 0 1 1.6-3.4 12.44 12.44 0 0 1 2.5-2.7 11.45 11.45 0 0 1 3.4-1.8 12.87 12.87 0 0 1 4.1-.7v4Z" transform="scale(0.8) translate(6, 4)"/>
-                                                                </svg>
-                                                            </a>
+                                                            <li>
+                                                                <span class="text-gray-500">TikTok:</span>
+                                                                <a href="{{ Str::startsWith($assembly->tiktok, 'http') ? $assembly->tiktok : 'https://tiktok.com/' . $assembly->tiktok }}" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:underline">{{ $assembly->tiktok }}</a>
+                                                            </li>
                                                         @endif
-                                                    </div>
+                                                    </ul>
                                                 </div>
                                             @endif
                                         </aside>
