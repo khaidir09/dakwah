@@ -34,6 +34,10 @@ class ManagedMajelisController extends Controller
             'alamat' => 'required',
             'deskripsi' => 'required',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'youtube' => 'nullable|string|max:255',
+            'instagram' => 'nullable|string|max:255',
+            'facebook' => 'nullable|string|max:255',
+            'tiktok' => 'nullable|string|max:255',
         ]);
 
         $data = $request->except(['gambar']);

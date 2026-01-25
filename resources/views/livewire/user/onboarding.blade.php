@@ -250,6 +250,32 @@
                 </div>
 
                 <div class="col-span-2">
+                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Media Sosial</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block font-medium text-sm text-gray-700">YouTube</label>
+                            <input wire:model="youtube" type="text" placeholder="Link/Username Channel" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full">
+                            @error('youtube') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="block font-medium text-sm text-gray-700">Instagram</label>
+                            <input wire:model="instagram" type="text" placeholder="Link/Username Profile" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full">
+                            @error('instagram') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="block font-medium text-sm text-gray-700">Facebook</label>
+                            <input wire:model="facebook" type="text" placeholder="Link/Username Page" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full">
+                            @error('facebook') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="block font-medium text-sm text-gray-700">TikTok</label>
+                            <input wire:model="tiktok" type="text" placeholder="Link/Username Account" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full">
+                            @error('tiktok') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-span-2">
                     <label class="block font-medium text-sm text-gray-700">Foto Majelis</label>
                     <input wire:model="gambar" type="file" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
                     @error('gambar') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror

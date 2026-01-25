@@ -86,6 +86,43 @@
 
                 </div>
 
+                <div class="mt-6">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Media Sosial</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="youtube">YouTube</label>
+                            <input id="youtube" class="form-input w-full @error('youtube') is-invalid @enderror" type="text" name="youtube" value="{{ old('youtube', $majelis->youtube) }}" placeholder="Link atau Username Channel" />
+                            @error('youtube')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="instagram">Instagram</label>
+                            <input id="instagram" class="form-input w-full @error('instagram') is-invalid @enderror" type="text" name="instagram" value="{{ old('instagram', $majelis->instagram) }}" placeholder="Link atau Username Profile" />
+                            @error('instagram')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="facebook">Facebook</label>
+                            <input id="facebook" class="form-input w-full @error('facebook') is-invalid @enderror" type="text" name="facebook" value="{{ old('facebook', $majelis->facebook) }}" placeholder="Link atau Username Page" />
+                            @error('facebook')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="tiktok">TikTok</label>
+                            <input id="tiktok" class="form-input w-full @error('tiktok') is-invalid @enderror" type="text" name="tiktok" value="{{ old('tiktok', $majelis->tiktok) }}" placeholder="Link atau Username Account" />
+                            @error('tiktok')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 mt-6">
                     <div>
                         <label class="block text-sm font-medium mb-2" for="deskripsi">Deskripsi <span class="text-red-500">*</span></label>

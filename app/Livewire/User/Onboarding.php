@@ -50,6 +50,12 @@ class Onboarding extends Component
     public $majelisMaps;
     public $gambar;
 
+    // Social Media
+    public $youtube;
+    public $instagram;
+    public $facebook;
+    public $tiktok;
+
     // Region Data
     public $provinces = [];
     public $cities = [];
@@ -205,6 +211,10 @@ class Onboarding extends Component
             'majelisAddress' => 'required|string',
             'majelisMaps' => 'required|string|max:255',
             'gambar' => 'nullable|image|max:2048',
+            'youtube' => 'nullable|string|max:255',
+            'instagram' => 'nullable|string|max:255',
+            'facebook' => 'nullable|string|max:255',
+            'tiktok' => 'nullable|string|max:255',
             'selectedProvince' => 'required',
             'selectedCity' => 'required',
             'selectedDistrict' => 'required',
@@ -242,6 +252,12 @@ class Onboarding extends Component
             'maps' => $this->majelisMaps,
             'gambar' => $imagePath,
             'status' => 'Aktif',
+
+            // Social Media
+            'youtube' => $this->youtube,
+            'instagram' => $this->instagram,
+            'facebook' => $this->facebook,
+            'tiktok' => $this->tiktok,
 
             // Region Codes
             'province_code' => $this->selectedProvince,
