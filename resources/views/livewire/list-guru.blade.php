@@ -30,7 +30,9 @@
                                     <h2 class="text-md leading-snug justify-center font-semibold">{{ $teacher->name }} </h2>
                                 </a>
                             </div>
-                            <div class="flex justify-center items-center text-xs">({{ date('Y') - $teacher->tahun_lahir }} tahun)</div>
+                            @if ($teacher->tahun_lahir != null)
+                                <div class="flex justify-center items-center text-xs">({{ date('Y') - $teacher->tahun_lahir }} tahun)</div>
+                            @endif
                             <div class="flex justify-center items-center text-sm font-medium mt-2">{{ $teacher->village->name }}</div>
                         </header>
                         <!-- Bio -->
