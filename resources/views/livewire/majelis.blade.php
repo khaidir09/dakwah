@@ -23,9 +23,12 @@
             <x-search-form placeholder="Masukkan nama majelis/guru" />
 
             <!-- Add customer button -->
-            <button wire:click="generateInviteLink" class="btn bg-emerald-500 text-white hover:bg-emerald-600 mr-2">
+            <button wire:click="generateInviteLink" class="btn bg-emerald-500 text-white hover:bg-emerald-600">
+                {{-- icon svg generate --}}
+                <svg class="fill-current shrink-0 xs:hidden" width="16" height="16" viewBox="0 0 16 16">
+                    <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm1 12H7v-2h2v2zm0-4H7V4h2v4z" />
+                </svg>
                 <span class="max-xs:sr-only">Generate Link</span>
-                <span class="hidden xs:block">Generate Link</span>
             </button>
 
             <a href="{{ route('majelis.create') }}" class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
@@ -214,30 +217,65 @@
     </div>
 
     <!-- Modal Generate Link -->
-    <x-dialog-modal wire:model.live="showLinkModal">
-        <x-slot name="title">
-            {{ __('Link Registrasi Majelis') }}
-        </x-slot>
-
-        <x-slot name="content">
-            <div class="mt-4">
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                    Link ini valid selama 24 jam.
-                </p>
-                <div class="flex items-center space-x-2">
-                    <x-input type="text" class="block w-full" readonly :value="$generatedLink" id="generatedLink" />
-                    <button class="btn bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-                        onclick="navigator.clipboard.writeText(document.getElementById('generatedLink').value).then(() => alert('Link berhasil disalin!'))">
-                        Copy
-                    </button>
+    <!-- Modal Generate Link -->
+    <div x-data="{ linkOpen: @entangle('showLinkModal').live }">
+        <div
+            class="fixed inset-0 bg-gray-900/30 z-50 transition-opacity"
+            x-show="linkOpen"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-out duration-100"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            aria-hidden="true"
+            x-cloak
+        ></div>
+        <div
+            id="link-modal"
+            class="fixed inset-0 z-50 overflow-hidden flex items-center my-4 justify-center px-4 sm:px-6"
+            role="dialog"
+            aria-modal="true"
+            x-show="linkOpen"
+            x-transition:enter="transition ease-in-out duration-200"
+            x-transition:enter-start="opacity-0 translate-y-4"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in-out duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-4"
+            x-cloak
+        >
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-auto max-w-lg w-full max-h-full" @click.outside="linkOpen = false" @keydown.escape.window="linkOpen = false">
+                <div class="p-5 flex space-x-4">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-emerald-100 dark:bg-emerald-700">
+                        <svg class="shrink-0 fill-current text-emerald-500 text-emerald-50" width="16" height="16" viewBox="0 0 16 16">
+                            <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM7 11.4L3.6 8 5 6.6l2 2 4-4L12.4 6 7 11.4z" />
+                        </svg>
+                    </div>
+                    <div class="w-full">
+                        <div class="mb-2">
+                            <div class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ __('Link Registrasi Majelis') }}</div>
+                        </div>
+                        <div class="text-sm mb-4 w-full">
+                            <div class="space-y-2">
+                                <p class="text-gray-500 dark:text-gray-400">Link ini valid selama 24 jam.</p>
+                                <div class="flex items-center space-x-2">
+                                    <x-input type="text" class="block w-full" readonly :value="$generatedLink" id="generatedLink" />
+                                    <button class="btn bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shrink-0"
+                                        onclick="navigator.clipboard.writeText(document.getElementById('generatedLink').value).then(() => alert('Link berhasil disalin!'))">
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap justify-end space-x-2">
+                            <button class="btn-sm border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300" @click="linkOpen = false">
+                                {{ __('Tutup') }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </x-slot>
-
-        <x-slot name="footer">
-            <x-secondary-button wire:click="$set('showLinkModal', false)" wire:loading.attr="disabled">
-                {{ __('Tutup') }}
-            </x-secondary-button>
-        </x-slot>
-    </x-dialog-modal>
+        </div>
+    </div>
 </div>

@@ -209,7 +209,7 @@ class Onboarding extends Component
             'majelisName' => 'required|string|max:255',
             'majelisDesc' => 'required|string',
             'majelisAddress' => 'required|string',
-            'majelisMaps' => 'required|string|max:255',
+            'majelisMaps' => 'nullable|string|max:255',
             'gambar' => 'nullable|image|max:2048',
             'youtube' => 'nullable|string|max:255',
             'instagram' => 'nullable|string|max:255',

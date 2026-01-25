@@ -56,7 +56,7 @@
 
                     <div>
                         <label class="block text-sm font-medium mb-2" for="maps">Maps</label>
-                        <input id="maps" class="form-input w-full @error('maps') is-invalid @enderror" type="text" name="maps" value="{{ old('maps', $majelis->maps) }}" required/>
+                        <input id="maps" class="form-input w-full @error('maps') is-invalid @enderror" type="text" name="maps" value="{{ old('maps', $majelis->maps) }}"/>
                         @error('maps')
                             <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                         @enderror
