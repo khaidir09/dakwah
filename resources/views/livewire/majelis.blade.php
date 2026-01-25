@@ -23,6 +23,11 @@
             <x-search-form placeholder="Masukkan nama majelis/guru" />
 
             <!-- Add customer button -->
+            <button wire:click="generateInviteLink" class="btn bg-emerald-500 text-white hover:bg-emerald-600 mr-2">
+                <span class="max-xs:sr-only">Generate Link</span>
+                <span class="hidden xs:block">Generate Link</span>
+            </button>
+
             <a href="{{ route('majelis.create') }}" class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
                 <svg class="fill-current shrink-0 xs:hidden" width="16" height="16" viewBox="0 0 16 16">
                     <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
@@ -207,4 +212,32 @@
     <div class="mt-8">
         {{ $assemblies->links() }}
     </div>
+
+    <!-- Modal Generate Link -->
+    <x-dialog-modal wire:model.live="showLinkModal">
+        <x-slot name="title">
+            {{ __('Link Registrasi Majelis') }}
+        </x-slot>
+
+        <x-slot name="content">
+            <div class="mt-4">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                    Link ini valid selama 24 jam.
+                </p>
+                <div class="flex items-center space-x-2">
+                    <x-input type="text" class="block w-full" readonly :value="$generatedLink" id="generatedLink" />
+                    <button class="btn bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                        onclick="navigator.clipboard.writeText(document.getElementById('generatedLink').value).then(() => alert('Link berhasil disalin!'))">
+                        Copy
+                    </button>
+                </div>
+            </div>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-secondary-button wire:click="$set('showLinkModal', false)" wire:loading.attr="disabled">
+                {{ __('Tutup') }}
+            </x-secondary-button>
+        </x-slot>
+    </x-dialog-modal>
 </div>
