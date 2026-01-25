@@ -11,7 +11,7 @@ class HomeEvent extends Component
 {
     public function render()
     {
-        $query = Event::latest();
+        $query = Event::orderBy('date', 'asc');
 
         $query->where('date', '>=', now());
         $events = $query->take(6)->get();

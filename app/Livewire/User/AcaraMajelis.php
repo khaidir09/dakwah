@@ -48,7 +48,7 @@ class AcaraMajelis extends Component
         $query = Event::with('assembly')
             ->whereHas('assembly', function ($assemblyQuery) {
                 $assemblyQuery->where('user_id', Auth::user()->id);
-            })->latest();
+            })->orderBy('date', 'asc');
 
         // Ambil hasil akhir dengan paginasi
         $events = $query->simplePaginate($this->paginate);

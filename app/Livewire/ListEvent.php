@@ -31,7 +31,7 @@ class ListEvent extends Component
 
     public function render()
     {
-        $query = Event::latest();
+        $query = Event::orderBy('date', 'asc');
 
         if ($this->search) {
             $searchTerm = '%' . $this->search . '%';
