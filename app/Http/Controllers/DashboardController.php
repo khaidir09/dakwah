@@ -3,15 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\DataFeed;
+use App\Models\User;
+use App\Models\Teacher;
+use App\Models\Assembly;
+use App\Models\Schedule;
+use App\Models\Wirid;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $dataFeed = new DataFeed();
+        $totalUsers = User::count();
+        $totalAssemblies = Assembly::count();
+        $totalTeachers = Teacher::count();
+        $upcomingSchedules = Schedule::where('waktu', '>=', now())->count();
+        $totalWirid = Wirid::count();
 
-        return view('pages/dashboard/dashboard', compact('dataFeed'));
+        return view('pages/dashboard/dashboard', compact(
+            'totalUsers',
+            'totalAssemblies',
+            'totalTeachers',
+            'upcomingSchedules',
+            'totalWirid'
+        ));
     }
 
     /**
