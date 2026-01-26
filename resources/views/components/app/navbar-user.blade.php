@@ -10,7 +10,7 @@
                 </svg>
                 
                 <!-- Logo Text -->
-                <span class="text-lg md:text-2xl font-bold font-serif text-gray-800 tracking-tight dark:text-gray-100 pt-1">
+                <span class="hidden md:inline-block text-lg md:text-2xl font-bold font-serif text-gray-800 tracking-tight dark:text-gray-100 pt-1">
                     Syaikhuna
                 </span>
             </a>
@@ -20,7 +20,7 @@
             <div class="flex items-center space-x-0 md:space-x-1">
 
                 <!-- Notifications button -->
-                <x-dropdown-notifications align="right" />
+                {{-- <x-dropdown-notifications align="right" /> --}}
 
                 <!-- Info button -->
                 <x-dropdown-help align="right" />
