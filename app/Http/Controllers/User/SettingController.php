@@ -73,4 +73,17 @@ class SettingController extends Controller
 
         return back()->with('status', 'profile-updated');
     }
+
+    public function updateOneSignalId(Request $request)
+    {
+        $request->validate([
+            'one_signal_id' => ['required', 'string'],
+        ]);
+
+        auth()->user()->update([
+            'one_signal_id' => $request->one_signal_id,
+        ]);
+
+        return response()->json(['status' => 'success']);
+    }
 }
