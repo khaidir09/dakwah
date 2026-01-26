@@ -40,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'village_code',
         'gender',
         'birth_year',
+        'one_signal_id',
     ];
 
     /**

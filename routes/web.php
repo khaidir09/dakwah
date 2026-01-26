@@ -69,6 +69,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/pengaturan-akun', [SettingController::class, 'index'])->name('pengaturan-akun');
     Route::put('/pengaturan-akun', [SettingController::class, 'update'])->name('pengaturan-akun.update');
+    Route::post('/user/onesignal-id', [SettingController::class, 'updateOneSignalId'])->name('user.onesignal.update');
 });
 
 Route::get('/tentang-kami', function () {
