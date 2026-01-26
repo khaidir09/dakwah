@@ -170,12 +170,12 @@
                     Syaikhuna dibangun dengan semangat gotong royong (Ta'awun). Kami terbuka untuk kolaborasi dengan berbagai pihak, baik pengurus majelis, komunitas IT, maupun donatur yang ingin berkontribusi dalam dakwah digital ini.
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="https://wa.me/6283199450909" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 md:text-lg transition-colors">
+                    <a href="https://wa.me/6281938960028" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 md:text-lg transition-colors">
                         Hubungi Kami
                     </a>
-                    <a href="#" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 md:text-lg transition-colors">
+                    {{-- <a href="#" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 md:text-lg transition-colors">
                         Dukung Kami
-                    </a>
+                    </a> --}}
                 </div>
             </section>
 
