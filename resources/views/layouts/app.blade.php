@@ -45,6 +45,8 @@
             }
         </script>
 
+        <x-onesignal-script />
+
         <!-- Page wrapper -->
         <div class="flex h-[100dvh] overflow-hidden">
 
