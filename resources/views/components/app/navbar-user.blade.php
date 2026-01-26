@@ -10,9 +10,11 @@
                 </svg>
                 
                 <!-- Logo Text -->
-                <span class="text-lg md:text-2xl font-bold font-serif text-gray-800 tracking-tight dark:text-gray-100 pt-1">
-                    Syaikhuna
-                </span>
+                @guest
+                    <span class="text-lg md:text-2xl font-bold font-serif text-gray-800 tracking-tight dark:text-gray-100 pt-1">
+                        Syaikhuna
+                    </span>
+                @endguest
             </a>
            
 
