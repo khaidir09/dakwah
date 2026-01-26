@@ -41,6 +41,30 @@
                     if (OneSignal.User.externalId !== "{{ auth()->id() }}") {
                         OneSignal.login("{{ auth()->id() }}");
                     }
+
+                    const saveOneSignalId = (id) => {
+                        fetch("{{ route('user.onesignal.update') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({ one_signal_id: id })
+                        });
+                    };
+
+                    const currentOneSignalId = OneSignal.User.PushSubscription.id;
+                    const dbOneSignalId = "{{ auth()->user()->one_signal_id }}";
+
+                    if (currentOneSignalId && currentOneSignalId !== dbOneSignalId) {
+                        saveOneSignalId(currentOneSignalId);
+                    }
+
+                    OneSignal.User.PushSubscription.addEventListener("change", (event) => {
+                        if (event.current.id && event.current.id !== dbOneSignalId) {
+                            saveOneSignalId(event.current.id);
+                        }
+                    });
                 @endauth
             });
         });

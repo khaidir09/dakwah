@@ -3,28 +3,39 @@
 
   Press Ctrl+C to stop the server
 
-  2026-01-25 07:30:27 /jadwal-majelis ............................ ~ 500.52ms
-  2026-01-25 07:31:06 /jadwal-majelis .............................. ~ 0.12ms
-  2026-01-25 07:31:48 /jadwal-majelis .............................. ~ 0.13ms
-  2026-01-25 07:31:49 /build/assets/app-DF3a4zBz.css ............... ~ 0.06ms
-  2026-01-25 07:31:49 /build/assets/app-SKZwaN8M.js ................ ~ 0.19ms
+  2026-01-26 08:07:12 /login ....................................... ~ 0.13ms
+  2026-01-26 08:07:13 /build/assets/app-CgfVL8i8.css ............... ~ 0.06ms
+  2026-01-26 08:07:13 /build/assets/app-SKZwaN8M.js ................ ~ 0.20ms
+  2026-01-26 08:07:13 /login ..................................... ~ 500.41ms
+  2026-01-26 08:07:14 /beranda ..................................... ~ 0.03ms
+  2026-01-26 08:07:14 /build/assets/app-CgfVL8i8.css ............... ~ 0.05ms
+  2026-01-26 08:07:14 /build/assets/app-SKZwaN8M.js ................ ~ 0.19ms
+  2026-01-26 08:07:43 /login ....................................... ~ 0.12ms
+  2026-01-26 08:07:43 /build/assets/app-CgfVL8i8.css ............... ~ 0.05ms
+  2026-01-26 08:07:43 /build/assets/app-SKZwaN8M.js ................ ~ 0.19ms
+  2026-01-26 08:07:44 /login ..................................... ~ 500.43ms
+  2026-01-26 08:07:44 /beranda ..................................... ~ 0.03ms
+  2026-01-26 08:07:44 /build/assets/app-CgfVL8i8.css ............... ~ 0.05ms
+  2026-01-26 08:07:44 /build/assets/app-SKZwaN8M.js ................ ~ 0.19ms
+  2026-01-26 08:08:22 /login ....................................... ~ 0.11ms
+  2026-01-26 08:08:22 /build/assets/app-CgfVL8i8.css ............... ~ 0.03ms
+  2026-01-26 08:08:22 /build/assets/app-SKZwaN8M.js ................ ~ 0.03ms
+  2026-01-26 08:08:23 /login ..................................... ~ 500.49ms
+  2026-01-26 08:08:23 /beranda ..................................... ~ 0.04ms
+  2026-01-26 08:08:23 /build/assets/app-CgfVL8i8.css ............... ~ 0.05ms
+  2026-01-26 08:08:23 /build/assets/app-SKZwaN8M.js ................ ~ 0.19ms
+  2026-01-26 08:09:04 /login ....................................... ~ 0.10ms
+  2026-01-26 08:09:04 /build/assets/app-CgfVL8i8.css ............... ~ 0.14ms
+  2026-01-26 08:09:04 /build/assets/app-SKZwaN8M.js ................ ~ 0.30ms
+  2026-01-26 08:09:04 /login ..................................... ~ 500.43ms
+  2026-01-26 08:09:05 /beranda ..................................... ~ 0.03ms
+  2026-01-26 08:09:05 /build/assets/app-CgfVL8i8.css ............... ~ 0.15ms
+  2026-01-26 08:09:05 /build/assets/app-SKZwaN8M.js ................ ~ 0.30ms
+  2026-01-26 08:09:05 /user/onesignal-id ........................... ~ 0.03ms
 
-   ErrorException
+   INFO  Environment modified. Restarting server...
 
-  filemtime(): stat failed for /app/.env
+   INFO  Server running on [http://127.0.0.1:8080].
 
-  at vendor/laravel/framework/src/Illuminate/Foundation/Console/ServeCommand.php:115
-    111▕             }
-    112▕
-    113▕             if (! $this->option('no-reload') &&
-    114▕                 $hasEnvironment &&
-  ➜ 115▕                 filemtime($environmentFile) > $environmentLastModified) {
-    116▕                 $environmentLastModified = filemtime($environmentFile);
-    117▕
-    118▕                 $this->newLine();
-    119▕
+  Press Ctrl+C to stop the server
 
-      [2m+13 vendor frames [22m
-
-  14  artisan:35
-      Illuminate\Foundation\Console\Kernel::handle()
