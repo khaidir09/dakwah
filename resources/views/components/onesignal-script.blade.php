@@ -35,12 +35,14 @@
                     }
                 },
                 allowLocalhostAsSecureOrigin: {{ app()->isLocal() ? 'true' : 'false' }},
+            }).then(() => {
+                @auth
+                    // Associate the session user with the OneSignal user
+                    if (OneSignal.User.externalId !== "{{ auth()->id() }}") {
+                        OneSignal.login("{{ auth()->id() }}");
+                    }
+                @endauth
             });
-
-            @auth
-                // Associate the session user with the OneSignal user
-                OneSignal.login("{{ auth()->id() }}");
-            @endauth
         });
     </script>
 @endif
