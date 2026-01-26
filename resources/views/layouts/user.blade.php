@@ -48,6 +48,7 @@
         </script>
 
          <x-google-analytics />
+         <x-onesignal-script />
     </head>
     <body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400">
         <!-- Page wrapper -->
