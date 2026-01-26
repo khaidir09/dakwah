@@ -75,7 +75,7 @@ class OneSignalService
             return false;
         }
     }
-
+    
     /**
      * Send a notification to All Subscribed Users.
      *

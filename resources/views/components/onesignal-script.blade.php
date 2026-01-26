@@ -1,74 +1,46 @@
 @if(config('services.onesignal.app_id'))
-    @auth
-        <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-        <script>
-            window.OneSignalDeferred = window.OneSignalDeferred || [];
-            OneSignalDeferred.push(function(OneSignal) {
-                OneSignal.init({
-                    appId: "{{ config('services.onesignal.app_id') }}",
-                    safari_web_id: "web.onesignal.auto.{{ config('services.onesignal.app_id') }}",
-                    notifyButton: {
-                        enable: true,
-                        // ... (pengaturan warna/text Anda biarkan saja)
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(function(OneSignal) {
+            OneSignal.init({
+                appId: "{{ config('services.onesignal.app_id') }}",
+                safari_web_id: "web.onesignal.auto.{{ config('services.onesignal.app_id') }}",
+                notifyButton: {
+                    enable: true,
+                    colors: {
+                        'circle.background': '#059669',
+                        'circle.foreground': 'white',
+                        'badge.background': '#059669',
+                        'badge.foreground': 'white',
+                        'badge.border': 'white',
+                        'pulse.color': 'white',
+                        'dialog.button.background.hovering': '#047857',
+                        'dialog.button.background.active': '#059669',
+                        'dialog.button.background': '#059669',
+                        'dialog.button.foreground': 'white',
                     },
-                    // Pastikan ini true jika testing di localhost tanpa HTTPS
-                    allowLocalhostAsSecureOrigin: {{ app()->isLocal() ? 'true' : 'false' }},
-                });
-
-                // Login user identity
-                OneSignal.login("{{ auth()->id() }}");
-
-                // Fungsi Sync dengan Debugging & Error Handling
-                function syncOneSignalId(id) {
-                    console.log("[OneSignal] Mencoba sync ID:", id);
-                    if (!id) {
-                        console.warn("[OneSignal] ID kosong, membatalkan sync.");
-                        return;
+                    text: {
+                        'tip.state.unsubscribed': 'Berlangganan notifikasi',
+                        'tip.state.subscribed': 'Anda telah berlangganan',
+                        'tip.state.blocked': 'Notifikasi diblokir',
+                        'message.action.subscribed': 'Terima kasih telah berlangganan!',
+                        'message.action.resubscribed': 'Anda kembali berlangganan notifikasi.',
+                        'message.action.unsubscribed': 'Anda berhenti berlangganan.',
+                        'dialog.main.title': 'Kelola Notifikasi',
+                        'dialog.main.button.subscribe': 'BERLANGGANAN',
+                        'dialog.main.button.unsubscribe': 'BERHENTI',
+                        'dialog.blocked.title': 'Buka Blokir Notifikasi',
+                        'dialog.blocked.message': 'Ikuti petunjuk ini untuk mengizinkan notifikasi:',
                     }
-
-                    fetch('{{ route('user.onesignal.update') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json' // Tambahkan ini
-                        },
-                        body: JSON.stringify({ one_signal_id: id })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            // Jika server merespon 401/419/500
-                            return response.text().then(text => { throw new Error(text) });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log("[OneSignal] Berhasil disimpan ke DB:", data);
-                    })
-                    .catch(error => {
-                        console.error("[OneSignal] Gagal menyimpan ke DB:", error);
-                    });
-                }
-
-                // Cek ID saat load page
-                var dbOneSignalId = "{{ auth()->user()->one_signal_id }}";
-                var subscriptionId = OneSignal.User.PushSubscription.id;
-                
-                console.log("[OneSignal] Status Awal - DB:", dbOneSignalId, "SDK ID:", subscriptionId);
-
-                // Jika ID SDK ada dan beda dengan DB, sync
-                if (subscriptionId && subscriptionId !== dbOneSignalId) {
-                    syncOneSignalId(subscriptionId);
-                }
-
-                // Event Listener: Tangkap perubahan saat user baru saja subscribe
-                OneSignal.User.PushSubscription.addEventListener("change", function(event) {
-                    console.log("[OneSignal] Subscription Change Event:", event);
-                    if (event.current.id) {
-                        syncOneSignalId(event.current.id);
-                    }
-                });
+                },
+                allowLocalhostAsSecureOrigin: {{ app()->isLocal() ? 'true' : 'false' }},
             });
-        </script>
-    @endauth
+
+            @auth
+                // Associate the session user with the OneSignal user
+                OneSignal.login("{{ auth()->id() }}");
+            @endauth
+        });
+    </script>
 @endif
