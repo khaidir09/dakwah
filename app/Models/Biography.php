@@ -14,8 +14,13 @@ class Biography extends Model
         'slug',
         'foto',
         'deskripsi',
+        'source',
         'maps',
         'tanggal_wafat_masehi',
         'tanggal_wafat_hijriah',
+    ];
+
+    protected $casts = [
+        'source' => 'array',
     ];
 }
