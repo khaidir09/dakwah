@@ -52,6 +52,8 @@ Route::get('/guru/{id}', [UserGuruController::class, 'detail'])->name('guru-deta
 Route::get('/video', [UserVideoController::class, 'list'])->name('video-list');
 Route::get('/event', [UserEventController::class, 'list'])->name('event-list');
 Route::get('/wirid', [UserWiridController::class, 'list'])->name('wirid-list');
+Route::get('/manaqib', [\App\Http\Controllers\User\BiographyController::class, 'list'])->name('manaqib-list');
+Route::get('/manaqib/{slug}', [\App\Http\Controllers\User\BiographyController::class, 'detail'])->name('manaqib-detail');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/email/verify', function () {
