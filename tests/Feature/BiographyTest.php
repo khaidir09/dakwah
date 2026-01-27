@@ -59,4 +59,28 @@ class BiographyTest extends TestCase
         $this->assertNotNull($biography->slug);
         $this->assertNotNull($biography->foto);
     }
+
+    public function test_admin_can_create_biography_with_sources()
+    {
+        $user = User::factory()->create();
+        $user->assignRole('Super Admin');
+
+        $sources = [
+            ['name' => 'Wikipedia', 'url' => 'https://wikipedia.org'],
+            ['name' => 'Kitab', 'url' => ''],
+        ];
+
+        $response = $this->actingAs($user)->post(route('biographies.store'), [
+            'nama' => 'Wali Source',
+            'deskripsi' => 'Bio with sources',
+            'source' => $sources,
+        ]);
+
+        $response->assertRedirect(route('biographies.index'));
+
+        $biography = Biography::where('nama', 'Wali Source')->first();
+        $this->assertIsArray($biography->source);
+        $this->assertCount(2, $biography->source);
+        $this->assertEquals('Wikipedia', $biography->source[0]['name']);
+    }
 }

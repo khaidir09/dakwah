@@ -35,6 +35,9 @@ class BiographyController extends Controller
             'nama' => 'required|string|max:255',
             'foto' => 'nullable|image|max:2048',
             'deskripsi' => 'required|string',
+            'source' => 'nullable|array',
+            'source.*.name' => 'required_with:source|string',
+            'source.*.url' => 'nullable|url',
             'maps' => 'nullable|string',
             'tanggal_wafat_masehi' => 'nullable|date',
             'tanggal_wafat_hijriah' => 'nullable|string',
@@ -86,12 +89,21 @@ class BiographyController extends Controller
             'nama' => 'required|string|max:255',
             'foto' => 'nullable|image|max:2048',
             'deskripsi' => 'required|string',
+            'source' => 'nullable|array',
+            'source.*.name' => 'required_with:source|string',
+            'source.*.url' => 'nullable|url',
             'maps' => 'nullable|string',
             'tanggal_wafat_masehi' => 'nullable|date',
             'tanggal_wafat_hijriah' => 'nullable|string',
         ]);
 
         $dataToUpdate = $validatedData;
+
+        // Handle case where all sources are removed (checkbox/list empty)
+        if (!$request->has('source')) {
+            $dataToUpdate['source'] = null;
+        }
+
         if ($validatedData['nama'] !== $biography->nama) {
             $dataToUpdate['slug'] = Str::slug($validatedData['nama']) . '-' . Str::random(6);
         }
