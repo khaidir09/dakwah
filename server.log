@@ -1,30 +1,11 @@
 
-   INFO  Server running on [http://127.0.0.1:8080].
+   INFO  Server running on [http://127.0.0.1:8000].
 
   Press Ctrl+C to stop the server
 
-  2026-01-25 07:30:27 /jadwal-majelis ............................ ~ 500.52ms
-  2026-01-25 07:31:06 /jadwal-majelis .............................. ~ 0.12ms
-  2026-01-25 07:31:48 /jadwal-majelis .............................. ~ 0.13ms
-  2026-01-25 07:31:49 /build/assets/app-DF3a4zBz.css ............... ~ 0.06ms
-  2026-01-25 07:31:49 /build/assets/app-SKZwaN8M.js ................ ~ 0.19ms
-
-   ErrorException
-
-  filemtime(): stat failed for /app/.env
-
-  at vendor/laravel/framework/src/Illuminate/Foundation/Console/ServeCommand.php:115
-    111▕             }
-    112▕
-    113▕             if (! $this->option('no-reload') &&
-    114▕                 $hasEnvironment &&
-  ➜ 115▕                 filemtime($environmentFile) > $environmentLastModified) {
-    116▕                 $environmentLastModified = filemtime($environmentFile);
-    117▕
-    118▕                 $this->newLine();
-    119▕
-
-      [2m+13 vendor frames [22m
-
-  14  artisan:35
-      Illuminate\Foundation\Console\Kernel::handle()
+  2026-01-27 03:50:12 /manaqib ................................... ~ 500.53ms
+  2026-01-27 03:50:13 /build/assets/app-C_Qm0tlu.css ............... ~ 0.20ms
+  2026-01-27 03:50:13 /build/assets/app-SKZwaN8M.js ................ ~ 0.38ms
+  2026-01-27 03:50:14 /manaqib/wali-verification ................... ~ 0.16ms
+  2026-01-27 03:50:14 /build/assets/app-C_Qm0tlu.css ............... ~ 0.05ms
+  2026-01-27 03:50:14 /build/assets/app-SKZwaN8M.js ................ ~ 0.20ms

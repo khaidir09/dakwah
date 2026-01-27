@@ -87,6 +87,17 @@
                                 <span class="text-sm font-medium @if(request()->routeIs('wirid*')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Wirid</span>
                             </a>
                         </li>
+                        <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                             <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('manaqib*')) bg-white dark:bg-gray-800 @endif" href="{{ route('manaqib-list') }}">
+                                <svg class="shrink-0 @if(request()->routeIs('manaqib*')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                    <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                                    <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+                                </svg>
+                                <span class="text-sm font-medium @if(request()->routeIs('manaqib*')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Manaqib</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
