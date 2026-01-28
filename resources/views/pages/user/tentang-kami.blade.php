@@ -166,6 +166,12 @@
             <!-- Tim & Kolaborasi -->
             <section class="max-w-4xl mx-auto text-center pb-12">
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6 font-serif">Tim & Kolaborasi</h2>
+                <div class="w-32 h-32 mx-auto bg-emerald-100 rounded-full overflow-hidden mb-6 border-4 border-emerald-50">
+                    <img src="{{ asset('images/developer.png') }}" alt="Foto Pengembang" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 font-serif">Muhammad Khaidir, S.Kom</h3>
+                <p class="text-emerald-600 font-medium mb-4">Guru & Pengembang Aplikasi</p>
+                
                 <p class="text-gray-600 dark:text-gray-300 mb-8">
                     Syaikhuna dibangun dengan semangat gotong royong (Ta'awun). Kami terbuka untuk kolaborasi dengan berbagai pihak, baik pengurus majelis, komunitas IT, maupun donatur yang ingin berkontribusi dalam dakwah digital ini.
                 </p>
