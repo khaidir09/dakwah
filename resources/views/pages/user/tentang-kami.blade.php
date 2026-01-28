@@ -179,6 +179,42 @@
                 </div>
             </section>
 
+            <!-- Profil Pengembang -->
+            <section class="max-w-4xl mx-auto text-center pb-12">
+                <div class="border-t border-gray-200 dark:border-gray-700 my-12"></div>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6 font-serif">Profil Pengembang</h2>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-8 md:p-12 max-w-2xl mx-auto">
+                    <div class="w-32 h-32 mx-auto bg-emerald-100 rounded-full overflow-hidden mb-6 border-4 border-emerald-50">
+                        <img src="{{ asset('images/avatar-01.jpg') }}" alt="Foto Pengembang" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 font-serif">Nama Pengembang</h3>
+                    <p class="text-emerald-600 font-medium mb-4">Full Stack Developer</p>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                        Mahasiswa tingkat akhir yang mendedikasikan ilmunya untuk membangun sistem yang bermanfaat bagi umat. Mengembangkan Syaikhuna sebagai wujud khidmah kepada guru dan masyarakat Banjar.
+                    </p>
+                    <div class="flex justify-center gap-4">
+                        <a href="#" class="text-gray-400 hover:text-emerald-600 transition-colors">
+                            <span class="sr-only">GitHub</span>
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-emerald-600 transition-colors">
+                            <span class="sr-only">LinkedIn</span>
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-emerald-600 transition-colors">
+                            <span class="sr-only">Instagram</span>
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772 4.902 4.902 0 011.772-1.153c.636-.247 1.363-.416 2.427-.465C9.673 2.013 10.03 2 12.315 2zm-1.016 1.817c-2.616 0-2.923.012-3.957.06-.948.043-1.463.197-1.808.332-.455.176-.78.388-1.12.729-.34.34-.552.665-.729 1.12-.134.344-.288.86-.331 1.808-.047 1.033-.058 1.339-.058 3.957 0 2.616.011 2.923.058 3.957.043.948.197 1.463.331 1.808.177.455.389.78.729 1.12.34.34.665.552 1.12.729.344.134.86.288 1.808.331 1.034.047 1.34.058 3.957.058 2.617 0 2.924-.011 3.957-.058.949-.043 1.464-.197 1.809-.331.454-.177.78-.389 1.12-.729.34-.34.552-.665.729-1.12.134-.344.288-.86.331-1.808.047-1.034.058-1.34.058-3.957 0-2.617-.011-2.924-.058-3.957-.043-.948-.197-1.464-.331-1.808-.177-.454-.389-.78-.729-1.12-.34-.34-.665-.552-1.12-.729-.344-.134-.86-.288-1.808-.331-1.034-.047-1.34-.058-3.957-.058zm0 4.407a5.353 5.353 0 110 10.706 5.353 5.353 0 010-10.706zm0 1.817a3.535 3.535 0 100 7.07 3.535 3.535 0 000-7.07zm5.827-6.932a1.212 1.212 0 110 2.424 1.212 1.212 0 010-2.424z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </div>
 
