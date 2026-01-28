@@ -190,13 +190,16 @@
                 // ambil gambar dari public storage atau assets
                 slides: [
                     '{{ asset("images/penasihat/1.jpg") }}',
-                    '{{ asset("images/penasihat/2.jpg") }}',
+                    '{{ asset("images/penasihat/2.jpeg") }}',
                     '{{ asset("images/penasihat/3.jpg") }}',
-                    '{{ asset("images/penasihat/4.jpg") }}',
-                    '{{ asset("images/penasihat/5.jpg") }}',
+                    '{{ asset("images/penasihat/4.jpeg") }}',
+                    '{{ asset("images/penasihat/5.jpeg") }}',
                     '{{ asset("images/penasihat/6.jpg") }}',
                     '{{ asset("images/penasihat/7.jpg") }}',
-                    '{{ asset("images/penasihat/8.jpg") }}'
+                    '{{ asset("images/penasihat/8.jpeg") }}',
+                    '{{ asset("images/penasihat/9.jpeg") }}',
+                    '{{ asset("images/penasihat/10.jpeg") }}',
+                    '{{ asset("images/penasihat/guru.jpeg") }}'
                 ],
                 next() {
                     this.activeSlide = (this.activeSlide + 1) % this.slides.length;
