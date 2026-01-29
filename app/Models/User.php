@@ -41,6 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender',
         'birth_year',
         'one_signal_id',
+        'google_id'
     ];
 
     /**
