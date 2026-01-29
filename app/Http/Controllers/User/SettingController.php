@@ -31,12 +31,16 @@ class SettingController extends Controller
             'city_code' => ['nullable', 'exists:indonesia_cities,code'],
             'district_code' => ['nullable', 'exists:indonesia_districts,code'],
             'village_code' => ['nullable', 'exists:indonesia_villages,code'],
+            'gender' => ['nullable', 'in:Laki-laki,Perempuan'],
+            'birth_year' => ['nullable', 'integer', 'digits:4', 'min:1900', 'max:' . date('Y')],
         ]);
 
         $user->forceFill([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'gender' => $request->gender,
+            'birth_year' => $request->birth_year,
         ]);
 
         $sendVerification = false;
