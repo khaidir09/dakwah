@@ -75,8 +75,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/user/onesignal-id', [SettingController::class, 'updateOneSignalId'])->name('user.onesignal.update');
 });
 
-Route::get('auth/google', [\App\Http\Controllers\GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
-Route::get('auth/google/callback', [\App\Http\Controllers\GoogleAuthController::class, 'handleGoogleCallback']);
+Route::get('auth', [\App\Http\Controllers\GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google', [\App\Http\Controllers\GoogleAuthController::class, 'handleGoogleCallback']);
 
 Route::get('/tentang-kami', function () {
     return view('pages/user/tentang-kami');
