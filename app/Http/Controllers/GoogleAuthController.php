@@ -25,7 +25,6 @@ class GoogleAuthController extends Controller
 
             if ($user) {
                 Auth::login($user);
-                return redirect()->intended('beranda');
             } else {
                 $user = User::where('email', $googleUser->email)->first();
 
@@ -34,9 +33,8 @@ class GoogleAuthController extends Controller
                         'google_id' => $googleUser->id,
                     ]);
                     Auth::login($user);
-                    return redirect()->intended('beranda');
                 } else {
-                    $newUser = User::create([
+                    $user = User::create([
                         'name' => $googleUser->name,
                         'email' => $googleUser->email,
                         'google_id' => $googleUser->id,
@@ -46,12 +44,17 @@ class GoogleAuthController extends Controller
                     
                     // Assign default role (User/Member) - check CreateNewUser logic
                     // CreateNewUser assigns role 2.
-                    $newUser->assignRole(2);
+                    $user->assignRole(2);
 
-                    Auth::login($newUser);
-                    return redirect()->intended('beranda');
+                    Auth::login($user);
                 }
             }
+
+            if (!$user->province_code || !$user->gender || !$user->birth_year) {
+                return redirect()->route('pengaturan-akun')->with('incomplete_profile', true);
+            }
+
+            return redirect()->intended('beranda');
         } catch (\Exception $e) {
             // Log error or show message
             return redirect()->route('login')->with('status', 'Login failed: ' . $e->getMessage());

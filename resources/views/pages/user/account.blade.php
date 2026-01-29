@@ -7,6 +7,21 @@
             <div class="p-6 space-y-6">
                 <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold mb-5">Profil Saya</h2>
 
+                @if (session('incomplete_profile'))
+                    <div role="alert">
+                        <div class="mb-4 px-4 py-2 rounded-lg text-sm bg-yellow-500 text-white">
+                            <div class="flex w-full justify-between items-start">
+                                <div class="flex">
+                                    <svg class="shrink-0 fill-current opacity-80 mt-[3px] mr-3" width="16" height="16" viewBox="0 0 16 16">
+                                        <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM7 11.4L3.6 8 5 6.6l2 2 4-4L12.4 6 7 11.4z" />
+                                    </svg>
+                                    <div class="font-medium">Silahkan lengkapi data informasi seperti Domisili, Jenis Kelamin, Tahun Lahir agar sistem dapat melakukan personalisasi.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 @if (session('status') === 'profile-updated')
                     <div role="alert">
                         <div class="mb-4 px-4 py-2 rounded-lg text-sm bg-green-500 text-white">
@@ -69,6 +84,28 @@
                         <div class="sm:w-1/3">
                             <label class="block text-sm font-medium mb-1" for="phone">Nomor Telepon/WA</label>
                             <input id="phone" name="phone" class="form-input w-full" type="number" placeholder="Awali dengan 62 untuk pengganti 0." value="{{ old('phone', Auth::user()->phone) }}" />
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data Personal -->
+                <section>
+                    <h3 class="text-xl leading-snug text-gray-800 dark:text-gray-100 font-bold mb-1 mt-6">Data Personal</h3>
+                    <div class="text-sm mb-4">
+                        Lengkapi data personal anda.
+                    </div>
+                    <div class="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                        <div class="sm:w-1/2">
+                            <label class="block text-sm font-medium mb-1" for="gender">Jenis Kelamin</label>
+                            <select id="gender" name="gender" class="form-select w-full">
+                                <option value="">Pilih Jenis Kelamin</option>
+                                <option value="Laki-laki" {{ old('gender', Auth::user()->gender) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                <option value="Perempuan" {{ old('gender', Auth::user()->gender) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="sm:w-1/2">
+                            <label class="block text-sm font-medium mb-1" for="birth_year">Tahun Lahir</label>
+                            <input id="birth_year" name="birth_year" class="form-input w-full" type="number" min="1900" max="{{ date('Y') }}" value="{{ old('birth_year', Auth::user()->birth_year) }}" />
                         </div>
                     </div>
                 </section>
