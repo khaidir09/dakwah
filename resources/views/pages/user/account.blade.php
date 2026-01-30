@@ -181,9 +181,6 @@
                         </div>
                     </div>
                 </section>
-
-                <!-- Daily Surah Reading Preference -->
-                <livewire:settings.toggle-daily-surah />
             </div>
 
             <!-- Panel footer -->

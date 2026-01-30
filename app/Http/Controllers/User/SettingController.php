@@ -12,7 +12,7 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $provinces = Province::pluck('name', 'code');
+        $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
         return view('pages.user.account', compact('provinces'));
     }
 

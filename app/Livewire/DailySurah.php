@@ -11,11 +11,6 @@ class DailySurah extends Component
 {
     public function render()
     {
-        // If user is logged in and has disabled the feature, return empty view
-        if (Auth::check() && !Auth::user()->is_daily_surah_enabled) {
-            return view('livewire.empty');
-        }
-
         $today = strtolower(Carbon::now()->format('l')); // monday, tuesday...
 
         // Ensure day name matches seed data (english)
