@@ -13,9 +13,8 @@ class GuruController extends Controller
         $teachers = Teacher::all();
         return view('pages/user/guru/list', compact('teachers'));
     }
-    public function detail($id)
+    public function detail(Teacher $teacher)
     {
-        $teacher = Teacher::findOrFail($id);
         $schedules = Schedule::with('teacher')->where('teacher_id', $teacher->id)->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')")->get();
         return view('pages/user/guru/detail', compact('teacher', 'schedules'));
     }

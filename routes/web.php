@@ -48,7 +48,7 @@ Route::get('/majelis', [UserMajelisController::class, 'list'])->name('majelis-li
 Route::get('/jadwal-majelis', [UserJadwalMajelisController::class, 'list'])->name('jadwal-majelis-list');
 Route::get('/majelis/{id}', [UserMajelisController::class, 'detail'])->name('majelis-detail');
 Route::get('/guru', [UserGuruController::class, 'list'])->name('guru-list');
-Route::get('/guru/{id}', [UserGuruController::class, 'detail'])->name('guru-detail');
+Route::get('/guru/{teacher}', [UserGuruController::class, 'detail'])->name('guru-detail');
 Route::get('/video', [UserVideoController::class, 'list'])->name('video-list');
 Route::get('/event', [UserEventController::class, 'list'])->name('event-list');
 Route::get('/wirid', [UserWiridController::class, 'list'])->name('wirid-list');
