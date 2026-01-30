@@ -112,7 +112,7 @@
                         <!-- Image + name -->
                         <header>                
                             <div class="flex mb-2">
-                                <a class="relative inline-flex items-start mr-5" href="{{ route('guru-detail', $schedule->teacher->id) }}">
+                                <a class="relative inline-flex items-start mr-5" href="{{ route('guru-detail', $schedule->teacher) }}">
                                     @if($schedule->teacher->foto != null)
                                         <img class="rounded-full w-16 h-16 object-cover" src="{{ Storage::url($schedule->teacher->foto) }}" alt="{{ $schedule->teacher->name }}" />
                                     @else
@@ -124,7 +124,7 @@
                                     @endif
                                 </a>
                                 <div class="mt-1 pr-1">
-                                    <a class="inline-flex text-gray-800 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white" href="{{ route('guru-detail', $schedule->teacher->id) }}">
+                                    <a class="inline-flex text-gray-800 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white" href="{{ route('guru-detail', $schedule->teacher) }}">
                                         <h2 class="text-xl leading-snug justify-center font-semibold">{{ $schedule->teacher->name }}</h2>
                                     </a>
                                     <div>{{ $schedule->nama_jadwal }}</div>

@@ -123,7 +123,7 @@
                                                                     {{ $item->hari }}, {{ $item->waktu_formatted }} WITA
                                                                 </div>
                                                                 <!-- Avatars group -->
-                                                                <a href="{{ route('guru-detail', $item->teacher->id) }}">
+                                                                <a href="{{ route('guru-detail', $item->teacher) }}">
                                                                     <div class="flex items-center">
                                                                         <img class="rounded-full border-2 border-white w-8 h-8 object-cover dark:border-gray-800 box-content mr-1" src="{{ Storage::url($item->teacher->foto) }}" alt="{{ $item->teacher->name }}" /> <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->teacher->name }}</span>
                                                                     </div>
