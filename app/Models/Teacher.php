@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Assembly;
+use Illuminate\Support\Str;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\Village;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,26 @@ class Teacher extends Model
     protected $casts = [
         'source' => 'array',
     ];
+
+    public static function generateSlug($name, $ignoreId = null)
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (static::where('slug', $slug)->when($ignoreId, function ($q) use ($ignoreId) {
+            $q->where('id', '!=', $ignoreId);
+        })->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+
+        return $slug;
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function assemblies()
     {

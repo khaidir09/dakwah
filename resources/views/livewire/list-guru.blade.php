@@ -58,12 +58,12 @@
                         <!-- Image + name -->
                         <header>                
                             <div class="flex justify-center mb-2">
-                                <a class="relative inline-flex items-start" href="#0">
+                                <a class="relative inline-flex items-start" href="{{ route('guru-detail', $teacher) }}">
                                     <img class="rounded-full" src="{{ Storage::url($teacher->foto) }}" width="64" height="64" alt="{{ $teacher->name }}" />
                                 </a>
                             </div>
                             <div class="text-center">
-                                <a class="inline-flex text-gray-800 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white" href="{{ route('guru-detail', $teacher->id) }}">
+                                <a class="inline-flex text-gray-800 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white" href="{{ route('guru-detail', $teacher) }}">
                                     <h2 class="text-md leading-snug justify-center font-semibold">{{ $teacher->name }} </h2>
                                 </a>
                             </div>

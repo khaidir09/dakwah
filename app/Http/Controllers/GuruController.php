@@ -82,6 +82,9 @@ class GuruController extends Controller
             $dataToCreate['village']
         );
 
+        // Generate Slug
+        $dataToCreate['slug'] = Teacher::generateSlug($dataToCreate['name']);
+
         // 6. Buat record baru di database
         Teacher::create($dataToCreate);
 
@@ -172,6 +175,11 @@ class GuruController extends Controller
             $dataToUpdate['district'],
             $dataToUpdate['village']
         );
+
+        // Generate Slug if name changed
+        if ($guru->name !== $dataToUpdate['name']) {
+            $dataToUpdate['slug'] = Teacher::generateSlug($dataToUpdate['name'], $id);
+        }
 
         // 7. Update data guru
         $guru->update($dataToUpdate);
