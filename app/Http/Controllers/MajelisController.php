@@ -38,6 +38,7 @@ class MajelisController extends Controller
     {
         $validatedData = $request->validate([
             'nama_majelis' => 'required|string|max:255',
+            'tipe' => 'nullable|string|in:Majelis Ta\'lim,Mesjid,Langgar,Musholla',
             'deskripsi' => 'required|string',
             'teacher_id' => 'required|exists:teachers,id',
             'alamat' => 'required|string',
@@ -84,7 +85,13 @@ class MajelisController extends Controller
             $validatedData['village']
         );
 
-        Assembly::create($validatedData);
+        // Populate legacy 'guru' field
+        $teacher = Teacher::find($validatedData['teacher_id']);
+        $validatedData['guru'] = $teacher->name;
+
+        $assembly = new Assembly($validatedData);
+        $assembly->guru = $teacher->name; // Explicitly set it
+        $assembly->save();
 
         return redirect()->route('majelis.index')->with('message', 'Majelis berhasil ditambahkan!');
     }
@@ -115,6 +122,7 @@ class MajelisController extends Controller
     {
         $validatedData = $request->validate([
             'nama_majelis' => 'required|string|max:255',
+            'tipe' => 'nullable|string|in:Majelis Ta\'lim,Mesjid,Langgar,Musholla',
             'deskripsi'    => 'required|string',
             'teacher_id'   => 'required|exists:teachers,id',
             'alamat'       => 'required|string',
@@ -179,6 +187,10 @@ class MajelisController extends Controller
             $validatedData['district'],
             $validatedData['village']
         );
+
+        // Populate legacy 'guru' field
+        $teacher = Teacher::find($validatedData['teacher_id']);
+        $validatedData['guru'] = $teacher->name;
 
         $majelis->update($validatedData);
 
