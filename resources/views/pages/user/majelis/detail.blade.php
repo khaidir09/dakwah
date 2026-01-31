@@ -49,9 +49,9 @@
                                                 <h1 class="text-2xl text-gray-800 dark:text-gray-100 font-bold">{{ $assembly->nama_majelis }}</h1>
                                             </div>
                                             <!-- Meta -->
-                                            <div class="flex flex-wrap justify-center sm:justify-start space-x-4">
+                                            <div class="flex flex-wrap justify-center sm:justify-start space-x-2">
                                                 @if($assembly->tipe)
-                                                    <div class="flex items-center">
+                                                    <div class="flex items-center mb-2 lg:mb-0">
                                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300">
                                                             {{ $assembly->tipe }}
                                                         </span>
