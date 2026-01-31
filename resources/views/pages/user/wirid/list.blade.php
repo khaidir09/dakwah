@@ -1,5 +1,5 @@
 <x-user-layout>
-    @section('title', 'Kumpulan Wirid')
+    @section('title', 'Kumpulan Amalan')
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">
@@ -19,7 +19,7 @@
 
                             <!-- Title -->
                             <header>
-                                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Wirid</h1>
+                                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Amalan</h1>
                             </header>
 
                             <!-- Posts -->

@@ -3,7 +3,7 @@
     <div class="mb-5">
         <form class="relative">
             <label for="feed-search-mobile" class="sr-only">Search</label>
-            <input wire:model.live="search" id="feed-search-mobile" class="form-input w-full pl-9 bg-white dark:bg-gray-800" type="search" placeholder="Cari nama wirid/waktu baca" />
+            <input wire:model.live="search" id="feed-search-mobile" class="form-input w-full pl-9 bg-white dark:bg-gray-800" type="search" placeholder="Cari nama amalan/waktu baca" />
             <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                 <svg class="shrink-0 fill-current text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 ml-3 mr-2" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
@@ -18,10 +18,10 @@
             <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
-            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Belum ada wirid favorit</h3>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Tandai wirid sebagai favorit untuk melihatnya di sini.</p>
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Belum ada amalan favorit</h3>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Tandai amalan sebagai favorit untuk melihatnya di sini.</p>
             <a href="{{ route('wirid-list') }}" class="mt-4 btn-sm bg-violet-500 hover:bg-violet-600 text-white">
-                Jelajahi Wirid
+                Jelajahi amalan
             </a>
         </div>
     @else

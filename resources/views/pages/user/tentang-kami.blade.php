@@ -24,7 +24,7 @@
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6 font-serif">Muqaddimah</h2>
                 <div class="prose prose-lg mx-auto text-gray-600 dark:text-gray-300">
                     <p>
-                        Kalimantan, khususnya Tanah Banjar, adalah serambi ulama. Dari Syekh Muhammad Arsyad Al-Banjari (Datu Kalampayan) hingga KH. Muhammad Zaini bin Abdul Ghani (Abah Guru Sekumpul), tanah ini tidak pernah kering dari majelis ilmu dan lantunan zikir & sholawat. Namun, di era informasi yang begitu cepat, seringkali kita tertinggal kabar. Jadwal majelis yang berubah, informasi acara yang simpang siur, hingga kerinduan akan bacaan wirid yang otentik, menjadi tantangan tersendiri bagi kita para pencari ilmu.
+                        Kalimantan, khususnya Tanah Banjar, adalah serambi ulama. Dari Syekh Muhammad Arsyad Al-Banjari (Datu Kalampayan) hingga KH. Muhammad Zaini bin Abdul Ghani (Abah Guru Sekumpul), tanah ini tidak pernah kering dari majelis ilmu dan lantunan zikir & sholawat. Namun, di era informasi yang begitu cepat, seringkali kita tertinggal kabar. Jadwal majelis yang berubah, informasi acara yang simpang siur, hingga kerinduan akan bacaan amalan yang otentik, menjadi tantangan tersendiri bagi kita para pencari ilmu.
                         <strong>Syaikhuna</strong> hadir bukan untuk menggantikan kehadiran fisik di majelis, melainkan sebagai khadam (pelayan) digital. Kami berikhtiar menyambungkan kembali informasi yang terputus, memastikan setiap langkah kaki Anda menuju majelis ilmu terbimbing oleh informasi yang valid dan terpercaya.
                     </p>
                     <p class="mt-4">
@@ -101,7 +101,7 @@
                 <div class="relative z-10 max-w-3xl mx-auto">
                     <h2 class="text-3xl font-bold mb-6 font-serif">Visi Kami</h2>
                     <blockquote class="text-xl md:text-2xl font-light italic leading-relaxed">
-                        "Mewujudkan ekosistem digital Islam terintegrasi di Kalimantan, di mana teknologi menjadi jembatan yang memudahkan jutaan jamaah terhubung dengan ribuan majelis, melestarikan warisan wirid ulama bahari, dan menciptakan ketertiban yang penuh berkah dalam setiap perhelatan akbar keagamaan."
+                        "Mewujudkan ekosistem digital Islam terintegrasi di Kalimantan, di mana teknologi menjadi jembatan yang memudahkan jutaan jamaah terhubung dengan ribuan majelis, melestarikan warisan amalan ulama bahari, dan menciptakan ketertiban yang penuh berkah dalam setiap perhelatan akbar keagamaan."
                     </blockquote>
                 </div>
             </section>
@@ -155,7 +155,7 @@
                                 </p>
                                 {{-- Qoutes --}}
                                 <div class="border-l-4 border-emerald-500 pl-4 italic text-gray-800 dark:text-gray-200 mt-4">
-                                    "Di zaman yang serba digital ini, kita butuh pegangan agar tidak tersesat di hutan informasi. Saya mendukung penuh hadirnya Syaikhuna sebagai ikhtiar anak-anak muda Banua untuk mendigitalkan jadwal majelis dan wirid ulama kita. Semoga aplikasi ini menjadi ladang amal jariyah dan memudahkan kita menuntut ilmu."
+                                    "Di zaman yang serba digital ini, kita butuh pegangan agar tidak tersesat di hutan informasi. Saya mendukung penuh hadirnya Syaikhuna sebagai ikhtiar anak-anak muda Banua untuk mendigitalkan jadwal majelis dan amalan ulama kita. Semoga aplikasi ini menjadi ladang amal jariyah dan memudahkan kita menuntut ilmu."
                                 </div>
                             </div>
                         </div>

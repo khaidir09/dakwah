@@ -4,7 +4,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Wirid</h1>
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Amalan</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -20,14 +20,14 @@
             {{-- <x-dropdown-filter align="right" /> --}}
 
             <!-- Search form -->
-            <x-search-form placeholder="Masukkan nama wirid/waktu" />
+            <x-search-form placeholder="Masukkan nama amalan/waktu" />
 
             <!-- Add customer button -->
             <a href="{{ route('wirid.create') }}" class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
                 <svg class="fill-current shrink-0 xs:hidden" width="16" height="16" viewBox="0 0 16 16">
                     <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                 </svg>
-                <span class="max-xs:sr-only">Tambah Wirid</span>
+                <span class="max-xs:sr-only">Tambah Amalan</span>
             </a>                      
             
         </div>
@@ -59,7 +59,7 @@
 
     <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Semua Wirid <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $wirids_count }}</span></h2>
+            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Semua Amalan <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $wirids_count }}</span></h2>
         </header>
 
         <!-- Table -->
@@ -72,7 +72,7 @@
                                 <div class="font-semibold text-center">No.</div>
                             </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Nama Wirid</div>
+                            <div class="font-semibold text-left">Nama Amalan</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">Jumlah</div>

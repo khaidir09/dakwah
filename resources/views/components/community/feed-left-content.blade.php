@@ -84,7 +84,7 @@
                                     <path d="M19 16h-12a2 2 0 0 0 -2 2" />
                                     <path d="M9 8h6" />
                                 </svg>
-                                <span class="text-sm font-medium @if(request()->routeIs('wirid*')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Wirid</span>
+                                <span class="text-sm font-medium @if(request()->routeIs('wirid*')) text-violet-500 @else text-gray-600 dark:text-gray-300 @endif">Amalan</span>
                             </a>
                         </li>
                         <li class="mr-0.5 md:mr-0 md:mb-0.5">

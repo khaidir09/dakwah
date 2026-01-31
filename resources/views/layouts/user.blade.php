@@ -7,7 +7,7 @@
 
         <title>@yield('title', config('app.name', 'Syaikhuna'))</title>
         <meta name="description" content="@yield('meta_description', 'Platform informasi jadwal majelis & acara terkini, profil ulama, dan konten islami.')">
-        <meta name="keywords" content="@yield('meta_keywords', 'majelis, muallim, banjar, jadwal pengajian, syaikhuna, acara haul, wirid')">
+        <meta name="keywords" content="@yield('meta_keywords', 'majelis, muallim, banjar, jadwal pengajian, syaikhuna, acara haul, amalan')">
         <meta name="author" content="@yield('meta_author', config('app.name', 'Syaikhuna'))">
 
         <!-- Open Graph / Facebook -->

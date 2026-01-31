@@ -4,7 +4,7 @@
         <!-- Page header -->
         <div class="sm:flex sm:justify-between sm:items-center mb-8">
             <div class="mb-4 sm:mb-0">
-                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Edit Wirid</h1>
+                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Edit Amalan</h1>
             </div>
              <div class="flex space-x-3">
                 <a href="{{ route('wirid.index') }}" class="btn bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
@@ -36,7 +36,7 @@
                         @endif
 
                         <div class="col-span-2">
-                            <label class="block text-sm font-medium mb-2" for="nama">Nama Wirid <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium mb-2" for="nama">Nama Amalan <span class="text-red-500">*</span></label>
                             <input id="nama" class="form-input w-full @error('nama') is-invalid @enderror" type="text" name="nama" value="{{ old('nama', $wirid->nama) }}" required placeholder="Contoh: Istighfar"/>
                             @error('nama')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
@@ -77,7 +77,7 @@
 
                         <div class="col-span-2">
                             <label class="block text-sm font-medium mb-2" for="deskripsi">Deskripsi</label>
-                            <textarea class="form-input w-full @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="3" placeholder="Penjelasan tambahan tentang wirid ini">{{ old('deskripsi', $wirid->deskripsi) }}</textarea>
+                            <textarea class="form-input w-full @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="3" placeholder="Penjelasan tambahan tentang amalan ini">{{ old('deskripsi', $wirid->deskripsi) }}</textarea>
                             @error('deskripsi')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror

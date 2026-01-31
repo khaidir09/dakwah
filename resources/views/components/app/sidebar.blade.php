@@ -121,7 +121,7 @@
                                     <!-- Icon Wirid (Book/Reading style) -->
                                     <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm0 2h12v12H2V2zm2 2v2h8V4H4zm0 4v2h8V8H4zm0 4v2h8v-2H4z" />
                                 </svg>
-                                <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Wirid</span>
+                                <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Amalan</span>
                             </div>
                         </a>
                     </li>
