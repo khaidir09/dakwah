@@ -49,4 +49,24 @@ class SettingControllerTest extends TestCase
         $response->assertSee('Jenis Kelamin');
         $response->assertSee('Tahun Lahir');
     }
+
+    public function test_update_onesignal_id_saves_to_database()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $testId = 'test-onesignal-id-123';
+
+        $response = $this->postJson(route('user.onesignal.update'), [
+            'one_signal_id' => $testId,
+        ]);
+
+        $response->assertOk();
+        $response->assertJson(['status' => 'success']);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'one_signal_id' => $testId,
+        ]);
+    }
 }
