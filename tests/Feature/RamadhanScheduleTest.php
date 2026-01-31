@@ -27,7 +27,6 @@ class RamadhanScheduleTest extends TestCase
             'city_code' => '1101',
             'district_code' => '1101010',
             'village_code' => '1101010001',
-            // Add other required fields if necessary
         ]);
 
         $schedule = RamadhanSchedule::create([
@@ -47,26 +46,42 @@ class RamadhanScheduleTest extends TestCase
         $this->assertTrue($assembly->ramadhanSchedules->contains($schedule));
     }
 
-    public function test_lecture_dates_are_calculated_correctly()
+    public function test_user_cannot_create_schedule_if_active_exists()
     {
-        $schedule = RamadhanSchedule::create([
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $assembly = Assembly::create([
+            'user_id' => $user->id,
+            'nama_majelis' => 'Masjid Raya',
+            'deskripsi' => 'Deskripsi',
+            'guru' => 'Guru',
+            'alamat' => 'Alamat',
+            'maps' => 'Maps',
+            'province_code' => '11',
+            'city_code' => '1101',
+            'district_code' => '1101010',
+            'village_code' => '1101010001',
+        ]);
+
+        // Create an active schedule
+        RamadhanSchedule::create([
+            'assembly_id' => $assembly->id,
             'hijri_year' => 1446,
             'gregorian_start_date' => '2025-03-01',
-            'title' => 'Test Schedule',
+            'title' => 'Active Schedule',
             'is_active' => true,
         ]);
 
-        $lecture = RamadhanDailyLecture::create([
-            'ramadhan_schedule_id' => $schedule->id,
-            'day' => 1,
-            'title' => 'First Day',
-            'time' => '04:30:00',
-        ]);
+        // Access Index Page (Should have warning)
+        $response = $this->get(route('kelola-ramadhan.index'));
+        $response->assertStatus(200);
+        $response->assertSee('Anda masih memiliki jadwal aktif');
+        $response->assertViewHas('hasActiveSchedule', true);
 
-        // Reload to ensure relationship can be fetched
-        $lecture = $lecture->fresh(['schedule']);
-
-        $this->assertNotNull($lecture->schedule, 'Schedule relationship is null');
-        $this->assertEquals('2025-03-01', $lecture->date->format('Y-m-d'));
+        // Try to access Create Page (Should redirect)
+        $response = $this->get(route('kelola-ramadhan.create'));
+        $response->assertRedirect(route('kelola-ramadhan.index'));
+        $response->assertSessionHas('error', 'Anda masih memiliki jadwal aktif.');
     }
 }

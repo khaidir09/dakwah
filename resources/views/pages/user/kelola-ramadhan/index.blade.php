@@ -7,14 +7,30 @@
                 <p class="text-slate-600">{{ $assembly->nama_majelis }}</p>
             </div>
             <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                <a href="{{ route('kelola-ramadhan.create') }}" class="btn bg-emerald-500 hover:bg-emerald-600 text-white">
-                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2" viewBox="0 0 16 16">
-                        <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                    </svg>
-                    <span>Tambah Jadwal Baru</span>
-                </a>
+                @if(isset($hasActiveSchedule) && $hasActiveSchedule)
+                    <button disabled class="btn bg-slate-400 text-white cursor-not-allowed opacity-50" title="Nonaktifkan jadwal lama terlebih dahulu">
+                        <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2" viewBox="0 0 16 16">
+                            <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                        </svg>
+                        <span>Tambah Jadwal Baru</span>
+                    </button>
+                @else
+                    <a href="{{ route('kelola-ramadhan.create') }}" class="btn bg-emerald-500 hover:bg-emerald-600 text-white">
+                        <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2" viewBox="0 0 16 16">
+                            <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                        </svg>
+                        <span>Tambah Jadwal Baru</span>
+                    </a>
+                @endif
             </div>
         </div>
+
+        <!-- Flash Message -->
+        @if(session('warning'))
+            <div class="mb-4 bg-amber-100 border border-amber-400 text-amber-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('warning') }}</span>
+            </div>
+        @endif
 
         <!-- Table -->
         <div class="bg-white shadow-lg rounded-sm border border-slate-200">

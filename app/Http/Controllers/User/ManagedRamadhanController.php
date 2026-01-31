@@ -26,7 +26,13 @@ class ManagedRamadhanController extends Controller
             ->orderBy('hijri_year', 'desc')
             ->get();
 
-        return view('pages.user.kelola-ramadhan.index', compact('schedules', 'assembly'));
+        $hasActiveSchedule = $schedules->where('is_active', true)->isNotEmpty();
+
+        if ($hasActiveSchedule) {
+            session()->flash('warning', 'Anda masih memiliki jadwal aktif. Nonaktifkan jadwal lama terlebih dahulu untuk membuat jadwal baru.');
+        }
+
+        return view('pages.user.kelola-ramadhan.index', compact('schedules', 'assembly', 'hasActiveSchedule'));
     }
 
     /**
@@ -35,6 +41,12 @@ class ManagedRamadhanController extends Controller
     public function create()
     {
         $assembly = Assembly::where('user_id', Auth::id())->firstOrFail();
+
+        // Prevent creating new schedule if active one exists
+        if (RamadhanSchedule::where('assembly_id', $assembly->id)->where('is_active', true)->exists()) {
+            return redirect()->route('kelola-ramadhan.index')->with('error', 'Anda masih memiliki jadwal aktif.');
+        }
+
         return view('pages.user.kelola-ramadhan.create', compact('assembly'));
     }
 
