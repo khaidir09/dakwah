@@ -85,6 +85,11 @@ class Assembly extends Model
         return $this->hasMany(Event::class);
     }
 
+    public function ramadhanSchedules()
+    {
+        return $this->hasMany(RamadhanSchedule::class);
+    }
+
     public function followers()
     {
         return $this->belongsToMany(User::class, 'assembly_user');

@@ -12,7 +12,7 @@ class RamadhanController extends Controller
      */
     public function index()
     {
-        $schedules = RamadhanSchedule::orderBy('hijri_year', 'desc')->get();
+        $schedules = RamadhanSchedule::with('assembly')->orderBy('hijri_year', 'desc')->get();
         return view('pages.ramadhan.index', compact('schedules'));
     }
 
