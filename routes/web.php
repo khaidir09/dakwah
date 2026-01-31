@@ -23,6 +23,7 @@ use App\Http\Controllers\User\ManageEventController;
 use App\Http\Controllers\RamadhanController;
 use App\Http\Controllers\DependantDropdownController;
 use App\Http\Controllers\User\ManagedMajelisController;
+use App\Http\Controllers\User\ManagedRamadhanController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\User\GuruController as UserGuruController;
 use App\Http\Controllers\User\EventController as UserEventController;
@@ -102,6 +103,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/kelola-acara-majelis', [ManageEventController::class, 'store'])->name('kelola-acara-majelis.store');
     Route::get('/kelola-acara-majelis/{id}/edit', [ManageEventController::class, 'edit'])->name('kelola-acara-majelis.edit');
     Route::put('/kelola-acara-majelis/{id}', [ManageEventController::class, 'update'])->name('kelola-acara-majelis.update');
+
+    Route::resource('kelola-ramadhan', ManagedRamadhanController::class);
 
     // Route khusus onboarding majelis (hanya bisa diakses via link khusus)
     Route::get('/registrasi-majelis/baru', [ManagedMajelisController::class, 'register'])

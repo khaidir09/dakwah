@@ -1,5 +1,26 @@
 <div class="p-6 bg-white border-b border-gray-200">
     <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        @if($isAdmin)
+        <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Pilih Majelis / Masjid</label>
+            <select wire:model="assembly_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50">
+                <option value="">-- Pilih Majelis --</option>
+                @foreach($assemblies as $assembly)
+                    <option value="{{ $assembly->id }}">{{ $assembly->nama_majelis }} ({{ $assembly->city?->name }})</option>
+                @endforeach
+            </select>
+            @error('assembly_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+        </div>
+        @else
+            <!-- Hidden input for assembly_id if user is regular user -->
+            @if(!$assembly_id)
+                <div class="md:col-span-2 bg-yellow-50 p-4 rounded text-yellow-800">
+                    Anda belum memiliki Majelis yang terdaftar. Silahkan daftarkan majelis Anda terlebih dahulu.
+                </div>
+            @endif
+        @endif
+
         <!-- Header Information -->
         <div>
             <label class="block text-sm font-medium text-gray-700">Tahun Hijriah</label>
