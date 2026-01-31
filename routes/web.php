@@ -20,6 +20,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\SettingController;
 use App\Http\Controllers\JadwalMajelisController;
 use App\Http\Controllers\User\ManageEventController;
+use App\Http\Controllers\RamadhanController;
 use App\Http\Controllers\DependantDropdownController;
 use App\Http\Controllers\User\ManagedMajelisController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -118,6 +119,7 @@ Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->gr
     Route::resource('/video', VideoController::class);
     Route::resource('/wirid', WiridController::class);
     Route::resource('/biographies', BiographyController::class);
+    Route::resource('/ramadhan-schedules', RamadhanController::class);
     Route::resource('/roles', \App\Http\Controllers\RoleController::class);
     Route::resource('/permissions', \App\Http\Controllers\PermissionController::class);
     // Route for the getting the data feed
