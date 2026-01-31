@@ -89,6 +89,18 @@
                 </div>
 
                 <div class="col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Tipe Majelis</label>
+                    <select wire:model="majelisType" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full">
+                        <option value="">Pilih Tipe</option>
+                        <option value="Majelis Ta'lim">Majelis Ta'lim</option>
+                        <option value="Mesjid">Mesjid</option>
+                        <option value="Langgar">Langgar</option>
+                        <option value="Musholla">Musholla</option>
+                    </select>
+                    @error('majelisType') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="col-span-2">
                     <label class="block font-medium text-sm text-gray-700">Biografi Singkat</label>
                     <textarea wire:model="teacherBio" rows="3" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full"></textarea>
                     @error('teacherBio') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror

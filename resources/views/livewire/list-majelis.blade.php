@@ -73,9 +73,16 @@
                         <!-- Card body -->
                         <div class="grow">
                             <header class="mb-2">
-                                <a href="{{ route('majelis-detail', $assembly->id) }}">
-                                    <h3 class="text-lg text-gray-800 dark:text-gray-100 font-semibold mb-1">{{ $assembly->nama_majelis }}</h3>
-                                </a>
+                                <div class="flex justify-between items-start mb-1">
+                                    <a href="{{ route('majelis-detail', $assembly->id) }}">
+                                        <h3 class="text-lg text-gray-800 dark:text-gray-100 font-semibold">{{ $assembly->nama_majelis }}</h3>
+                                    </a>
+                                    @if($assembly->tipe)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300">
+                                            {{ $assembly->tipe }}
+                                        </span>
+                                    @endif
+                                </div>
                                 <div class="font-semibold">Pengasuh : {{ $assembly->teacher->name }}</div>
                                 <div class="flex items-center space-x-2 mr-2 mt-2">
                                     <div class="flex space-x-1">

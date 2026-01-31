@@ -45,6 +45,7 @@ class Onboarding extends Component
 
     // Step 3: Create Majelis
     public $majelisName;
+    public $majelisType;
     public $majelisDesc;
     public $majelisAddress;
     public $majelisMaps;
@@ -222,6 +223,7 @@ class Onboarding extends Component
         $this->validate([
             'selectedTeacherId' => 'required|exists:teachers,id',
             'majelisName' => 'required|string|max:255',
+            'majelisType' => 'required|string|in:Majelis Ta\'lim,Mesjid,Langgar,Musholla',
             'majelisDesc' => 'required|string',
             'majelisAddress' => 'required|string',
             'majelisMaps' => 'nullable|string|max:255',
@@ -236,35 +238,41 @@ class Onboarding extends Component
             'selectedVillage' => 'required',
         ]);
 
-        // Replicating logic from ManagedMajelisController
-        $file = $this->gambar;
-        $filename = Str::uuid() . '.webp';
+        $imagePath = null;
 
-        // Paths
-        $pathLarge = 'public/majelis/large/' . $filename;
-        $pathThumb = 'public/majelis/thumb/' . $filename;
+        if ($this->gambar) {
+            // Replicating logic from ManagedMajelisController
+            $file = $this->gambar;
+            $filename = Str::uuid() . '.webp';
 
-        // Processing
-        // Note: In Livewire temporary upload, $file is a TemporaryUploadedFile wrapper.
-        // We need the real path for Intervention Image.
+            // Paths
+            $pathLarge = 'public/majelis/large/' . $filename;
+            $pathThumb = 'public/majelis/thumb/' . $filename;
 
-        $image = Image::read($file->getRealPath());
-        $image->scaleDown(width: 800);
-        Storage::put($pathLarge, $image->toWebp(80));
+            // Processing
+            $image = Image::read($file->getRealPath());
+            $image->scaleDown(width: 800);
+            Storage::put($pathLarge, $image->toWebp(80));
 
-        $imageThumb = Image::read($file->getRealPath());
-        $imageThumb->scaleDown(width: 400);
-        Storage::put($pathThumb, $imageThumb->toWebp(80));
+            $imageThumb = Image::read($file->getRealPath());
+            $imageThumb->scaleDown(width: 400);
+            Storage::put($pathThumb, $imageThumb->toWebp(80));
 
-        $imagePath = $pathLarge;
+            $imagePath = $pathLarge;
+        }
+
+        // Populate legacy 'guru' field
+        $teacher = Teacher::find($this->selectedTeacherId);
 
         Assembly::create([
             'user_id' => Auth::id(),
             'teacher_id' => $this->selectedTeacherId,
+            'guru' => $teacher->name, // Legacy
             'nama_majelis' => $this->majelisName,
+            'tipe' => $this->majelisType,
             'deskripsi' => $this->majelisDesc,
             'alamat' => $this->majelisAddress,
-            'maps' => $this->majelisMaps,
+            'maps' => $this->majelisMaps ?? '', // Ensure not null if schema demands it (though validation says nullable)
             'gambar' => $imagePath,
             'status' => 'Aktif',
 

@@ -44,6 +44,20 @@
                         </div>
 
                         <div>
+                            <label class="block text-sm font-medium mb-2" for="tipe">Tipe Majelis</label>
+                            <select id="tipe" class="form-select w-full @error('tipe') is-invalid @enderror" name="tipe">
+                                <option value="">Pilih Tipe</option>
+                                <option value="Majelis Ta'lim" {{ old('tipe', $majelis->tipe) == "Majelis Ta'lim" ? 'selected' : '' }}>Majelis Ta'lim</option>
+                                <option value="Mesjid" {{ old('tipe', $majelis->tipe) == "Mesjid" ? 'selected' : '' }}>Mesjid</option>
+                                <option value="Langgar" {{ old('tipe', $majelis->tipe) == "Langgar" ? 'selected' : '' }}>Langgar</option>
+                                <option value="Musholla" {{ old('tipe', $majelis->tipe) == "Musholla" ? 'selected' : '' }}>Musholla</option>
+                            </select>
+                            @error('tipe')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div>
                             <label class="block text-sm font-medium mb-2" for="teacher_id">Nama Guru <span class="text-red-500">*</span></label>
                             <select id="teacher_id" class="form-select w-full @error('teacher_id') is-invalid @enderror" name="teacher_id" required>
                                 <option value="">Pilih Guru</option>
