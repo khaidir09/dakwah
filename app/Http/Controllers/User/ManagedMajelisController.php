@@ -31,7 +31,7 @@ class ManagedMajelisController extends Controller
 
         $request->validate([
             'nama_majelis' => 'required',
-            'tipe' => 'nullable|string|in:Majelis Ta\'lim,Mesjid,Langgar,Musholla',
+            'tipe' => 'nullable|string|in:Majelis,Mesjid,Langgar,Musholla',
             'alamat' => 'required',
             'deskripsi' => 'required',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

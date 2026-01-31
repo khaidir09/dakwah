@@ -223,7 +223,7 @@ class Onboarding extends Component
         $this->validate([
             'selectedTeacherId' => 'required|exists:teachers,id',
             'majelisName' => 'required|string|max:255',
-            'majelisType' => 'required|string|in:Majelis Ta\'lim,Mesjid,Langgar,Musholla',
+            'majelisType' => 'required|string|in:Majelis,Mesjid,Langgar,Musholla',
             'majelisDesc' => 'required|string',
             'majelisAddress' => 'required|string',
             'majelisMaps' => 'nullable|string|max:255',

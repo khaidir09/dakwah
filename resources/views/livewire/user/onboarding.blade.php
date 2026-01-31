@@ -92,7 +92,7 @@
                     <label class="block font-medium text-sm text-gray-700">Tipe Majelis</label>
                     <select wire:model="majelisType" class="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full">
                         <option value="">Pilih Tipe</option>
-                        <option value="Majelis Ta'lim">Majelis Ta'lim</option>
+                        <option value="Majelis">Majelis</option>
                         <option value="Mesjid">Mesjid</option>
                         <option value="Langgar">Langgar</option>
                         <option value="Musholla">Musholla</option>

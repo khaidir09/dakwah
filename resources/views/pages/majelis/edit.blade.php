@@ -47,7 +47,7 @@
                             <label class="block text-sm font-medium mb-2" for="tipe">Tipe Majelis</label>
                             <select id="tipe" class="form-select w-full @error('tipe') is-invalid @enderror" name="tipe">
                                 <option value="">Pilih Tipe</option>
-                                <option value="Majelis Ta'lim" {{ old('tipe', $majelis->tipe) == "Majelis Ta'lim" ? 'selected' : '' }}>Majelis Ta'lim</option>
+                                <option value="Majelis" {{ old('tipe', $majelis->tipe) == "Majelis" ? 'selected' : '' }}>Majelis</option>
                                 <option value="Mesjid" {{ old('tipe', $majelis->tipe) == "Mesjid" ? 'selected' : '' }}>Mesjid</option>
                                 <option value="Langgar" {{ old('tipe', $majelis->tipe) == "Langgar" ? 'selected' : '' }}>Langgar</option>
                                 <option value="Musholla" {{ old('tipe', $majelis->tipe) == "Musholla" ? 'selected' : '' }}>Musholla</option>
