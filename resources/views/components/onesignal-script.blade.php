@@ -41,6 +41,36 @@
                     if (OneSignal.User.externalId !== "{{ auth()->id() }}") {
                         OneSignal.login("{{ auth()->id() }}");
                     }
+
+                    const updateOneSignalId = async (id) => {
+                        try {
+                            await fetch("{{ route('user.onesignal.update') }}", {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                                },
+                                body: JSON.stringify({
+                                    one_signal_id: id
+                                })
+                            });
+                        } catch (error) {
+                            console.error('Error updating OneSignal ID:', error);
+                        }
+                    };
+
+                    // Check initial subscription status
+                    const pushSubscription = OneSignal.User.PushSubscription;
+                    if (pushSubscription.id) {
+                        updateOneSignalId(pushSubscription.id);
+                    }
+
+                    // Listen for subscription changes
+                    OneSignal.User.PushSubscription.addEventListener("change", (event) => {
+                        if (event.current.id) {
+                            updateOneSignalId(event.current.id);
+                        }
+                    });
                 @endauth
             });
         });
