@@ -67,7 +67,17 @@
         </div>
     </div>
     <!-- Region Filters -->
-    <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Tipe Filter -->
+        <div>
+            <label for="tipe" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipe Majelis</label>
+            <select wire:model.live="selectedType" id="tipe" class="block w-full form-select rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 sm:text-sm">
+                <option value="">Semua Tipe</option>
+                @foreach($types as $type)
+                    <option value="{{ $type }}">{{ $type }}</option>
+                @endforeach
+            </select>
+        </div>
         <!-- Province Filter -->
         <div>
             <label for="province" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Provinsi</label>

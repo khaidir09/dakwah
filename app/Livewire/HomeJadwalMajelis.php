@@ -18,6 +18,7 @@ class HomeJadwalMajelis extends Component
     public $search;
 
     // Filter Properties
+    public $selectedType = null;
     public $selectedProvince = null;
     public $selectedCity = null;
     public $selectedDistrict = null;
@@ -41,6 +42,11 @@ class HomeJadwalMajelis extends Component
     }
 
     public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSelectedType($value)
     {
         $this->resetPage();
     }
@@ -82,6 +88,13 @@ class HomeJadwalMajelis extends Component
 
         // Prepare Query
         $query = Schedule::with('teacher', 'assembly')->where('hari', $hariIni);
+
+        // Apply Filters
+        if ($this->selectedType) {
+            $query->whereHas('assembly', function ($q) {
+                $q->where('tipe', $this->selectedType);
+            });
+        }
 
         // Apply Region Filters
         if ($this->selectedProvince) {
@@ -138,6 +151,7 @@ class HomeJadwalMajelis extends Component
             'provinces' => $provinces,
             'cities' => $cities,
             'districts' => $districts,
+            'types' => ['Majelis', 'Mesjid', 'Langgar', 'Musholla'],
         ]);
     }
 }

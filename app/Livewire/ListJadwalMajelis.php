@@ -18,6 +18,7 @@ class ListJadwalMajelis extends Component
     public $access = '';
 
     // Filter Properties
+    public $selectedType = null;
     public $selectedProvince = null;
     public $selectedCity = null;
     public $selectedDistrict = null;
@@ -47,6 +48,11 @@ class ListJadwalMajelis extends Component
     }
 
     public function updatingAccess()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSelectedType($value)
     {
         $this->resetPage();
     }
@@ -87,6 +93,13 @@ class ListJadwalMajelis extends Component
 
         if ($this->access) {
             $query->where('access', $this->access);
+        }
+
+        // Apply Filters
+        if ($this->selectedType) {
+            $query->whereHas('assembly', function ($q) {
+                $q->where('tipe', $this->selectedType);
+            });
         }
 
         // Apply Region Filters
@@ -142,6 +155,7 @@ class ListJadwalMajelis extends Component
             'provinces' => $provinces,
             'cities' => $cities,
             'districts' => $districts,
+            'types' => ['Majelis', 'Mesjid', 'Langgar', 'Musholla'],
         ]);
     }
 }

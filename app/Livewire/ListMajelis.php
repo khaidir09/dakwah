@@ -18,6 +18,7 @@ class ListMajelis extends Component
     public $search;
 
     // Filter Properties
+    public $selectedType = null;
     public $selectedProvince = null;
     public $selectedCity = null;
     public $selectedDistrict = null;
@@ -41,6 +42,11 @@ class ListMajelis extends Component
     }
 
     public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSelectedType($value)
     {
         $this->resetPage();
     }
@@ -75,6 +81,11 @@ class ListMajelis extends Component
         }
 
         $query->latest();
+
+        // Apply Filters
+        if ($this->selectedType) {
+            $query->where('tipe', $this->selectedType);
+        }
 
         // Apply Region Filters
         if ($this->selectedProvince) {
@@ -123,6 +134,7 @@ class ListMajelis extends Component
             'provinces' => $provinces,
             'cities' => $cities,
             'districts' => $districts,
+            'types' => ['Majelis', 'Mesjid', 'Langgar', 'Musholla'],
         ]);
     }
 }
