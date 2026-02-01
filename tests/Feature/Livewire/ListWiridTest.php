@@ -51,9 +51,15 @@ class ListWiridTest extends TestCase
             'likes' => 10,
         ]);
 
+        // Expectation:
+        // Link: https://wa.me/?text=...
+        // Message contains: route('wirid-list', ['search' => 'Wirid Share Test'])
+        // URL Encoded: %3Fsearch%3DWirid%2BShare%2BTest (or similar)
+
         Livewire::test(ListWirid::class)
             ->assertSee('Wirid Share Test')
             ->assertSeeHtml('https://wa.me/?text=')
-            ->assertSeeHtml(urlencode($wirid->nama));
+            ->assertSeeHtml(urlencode($wirid->nama))
+            ->assertSeeHtml('search%3D'); // search= encoded
     }
 }
