@@ -15,6 +15,8 @@ class LibraryController extends Controller
 
     public function detail(Library $library)
     {
+        $library->increment('visit_count');
+
         return view('pages.user.library.detail', compact('library'));
     }
 }

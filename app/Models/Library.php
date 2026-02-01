@@ -18,6 +18,8 @@ class Library extends Model
         'cover_image',
         'price_type',
         'is_active',
+        'visit_count',
+        'like_count',
     ];
 
     public function getRouteKeyName()
