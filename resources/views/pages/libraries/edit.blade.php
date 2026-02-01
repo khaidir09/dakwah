@@ -24,7 +24,7 @@
         @endif
 
         <div>
-            <form action="{{ route('libraries.update', $library->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('libraries.update', $library) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="bg-white dark:bg-gray-800 p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
