@@ -56,6 +56,8 @@ Route::get('/event', [UserEventController::class, 'list'])->name('event-list');
 Route::get('/wirid', [UserWiridController::class, 'list'])->name('wirid-list');
 Route::get('/manaqib', [\App\Http\Controllers\User\BiographyController::class, 'list'])->name('manaqib-list');
 Route::get('/manaqib/{slug}', [\App\Http\Controllers\User\BiographyController::class, 'detail'])->name('manaqib-detail');
+Route::get('/pustaka', [\App\Http\Controllers\User\LibraryController::class, 'list'])->name('pustaka-list');
+Route::get('/pustaka/{library}', [\App\Http\Controllers\User\LibraryController::class, 'detail'])->name('pustaka-detail');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/email/verify', function () {
@@ -122,6 +124,7 @@ Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->gr
     Route::resource('/video', VideoController::class);
     Route::resource('/wirid', WiridController::class);
     Route::resource('/biographies', BiographyController::class);
+    Route::resource('/libraries', \App\Http\Controllers\LibraryController::class);
     Route::resource('/ramadhan-schedules', RamadhanController::class);
     Route::resource('/roles', \App\Http\Controllers\RoleController::class);
     Route::resource('/permissions', \App\Http\Controllers\PermissionController::class);
