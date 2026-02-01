@@ -26,13 +26,13 @@
         @forelse($libraries as $library)
             <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden flex flex-col h-full border border-gray-100 dark:border-gray-700/60">
                 <!-- Cover Image -->
-                <a href="{{ route('pustaka-detail', $library->slug) }}" class="block aspect-[2/3] relative overflow-hidden group">
+                <a href="{{ route('pustaka-detail', $library->slug) }}" class="block h-80 w-full relative overflow-hidden group">
                     @if($library->cover_image)
                         <img class="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-105" src="{{ Storage::url($library->cover_image) }}" alt="{{ $library->title }}">
                     @else
                         <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-400">
-                             <svg class="w-12 h-12 fill-current" viewBox="0 0 24 24">
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                             <svg class="w-16 h-16 fill-current" viewBox="0 0 24 24">
+                                <path d="M4 6h2v14c0 1.1.9 2 2 2h14v-2H8V6h14V4H5c-1.1 0-2 .9-2 2zm16-4H5c-1.1 0-2 .9-2 2v15c0 1.1.9 2 2 2h15c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 16H8V4h11v14z"/>
                             </svg>
                         </div>
                     @endif
