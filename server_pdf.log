@@ -1,0 +1,11 @@
+
+   INFO  Server running on [http://127.0.0.1:8081].
+
+  Press Ctrl+C to stop the server
+
+  2026-02-01 09:09:10 /pustaka/test-pdf ................................ ~ 1s
+  2026-02-01 09:10:12 /pustaka/test-pdf ............................ ~ 0.13ms
+  2026-02-01 09:10:12 /build/assets/app.css ........................ ~ 0.18ms
+  2026-02-01 09:10:12 /build/assets/app.js ......................... ~ 0.44ms
+  2026-02-01 09:10:12 /storage/library/cover.jpg ................. ~ 501.24ms
+  2026-02-01 09:10:13 /storage/library/test.pdf .................... ~ 0.04ms

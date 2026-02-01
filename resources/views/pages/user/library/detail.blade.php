@@ -66,6 +66,16 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- PDF Embed -->
+                            @if($library->file_path)
+                                <div class="mt-8 border-t border-gray-100 dark:border-gray-700 pt-8">
+                                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">Baca Pustaka</h3>
+                                    <div class="w-full h-[800px] bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                                        <iframe src="{{ Storage::url($library->file_path) }}" class="w-full h-full" frameborder="0"></iframe>
+                                    </div>
+                                </div>
+                            @endif
                         </article>
                     </div>
                 </div>
