@@ -18,7 +18,7 @@
                         </div>
 
                         <article class="bg-white dark:bg-gray-800 p-6 shadow-md rounded-xl border border-gray-100 dark:border-gray-700/60">
-                            <div class="flex flex-col md:flex-row gap-8">
+                            <div class="flex flex-col md:flex-row gap-8 mb-8">
                                 <!-- Cover -->
                                 <div class="w-full md:w-1/3 flex-shrink-0">
                                     @if($library->cover_image)
@@ -30,21 +30,6 @@
                                             </svg>
                                         </div>
                                     @endif
-
-                                    <div class="mt-6">
-                                        @if($library->file_path)
-                                            <a href="{{ Storage::url($library->file_path) }}" target="_blank" class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white">
-                                                <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2" viewBox="0 0 16 16">
-                                                    <path d="M15 15H1a1 1 0 01-1-1V2a1 1 0 011-1h4v2H2v10h12V3h-3V1h4a1 1 0 011 1v12a1 1 0 01-1 1zM9 7h3l-4 4-4-4h3V1h2v6z" />
-                                                </svg>
-                                                <span>Download / Baca PDF</span>
-                                            </a>
-                                        @else
-                                            <button disabled class="btn w-full bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed">
-                                                File Tidak Tersedia
-                                            </button>
-                                        @endif
-                                    </div>
                                 </div>
 
                                 <!-- Details -->
@@ -64,8 +49,33 @@
                                             {!! nl2br(e($library->description)) !!}
                                         </div>
                                     </div>
+
+                                    <div class="mt-6">
+                                        @if($library->file_path)
+                                            <a href="{{ Storage::url($library->file_path) }}" target="_blank" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                                                <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2" viewBox="0 0 16 16">
+                                                    <path d="M15 15H1a1 1 0 01-1-1V2a1 1 0 011-1h4v2H2v10h12V3h-3V1h4a1 1 0 011 1v12a1 1 0 01-1 1zM9 7h3l-4 4-4-4h3V1h2v6z" />
+                                                </svg>
+                                                <span>Download PDF</span>
+                                            </a>
+                                        @else
+                                            <button disabled class="btn bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed">
+                                                File Tidak Tersedia
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- PDF Embed -->
+                            @if($library->file_path)
+                                <div class="mt-8 border-t border-gray-200 dark:border-gray-700/60 pt-8">
+                                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Baca Online</h2>
+                                    <div class="w-full aspect-[3/4] md:aspect-[16/9] bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700/60">
+                                        <iframe src="{{ Storage::url($library->file_path) }}" class="w-full h-full" frameborder="0"></iframe>
+                                    </div>
+                                </div>
+                            @endif
                         </article>
                     </div>
                 </div>
