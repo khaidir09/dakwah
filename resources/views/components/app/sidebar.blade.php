@@ -54,6 +54,18 @@
                             </div>
                         </a>
                     </li>
+                    <!-- Doa -->
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(in_array(Request::segment(1), ['doa'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
+                        <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['doa'])){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('doa.index') }}">
+                            <div class="flex items-center">
+                                <svg class="shrink-0 fill-current @if(in_array(Request::segment(1), ['doa'])){{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                    <!-- Icon Doa (Book/Reading style) -->
+                                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm0 2h12v12H2V2zm2 2v2h8V4H4zm0 4v2h8V8H4zm0 4v2h8v-2H4z" />
+                                </svg>
+                                <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Doa</span>
+                            </div>
+                        </a>
+                    </li>
                     <!-- Majelis -->
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(in_array(Request::segment(1), ['majelis'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
                         <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['majelis'])){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('majelis.index') }}">
