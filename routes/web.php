@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WiridController;
+use App\Http\Controllers\DoaController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MajelisController;
@@ -123,6 +124,7 @@ Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->gr
     Route::resource('/event', \App\Http\Controllers\EventController::class);
     Route::resource('/video', VideoController::class);
     Route::resource('/wirid', WiridController::class);
+    Route::resource('/doa', DoaController::class);
     Route::resource('/biographies', BiographyController::class);
     Route::resource('/libraries', \App\Http\Controllers\LibraryController::class);
     Route::resource('/ramadhan-schedules', RamadhanController::class);
