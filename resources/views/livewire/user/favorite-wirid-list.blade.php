@@ -1,4 +1,28 @@
 <div>
+    <!-- Tabs -->
+    <div class="mb-5 border-b border-gray-200 dark:border-gray-700">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button 
+                    class="inline-block p-4 border-b-2 rounded-t-lg {{ $kategori == 'wirid' ? 'border-emerald-500 text-emerald-600 dark:text-emerald-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 border-transparent' }}" 
+                    wire:click="setKategori('wirid')"
+                    type="button" 
+                    role="tab">
+                    Wirid
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button 
+                    class="inline-block p-4 border-b-2 rounded-t-lg {{ $kategori == 'doa' ? 'border-emerald-500 text-emerald-600 dark:text-emerald-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 border-transparent' }}" 
+                    wire:click="setKategori('doa')"
+                    type="button" 
+                    role="tab">
+                    Doa
+                </button>
+            </li>
+        </ul>
+    </div>
+
     <!-- Search form -->
     <div class="mb-5">
         <form class="relative">
@@ -18,10 +42,10 @@
             <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
-            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Belum ada amalan favorit</h3>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Tandai amalan sebagai favorit untuk melihatnya di sini.</p>
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Belum ada {{ $kategori }} favorit</h3>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Tandai {{ $kategori }} sebagai favorit untuk melihatnya di sini.</p>
             <a href="{{ route('wirid-list') }}" class="mt-4 btn-sm bg-violet-500 hover:bg-violet-600 text-white">
-                Jelajahi amalan
+                Jelajahi {{ $kategori }}
             </a>
         </div>
     @else
