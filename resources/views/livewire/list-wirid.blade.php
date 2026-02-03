@@ -1,4 +1,28 @@
 <div>
+    <!-- Tabs -->
+    <div class="mb-5 border-b border-gray-200 dark:border-gray-700">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button
+                    class="inline-block p-4 border-b-2 rounded-t-lg {{ $kategori == 'wirid' ? 'border-emerald-500 text-emerald-600 dark:text-emerald-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 border-transparent' }}"
+                    wire:click="setKategori('wirid')"
+                    type="button"
+                    role="tab">
+                    Wirid
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button
+                    class="inline-block p-4 border-b-2 rounded-t-lg {{ $kategori == 'doa' ? 'border-emerald-500 text-emerald-600 dark:text-emerald-500' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 border-transparent' }}"
+                    wire:click="setKategori('doa')"
+                    type="button"
+                    role="tab">
+                    Doa
+                </button>
+            </li>
+        </ul>
+    </div>
+
     <!-- Search form -->
     <div>
         <form class="relative">
