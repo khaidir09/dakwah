@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Biography;
+use App\Models\Teacher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,10 +12,12 @@ class UserBiographyTest extends TestCase
 
     public function test_user_can_view_biography_list()
     {
-        Biography::create([
-            'nama' => 'Wali Test',
+        Teacher::create([
+            'name' => 'Wali Test',
             'slug' => 'wali-test',
-            'deskripsi' => 'Deskripsi',
+            'biografi' => 'Deskripsi',
+            'domisili' => '-',
+            'foto' => 'test.jpg'
         ]);
 
         $response = $this->get(route('manaqib-list'));
@@ -27,12 +29,14 @@ class UserBiographyTest extends TestCase
 
     public function test_user_can_view_biography_detail()
     {
-        $bio = Biography::create([
-            'nama' => 'Wali Detail',
+        $bio = Teacher::create([
+            'name' => 'Wali Detail',
             'slug' => 'wali-detail',
-            'deskripsi' => 'Deskripsi Detail',
-            'tanggal_wafat_masehi' => '2023-01-01',
+            'biografi' => 'Deskripsi Detail',
+            'domisili' => '-',
+            'wafat_masehi' => '2023-01-01',
             'maps' => '<iframe>maps</iframe>',
+            'foto' => 'detail.jpg'
         ]);
 
         $response = $this->get(route('manaqib-detail', $bio->slug));

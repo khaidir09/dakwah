@@ -96,6 +96,14 @@
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium mb-2" for="maps">Maps (Embed)</label>
+                            <textarea class="form-input w-full @error('maps') is-invalid @enderror" name="maps" id="maps" cols="30" rows="3">{{ old('maps', $guru->maps) }}</textarea>
+                            @error('maps')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold my-4">Domisili</h2>
@@ -150,7 +158,7 @@
                         <div>
                             <label class="block text-sm font-medium mb-2" for="wafat_masehi">Wafat Masehi</label>
                             {{-- DIUBAH: Tambah old() dengan data $guru --}}
-                            <input id="wafat_masehi" class="form-input w-full @error('wafat_masehi') is-invalid @enderror" type="number" name="wafat_masehi" value="{{ old('wafat_masehi', $guru->wafat_masehi) }}"/>
+                            <input id="wafat_masehi" class="form-input w-full @error('wafat_masehi') is-invalid @enderror" type="date" name="wafat_masehi" value="{{ old('wafat_masehi', $guru->wafat_masehi) }}"/>
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-2" for="wafat_hijriah_day">Tanggal Wafat</label>

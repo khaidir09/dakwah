@@ -1,5 +1,5 @@
 <x-user-layout>
-    @section('title', $biography->nama)
+    @section('title', $biography->name)
 
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
@@ -31,26 +31,26 @@
 
                             <!-- Header -->
                             <header class="mb-6">
-                                <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">{{ $biography->nama }}</h1>
+                                <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">{{ $biography->name }}</h1>
 
                                 @if($biography->foto)
                                     <div class="relative w-full h-64 md:h-96 rounded-xl overflow-hidden mb-6">
-                                        <img src="{{ asset('storage/' . $biography->foto) }}" alt="{{ $biography->nama }}" class="object-cover w-full h-full">
+                                        <img src="{{ asset('storage/' . $biography->foto) }}" alt="{{ $biography->name }}" class="object-cover w-full h-full">
                                     </div>
                                 @endif
 
                                 <div class="flex flex-col gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                    @if($biography->tanggal_wafat_masehi)
+                                    @if($biography->wafat_masehi)
                                         <div class="flex items-center">
                                             <span class="font-semibold w-32">Wafat (Masehi):</span>
-                                            <span>{{ \Carbon\Carbon::parse($biography->tanggal_wafat_masehi)->isoFormat('D MMMM Y') }}</span>
+                                            <span>{{ \Carbon\Carbon::parse($biography->wafat_masehi)->isoFormat('D MMMM Y') }}</span>
                                         </div>
                                     @endif
 
-                                    @if($biography->tanggal_wafat_hijriah)
+                                    @if($biography->wafat_hijriah)
                                         <div class="flex items-center">
                                             <span class="font-semibold w-32">Wafat (Hijriah):</span>
-                                            <span>{{ $biography->tanggal_wafat_hijriah }}</span>
+                                            <span>{{ $biography->wafat_hijriah }}</span>
                                         </div>
                                     @endif
                                 </div>
@@ -58,7 +58,7 @@
 
                             <!-- Description -->
                             <div class="text-lg/8 max-w-none text-gray-800 dark:text-gray-200 text-justify">
-                                {!! $biography->deskripsi !!}
+                                {!! $biography->biografi !!}
                             </div>
 
                             @if(!empty($biography->source) && is_array($biography->source))

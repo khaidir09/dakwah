@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Biography;
+use App\Models\Teacher;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -11,9 +11,11 @@ class ListBiography extends Component
     use WithPagination;
 
     public $paginate = 10;
-    public $search;
+    public $search = '';
 
-    protected $updatesQueryString = ['search'];
+    protected $queryString = [
+        'search' => ['except' => ''],
+    ];
 
     public function mount()
     {
@@ -27,23 +29,24 @@ class ListBiography extends Component
 
     public function render()
     {
-        $biographies_count = Biography::count();
-        $query = Biography::query();
+        $teachers_count = Teacher::count();
+        $query = Teacher::query();
 
+        // Maybe default sorting by name or created_at?
         $query->latest();
 
         if ($this->search) {
             $searchTerm = '%' . $this->search . '%';
             $query->where(function ($subQuery) use ($searchTerm) {
-                $subQuery->where('nama', 'like', $searchTerm)
-                         ->orWhere('deskripsi', 'like', $searchTerm);
+                $subQuery->where('name', 'like', $searchTerm)
+                         ->orWhere('biografi', 'like', $searchTerm);
             });
         }
 
         $biographies = $query->simplePaginate($this->paginate);
 
         return view('livewire.list-biography', [
-            'biographies_count' => $biographies_count,
+            'biographies_count' => $teachers_count,
             'biographies' => $biographies
         ]);
     }
