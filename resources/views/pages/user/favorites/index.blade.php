@@ -16,27 +16,6 @@
         </div>
 
         <!-- Content -->
-        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl mb-8">
-            <div class="p-6">
-                <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
-                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
-                        <li class="mr-2" role="presentation">
-                            <button class="inline-block p-4 border-b-2 rounded-t-lg text-emerald-600 hover:text-emerald-600 dark:text-emerald-500 dark:hover:text-emerald-500 border-emerald-600 dark:border-emerald-500" id="wirid-tab" data-tabs-target="#wirid" type="button" role="tab" aria-controls="wirid" aria-selected="true">Amalan</button>
-                        </li>
-                        <!-- Placeholder for future tabs like "Do'a" -->
-                        {{--
-                        <li class="mr-2" role="presentation">
-                            <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="doa-tab" data-tabs-target="#doa" type="button" role="tab" aria-controls="doa" aria-selected="false">Do'a</button>
-                        </li>
-                        --}}
-                    </ul>
-                </div>
-                <div id="myTabContent">
-                    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="wirid" role="tabpanel" aria-labelledby="wirid-tab" style="display: block;"> <!-- Forced block for now as it's the only tab -->
-                        <livewire:user.favorite-wirid-list />
-                    </div>
-                </div>
-            </div>
-        </div>
+        <livewire:user.favorite-wirid-list />
     </div>
 </x-user-layout>

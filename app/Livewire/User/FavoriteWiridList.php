@@ -13,6 +13,7 @@ class FavoriteWiridList extends Component
 
     public $paginate = 10;
     public $search;
+    public $kategori = 'wirid';
 
     protected $updatesQueryString = ['search'];
 
@@ -23,6 +24,12 @@ class FavoriteWiridList extends Component
 
     public function updatingSearch()
     {
+        $this->resetPage();
+    }
+
+    public function setKategori($val)
+    {
+        $this->kategori = $val;
         $this->resetPage();
     }
 
@@ -45,7 +52,7 @@ class FavoriteWiridList extends Component
         $user = Auth::user();
 
         // Start query from the User's liked wirids relationship
-        $query = $user->likedWirids();
+        $query = $user->likedWirids()->where('kategori', $this->kategori);
 
         // Apply search filter if present
         if ($this->search) {
