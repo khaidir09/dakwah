@@ -40,7 +40,8 @@ class WiridController extends Controller
             'arab' => 'required|string',
             'arti' => 'nullable|string',
             'jumlah' => 'required|integer',
-            'waktu' => 'nullable|string|max:100'
+            'waktu' => 'nullable|string|max:100',
+            'kategori' => 'required|in:wirid,doa',
         ]);
 
         Wirid::create($validatedData);
@@ -78,7 +79,8 @@ class WiridController extends Controller
             'arab' => 'required|string',
             'arti' => 'nullable|string',
             'jumlah' => 'required|integer',
-            'waktu' => 'nullable|string|max:100'
+            'waktu' => 'nullable|string|max:100',
+            'kategori' => 'required|in:wirid,doa',
         ]);
 
         $wirid->update($validatedData);

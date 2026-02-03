@@ -12,6 +12,7 @@ class ListWirid extends Component
 
     public $paginate = 10;
     public $search;
+    public $kategori = 'wirid';
 
     protected $updatesQueryString = ['search'];
 
@@ -22,6 +23,12 @@ class ListWirid extends Component
 
     public function updatingSearch()
     {
+        $this->resetPage();
+    }
+
+    public function setKategori($val)
+    {
+        $this->kategori = $val;
         $this->resetPage();
     }
 
@@ -46,8 +53,8 @@ class ListWirid extends Component
 
     public function render()
     {
-        $wirids_count = Wirid::count();
-        $query = Wirid::query();
+        $wirids_count = Wirid::where('kategori', $this->kategori)->count();
+        $query = Wirid::where('kategori', $this->kategori);
 
         // Jika user login, cek apakah dilike
         if (auth()->check()) {

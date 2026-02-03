@@ -35,6 +35,23 @@
                         @endif
 
                         <div class="col-span-2">
+                            <label class="block text-sm font-medium mb-2">Kategori <span class="text-red-500">*</span></label>
+                            <div class="flex items-center space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="kategori" value="wirid" class="form-radio text-emerald-500" {{ old('kategori', 'wirid') == 'wirid' ? 'checked' : '' }}>
+                                    <span class="ml-2">Wirid (Amalan)</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="kategori" value="doa" class="form-radio text-emerald-500" {{ old('kategori') == 'doa' ? 'checked' : '' }}>
+                                    <span class="ml-2">Doa</span>
+                                </label>
+                            </div>
+                            @error('kategori')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-span-2">
                             <label class="block text-sm font-medium mb-2" for="nama">Nama Amalan <span class="text-red-500">*</span></label>
                             <input id="nama" class="form-input w-full @error('nama') is-invalid @enderror" type="text" name="nama" value="{{ old('nama') }}" required placeholder="Contoh: Istighfar"/>
                             @error('nama')

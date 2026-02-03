@@ -12,4 +12,14 @@ class Wirid extends Model
     {
         return $this->belongsToMany(User::class, 'wirid_user');
     }
+
+    public function scopeWirid($query)
+    {
+        return $query->where('kategori', 'wirid');
+    }
+
+    public function scopeDoa($query)
+    {
+        return $query->where('kategori', 'doa');
+    }
 }

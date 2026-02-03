@@ -1,0 +1,31 @@
+
+   INFO  Server running on [http://127.0.0.1:8000].
+
+  Press Ctrl+C to stop the server
+
+  2026-02-03 07:33:10 /wirid ..................................... ~ 500.41ms
+  2026-02-03 07:33:41 /wirid ....................................... ~ 0.15ms
+  2026-02-03 07:34:27 /wirid ....................................... ~ 0.12ms
+  2026-02-03 07:34:27 /build/assets/app-BFkGBPuo.css ............... ~ 0.08ms
+  2026-02-03 07:34:27 /build/assets/app-SKZwaN8M.js ................ ~ 0.23ms
+  2026-02-03 07:34:28 /livewire/update ............................. ~ 0.19ms
+
+   ErrorException
+
+  filemtime(): stat failed for /app/.env
+
+  at vendor/laravel/framework/src/Illuminate/Foundation/Console/ServeCommand.php:115
+    111▕             }
+    112▕
+    113▕             if (! $this->option('no-reload') &&
+    114▕                 $hasEnvironment &&
+  ➜ 115▕                 filemtime($environmentFile) > $environmentLastModified) {
+    116▕                 $environmentLastModified = filemtime($environmentFile);
+    117▕
+    118▕                 $this->newLine();
+    119▕
+
+      [2m+13 vendor frames [22m
+
+  14  artisan:35
+      Illuminate\Foundation\Console\Kernel::handle()
