@@ -29,8 +29,8 @@ class ListBiography extends Component
 
     public function render()
     {
-        $teachers_count = Teacher::count();
-        $query = Teacher::query();
+        $teachers_count = Teacher::where('wafat_hijriah_year', '!=', null)->count();
+        $query = Teacher::where('wafat_hijriah_year', '!=', null);
 
         // Maybe default sorting by name or created_at?
         $query->latest();
@@ -39,7 +39,7 @@ class ListBiography extends Component
             $searchTerm = '%' . $this->search . '%';
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('name', 'like', $searchTerm)
-                         ->orWhere('biografi', 'like', $searchTerm);
+                    ->orWhere('biografi', 'like', $searchTerm);
             });
         }
 
