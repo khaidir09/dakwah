@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\GuruController;
-use App\Http\Controllers\BiographyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\VideoController;
@@ -125,7 +124,6 @@ Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->gr
     Route::resource('/video', VideoController::class);
     Route::resource('/wirid', WiridController::class);
     Route::resource('/doa', DoaController::class);
-    Route::resource('/biographies', BiographyController::class);
     Route::resource('/libraries', \App\Http\Controllers\LibraryController::class);
     Route::resource('/ramadhan-schedules', RamadhanController::class);
     Route::resource('/roles', \App\Http\Controllers\RoleController::class);

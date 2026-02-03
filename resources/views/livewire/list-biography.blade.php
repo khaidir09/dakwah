@@ -21,17 +21,17 @@
                     <div class="flex flex-col md:flex-row gap-4">
                         @if($bio->foto)
                             <div class="flex-shrink-0">
-                                <img src="{{ asset('storage/' . $bio->foto) }}" alt="{{ $bio->nama }}" class="w-full md:w-56 h-56 object-cover rounded-lg">
+                                <img src="{{ asset('storage/' . $bio->foto) }}" alt="{{ $bio->name }}" class="w-full md:w-56 h-56 object-cover rounded-lg">
                             </div>
                         @endif
                         <div class="flex-1">
                             <header class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">
                                 <a href="{{ route('manaqib-detail', $bio->slug) }}" class="hover:underline hover:text-emerald-500">
-                                    {{ $bio->nama }}
+                                    {{ $bio->name }}
                                 </a>
                             </header>
                             <div class="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3">
-                                {!! strip_tags($bio->deskripsi) !!}
+                                {!! strip_tags($bio->biografi) !!}
                             </div>
                             <a href="{{ route('manaqib-detail', $bio->slug) }}" class="inline-flex items-center text-sm font-medium text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400">
                                 Selengkapnya &rarr;
