@@ -21,7 +21,7 @@
                     <div class="flex flex-col md:flex-row gap-4">
                         @if($bio->foto)
                             <div class="flex-shrink-0">
-                                <img src="{{ asset('storage/' . $bio->foto) }}" alt="{{ $bio->name }}" class="w-full md:w-56 h-56 object-cover rounded-lg">
+                                <img src="{{ asset('storage/' . $bio->foto) }}" alt="{{ $bio->name }}" class="w-full md:w-56 h-56 object-fill rounded-lg">
                             </div>
                         @endif
                         <div class="flex-1">

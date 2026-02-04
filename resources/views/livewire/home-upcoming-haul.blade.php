@@ -11,7 +11,7 @@
             <a href="{{ route('manaqib-detail', $teacher->slug) }}" class="flex flex-col sm:flex-row bg-white dark:bg-gray-800 shadow-xs rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-200">
                 <!-- Image -->
                 <div class="block w-full h-48 sm:h-auto sm:w-40 shrink-0">
-                    <img class="w-full h-full object-cover"
+                    <img class="w-full h-full object-fill"
                         src="{{ Storage::url($teacher->foto) }}"
                         alt="{{ $teacher->name }}"
                     />

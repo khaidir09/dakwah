@@ -35,7 +35,7 @@
 
                                 @if($biography->foto)
                                     <div class="relative w-full h-64 md:h-96 rounded-xl overflow-hidden mb-6">
-                                        <img src="{{ asset('storage/' . $biography->foto) }}" alt="{{ $biography->name }}" class="object-cover w-full h-full">
+                                        <img src="{{ asset('storage/' . $biography->foto) }}" alt="{{ $biography->name }}" class="object-top w-full h-full">
                                     </div>
                                 @endif
 
