@@ -91,6 +91,8 @@
                                 </div>
                             @endif
 
+                            <livewire:biography.comment-section :biography="$biography" />
+
                         </div>
 
                     </div>

@@ -75,4 +75,9 @@ class Teacher extends Model
     {
         return $this->belongsTo(Village::class, 'village_code', 'code');
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }
