@@ -21,35 +21,25 @@ class HomeUpcomingHaul extends Component
                 $month = $parsed['month'];
                 $day = $parsed['day'];
 
-                // 1. Fetch upcoming in current year
-                $currentYearHauls = Teacher::where(function($q) use ($month, $day) {
-                    $q->where('wafat_hijriah_month', $month)
-                      ->where('wafat_hijriah_day', '>=', $day);
-                })
-                ->orWhere('wafat_hijriah_month', '>', $month)
-                ->orderBy('wafat_hijriah_month', 'asc')
-                ->orderBy('wafat_hijriah_day', 'asc')
-                ->take(5)
-                ->get();
+                // Query 1: Remaining days in Current Month
+                $currentMonthHauls = Teacher::where('wafat_hijriah_month', $month)
+                    ->where('wafat_hijriah_day', '>=', $day)
+                    ->orderBy('wafat_hijriah_day', 'asc')
+                    ->get();
 
-                $upcomingHauls = $currentYearHauls;
+                // Query 2: Full Next Month
+                // Handle Wrap Around (12 -> 1)
+                $nextMonth = ($month == 12) ? 1 : $month + 1;
+                
+                $nextMonthHauls = Teacher::where('wafat_hijriah_month', $nextMonth)
+                    ->orderBy('wafat_hijriah_day', 'asc')
+                    ->get();
 
-                // 2. Wrap around if needed (fetch from next year)
-                if ($upcomingHauls->count() < 5) {
-                    $needed = 5 - $upcomingHauls->count();
+                // Merge: Current Month first, then Next Month
+                $upcomingHauls = $currentMonthHauls->merge($nextMonthHauls);
 
-                    $nextYearHauls = Teacher::where('wafat_hijriah_month', '<', $month)
-                        ->orWhere(function($q) use ($month, $day) {
-                             $q->where('wafat_hijriah_month', $month)
-                               ->where('wafat_hijriah_day', '<', $day);
-                        })
-                        ->orderBy('wafat_hijriah_month', 'asc')
-                        ->orderBy('wafat_hijriah_day', 'asc')
-                        ->take($needed)
-                        ->get();
-
-                    $upcomingHauls = $upcomingHauls->merge($nextYearHauls);
-                }
+                // Limit to 5 items
+                $upcomingHauls = $upcomingHauls->take(5);
             }
         }
 
@@ -68,9 +58,9 @@ class HomeUpcomingHaul extends Component
         if (preg_match('/^(\d+)\s+(.+)$/', trim($clean), $matches)) {
             $day = (int)$matches[1];
             $monthStr = trim($matches[2]);
-
+            
             $monthNum = $this->getMonthNumber(strtolower($monthStr));
-
+            
             if ($monthNum) {
                 return ['day' => $day, 'month' => $monthNum];
             }
@@ -94,7 +84,7 @@ class HomeUpcomingHaul extends Component
             'zulkaidah' => 11,
             'zulhijah' => 12,
         ];
-
+        
         // Exact match first
         if (isset($months[$name])) {
             return $months[$name];
@@ -117,7 +107,6 @@ class HomeUpcomingHaul extends Component
         return Cache::remember($key, 60 * 60 * 24, function () {
             $url = "https://api.myquran.com/v3/cal/today?adj=-1&tz=Asia%2FMakassar";
             try {
-                // Removed withoutVerifying() for security
                 $response = Http::timeout(5)->get($url);
                 if ($response->successful()) {
                     $data = $response->json('data');
@@ -125,7 +114,7 @@ class HomeUpcomingHaul extends Component
                         $fullDate = $data['hijr']['today'];
                         $parts = explode(',', $fullDate);
                         if (count($parts) > 1) {
-                            return trim($parts[1]);
+                            return trim($parts[1]); 
                         }
                         return $fullDate;
                     }
