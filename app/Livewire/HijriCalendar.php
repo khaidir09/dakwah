@@ -33,7 +33,7 @@ class HijriCalendar extends Component
         // Simpan di cache selama 24 jam (60 detik * 60 menit * 24 jam)
         return Cache::remember($key, 60 * 60 * 24, function () {
 
-            $url = "https://api.myquran.com/v3/cal/today?adj=0&tz=Asia%2FMakassar";
+            $url = "https://api.myquran.com/v3/cal/today?adj=-1&tz=Asia%2FMakassar";
 
             try {
                 // Menggunakan withoutVerifying() untuk bypass masalah SSL certificate
