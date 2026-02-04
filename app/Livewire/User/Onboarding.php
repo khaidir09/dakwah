@@ -261,13 +261,9 @@ class Onboarding extends Component
             $imagePath = $pathLarge;
         }
 
-        // Populate legacy 'guru' field
-        $teacher = Teacher::find($this->selectedTeacherId);
-
         Assembly::create([
             'user_id' => Auth::id(),
             'teacher_id' => $this->selectedTeacherId,
-            'guru' => $teacher->name, // Legacy
             'nama_majelis' => $this->majelisName,
             'tipe' => $this->majelisType,
             'deskripsi' => $this->majelisDesc,
