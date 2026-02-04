@@ -21,35 +21,25 @@ class HomeUpcomingHaul extends Component
                 $month = $parsed['month'];
                 $day = $parsed['day'];
 
-                // 1. Fetch upcoming in current year
-                $currentYearHauls = Teacher::where(function($q) use ($month, $day) {
-                    $q->where('wafat_hijriah_month', $month)
-                      ->where('wafat_hijriah_day', '>=', $day);
-                })
-                ->orWhere('wafat_hijriah_month', '>', $month)
-                ->orderBy('wafat_hijriah_month', 'asc')
-                ->orderBy('wafat_hijriah_day', 'asc')
-                ->take(5)
-                ->get();
+                // Query 1: Remaining days in Current Month
+                $currentMonthHauls = Teacher::where('wafat_hijriah_month', $month)
+                    ->where('wafat_hijriah_day', '>=', $day)
+                    ->orderBy('wafat_hijriah_day', 'asc')
+                    ->get();
 
-                $upcomingHauls = $currentYearHauls;
+                // Query 2: Full Next Month
+                // Handle Wrap Around (12 -> 1)
+                $nextMonth = ($month == 12) ? 1 : $month + 1;
 
-                // 2. Wrap around if needed (fetch from next year)
-                if ($upcomingHauls->count() < 5) {
-                    $needed = 5 - $upcomingHauls->count();
+                $nextMonthHauls = Teacher::where('wafat_hijriah_month', $nextMonth)
+                    ->orderBy('wafat_hijriah_day', 'asc')
+                    ->get();
 
-                    $nextYearHauls = Teacher::where('wafat_hijriah_month', '<', $month)
-                        ->orWhere(function($q) use ($month, $day) {
-                             $q->where('wafat_hijriah_month', $month)
-                               ->where('wafat_hijriah_day', '<', $day);
-                        })
-                        ->orderBy('wafat_hijriah_month', 'asc')
-                        ->orderBy('wafat_hijriah_day', 'asc')
-                        ->take($needed)
-                        ->get();
+                // Merge: Current Month first, then Next Month
+                $upcomingHauls = $currentMonthHauls->merge($nextMonthHauls);
 
-                    $upcomingHauls = $upcomingHauls->merge($nextYearHauls);
-                }
+                // Limit to 5 items
+                $upcomingHauls = $upcomingHauls->take(5);
             }
         }
 
@@ -117,7 +107,6 @@ class HomeUpcomingHaul extends Component
         return Cache::remember($key, 60 * 60 * 24, function () {
             $url = "https://api.myquran.com/v3/cal/today?adj=-1&tz=Asia%2FMakassar";
             try {
-                // Removed withoutVerifying() for security
                 $response = Http::timeout(5)->get($url);
                 if ($response->successful()) {
                     $data = $response->json('data');
