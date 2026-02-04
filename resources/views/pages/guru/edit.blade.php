@@ -193,15 +193,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-2" for="wafat_hijriah_year">Tahun Wafat</label>
-                            <select id="wafat_hijriah_year" name="wafat_hijriah_year" class="form-select w-full">
-                                <option value="">Tahun</option>
-                                @for ($i = 1400; $i <= 1447; $i++)
-                                    {{-- DIUBAH: Tambah logika 'selected' --}}
-                                    <option value="{{ $i }}" {{ old('wafat_hijriah_year', $guru->wafat_hijriah_year) == $i ? 'selected' : '' }}>
-                                        {{ $i }}
-                                    </option>
-                                @endfor
-                            </select>
+                            <input id="wafat_hijriah_year" class="form-input w-full @error('wafat_hijriah_year') is-invalid @enderror" type="number" name="wafat_hijriah_year" value="{{ old('wafat_hijriah_year', $guru->wafat_hijriah_year) }}"/>
                         </div>
                     </div>
                 </div>

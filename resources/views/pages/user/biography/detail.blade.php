@@ -39,20 +39,39 @@
                                     </div>
                                 @endif
 
-                                <div class="flex flex-col gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                    @if($biography->wafat_masehi)
-                                        <div class="flex items-center">
-                                            <span class="font-semibold w-32">Wafat (Masehi):</span>
-                                            <span>{{ \Carbon\Carbon::parse($biography->wafat_masehi)->isoFormat('D MMMM Y') }}</span>
-                                        </div>
-                                    @endif
+                                <div class="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300 rounded-xl p-4 mb-6">
+                                    <div class="flex flex-col gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                        @if($biography->wafat_masehi)
+                                            <div class="flex items-center">
+                                                <span class="font-semibold w-32">Wafat (Masehi)</span>
+                                                <span class="font-medium">: {{ \Carbon\Carbon::parse($biography->wafat_masehi)->locale('id')->translatedFormat('d F Y') }}</span>
+                                            </div>
+                                        @endif
 
-                                    @if($biography->wafat_hijriah)
-                                        <div class="flex items-center">
-                                            <span class="font-semibold w-32">Wafat (Hijriah):</span>
-                                            <span>{{ $biography->wafat_hijriah }}</span>
-                                        </div>
-                                    @endif
+                                        @if($biography->wafat_hijriah_day)
+                                            <div class="flex items-center">
+                                                <span class="font-semibold w-32">Wafat (Hijriah)</span>
+                                                {{-- konversi tampilan bulan yang bernilai angka menjadi nama bulan --}}
+                                                @php
+                                                    $bulan = [
+                                                        1 => 'Muharram',
+                                                        2 => 'Safar',
+                                                        3 => 'Rabiul Awal',
+                                                        4 => 'Rabiul Akhir',
+                                                        5 => 'Jumadil Awal',
+                                                        6 => 'Jumadil Akhir',
+                                                        7 => 'Rajab',
+                                                        8 => 'Sya\'ban',
+                                                        9 => 'Ramadhan',
+                                                        10 => 'Syawal',
+                                                        11 => 'Dzulqaidah',
+                                                        12 => 'Dzulhijjah'
+                                                    ];
+                                                @endphp
+                                                <span class="font-medium">: {{ $biography->wafat_hijriah_day }} {{ $bulan[$biography->wafat_hijriah_month] ?? $biography->wafat_hijriah_month }} {{ $biography->wafat_hijriah_year }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </header>
 
