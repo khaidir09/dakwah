@@ -127,4 +127,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Wirid::class, 'wirid_user');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
