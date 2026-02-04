@@ -36,6 +36,9 @@
                                 <livewire:home-event />    
                             @endif
 
+                            <!-- Haul Terdekat -->
+                            <livewire:home-upcoming-haul />
+
                         </div>
 
                     </div>
