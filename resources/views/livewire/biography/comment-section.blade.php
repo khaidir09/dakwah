@@ -7,10 +7,15 @@
         <!-- Comment -->
         <li class="p-3 bg-gray-50 dark:bg-gray-700/30 rounded-sm">
             <div class="flex items-start space-x-3">
-                <img class="rounded-full shrink-0 object-cover" src="{{ $comment->user->profile_photo_url }}" width="32" height="32" alt="{{ $comment->user->name }}" />
+                @if ($comment->user->profile_photo_path != null)
+                    <img class="rounded-full shrink-0 object-cover" src="{{ Storage::url($comment->user->profile_photo_path) }}" width="32" height="32" alt="{{ $comment->user->name }}" />
+                @else
+                    <img class="rounded-full shrink-0 object-cover" src="{{ $comment->user->profile_photo_url }}" width="32" height="32" alt="{{ $comment->user->name }}" />
+                @endif
                 <div>
                     <div class="text-xs text-gray-500">
-                        <span class="font-semibold text-gray-800 dark:text-gray-100">{{ $comment->user->name }}</span> · {{ $comment->created_at->diffForHumans() }}
+                        {{-- gunakan perhitungan waktu menggunakan bahasa indonesia --}}
+                        <span class="font-semibold text-gray-800 dark:text-gray-100">{{ $comment->user->name }}</span> · <span>{{ $comment->created_at->locale('id')->diffForHumans() }}</span>
                     </div>
                     <div class="text-sm text-gray-800 dark:text-gray-200 mt-1">
                         {{ $comment->body }}
@@ -27,7 +32,11 @@
     <!-- Comment form -->
     @auth
     <div class="flex items-center space-x-3 mt-3">
-        <img class="rounded-full shrink-0 object-cover" src="{{ auth()->user()->profile_photo_url }}" width="32" height="32" alt="{{ auth()->user()->name }}" />
+        @if (Auth::user()->profile_photo_path != null)
+            <img class="rounded-full shrink-0 object-cover" src="{{ Storage::url(Auth::user()->profile_photo_path) }}" width="32" height="32" alt="{{ auth()->user()->name }}" />
+        @else
+            <img class="rounded-full shrink-0 object-cover" src="{{ auth()->user()->profile_photo_url }}" width="32" height="32" alt="{{ auth()->user()->name }}" />
+        @endif
         <div class="grow">
             <form wire:submit.prevent="save">
                 <label for="comment-form" class="sr-only">Tulis komentar...</label>
