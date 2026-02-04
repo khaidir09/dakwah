@@ -14,32 +14,55 @@ class HijriCalendar extends Component
 
     public function mount()
     {
-        // Format: Senin, 20 Mei 2024
-        $this->gregorianDate = Carbon::now()->setTimezone('Asia/Makassar')->locale('id')->isoFormat('dddd, D MMMM Y');
+        // Set zona waktu ke WITA (Makassar)
+        $now = Carbon::now()->setTimezone('Asia/Makassar');
+
+        // Format Masehi: "Rabu, 4 Februari 2026"
+        $this->gregorianDate = $now->locale('id')->isoFormat('dddd, D MMMM Y');
+
+        // Ambil data Hijriah
         $this->hijriDate = $this->fetchHijriDate();
     }
 
     public function fetchHijriDate()
     {
-        // Cache based on today's date (Jakarta Time)
+        // Cache berdasarkan tanggal hari ini (WITA) agar tidak request berulang kali
         $date = now()->setTimezone('Asia/Makassar')->format('Y-m-d');
         $key = 'hijri_date_' . $date;
 
-        return Cache::remember($key, 60 * 60 * 24, function () use ($date) {
+        // Simpan di cache selama 24 jam (60 detik * 60 menit * 24 jam)
+        return Cache::remember($key, 60 * 60 * 24, function () {
 
-            // Attempt to fetch from API Muslim v3/v2
-            // Endpoint documentation implies: https://api.myquran.com/v3/doc#tag/Kalender
-            // Common working endpoint for MyQuran:
             $url = "https://api.myquran.com/v3/cal/today?adj=0&tz=Asia%2FMakassar";
 
             try {
-                $response = Http::timeout(5)->get($url);
+                // Menggunakan withoutVerifying() untuk bypass masalah SSL certificate
+                $response = Http::withoutVerifying()
+                    ->timeout(5)
+                    ->get($url);
 
-                if (isset($data['hijr']['today'])) {
-                    return $data['hijr']['today'];
+                if ($response->successful()) {
+                    $data = $response->json('data');
+
+                    // Struktur: data -> hijr -> today
+                    if (isset($data['hijr']['today'])) {
+                        $fullDate = $data['hijr']['today'];
+                        // Contoh nilai asli: "Rabu, 17 Syakban 1447 H"
+
+                        // Opsional: Menghapus nama hari agar tidak duplikat dengan tanggal Masehi
+                        // Kita pecah string berdasarkan koma ","
+                        $parts = explode(',', $fullDate);
+
+                        // Jika berhasil dipecah, ambil bagian keduanya (tanggal saja)
+                        if (count($parts) > 1) {
+                            return trim($parts[1]); // Output: "17 Syakban 1447 H"
+                        }
+
+                        // Jika format berbeda, kembalikan apa adanya
+                        return $fullDate;
+                    }
                 }
             } catch (\Exception $e) {
-                // Silently fail to fallback
             }
 
             return 'Tanggal Hijriah Tidak Tersedia';
