@@ -19,6 +19,9 @@
             <!-- Blocks -->
             <div class="space-y-4">
 
+                <!-- Block 1a: Hijri Calendar -->
+                <livewire:hijri-calendar />
+
                 <!-- Block 1b: Daily Surah Reading -->
                 <livewire:daily-surah />
 
