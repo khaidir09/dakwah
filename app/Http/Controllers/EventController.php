@@ -44,6 +44,7 @@ class EventController extends Controller
             'access' => 'required|in:Umum,Khusus',
             'category' => 'required|string|max:255',
             'assembly_id' => 'nullable|exists:assemblies,id',
+            'maps_link' => 'nullable|url',
         ];
 
         // If assembly_id is provided, location fields are nullable (will be inherited)
@@ -190,7 +191,7 @@ class EventController extends Controller
             unset($dataToUpdate['image']);
         }
 
-         // Handle Location Logic
+        // Handle Location Logic
         if ($request->filled('assembly_id')) {
             $assembly = Assembly::find($request->assembly_id);
             if ($assembly) {

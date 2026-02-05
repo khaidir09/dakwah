@@ -53,6 +53,12 @@
                     <div class="text-xs inline-flex items-center font-medium border border-gray-200 dark:border-gray-700/60 text-gray-600 dark:text-gray-400 rounded-full text-center px-2.5 py-1">
                         <span>{{ $event->category }}</span>
                     </div>
+                    {{-- Tombol maps jika ada --}}
+                    @if($event->maps_link)
+                        <a href="{{ $event->maps_link }}" target="_blank" class="inline-flex items-center text-xs font-medium border border-emerald-500 dark:border-emerald-400 text-emerald-600 dark:text-emerald-400 rounded-full text-center px-3 py-1 hover:bg-emerald-50 dark:hover:bg-emerald-900 transition">
+                            Maps &rarr;
+                        </a>
+                    @endif
                 </div>
             </div>
         </article>

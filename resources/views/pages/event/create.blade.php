@@ -110,6 +110,15 @@
                             @enderror
                         </div>
 
+                        {{-- Maps --}}
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="maps_link">Link Maps (Opsional)</label>
+                            <input id="maps_link" class="form-input w-full @error('maps_link') is-invalid @enderror" type="url" name="maps_link" value="{{ old('maps_link') }}" placeholder="Contoh: https://goo.gl/maps/xyz"/>
+                            @error('maps_link')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                     </div>
 
                     <!-- Address/Regions (Conditional) -->
