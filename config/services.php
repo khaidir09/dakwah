@@ -46,4 +46,9 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
+    'open_notebook' => [
+        'base_url' => env('OPEN_NOTEBOOK_BASE_URL'),
+        'api_key' => env('OPEN_NOTEBOOK_API_KEY'),
+    ],
+
 ];

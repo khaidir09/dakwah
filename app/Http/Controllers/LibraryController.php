@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UploadLibraryToOpenNotebook;
 use App\Models\Library;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -60,7 +61,9 @@ class LibraryController extends Controller
         // Remove 'file' from dataToCreate as it's not a column
         unset($dataToCreate['file']);
 
-        Library::create($dataToCreate);
+        $library = Library::create($dataToCreate);
+
+        UploadLibraryToOpenNotebook::dispatch($library);
 
         return redirect()->route('libraries.index')->with('message', 'Pustaka berhasil ditambahkan!');
     }
@@ -136,6 +139,10 @@ class LibraryController extends Controller
         }
 
         $library->update($dataToUpdate);
+
+        if ($request->hasFile('file')) {
+            UploadLibraryToOpenNotebook::dispatch($library);
+        }
 
         return redirect()->route('libraries.index')->with('message', 'Pustaka berhasil diperbarui!');
     }
