@@ -26,7 +26,6 @@ class UploadLibraryToOpenNotebook implements ShouldQueue
      */
     public function __construct(public Library $library)
     {
-        $this->afterCommit = true;
     }
 
     /**

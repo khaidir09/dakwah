@@ -13,7 +13,7 @@ class LibraryObserver
     public function created(Library $library): void
     {
         if ($library->file_path) {
-            UploadLibraryToOpenNotebook::dispatch($library);
+            UploadLibraryToOpenNotebook::dispatch($library)->afterCommit();
         }
     }
 
@@ -23,7 +23,7 @@ class LibraryObserver
     public function updated(Library $library): void
     {
         if ($library->isDirty('file_path') && $library->file_path) {
-            UploadLibraryToOpenNotebook::dispatch($library);
+            UploadLibraryToOpenNotebook::dispatch($library)->afterCommit();
         }
     }
 }
