@@ -11,11 +11,13 @@ class OpenNotebookService
 {
     protected ?string $baseUrl;
     protected ?string $apiKey;
+    protected ?string $notebookId;
 
     public function __construct()
     {
         $this->baseUrl = config('services.open_notebook.base_url');
         $this->apiKey = config('services.open_notebook.api_key');
+        $this->notebookId = config('services.open_notebook.notebook_id');
     }
 
     /**
@@ -28,6 +30,11 @@ class OpenNotebookService
     {
         if (empty($this->baseUrl)) {
             Log::warning('Open Notebook Base URL not set.');
+            return false;
+        }
+
+        if (empty($this->notebookId)) {
+            Log::warning('Open Notebook ID not set.');
             return false;
         }
 
@@ -54,6 +61,8 @@ class OpenNotebookService
                 'category' => $library->category,
                 'description' => strip_tags($library->description),
                 'external_id' => (string) $library->id,
+                'source_id' => (string) $library->id,
+                'notebook_id' => $this->notebookId,
             ]);
 
             if (is_resource($fileStream)) {

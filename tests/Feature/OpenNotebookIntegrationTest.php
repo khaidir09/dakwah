@@ -129,14 +129,31 @@ class OpenNotebookIntegrationTest extends TestCase
         // Mock Config
         config(['services.open_notebook.base_url' => 'https://api.example.com']);
         config(['services.open_notebook.api_key' => 'secret_key']);
+        config(['services.open_notebook.notebook_id' => 'nb_12345']);
 
         $service = new OpenNotebookService();
         $service->uploadLibrary($library);
 
         Http::assertSent(function ($request) {
+            // Check multipart data
+            $data = $request->data();
+            $notebookId = null;
+            $sourceId = null;
+
+            foreach ($data as $item) {
+                if ($item['name'] === 'notebook_id') {
+                    $notebookId = $item['contents'];
+                }
+                if ($item['name'] === 'source_id') {
+                    $sourceId = $item['contents'];
+                }
+            }
+
             return $request->url() == 'https://api.example.com/libraries' &&
                    $request->hasHeader('Authorization', 'Bearer secret_key') &&
-                   $request->isMultipart();
+                   $request->isMultipart() &&
+                   $notebookId === 'nb_12345' &&
+                   $sourceId === '123';
         });
     }
 }
