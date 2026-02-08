@@ -64,6 +64,10 @@
                                             {!! nl2br(e($library->description)) !!}
                                         </div>
                                     </div>
+
+                                    @if($library->file_path)
+                                        <livewire:library.chat :library="$library" />
+                                    @endif
                                 </div>
                             </div>
                         </article>
