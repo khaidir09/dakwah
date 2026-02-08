@@ -10,11 +10,13 @@ class OpenNotebookService
 {
     protected string $baseUrl;
     protected string $apiKey;
+    protected string $defaultNotebookId;
 
     public function __construct()
     {
         $this->baseUrl = config('services.open_notebook.base_url');
         $this->apiKey = config('services.open_notebook.api_key');
+        $this->defaultNotebookId = config('services.open_notebook.default_id');
     }
 
     public function uploadLibrary(Library $library)
@@ -33,6 +35,7 @@ class OpenNotebookService
                 'category' => $library->category,
                 'description' => $library->description,
                 'source_id' => (string) $library->id,
+                'notebook_id' => $this->defaultNotebookId,
             ]);
 
         return $response->json();
@@ -44,6 +47,7 @@ class OpenNotebookService
             ->post($this->baseUrl . '/chat', [
                 'query' => $query,
                 'source_id' => $sourceId,
+                'notebook_id' => $this->defaultNotebookId,
             ]);
 
         if ($response->successful()) {
