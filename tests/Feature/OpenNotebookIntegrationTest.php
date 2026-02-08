@@ -52,17 +52,15 @@ class OpenNotebookIntegrationTest extends TestCase
         $admin = User::factory()->create();
         $admin->assignRole($role);
 
-        $library = Library::withoutEvents(function () {
-            return Library::create([
-                'title' => 'Old Title',
-                'slug' => 'old-title',
-                'category' => 'General',
-                'description' => 'Old Desc',
-                'file_path' => 'old.pdf',
-                'price_type' => 'free',
-                'is_active' => true,
-            ]);
-        });
+        $library = Library::create([
+            'title' => 'Old Title',
+            'slug' => 'old-title',
+            'category' => 'General',
+            'description' => 'Old Desc',
+            'file_path' => 'old.pdf',
+            'price_type' => 'free',
+            'is_active' => true,
+        ]);
 
         $file = UploadedFile::fake()->create('new.pdf', 100);
 
@@ -88,17 +86,15 @@ class OpenNotebookIntegrationTest extends TestCase
         $admin = User::factory()->create();
         $admin->assignRole($role);
 
-        $library = Library::withoutEvents(function () {
-            return Library::create([
-                'title' => 'Old Title',
-                'slug' => 'old-title',
-                'category' => 'General',
-                'description' => 'Old Desc',
-                'file_path' => 'old.pdf',
-                'price_type' => 'free',
-                'is_active' => true,
-            ]);
-        });
+        $library = Library::create([
+            'title' => 'Old Title',
+            'slug' => 'old-title',
+            'category' => 'General',
+            'description' => 'Old Desc',
+            'file_path' => 'old.pdf',
+            'price_type' => 'free',
+            'is_active' => true,
+        ]);
 
         $this->actingAs($admin)->put(route('libraries.update', $library), [
             'title' => 'New Title',
