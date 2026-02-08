@@ -64,6 +64,10 @@
                 </div>
             </div>
 
+            <div class="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
+                <p>Gunakan akun Google untuk masuk dengan Praktis &amp; Aman. Kami menggunakan Google OAuth untuk keamanan maksimal. Tidak perlu mengingat password!</p>
+            </div>
+
             <div class="mt-6">
                 <a href="{{ route('auth.google') }}" class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
                     <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
