@@ -28,6 +28,8 @@ class OpenNotebookService
         $fileContent = Storage::disk('public')->get($library->file_path);
         $fileName = basename($library->file_path);
 
+        $notebookId = $library->notebook_id ?? $this->defaultNotebookId;
+
         $response = Http::withToken($this->apiKey)
             ->attach('file', $fileContent, $fileName)
             ->post($this->baseUrl . '/libraries', [
@@ -35,19 +37,21 @@ class OpenNotebookService
                 'category' => $library->category,
                 'description' => $library->description,
                 'source_id' => (string) $library->id,
-                'notebook_id' => $this->defaultNotebookId,
+                'notebook_id' => $notebookId,
             ]);
 
         return $response->json();
     }
 
-    public function chat(string $query, string $sourceId)
+    public function chat(string $query, string $sourceId, ?string $notebookId = null)
     {
+        $notebookId = $notebookId ?? $this->defaultNotebookId;
+
         $response = Http::withToken($this->apiKey)
             ->post($this->baseUrl . '/chat', [
                 'query' => $query,
                 'source_id' => $sourceId,
-                'notebook_id' => $this->defaultNotebookId,
+                'notebook_id' => $notebookId,
             ]);
 
         if ($response->successful()) {

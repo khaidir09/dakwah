@@ -18,6 +18,7 @@ class Library extends Model
         'cover_image',
         'price_type',
         'is_active',
+        'notebook_id',
         'visit_count',
         'like_count',
     ];
