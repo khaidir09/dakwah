@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\UploadLibraryToOpenNotebook;
 use App\Models\Library;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -61,9 +60,7 @@ class LibraryController extends Controller
         // Remove 'file' from dataToCreate as it's not a column
         unset($dataToCreate['file']);
 
-        $library = Library::create($dataToCreate);
-
-        UploadLibraryToOpenNotebook::dispatch($library);
+        Library::create($dataToCreate);
 
         return redirect()->route('libraries.index')->with('message', 'Pustaka berhasil ditambahkan!');
     }
@@ -135,14 +132,10 @@ class LibraryController extends Controller
         // For now, I'll assume the form handles it correctly or passed as 1/0.
         // If using standard HTML form submission for boolean:
         if (!$request->has('is_active')) {
-             $dataToUpdate['is_active'] = 0;
+            $dataToUpdate['is_active'] = 0;
         }
 
         $library->update($dataToUpdate);
-
-        if ($request->hasFile('file')) {
-            UploadLibraryToOpenNotebook::dispatch($library);
-        }
 
         return redirect()->route('libraries.index')->with('message', 'Pustaka berhasil diperbarui!');
     }
