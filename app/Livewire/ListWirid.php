@@ -12,16 +12,25 @@ class ListWirid extends Component
 
     public $paginate = 10;
     public $search;
+    public $waktu;
     public $kategori = 'wirid';
+    public $availableWaktu = [];
 
-    protected $updatesQueryString = ['search'];
+    protected $updatesQueryString = ['search', 'waktu'];
 
     public function mount()
     {
         $this->search = request()->query('search', $this->search);
+        $this->waktu = request()->query('waktu', $this->waktu);
+        $this->availableWaktu = Wirid::select('waktu')->distinct()->whereNotNull('waktu')->where('waktu', '!=', '')->pluck('waktu')->toArray();
     }
 
     public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingWaktu()
     {
         $this->resetPage();
     }
@@ -65,6 +74,11 @@ class ListWirid extends Component
         }
 
         $query->latest();
+
+        // Jika ada filter waktu
+        if ($this->waktu) {
+            $query->where('waktu', $this->waktu);
+        }
 
         // Jika ada pencarian, tambahkan kondisi where
         if ($this->search) {
