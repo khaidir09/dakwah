@@ -82,15 +82,6 @@
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <div>
-                            <label class="block text-sm font-medium mb-2" for="notebook_id">Notebook ID (Opsional)</label>
-                            <input id="notebook_id" class="form-input w-full @error('notebook_id') is-invalid @enderror" type="text" name="notebook_id" value="{{ old('notebook_id') }}" />
-                            <div class="text-xs text-gray-500 mt-1">ID Notebook dari Open Notebook (jika ada).</div>
-                            @error('notebook_id')
-                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                            @enderror
-                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 mt-6">

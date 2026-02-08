@@ -35,7 +35,7 @@ class Chat extends Component
         try {
             $service = app(OpenNotebookService::class);
             // Assuming the source_id is the library ID as per upload logic
-            $response = $service->chat($userMessage, (string) $this->library->id, $this->library->notebook_id);
+            $response = $service->chat($userMessage, (string) $this->library->id);
 
             $aiContent = $response['answer'] ?? 'Maaf, saya tidak dapat menjawab saat ini.';
 

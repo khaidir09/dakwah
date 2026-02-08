@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Library;
-use App\Jobs\UploadLibraryToOpenNotebook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +29,6 @@ class LibraryController extends Controller
             'file' => 'required|file|mimes:pdf|max:10240', // 10MB max
             'cover_image' => 'nullable|image|max:2048',
             'price_type' => 'required|in:free,paid',
-            'notebook_id' => 'nullable|string|max:255',
         ]);
 
         $dataToCreate = $validatedData;
@@ -62,9 +60,7 @@ class LibraryController extends Controller
         // Remove 'file' from dataToCreate as it's not a column
         unset($dataToCreate['file']);
 
-        $library = Library::create($dataToCreate);
-
-        UploadLibraryToOpenNotebook::dispatch($library);
+        Library::create($dataToCreate);
 
         return redirect()->route('libraries.index')->with('message', 'Pustaka berhasil ditambahkan!');
     }
@@ -83,8 +79,7 @@ class LibraryController extends Controller
             'file' => 'nullable|file|mimes:pdf|max:10240',
             'cover_image' => 'nullable|image|max:2048',
             'price_type' => 'required|in:free,paid',
-            'is_active' => 'sometimes|boolean',
-            'notebook_id' => 'nullable|string|max:255',
+            'is_active' => 'sometimes|boolean'
         ]);
 
         $dataToUpdate = $validatedData;
@@ -141,8 +136,6 @@ class LibraryController extends Controller
         }
 
         $library->update($dataToUpdate);
-
-        UploadLibraryToOpenNotebook::dispatch($library);
 
         return redirect()->route('libraries.index')->with('message', 'Pustaka berhasil diperbarui!');
     }
