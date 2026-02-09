@@ -66,6 +66,10 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="mt-8 md:col-span-1">
+                                @livewire('pustaka-chat', ['pustakaId' => $library->id])
+                            </div>
                         </article>
                     </div>
                 </div>

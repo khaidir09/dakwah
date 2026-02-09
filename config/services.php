@@ -47,7 +47,7 @@ return [
     ],
 
     'open_notebook' => [
-        'base_url' => env('OPEN_NOTEBOOK_BASE_URL'),
+        'base_url' => env('OPEN_NOTEBOOK_API_URL'),
         'api_key' => env('OPEN_NOTEBOOK_API_KEY'),
         'default_id' => env('OPEN_NOTEBOOK_DEFAULT_ID'),
     ],
