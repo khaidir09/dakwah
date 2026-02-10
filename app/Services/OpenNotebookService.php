@@ -44,7 +44,7 @@ class OpenNotebookService
         $strictInstruction =
             "PERAN: Anda adalah asisten pustaka yang membantu menjelaskan isi dokumen.\n" .
             "INSTRUKSI:\n" .
-            "1. Jawab pertanyaan pengguna dengan menggunakan informasi dari 'Context' yang tersedia di bawah ini sebagai sumber utama.\n" .
+            "1. Jawab pertanyaan pengguna HANYA dengan menggunakan informasi yang terdapat dalam dokumen pustaka ini sebagai sumber utama.\n" .
             "2. Anda BOLEH merangkum, menyimpulkan, atau memfrasekan ulang kalimat dari dokumen agar lebih mudah dipahami, selama maknanya tidak berubah.\n" .
             "3. JANGAN menambahkan fakta baru (seperti angka, tanggal, hukum) yang tidak disebutkan dalam dokumen.\n" .
             "4. Jika informasi benar-benar tidak ada di dokumen, katakan dengan sopan bahwa topik tersebut belum tersedia di pustaka.\n\n" .
@@ -57,7 +57,6 @@ class OpenNotebookService
         $response = Http::timeout(60)->post("{$this->baseUrl}/api/chat/execute", [
             'session_id' => $sessionId,
             'message' => $finalMessage,
-            'context'    => (object)[],
             // 'stream' => false, // Matikan stream agar respons langsung JSON utuh
         ]);
 
