@@ -58,6 +58,8 @@ Route::get('/manaqib', [\App\Http\Controllers\User\BiographyController::class, '
 Route::get('/manaqib/{slug}', [\App\Http\Controllers\User\BiographyController::class, 'detail'])->name('manaqib-detail');
 Route::get('/pustaka', [\App\Http\Controllers\User\LibraryController::class, 'list'])->name('pustaka-list');
 Route::get('/pustaka/{library}', [\App\Http\Controllers\User\LibraryController::class, 'detail'])->name('pustaka-detail');
+Route::get('/tulisan', [\App\Http\Controllers\User\PostController::class, 'index'])->name('tulisan.list');
+Route::get('/tulisan/{slug}', [\App\Http\Controllers\User\PostController::class, 'detail'])->name('tulisan.detail');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/email/verify', function () {
@@ -107,6 +109,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::put('/kelola-acara-majelis/{id}', [ManageEventController::class, 'update'])->name('kelola-acara-majelis.update');
 
     Route::resource('kelola-ramadhan', ManagedRamadhanController::class);
+    Route::resource('kelola-tulisan', \App\Http\Controllers\PostController::class);
 
     // Route khusus onboarding majelis (hanya bisa diakses via link khusus)
     Route::get('/registrasi-majelis/baru', [ManagedMajelisController::class, 'register'])
@@ -128,6 +131,7 @@ Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->gr
     Route::resource('/ramadhan-schedules', RamadhanController::class);
     Route::resource('/roles', \App\Http\Controllers\RoleController::class);
     Route::resource('/permissions', \App\Http\Controllers\PermissionController::class);
+    Route::resource('/posts', \App\Http\Controllers\PostController::class)->names('admin.posts');
     // Route for the getting the data feed
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
     Route::get('/dashboard/analytics', [DashboardController::class, 'analytics'])->name('analytics');
