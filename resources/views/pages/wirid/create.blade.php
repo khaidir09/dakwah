@@ -61,7 +61,7 @@
 
                         <div class="col-span-2">
                             <label class="block text-sm font-medium mb-2" for="arab">Teks Arab <span class="text-red-500">*</span></label>
-                            <textarea id="arab" dir="rtl" class="form-input w-full text-right text-xl font-arabic @error('arab') is-invalid @enderror" name="arab" rows="4" required placeholder="أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيَّ الْقَيُّومَ وَأَتُوبُ إِلَيْهِ">{{ old('arab') }}</textarea>
+                            <textarea id="arab" dir="rtl" class="form-textarea w-full text-right text-xl font-arabic @error('arab') is-invalid @enderror" name="arab" rows="4" required placeholder="أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيَّ الْقَيُّومَ وَأَتُوبُ إِلَيْهِ">{{ old('arab') }}</textarea>
                             @error('arab')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
@@ -69,7 +69,7 @@
 
                         <div class="col-span-2">
                             <label class="block text-sm font-medium mb-2" for="arti">Arti</label>
-                            <textarea id="arti" class="form-input w-full @error('arti') is-invalid @enderror" name="arti" rows="3" placeholder="Masukkan arti atau terjemahan">{{ old('arti') }}</textarea>
+                            <textarea id="arti" class="form-textarea w-full @error('arti') is-invalid @enderror" name="arti" rows="3" placeholder="Masukkan arti atau terjemahan">{{ old('arti') }}</textarea>
                             @error('arti')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
@@ -93,7 +93,7 @@
 
                         <div class="col-span-2">
                             <label class="block text-sm font-medium mb-2" for="deskripsi">Deskripsi</label>
-                            <textarea class="form-input w-full @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="3" placeholder="Penjelasan tambahan tentang amalan ini">{{ old('deskripsi') }}</textarea>
+                            <textarea class="form-textarea w-full @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="3" placeholder="Penjelasan tambahan tentang amalan ini">{{ old('deskripsi') }}</textarea>
                             @error('deskripsi')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror

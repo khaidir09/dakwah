@@ -105,7 +105,7 @@
                     <div class="grid grid-cols-1 mt-6">
                         <div>
                             <label class="block text-sm font-medium mb-2" for="description">Deskripsi <span class="text-red-500">*</span></label>
-                            <textarea class="form-input w-full @error('description') is-invalid @enderror" name="description" id="description" cols="30" rows="5" required>{{ old('description', $library->description) }}</textarea>
+                            <textarea class="form-textarea w-full @error('description') is-invalid @enderror" name="description" id="description" cols="30" rows="5" required>{{ old('description', $library->description) }}</textarea>
                             @error('description')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror

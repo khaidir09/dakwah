@@ -85,7 +85,7 @@
                     <div class="grid grid-cols-1 mt-6">
                         <div>
                             <label class="block text-sm font-medium mb-2" for="biografi">Biografi <span class="text-red-500">*</span></label>
-                            <textarea class="form-input w-full @error('biografi') is-invalid @enderror" name="biografi" id="biografi" cols="30" rows="10" required>{{ old('biografi') }}</textarea>
+                            <textarea class="form-textarea w-full @error('biografi') is-invalid @enderror" name="biografi" id="biografi" cols="30" rows="10" required>{{ old('biografi') }}</textarea>
                             @error('biografi')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror

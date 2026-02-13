@@ -94,7 +94,7 @@
 
                         <div class="col-span-2">
                             <label class="block text-sm font-medium mb-2" for="deskripsi">Deskripsi</label>
-                            <textarea class="form-input w-full @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="3" placeholder="Penjelasan tambahan tentang amalan ini">{{ old('deskripsi', $wirid->deskripsi) }}</textarea>
+                            <textarea class="form-textarea w-full @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" rows="3" placeholder="Penjelasan tambahan tentang amalan ini">{{ old('deskripsi', $wirid->deskripsi) }}</textarea>
                             @error('deskripsi')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
