@@ -111,43 +111,53 @@
                                                 <h2 class="text-gray-800 dark:text-gray-100 font-semibold mb-2">Jadwal Rutinan</h2>
                                                 <!-- Cards -->
                                                 <div class="space-y-4">
-
-                                                    <!-- Card -->
-                                                    @foreach ($schedules as $item)
-                                                        <div class="bg-white dark:bg-gray-900 p-4 border border-gray-200 dark:border-gray-700/60 rounded-lg shadow-xs">
-                                                            <!-- Card header -->
-                                                            <div class="flex items-center gap-2 mb-2">
-                                                                <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->nama_jadwal }}</span>
-                                                                @php
-                                                                    $accessColor = match($item->access) {
-                                                                        'Umum' => 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-                                                                        'Ikhwan' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-                                                                        'Akhwat' => 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-                                                                        default => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-                                                                    };
-                                                                @endphp
-                                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $accessColor }}">
-                                                                    {{ $item->access }}
-                                                                </span>
-                                                            </div>
-                                                            <!-- Card content -->
-                                                            <div class="text-sm mb-3">{!! $item->deskripsi !!}</div>
-                                                            <!-- Card footer -->
-                                                            <div class="flex justify-between items-center">
-                                                                <!-- Link -->
-                                                                <div class="text-sm font-medium text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400">
-                                                                    {{ $item->hari }}, {{ $item->waktu_formatted }} WITA
+                                                    @if(isset($isRamadhan) && $isRamadhan)
+                                                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 dark:bg-yellow-900/30 dark:border-yellow-600">
+                                                            <div class="flex">
+                                                                <div class="ml-3">
+                                                                    <p class="text-sm text-yellow-700 dark:text-yellow-400">
+                                                                        Mohon maaf, jadwal rutinan majelis ini diliburkan selama bulan Ramadhan dan akan aktif kembali pada bulan Syawal.
+                                                                    </p>
                                                                 </div>
-                                                                <!-- Avatars group -->
-                                                                <a href="{{ route('guru-detail', $item->teacher) }}">
-                                                                    <div class="flex items-center">
-                                                                        <img class="rounded-full border-2 border-white w-8 h-8 object-cover dark:border-gray-800 box-content mr-1" src="{{ Storage::url($item->teacher->foto) }}" alt="{{ $item->teacher->name }}" /> <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->teacher->name }}</span>
-                                                                    </div>
-                                                                </a>
                                                             </div>
                                                         </div>
-                                                    @endforeach
-
+                                                    @else
+                                                        <!-- Card -->
+                                                        @foreach ($schedules as $item)
+                                                            <div class="bg-white dark:bg-gray-900 p-4 border border-gray-200 dark:border-gray-700/60 rounded-lg shadow-xs">
+                                                                <!-- Card header -->
+                                                                <div class="flex items-center gap-2 mb-2">
+                                                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->nama_jadwal }}</span>
+                                                                    @php
+                                                                        $accessColor = match($item->access) {
+                                                                            'Umum' => 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+                                                                            'Ikhwan' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                                                                            'Akhwat' => 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+                                                                            default => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
+                                                                        };
+                                                                    @endphp
+                                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $accessColor }}">
+                                                                        {{ $item->access }}
+                                                                    </span>
+                                                                </div>
+                                                                <!-- Card content -->
+                                                                <div class="text-sm mb-3">{!! $item->deskripsi !!}</div>
+                                                                <!-- Card footer -->
+                                                                <div class="flex justify-between items-center">
+                                                                    <!-- Link -->
+                                                                    <div class="text-sm font-medium text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400">
+                                                                        {{ $item->hari }}, {{ $item->waktu_formatted }} WITA
+                                                                    </div>
+                                                                    <!-- Avatars group -->
+                                                                    <a href="{{ route('guru-detail', $item->teacher) }}">
+                                                                        <div class="flex items-center">
+                                                                            <img class="rounded-full border-2 border-white w-8 h-8 object-cover dark:border-gray-800 box-content mr-1" src="{{ Storage::url($item->teacher->foto) }}" alt="{{ $item->teacher->name }}" /> <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->teacher->name }}</span>
+                                                                        </div>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
 
                                             </div>
