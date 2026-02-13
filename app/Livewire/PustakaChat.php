@@ -13,19 +13,21 @@ class PustakaChat extends Component
 {
     public $pustakaId;
     public $question = '';
-    // public $messages = [];
-
     public $chatSession;
     public $isLoading = false;
 
-    // Kita simpan session_id chat di property public (Livewire akan menjaganya tetap ada selama user di halaman ini)
-    // public $chatSessionId = null;
+    // Listener untuk handle error (opsional)
+    protected $listeners = ['refreshChat' => '$refresh'];
 
     public function mount($pustakaId)
     {
         $this->pustakaId = $pustakaId;
 
-        // 1. Cek apakah User sudah pernah chat di Pustaka ini?
+        $this->loadSession();
+    }
+
+    public function loadSession()
+    {
         if (Auth::check()) {
             $this->chatSession = ChatSession::with('messages')
                 ->where('user_id', Auth::id())
@@ -34,38 +36,44 @@ class PustakaChat extends Component
         }
     }
 
-    // Property computed agar pesan selalu fresh dari DB saat render ulang
+    // Computed Property untuk pesan agar reaktif
     public function getMessagesProperty()
     {
         if (!$this->chatSession) return collect([]);
-        // Urutkan dari yang terlama ke terbaru (ASC) agar percakapan runut
         return $this->chatSession->messages()->oldest()->get();
     }
 
     public function ask(OpenNotebookService $aiService)
     {
-        // Validasi Login
+        // 1. Validasi
         if (!Auth::check()) {
-            // Opsional: Redirect ke login atau tampilkan pesan error
             $this->addError('question', 'Silakan login untuk bertanya.');
             return;
         }
 
         $this->validate(['question' => 'required|string|min:2']);
 
+        // Ambil data Pustaka
         $pustaka = Library::find($this->pustakaId);
+
+        // DEBUG 3: Pastikan ID Source di database Anda BENAR dan TIDAK KOSONG
+        if (!$pustaka || empty($pustaka->open_notebook_source_id) || empty($pustaka->notebook_id)) {
+            session()->flash('error', 'Dokumen pustaka ini belum terhubung sepenuhnya ke sistem AI (ID tidak lengkap).');
+            return;
+        }
 
         $this->isLoading = true;
 
         try {
-            // 2. Cek apakah sesi chat sudah ada? Jika belum, buat baru.
+            // 2. Cek atau Buat Sesi Baru
             if (!$this->chatSession) {
-                // A. Minta Session ID ke Open Notebook API
+                // Buat sesi di API Open Notebook
+                // Note: Session biasanya butuh notebook_id sebagai container utama
                 $apiSessionId = $aiService->createSession($pustaka->notebook_id);
 
-                if (!$apiSessionId) throw new \Exception("Gagal membuat sesi chat di AI.");
+                if (!$apiSessionId) throw new \Exception("Gagal inisialisasi sesi AI.");
 
-                // B. Simpan Sesi ke Database Lokal
+                // Simpan sesi di DB Lokal
                 $this->chatSession = ChatSession::create([
                     'user_id' => Auth::id(),
                     'library_id' => $this->pustakaId,
@@ -73,7 +81,7 @@ class PustakaChat extends Component
                 ]);
             }
 
-            // 3. Simpan Pesan User ke Database
+            // 3. Simpan Pesan User ke Database Lokal (Optimistic UI)
             $this->chatSession->messages()->create([
                 'role' => 'user',
                 'message' => $this->question
@@ -83,48 +91,45 @@ class PustakaChat extends Component
             $userQuestion = $this->question;
             $this->question = '';
 
-            // 4. Kirim ke API AI
+            // EKSEKUSI UTAMA
+            // Kita panggil fungsi checkSource dulu untuk memastikan file terbaca di API
+            // Uncomment baris di bawah ini jika ingin mengecek status file sekali saja
+            // dd($aiService->checkSource($pustaka->open_notebook_source_id));
+
             $response = $aiService->sendMessage(
                 $this->chatSession->open_notebook_session_id,
-                $userQuestion
+                $userQuestion, // Gunakan variabel yang sudah diamankan
+                $pustaka->open_notebook_source_id
             );
 
-            // 5. Ambil Jawaban AI (Parsing Logika Sebelumnya)
-            $aiAnswer = 'Maaf, tidak ada jawaban.';
+            // 5. Parsing Jawaban AI
+            $aiAnswer = 'Maaf, saya tidak dapat menemukan jawaban dari dokumen ini.';
+
             if (isset($response['messages']) && is_array($response['messages'])) {
+                // Ambil pesan terakhir
                 $lastMessage = end($response['messages']);
-                if (isset($lastMessage['content'])) {
+
+                // Validasi tambahan: Pastikan ada kontennya
+                if (!empty($lastMessage['content'])) {
                     $aiAnswer = $lastMessage['content'];
                 }
             }
 
-            // 6. Simpan Jawaban AI ke Database
+            // 6. Simpan Jawaban AI ke Database Lokal
             $this->chatSession->messages()->create([
                 'role' => 'ai',
                 'message' => $aiAnswer
             ]);
         } catch (\Exception $e) {
-            // Jika error, simpan pesan error sebagai system message atau flash
-            // Disini kita biarkan saja user tau lewat UI loading yang berhenti
-            session()->flash('error', 'Gagal: ' . $e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
 
         $this->isLoading = false;
     }
 
-    // protected function addMessage($role, $text)
-    // {
-    //     $this->messages[] = [
-    //         'role' => $role,
-    //         'text' => $text,
-    //         'time' => now()->format('H:i')
-    //     ];
-    // }
-
     public function render()
     {
         return view('livewire.pustaka-chat', [
-            // Kirim pesan lewat computed property
             'messages' => $this->messages
         ]);
     }
