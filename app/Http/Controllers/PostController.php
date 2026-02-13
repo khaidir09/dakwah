@@ -98,7 +98,7 @@ class PostController extends Controller
 
         // Redirect based on role
         if (Auth::user()->hasRole('Super Admin')) {
-            return redirect()->route('admin.posts.index')->with('success', 'Tulisan berhasil dibuat.');
+            return redirect()->route('posts.index')->with('success', 'Tulisan berhasil dibuat.');
         } else {
             return redirect()->route('kelola-tulisan.index')->with('success', 'Tulisan berhasil dibuat.');
         }
@@ -193,7 +193,7 @@ class PostController extends Controller
         }
 
         if (Auth::user()->hasRole('Super Admin')) {
-            return redirect()->route('admin.posts.index')->with('success', 'Tulisan berhasil diperbarui.');
+            return redirect()->route('posts.index')->with('success', 'Tulisan berhasil diperbarui.');
         } else {
             return redirect()->route('kelola-tulisan.index')->with('success', 'Tulisan berhasil diperbarui.');
         }

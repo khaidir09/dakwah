@@ -131,7 +131,7 @@ Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->gr
     Route::resource('/ramadhan-schedules', RamadhanController::class);
     Route::resource('/roles', \App\Http\Controllers\RoleController::class);
     Route::resource('/permissions', \App\Http\Controllers\PermissionController::class);
-    Route::resource('/posts', \App\Http\Controllers\PostController::class)->names('admin.posts');
+    Route::resource('/posts', \App\Http\Controllers\PostController::class);
     // Route for the getting the data feed
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
     Route::get('/dashboard/analytics', [DashboardController::class, 'analytics'])->name('analytics');

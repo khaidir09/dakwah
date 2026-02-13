@@ -22,7 +22,7 @@ class PostTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Super Admin']);
         $admin->assignRole('Super Admin');
 
-        $response = $this->actingAs($admin)->get(route('admin.posts.index'));
+        $response = $this->actingAs($admin)->get(route('posts.index'));
 
         $response->assertStatus(200);
         $response->assertSeeLivewire(Index::class);

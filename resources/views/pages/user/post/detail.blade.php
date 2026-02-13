@@ -42,7 +42,7 @@
                                 </figure>
                             @endif
 
-                            <div class="prose max-w-none text-gray-600 dark:text-gray-300">
+                            <div class="prose max-w-none text-gray-600 dark:text-gray-300 text-justify">
                                 {!! nl2br(e($post->content)) !!}
                             </div>
                         </article>

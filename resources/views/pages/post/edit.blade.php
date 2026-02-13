@@ -7,7 +7,7 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6">
-            <form action="{{ Auth::user()->hasRole('Super Admin') ? route('admin.posts.update', $post->id) : route('kelola-tulisan.update', $post->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ Auth::user()->hasRole('Super Admin') ? route('posts.update', $post->id) : route('kelola-tulisan.update', $post->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="space-y-4">

@@ -13,6 +13,9 @@ class Index extends Component
 
     public $search = '';
 
+    public $confirmingDeletion = false;
+    public $post_id_to_delete;
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -36,20 +39,31 @@ class Index extends Component
         ]);
     }
 
-    public function delete($id)
+    public function confirmDelete($postId)
     {
-        $post = Post::findOrFail($id);
+        $this->post_id_to_delete = $postId; // Simpan ID
+        $this->confirmingDeletion = true; // Buka modal
+    }
 
-        if (!Auth::user()->hasRole('Super Admin') && $post->user_id !== Auth::id()) {
-            return;
+    public function deletePost()
+    {
+        // Pastikan ID ada
+        if ($this->post_id_to_delete) {
+            $post = Post::find($this->post_id_to_delete);
+
+            if ($post) {
+                if ($post->cover_image) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($post->cover_image);
+                }
+                $post->labels()->detach();
+                $post->delete();
+                // Kirim pesan sukses (akan kita tampilkan di view)
+                session()->flash('success', 'Tulisan berhasil dihapus.');
+            }
         }
 
-        if ($post->cover_image) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($post->cover_image);
-        }
-        $post->labels()->detach();
-        $post->delete();
-
-        session()->flash('success', 'Tulisan berhasil dihapus.');
+        // Tutup modal dan reset ID
+        $this->confirmingDeletion = false;
+        $this->post_id_to_delete = null;
     }
 }
