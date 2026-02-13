@@ -32,7 +32,7 @@
                                 <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
                                     <span class="font-medium text-gray-800 dark:text-gray-100 mr-2">{{ $post->user->name }}</span>
                                     <span class="mx-1">&middot;</span>
-                                    <span>{{ $post->published_at ? $post->published_at->format('d M Y') : $post->created_at->format('d M Y') }}</span>
+                                    <span>{{ $post->published_at ? $post->published_at->locale('id')->translatedFormat('d M Y') : $post->created_at->locale('id')->translatedFormat('d M Y') }}</span>
                                 </div>
                             </header>
 
