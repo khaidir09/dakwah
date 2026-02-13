@@ -49,6 +49,31 @@
                             <label class="block text-sm font-medium mb-1" for="labels">Label (Pisahkan dengan koma)</label>
                             <input id="labels" class="form-input w-full" type="text" name="labels" value="{{ old('labels') }}" placeholder="Contoh: Fiqih, Sejarah, Umum" />
                         </div>
+
+                        <!-- Source -->
+                        <div class="col-span-2" x-data="{ sources: {{ Js::from(old('source', [])) }}, errors: {{ Js::from($errors->messages()) }} }">
+                            <label class="block text-sm font-medium mb-2">Sumber</label>
+                            <template x-for="(source, index) in sources" :key="index">
+                                <div class="flex gap-4 mb-2 items-start">
+                                    <div class="flex-1">
+                                        <input type="text" :name="`source[${index}][name]`" x-model="source.name" class="form-input w-full" placeholder="Nama Sumber (Contoh: Kitab Ihya Ulumuddin)">
+                                        <div x-show="errors[`source.${index}.name`]" x-text="errors[`source.${index}.name`] ? errors[`source.${index}.name`][0] : ''" class="text-xs mt-1 text-red-500"></div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <input type="text" :name="`source[${index}][url]`" x-model="source.url" class="form-input w-full" placeholder="Link URL (Opsional)">
+                                        <div x-show="errors[`source.${index}.url`]" x-text="errors[`source.${index}.url`] ? errors[`source.${index}.url`][0] : ''" class="text-xs mt-1 text-red-500"></div>
+                                    </div>
+                                    <button type="button" @click="sources.splice(index, 1)" class="text-red-500 hover:text-red-700 mt-2" x-show="sources.length > 0">
+                                        <span class="sr-only">Hapus</span>
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>
+                                </div>
+                            </template>
+                            <button type="button" @click="sources.push({ name: '', url: '' })" class="text-sm text-blue-500 hover:text-blue-700 font-medium flex items-center mt-1">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                Tambah Sumber
+                            </button>
+                        </div>
                         
                         <!-- Status -->
                         <div>

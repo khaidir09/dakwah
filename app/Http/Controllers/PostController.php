@@ -46,6 +46,9 @@ class PostController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'status' => 'required|in:draft,published',
             'labels' => 'nullable|string', // Comma separated tags
+            'source' => 'nullable|array',
+            'source.*.name' => 'required_with:source|string',
+            'source.*.url' => 'nullable|url',
         ]);
 
         $slug = Str::slug($validatedData['title']);
@@ -61,6 +64,7 @@ class PostController extends Controller
         $post->slug = $slug;
         $post->content = $validatedData['content'];
         $post->status = $validatedData['status'];
+        $post->source = $validatedData['source'] ?? null;
 
         if ($validatedData['status'] === 'published') {
             $post->published_at = now();
@@ -145,12 +149,16 @@ class PostController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'status' => 'required|in:draft,published',
             'labels' => 'nullable|string',
+            'source' => 'nullable|array',
+            'source.*.name' => 'required_with:source|string',
+            'source.*.url' => 'nullable|url',
         ]);
 
         $post->title = $validatedData['title'];
         // Don't update slug to keep links working, or only if needed. Let's keep slug as is.
         $post->content = $validatedData['content'];
         $post->status = $validatedData['status'];
+        $post->source = $validatedData['source'] ?? null;
 
         if ($post->status === 'published' && !$post->published_at) {
             $post->published_at = now();
