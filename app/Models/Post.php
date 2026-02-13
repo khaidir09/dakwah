@@ -15,6 +15,7 @@ class Post extends Model
 
     protected $casts = [
         'published_at' => 'datetime',
+        'source' => 'array',
     ];
 
     public function user(): BelongsTo

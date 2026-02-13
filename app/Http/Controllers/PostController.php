@@ -46,7 +46,9 @@ class PostController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'status' => 'required|in:draft,published',
             'labels' => 'nullable|string', // Comma separated tags
-            'source' => 'nullable|string|max:255',
+            'source' => 'nullable|array',
+            'source.*.name' => 'required_with:source|string',
+            'source.*.url' => 'nullable|url',
         ]);
 
         $slug = Str::slug($validatedData['title']);
@@ -147,7 +149,9 @@ class PostController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'status' => 'required|in:draft,published',
             'labels' => 'nullable|string',
-            'source' => 'nullable|string|max:255',
+            'source' => 'nullable|array',
+            'source.*.name' => 'required_with:source|string',
+            'source.*.url' => 'nullable|url',
         ]);
 
         $post->title = $validatedData['title'];

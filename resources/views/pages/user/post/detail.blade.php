@@ -46,11 +46,22 @@
                                 {!! nl2br(e($post->content)) !!}
                             </div>
 
-                            @if ($post->source)
+                            @if ($post->source && is_array($post->source) && count($post->source) > 0)
                                 <div class="mt-8 pt-4 border-t border-gray-100 dark:border-gray-700">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                                        <span class="font-semibold">Sumber:</span> {{ $post->source }}
-                                    </p>
+                                    <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2">Sumber:</h3>
+                                    <ul class="list-disc list-inside text-sm text-gray-500 dark:text-gray-400">
+                                        @foreach ($post->source as $source)
+                                            <li>
+                                                @if (!empty($source['url']))
+                                                    <a href="{{ $source['url'] }}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">
+                                                        {{ $source['name'] ?? '' }}
+                                                    </a>
+                                                @else
+                                                    {{ $source['name'] ?? '' }}
+                                                @endif
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             @endif
                         </article>
