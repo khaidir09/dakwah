@@ -24,9 +24,21 @@
                             </div>
 
                             <!-- Title -->
-                            <header class="mb-6">
+                            <header>
                                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Majelis Hari Ini</h1>
                             </header>
+
+                            @if(isset($isRamadhan) && $isRamadhan)
+                                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 dark:bg-yellow-900/30 dark:border-yellow-600">
+                                    <div class="flex">
+                                        <div class="ml-3">
+                                            <p class="text-sm text-yellow-700 dark:text-yellow-400">
+                                                Mohon maaf, jadwal rutinan majelis ini diliburkan selama bulan Ramadhan dan akan aktif kembali pada bulan Syawal.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
 
                             <!-- Jadwal Majelis -->
                             <livewire:home-jadwal-majelis />

@@ -4,10 +4,11 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Schedule;
+use App\Services\HijriService;
 
 class JadwalMajelisController extends Controller
 {
-    public function list()
+    public function list(HijriService $hijriService)
     {
         $schedules = Schedule::with('teacher')->orderByRaw("
             CASE hari
@@ -21,6 +22,9 @@ class JadwalMajelisController extends Controller
                 ELSE 8
             END
         ")->get();
-        return view('pages/user/jadwal-majelis/list', compact('schedules'));
+
+        $isRamadhan = $hijriService->isRamadhan();
+
+        return view('pages/user/jadwal-majelis/list', compact('schedules', 'isRamadhan'));
     }
 }

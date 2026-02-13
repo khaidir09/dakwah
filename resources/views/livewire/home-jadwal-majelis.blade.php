@@ -1,6 +1,6 @@
 <div>
     <!-- Region Filters -->
-    <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
         <!-- Tipe Filter -->
         <div>
             <label for="tipe" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipe Majelis</label>
