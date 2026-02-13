@@ -42,6 +42,13 @@
                             <input id="labels" class="form-input w-full" type="text" name="labels" value="{{ old('labels', $post->labels->pluck('name')->implode(', ')) }}" placeholder="Contoh: Fiqih, Sejarah, Umum" />
                         </div>
 
+                        <!-- Source -->
+                        <div>
+                            <label class="block text-sm font-medium mb-1" for="source">Sumber</label>
+                            <input id="source" class="form-input w-full" type="text" name="source" value="{{ old('source', $post->source) }}" placeholder="Contoh: Kitab Ihya Ulumuddin" />
+                            @error('source') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
+                        </div>
+
                         <!-- Status -->
                         <div>
                             <label class="block text-sm font-medium mb-1" for="status">Status <span class="text-red-500">*</span></label>

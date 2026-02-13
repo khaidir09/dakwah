@@ -49,6 +49,13 @@
                             <label class="block text-sm font-medium mb-1" for="labels">Label (Pisahkan dengan koma)</label>
                             <input id="labels" class="form-input w-full" type="text" name="labels" value="{{ old('labels') }}" placeholder="Contoh: Fiqih, Sejarah, Umum" />
                         </div>
+
+                        <!-- Source -->
+                        <div>
+                            <label class="block text-sm font-medium mb-1" for="source">Sumber</label>
+                            <input id="source" class="form-input w-full" type="text" name="source" value="{{ old('source') }}" placeholder="Contoh: Kitab Ihya Ulumuddin" />
+                            @error('source') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
+                        </div>
                         
                         <!-- Status -->
                         <div>

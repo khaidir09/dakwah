@@ -45,6 +45,14 @@
                             <div class="prose max-w-none text-gray-600 dark:text-gray-300 text-justify">
                                 {!! nl2br(e($post->content)) !!}
                             </div>
+
+                            @if ($post->source)
+                                <div class="mt-8 pt-4 border-t border-gray-100 dark:border-gray-700">
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                                        <span class="font-semibold">Sumber:</span> {{ $post->source }}
+                                    </p>
+                                </div>
+                            @endif
                         </article>
 
                     </div>
