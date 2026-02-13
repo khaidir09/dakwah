@@ -40,15 +40,12 @@
                     <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 mb-4 text-justify">
                         {{ Str::limit(strip_tags($post->content), 100) }}
                     </p>
-                    <div class="flex flex-wrap justify-between gap-1">
+                    <div class="flex flex-wrap gap-1">
                         @foreach ($post->labels as $label)
                             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
                                 {{ $label->name }}
                             </span>
                         @endforeach
-                        <a href="{{ route('tulisan.detail', $post->slug) }}" class="inline-flex items-center text-xs font-medium text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400">
-                            Selengkapnya &rarr;
-                        </a>
                     </div>
                 </div>
             </div>
