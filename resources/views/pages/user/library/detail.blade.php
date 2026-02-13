@@ -67,9 +67,11 @@
                                 </div>
                             </div>
 
-                            <div class="mt-8 md:col-span-1">
-                                @livewire('pustaka-chat', ['pustakaId' => $library->id])
-                            </div>
+                            @if ($library->open_notebook_source_id)
+                                <div class="mt-8 md:col-span-1">
+                                    @livewire('pustaka-chat', ['pustakaId' => $library->id])
+                                </div>
+                            @endif
                         </article>
                     </div>
                 </div>
