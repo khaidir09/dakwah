@@ -111,6 +111,18 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('kelola-ramadhan', ManagedRamadhanController::class);
     Route::resource('kelola-tulisan', \App\Http\Controllers\PostController::class);
 
+    // Kelola Yayasan
+    Route::get('/kelola-yayasan/{id}', [\App\Http\Controllers\User\ManagedFoundationController::class, 'edit'])->name('kelola-yayasan.edit');
+    Route::put('/kelola-yayasan/{id}', [\App\Http\Controllers\User\ManagedFoundationController::class, 'update'])->name('kelola-yayasan.update');
+
+    // Kelola Artikel Ilmiah
+    Route::get('/kelola-artikel-ilmiah', [\App\Http\Controllers\User\ManagedFoundationController::class, 'listArticles'])->name('kelola-artikel.index');
+    Route::get('/kelola-artikel-ilmiah/create', [\App\Http\Controllers\User\ManagedFoundationController::class, 'createArticle'])->name('kelola-artikel.create');
+    Route::post('/kelola-artikel-ilmiah', [\App\Http\Controllers\User\ManagedFoundationController::class, 'storeArticle'])->name('kelola-artikel.store');
+    Route::get('/kelola-artikel-ilmiah/{id}/edit', [\App\Http\Controllers\User\ManagedFoundationController::class, 'editArticle'])->name('kelola-artikel.edit');
+    Route::put('/kelola-artikel-ilmiah/{id}', [\App\Http\Controllers\User\ManagedFoundationController::class, 'updateArticle'])->name('kelola-artikel.update');
+    Route::delete('/kelola-artikel-ilmiah/{id}', [\App\Http\Controllers\User\ManagedFoundationController::class, 'destroyArticle'])->name('kelola-artikel.destroy');
+
     // Route khusus onboarding majelis (hanya bisa diakses via link khusus)
     Route::get('/registrasi-majelis/baru', [ManagedMajelisController::class, 'register'])
         ->name('majelis.onboarding');
