@@ -74,6 +74,38 @@
                     </li>
                 @endif
             @endif
+            @if(Auth::user()->foundations->isNotEmpty())
+                @foreach(Auth::user()->foundations as $foundation)
+                    <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                        <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('kelola-yayasan.edit') && request()->route('id') == $foundation->id){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kelola-yayasan.edit', $foundation->id) }}">
+                            <svg class="shrink-0 @if(request()->routeIs('kelola-yayasan.edit') && request()->route('id') == $foundation->id) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M3 21l18 0" />
+                                <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" />
+                                <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+                                <path d="M10 9l4 0" />
+                                <path d="M12 7l0 4" />
+                            </svg>
+                            <span class="text-sm font-medium @if(request()->routeIs('kelola-yayasan.edit') && request()->route('id') == $foundation->id){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">
+                                {{ $foundation->name }}
+                            </span>
+                        </a>
+                    </li>
+                @endforeach
+
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('kelola-artikel*')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kelola-artikel.index') }}">
+                        <svg class="shrink-0 @if(request()->routeIs('kelola-artikel*')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M3 19c3.333 0 6 3 6 6" />
+                            <path d="M3 13c6.667 0 10 3.333 10 10" />
+                            <path d="M3 7c10 0 14 3.333 14 10" />
+                            <path d="M3 3c13.333 0 18 3.333 18 10" />
+                        </svg>
+                        <span class="text-sm font-medium @if(Route::is('kelola-artikel*')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Artikel Ilmiah</span>
+                    </a>
+                </li>
+            @endif
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('notifications')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="#">
                     <svg class="shrink-0 fill-current mr-2 @if(Route::is('notifications')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">
