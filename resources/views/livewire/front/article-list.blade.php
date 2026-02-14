@@ -21,10 +21,6 @@
                 <a href="{{ route('artikel.detail', $article->slug) }}" class="block">
                     @if ($article->cover_image)
                         <img src="{{ Storage::url($article->cover_image) }}" alt="{{ $article->title }}" class="w-full h-48 object-cover">
-                    @else
-                        <div class="w-full h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                            <span class="text-gray-400 dark:text-gray-500">No Image</span>
-                        </div>
                     @endif
                 </a>
                 <div class="p-4">
