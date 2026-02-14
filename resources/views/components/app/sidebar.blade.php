@@ -54,6 +54,17 @@
                             </div>
                         </a>
                     </li>
+                    <!-- Mitra Yayasan -->
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(request()->routeIs('foundations.*')){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
+                        <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('foundations.*')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('foundations.index') }}">
+                            <div class="flex items-center">
+                                <svg class="shrink-0 fill-current @if(request()->routeIs('foundations.*')){{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                    <path d="M14.6 2.1c-.2-.2-.5-.2-.7 0l-2 2-1.4-1.4c-.2-.2-.5-.2-.7 0l-2 2-1.4-1.4c-.2-.2-.5-.2-.7 0l-2 2L2.1 3.9c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4L4.3 9H2v5h12V9h2.3l3.6-3.7c.4-.4.4-1 0-1.4s-1-.4-1.4 0l-1.3 1.3-1.4-1.4c-.2-.2-.5-.2-.7 0l-2 2-1.4-1.4c-.2-.2-.5-.2-.7 0l-2 2-1.4-1.4zM4 12h8v2H4v-2z" />
+                                </svg>
+                                <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mitra Yayasan</span>
+                            </div>
+                        </a>
+                    </li>
                     <!-- Doa -->
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(in_array(Request::segment(1), ['doa'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
                         <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['doa'])){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('doa.index') }}">

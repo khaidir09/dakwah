@@ -19,4 +19,9 @@ class Foundation extends Model
     {
         return $this->hasMany(ScientificArticle::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'foundation_user');
+    }
 }
