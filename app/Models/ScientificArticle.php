@@ -41,7 +41,7 @@ class ScientificArticle extends Model
         return $this->hasMany(ArticleCitation::class, 'article_id');
     }
 
-    public function bibliographies()
+    public function bibliography()
     {
         return $this->hasMany(ArticleBibliography::class, 'article_id');
     }
