@@ -73,26 +73,6 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2" for="status">Status <span class="text-red-500">*</span></label>
-                        <select id="status" class="form-select w-full @error('status') is-invalid @enderror" name="status" required>
-                            <option value="DRAFT" {{ old('status') == 'DRAFT' ? 'selected' : '' }}>Draft</option>
-                            <option value="PUBLISHED" {{ old('status') == 'PUBLISHED' ? 'selected' : '' }}>Published</option>
-                        </select>
-                        @error('status')
-                            <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-2" for="published_at">Tanggal Terbit</label>
-                        <input id="published_at" class="form-input w-full @error('published_at') is-invalid @enderror" type="datetime-local" name="published_at" value="{{ old('published_at') }}"/>
-                        <p class="text-xs text-gray-500 mt-1">Biarkan kosong jika Draft.</p>
-                        @error('published_at')
-                            <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div>
                         <label class="block text-sm font-medium mb-2" for="cover_image">Gambar Sampul</label>
                         <input id="cover_image" class="form-input w-full @error('cover_image') is-invalid @enderror" type="file" name="cover_image" accept="image/*"/>
                         @error('cover_image')

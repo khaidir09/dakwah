@@ -87,7 +87,7 @@
                                 <path d="M12 7l0 4" />
                             </svg>
                             <span class="text-sm font-medium @if(request()->routeIs('kelola-yayasan.edit') && request()->route('id') == $foundation->id){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">
-                                {{ $foundation->name }}
+                                Kelola Yayasan
                             </span>
                         </a>
                     </li>

@@ -90,9 +90,7 @@ class ManagedFoundationController extends Controller
             'foundation_id' => 'required|exists:foundations,id',
             'author_name' => 'required|string|max:255',
             'category' => 'required|string|max:255',
-            'published_at' => 'nullable|date',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'required|in:DRAFT,PUBLISHED',
         ]);
 
         // Ensure user belongs to the foundation
@@ -164,7 +162,7 @@ class ManagedFoundationController extends Controller
         // Update slug if title changed? Let's keep slug stable usually, or update it.
         // For now, let's keep slug stable unless explicitly wanted, but usually title change implies slug change.
         if ($article->title !== $request->title) {
-             $data['slug'] = Str::slug($request->title) . '-' . time();
+            $data['slug'] = Str::slug($request->title) . '-' . time();
         }
 
         if ($request->hasFile('cover_image')) {
