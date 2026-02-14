@@ -59,8 +59,8 @@ Route::get('/manaqib/{slug}', [\App\Http\Controllers\User\BiographyController::c
 Route::get('/pustaka', [\App\Http\Controllers\User\LibraryController::class, 'list'])->name('pustaka-list');
 Route::get('/pustaka/{library}', [\App\Http\Controllers\User\LibraryController::class, 'detail'])->name('pustaka-detail');
 Route::get('/tulisan', [\App\Http\Controllers\User\PostController::class, 'index'])->name('tulisan.list');
-Route::get('/artikel/{slug}', [\App\Http\Controllers\User\ArticleController::class, 'detail'])->name('artikel.detail');
 Route::get('/tulisan/{slug}', [\App\Http\Controllers\User\PostController::class, 'detail'])->name('tulisan.detail');
+Route::get('/artikel/{slug}', [\App\Http\Controllers\User\ArticleController::class, 'detail'])->name('artikel.detail');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/email/verify', function () {
