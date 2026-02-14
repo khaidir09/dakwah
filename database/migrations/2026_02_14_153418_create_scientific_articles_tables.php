@@ -33,6 +33,14 @@ return new class extends Migration
             $table->string('cover_image')->nullable();
             $table->string('notebook_id')->nullable();
             $table->enum('status', ['DRAFT', 'PUBLISHED'])->default('DRAFT');
+            // views count
+            $table->unsignedBigInteger('views_count')->default(0);
+            // likes count
+            $table->unsignedBigInteger('likes_count')->default(0);
+            // shares count
+            $table->unsignedBigInteger('shares_count')->default(0);
+            // estimated_reading_time
+            $table->integer('estimated_reading_time')->default(0);
             $table->timestamps();
         });
 
@@ -62,8 +70,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('article_id')->constrained('scientific_articles')->onDelete('cascade');
             $table->text('full_citation');
-            // Menghubungkan ke tabel libraries jika ada (Optional)
-            $table->foreignId('kitab_id')->nullable()->constrained('libraries')->onDelete('set null');
             $table->timestamps();
         });
     }
