@@ -91,6 +91,17 @@ class ManagedFoundationController extends Controller
             'author_name' => 'required|string|max:255',
             'category' => 'required|string|max:255',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'sections' => 'nullable|array',
+            'sections.*.heading' => 'required|string|max:255',
+            'sections.*.content' => 'required|string',
+            'sections.*.order' => 'nullable|integer',
+            'citations' => 'nullable|array',
+            'citations.*.type' => 'required|in:QURAN,HADITH,KITAB,SAINS',
+            'citations.*.source_text_arabic' => 'nullable|string',
+            'citations.*.translation' => 'nullable|string',
+            'citations.*.reference' => 'required|string|max:255',
+            'bibliography' => 'nullable|array',
+            'bibliography.*.full_citation' => 'required|string',
         ]);
 
         // Ensure user belongs to the foundation
@@ -98,7 +109,7 @@ class ManagedFoundationController extends Controller
             abort(403, 'Anda tidak memiliki akses ke yayasan ini.');
         }
 
-        $data = $request->all();
+        $data = $request->except(['sections', 'citations', 'bibliography']);
         $data['slug'] = Str::slug($request->title) . '-' . time();
 
         if ($request->hasFile('cover_image')) {
@@ -108,7 +119,28 @@ class ManagedFoundationController extends Controller
             $data['cover_image'] = $path;
         }
 
-        ScientificArticle::create($data);
+        $article = ScientificArticle::create($data);
+
+        // Save Sections
+        if ($request->has('sections')) {
+            foreach ($request->sections as $sectionData) {
+                $article->sections()->create($sectionData);
+            }
+        }
+
+        // Save Citations
+        if ($request->has('citations')) {
+            foreach ($request->citations as $citationData) {
+                $article->citations()->create($citationData);
+            }
+        }
+
+        // Save Bibliography
+        if ($request->has('bibliography')) {
+            foreach ($request->bibliography as $biblioData) {
+                $article->bibliography()->create($biblioData);
+            }
+        }
 
         return redirect()->route('kelola-artikel.index')->with('message', 'Artikel berhasil ditambahkan!');
     }
@@ -118,7 +150,7 @@ class ManagedFoundationController extends Controller
      */
     public function editArticle($id)
     {
-        $article = ScientificArticle::findOrFail($id);
+        $article = ScientificArticle::with(['sections', 'citations', 'bibliography'])->findOrFail($id);
 
         // Authorization check: User must belong to the foundation of the article
         if (!Auth::user()->foundations()->where('foundations.id', $article->foundation_id)->exists()) {
@@ -151,6 +183,17 @@ class ManagedFoundationController extends Controller
             'published_at' => 'nullable|date',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:DRAFT,PUBLISHED',
+            'sections' => 'nullable|array',
+            'sections.*.heading' => 'required|string|max:255',
+            'sections.*.content' => 'required|string',
+            'sections.*.order' => 'nullable|integer',
+            'citations' => 'nullable|array',
+            'citations.*.type' => 'required|in:QURAN,HADITH,KITAB,SAINS',
+            'citations.*.source_text_arabic' => 'nullable|string',
+            'citations.*.translation' => 'nullable|string',
+            'citations.*.reference' => 'required|string|max:255',
+            'bibliography' => 'nullable|array',
+            'bibliography.*.full_citation' => 'required|string',
         ]);
 
         // Ensure user belongs to the new foundation (if changed)
@@ -158,9 +201,8 @@ class ManagedFoundationController extends Controller
             abort(403, 'Anda tidak memiliki akses ke yayasan ini.');
         }
 
-        $data = $request->except(['cover_image']);
-        // Update slug if title changed? Let's keep slug stable usually, or update it.
-        // For now, let's keep slug stable unless explicitly wanted, but usually title change implies slug change.
+        $data = $request->except(['cover_image', 'sections', 'citations', 'bibliography']);
+
         if ($article->title !== $request->title) {
             $data['slug'] = Str::slug($request->title) . '-' . time();
         }
@@ -178,6 +220,30 @@ class ManagedFoundationController extends Controller
         }
 
         $article->update($data);
+
+        // Sync Sections
+        $article->sections()->delete();
+        if ($request->has('sections')) {
+            foreach ($request->sections as $sectionData) {
+                $article->sections()->create($sectionData);
+            }
+        }
+
+        // Sync Citations
+        $article->citations()->delete();
+        if ($request->has('citations')) {
+            foreach ($request->citations as $citationData) {
+                $article->citations()->create($citationData);
+            }
+        }
+
+        // Sync Bibliography
+        $article->bibliography()->delete();
+        if ($request->has('bibliography')) {
+            foreach ($request->bibliography as $biblioData) {
+                $article->bibliography()->create($biblioData);
+            }
+        }
 
         return redirect()->route('kelola-artikel.index')->with('message', 'Artikel berhasil diperbarui!');
     }
