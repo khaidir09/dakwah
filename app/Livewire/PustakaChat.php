@@ -8,6 +8,7 @@ use App\Models\ChatSession;
 use Illuminate\Support\Facades\Auth;
 use App\Services\OpenNotebookService;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\RateLimiter;
 
 class PustakaChat extends Component
 {
@@ -53,6 +54,13 @@ class PustakaChat extends Component
 
         $this->validate(['question' => 'required|string|min:2']);
 
+        // Limit harian: 5 pertanyaan per user per hari
+        $rateLimitKey = 'pustaka-chat-limit:' . Auth::id() . ':' . now()->format('Y-m-d');
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 5)) {
+            $this->addError('question', 'Maaf, Anda telah mencapai batas 5 pertanyaan hari ini.');
+            return;
+        }
+
         // Ambil data Pustaka
         $pustaka = Library::find($this->pustakaId);
 
@@ -61,6 +69,9 @@ class PustakaChat extends Component
             session()->flash('error', 'Dokumen pustaka ini belum terhubung sepenuhnya ke sistem AI (ID tidak lengkap).');
             return;
         }
+
+        // Hit rate limiter
+        RateLimiter::hit($rateLimitKey, 86400);
 
         $this->isLoading = true;
 
@@ -129,8 +140,15 @@ class PustakaChat extends Component
 
     public function render()
     {
+        $remaining = 5;
+        if (Auth::check()) {
+             $rateLimitKey = 'pustaka-chat-limit:' . Auth::id() . ':' . now()->format('Y-m-d');
+             $remaining = max(0, 5 - RateLimiter::attempts($rateLimitKey));
+        }
+
         return view('livewire.pustaka-chat', [
-            'messages' => $this->messages
+            'messages' => $this->messages,
+            'remaining' => $remaining
         ]);
     }
 }
