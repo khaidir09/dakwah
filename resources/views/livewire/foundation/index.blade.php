@@ -1,4 +1,4 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-[96rem] mx-auto">
+<div>
     <!-- Page header -->
     <div class="sm:flex sm:justify-between sm:items-center mb-8">
         <!-- Left: Title -->
@@ -25,77 +25,96 @@
                 <svg class="fill-current shrink-0 xs:hidden" width="16" height="16" viewBox="0 0 16 16">
                     <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                 </svg>
-                <span class="max-xs:hidden">Add Foundation</span>
+                <span class="max-xs:hidden">Tambah Mitra Yayasan</span>
             </a>
         </div>
     </div>
 
+    @if (session()->has('message'))
+        <div x-show="open" x-data="{ open: true }" role="alert">
+            <div class="px-4 py-2 rounded-lg text-sm bg-green-500 text-white mb-4">
+                <div class="flex w-full justify-between items-start">
+                    <div class="flex">
+                        <svg class="shrink-0 fill-current opacity-80 mt-[3px] mr-3" width="16" height="16" viewBox="0 0 16 16">
+                            <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM7 11.4L3.6 8 5 6.6l2 2 4-4L12.4 6 7 11.4z" />
+                        </svg>
+                        <div>{{ session('message') }}</div>
+                    </div>
+                    <button class="opacity-60 hover:opacity-70 ml-3 mt-[3px]" @click="open = false">
+                        <div class="sr-only">Close</div>
+                        <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16">
+                            <path d="M7.95 6.536l4.242-4.243a1 1 0 111.415 1.414L9.364 7.95l4.243 4.242a1 1 0 11-1.415 1.415L7.95 9.364l-4.243 4.243a1 1 0 01-1.414-1.415L6.536 7.95 2.293 3.707a1 1 0 011.414-1.414L7.95 6.536z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Table -->
-    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl mb-8">
-        <header class="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
+    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl">
+        <header class="px-5 py-4">
             <h2 class="font-semibold text-gray-800 dark:text-gray-100">All Foundations <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $foundations->total() }}</span></h2>
         </header>
-        <div class="p-3">
-            <div class="overflow-x-auto">
-                <table class="table-auto w-full dark:text-gray-300">
-                    <thead class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700/20 border-t border-b border-gray-100 dark:border-gray-700/60">
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full dark:text-gray-300">
+                <thead class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700/20 border-t border-b border-gray-100 dark:border-gray-700/60">
+                    <tr>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">Nama Mitra</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">Website</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">Pengguna</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-right">Aksi</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm divide-y divide-gray-100 dark:divide-gray-700/60">
+                    @forelse ($foundations as $foundation)
                         <tr>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Name</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Website</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Users</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-right">Actions</div>
-                            </th>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="font-medium text-gray-800 dark:text-gray-100">{{ $foundation->name }}</div>
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left"><a class="text-sky-500 hover:underline" href="{{ $foundation->website_url }}" target="_blank">{{ $foundation->website_url }}</a></div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left">{{ $foundation->users->count() }} Pengguna</div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="flex items-center justify-end space-x-2">
+                                    <a href="{{ route('foundations.edit', $foundation->id) }}" class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 rounded-full">
+                                        <span class="sr-only">Edit</span>
+                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                            <path d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
+                                        </svg>
+                                    </a>
+                                    <button wire:click="delete({{ $foundation->id }})" wire:confirm="Are you sure you want to delete this foundation?" class="text-red-500 hover:text-red-600 rounded-full">
+                                        <span class="sr-only">Delete</span>
+                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                            <path d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody class="text-sm divide-y divide-gray-100 dark:divide-gray-700/60">
-                        @forelse ($foundations as $foundation)
-                            <tr>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800 dark:text-gray-100">{{ $foundation->name }}</div>
-                                    </div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left"><a class="text-sky-500 hover:underline" href="{{ $foundation->website_url }}" target="_blank">{{ $foundation->website_url }}</a></div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left">{{ $foundation->users_count }} Users</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                    <div class="flex items-center justify-end space-x-2">
-                                        <a href="{{ route('foundations.edit', $foundation->id) }}" class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 rounded-full">
-                                            <span class="sr-only">Edit</span>
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <path d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                                            </svg>
-                                        </a>
-                                        <button wire:click="delete({{ $foundation->id }})" wire:confirm="Are you sure you want to delete this foundation?" class="text-red-500 hover:text-red-600 rounded-full">
-                                            <span class="sr-only">Delete</span>
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                                <path d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center text-gray-500">
-                                    No foundations found.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center text-gray-500">
+                                No foundations found.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 

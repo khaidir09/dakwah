@@ -45,10 +45,10 @@
 
                     {{-- Foundation Selection --}}
                     <div>
-                        <label class="block text-sm font-medium mb-2" for="foundation_id">Yayasan <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium mb-2" for="foundation_id">Mitra <span class="text-red-500">*</span></label>
                         @if($foundations->count() > 1)
                             <select id="foundation_id" class="form-select w-full @error('foundation_id') is-invalid @enderror" name="foundation_id" required>
-                                <option value="">Pilih Yayasan</option>
+                                <option value="">Pilih Mitra</option>
                                 @foreach($foundations as $foundation)
                                     <option value="{{ $foundation->id }}" {{ old('foundation_id') == $foundation->id ? 'selected' : '' }}>{{ $foundation->name }}</option>
                                 @endforeach

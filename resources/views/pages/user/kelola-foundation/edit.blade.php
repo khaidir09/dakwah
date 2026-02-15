@@ -1,11 +1,11 @@
 <x-dashboard-layout>
     <div class="grow">
-        <form action="{{ route('kelola-yayasan.update', $foundation->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('kelola-mitra.update', $foundation->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <!-- Panel body -->
             <div class="p-6 space-y-6">
-                <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold mb-5">Kelola Yayasan</h2>
+                <h2 class="text-2xl text-gray-800 dark:text-gray-100 font-bold mb-5">Profil Mitra</h2>
                 @if (session('status'))
                     <div role="alert">
                         <div class="mb-4 px-4 py-2 rounded-lg text-sm bg-green-500 text-white">
@@ -14,7 +14,7 @@
                                     <svg class="shrink-0 fill-current opacity-80 mt-[3px] mr-3" width="16" height="16" viewBox="0 0 16 16">
                                         <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM7 11.4L3.6 8 5 6.6l2 2 4-4L12.4 6 7 11.4z" />
                                     </svg>
-                                    <div class="font-medium">Data Yayasan berhasil diperbarui.</div>
+                                    <div class="font-medium">Data profil berhasil diperbarui.</div>
                                 </div>
                             </div>
                         </div>
@@ -31,7 +31,7 @@
                 @endif
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium mb-2" for="name">Nama Yayasan <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium mb-2" for="name">Nama <span class="text-red-500">*</span></label>
                         <input id="name" class="form-input w-full @error('name') is-invalid @enderror" type="text" name="name" value="{{ old('name', $foundation->name) }}" required/>
                         @error('name')
                             <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
@@ -39,7 +39,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2" for="website_url">Website URL</label>
+                        <label class="block text-sm font-medium mb-2" for="website_url">Website / Sosmed</label>
                         <input id="website_url" class="form-input w-full @error('website_url') is-invalid @enderror" type="url" name="website_url" value="{{ old('website_url', $foundation->website_url) }}" placeholder="https://example.com" />
                         @error('website_url')
                             <div class="text-xs mt-1 text-red-500">{{ $message }}</div>

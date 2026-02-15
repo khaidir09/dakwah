@@ -113,8 +113,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('kelola-tulisan', \App\Http\Controllers\PostController::class);
 
     // Kelola Yayasan
-    Route::get('/kelola-yayasan/{id}', [\App\Http\Controllers\User\ManagedFoundationController::class, 'edit'])->name('kelola-yayasan.edit');
-    Route::put('/kelola-yayasan/{id}', [\App\Http\Controllers\User\ManagedFoundationController::class, 'update'])->name('kelola-yayasan.update');
+    Route::get('/kelola-mitra/{id}', [\App\Http\Controllers\User\ManagedFoundationController::class, 'edit'])->name('kelola-mitra.edit');
+    Route::put('/kelola-mitra/{id}', [\App\Http\Controllers\User\ManagedFoundationController::class, 'update'])->name('kelola-mitra.update');
 
     // Kelola Artikel Ilmiah
     Route::get('/kelola-artikel-ilmiah', [\App\Http\Controllers\User\ManagedFoundationController::class, 'listArticles'])->name('kelola-artikel.index');
