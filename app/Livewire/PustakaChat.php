@@ -44,6 +44,25 @@ class PustakaChat extends Component
         return $this->chatSession->messages()->oldest()->get();
     }
 
+    private function stripMarkdown($text)
+    {
+        // 1. Hapus Bold (**teks**) dan Italic (*teks*) - Sisakan isinya
+        $text = preg_replace('/(\*{1,2})(.*?)\1/', '$2', $text);
+
+        // 2. Hapus Header Markdown (# Judul)
+        $text = preg_replace('/^#+\s+/m', '', $text);
+
+        // 3. Hapus List Bullet (* Item atau - Item) di awal baris
+        $text = preg_replace('/^\s*[\*\-]\s+/m', '', $text);
+
+        $text = preg_replace('/\[(source|note|insight):[a-zA-Z0-9]+\]/', '', $text);
+
+        // 4. Hapus karakter Markdown sisa yang tidak diinginkan (opsional)
+        // $text = str_replace('*', '', $text); 
+
+        return trim($text);
+    }
+
     public function ask(OpenNotebookService $aiService)
     {
         // 1. Validasi
@@ -126,10 +145,13 @@ class PustakaChat extends Component
                 }
             }
 
+            // --- BERSIHKAN MARKDOWN DI SINI ---
+            $cleanMessage = $this->stripMarkdown($aiAnswer);
+
             // 6. Simpan Jawaban AI ke Database Lokal
             $this->chatSession->messages()->create([
                 'role' => 'ai',
-                'message' => $aiAnswer
+                'message' => $cleanMessage
             ]);
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -142,8 +164,8 @@ class PustakaChat extends Component
     {
         $remaining = 5;
         if (Auth::check()) {
-             $rateLimitKey = 'pustaka-chat-limit:' . Auth::id() . ':' . now()->format('Y-m-d');
-             $remaining = max(0, 5 - RateLimiter::attempts($rateLimitKey));
+            $rateLimitKey = 'pustaka-chat-limit:' . Auth::id() . ':' . now()->format('Y-m-d');
+            $remaining = max(0, 5 - RateLimiter::attempts($rateLimitKey));
         }
 
         return view('livewire.pustaka-chat', [
