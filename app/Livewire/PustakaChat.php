@@ -7,7 +7,6 @@ use Livewire\Component;
 use App\Models\ChatSession;
 use Illuminate\Support\Facades\Auth;
 use App\Services\OpenNotebookService;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\RateLimiter;
 
 class PustakaChat extends Component
@@ -75,8 +74,8 @@ class PustakaChat extends Component
 
         // Limit harian: 5 pertanyaan per user per hari
         $rateLimitKey = 'pustaka-chat-limit:' . Auth::id() . ':' . now()->format('Y-m-d');
-        if (RateLimiter::tooManyAttempts($rateLimitKey, 5)) {
-            $this->addError('question', 'Maaf, Anda telah mencapai batas 5 pertanyaan hari ini.');
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 10)) {
+            $this->addError('question', 'Maaf, Anda telah mencapai batas 10 pertanyaan hari ini.');
             return;
         }
 
@@ -162,10 +161,10 @@ class PustakaChat extends Component
 
     public function render()
     {
-        $remaining = 5;
+        $remaining = 10;
         if (Auth::check()) {
             $rateLimitKey = 'pustaka-chat-limit:' . Auth::id() . ':' . now()->format('Y-m-d');
-            $remaining = max(0, 5 - RateLimiter::attempts($rateLimitKey));
+            $remaining = max(0, 10 - RateLimiter::attempts($rateLimitKey));
         }
 
         return view('livewire.pustaka-chat', [
