@@ -22,8 +22,8 @@ class OpenNotebookService
         // Endpoint: POST /chat/sessions [6]
         $response = Http::post("{$this->baseUrl}/api/chat/sessions", [
             'notebook_id' => $notebookId,
-            // Opsional: Berikan nama agar mudah dilacak di dashboard admin
-            'name' => 'Session-' . uniqid(),
+            // Opsional: Berikan title agar mudah dilacak di dashboard admin
+            'title' => 'Session-' . uniqid(),
         ]);
 
         if ($response->successful()) {
@@ -42,10 +42,12 @@ class OpenNotebookService
      */
     public function sendMessage($sessionId, $message, $sourceId)
     {
-        // 1. Siapkan Context: Mapping Source ID ke Level 'full'
+        // 1. Siapkan Context: Mapping Source ID ke Level 'full content'
         // "Chat: Full-Content Context... AI sees complete source text"
         $contextPayload = [
-            $sourceId => 'full' // Instruksi agar AI membaca "Full Content" dari source ini
+            'sources' => [
+                $sourceId => 'full content' // Instruksi agar AI membaca "Full Content" dari source ini
+            ]
         ];
 
         // 2. Siapkan Payload Lengkap
