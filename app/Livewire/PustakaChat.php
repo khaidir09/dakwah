@@ -54,8 +54,6 @@ class PustakaChat extends Component
         // 3. Hapus List Bullet (* Item atau - Item) di awal baris
         $text = preg_replace('/^\s*[\*\-]\s+/m', '', $text);
 
-        $text = preg_replace('/\[(source|note|insight):[a-zA-Z0-9]+\]/', '', $text);
-
         // 4. Hapus karakter Markdown sisa yang tidak diinginkan (opsional)
         // $text = str_replace('*', '', $text); 
 

@@ -12,7 +12,7 @@
         </h3>
         @auth
             <div class="text-xs font-medium px-2 py-1 bg-gray-200 text-gray-600 rounded-full" title="Sisa Pertanyaan Hari Ini">
-                {{ $remaining ?? 0 }} / 5
+                {{ $remaining ?? 0 }} / 10
             </div>
         @endauth
     </div>
