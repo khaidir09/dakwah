@@ -91,6 +91,7 @@ class ManagedFoundationController extends Controller
             'author_name' => 'required|string|max:255',
             'category' => 'required|string|max:255',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'file_path' => 'nullable|mimes:pdf|max:10240',
             'sections' => 'nullable|array',
             'sections.*.heading' => 'required|string|max:255',
             'sections.*.content' => 'required|string',
@@ -117,6 +118,13 @@ class ManagedFoundationController extends Controller
             $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('public/articles/covers', $filename);
             $data['cover_image'] = $path;
+        }
+
+        if ($request->hasFile('file_path')) {
+            $file = $request->file('file_path');
+            $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('public/articles/files', $filename);
+            $data['file_path'] = $path;
         }
 
         $article = ScientificArticle::create($data);
@@ -182,6 +190,7 @@ class ManagedFoundationController extends Controller
             'category' => 'required|string|max:255',
             'published_at' => 'nullable|date',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'file_path' => 'nullable|mimes:pdf|max:10240',
             'status' => 'required|in:DRAFT,PUBLISHED',
             'sections' => 'nullable|array',
             'sections.*.heading' => 'required|string|max:255',
@@ -201,7 +210,7 @@ class ManagedFoundationController extends Controller
             abort(403, 'Anda tidak memiliki akses ke yayasan ini.');
         }
 
-        $data = $request->except(['cover_image', 'sections', 'citations', 'bibliography']);
+        $data = $request->except(['cover_image', 'file_path', 'sections', 'citations', 'bibliography']);
 
         if ($article->title !== $request->title) {
             $data['slug'] = Str::slug($request->title) . '-' . time();
@@ -217,6 +226,18 @@ class ManagedFoundationController extends Controller
             $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('public/articles/covers', $filename);
             $data['cover_image'] = $path;
+        }
+
+        if ($request->hasFile('file_path')) {
+            // Delete old file
+            if ($article->file_path) {
+                Storage::delete($article->file_path);
+            }
+
+            $file = $request->file('file_path');
+            $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('public/articles/files', $filename);
+            $data['file_path'] = $path;
         }
 
         $article->update($data);
@@ -261,6 +282,10 @@ class ManagedFoundationController extends Controller
 
         if ($article->cover_image) {
             Storage::delete($article->cover_image);
+        }
+
+        if ($article->file_path) {
+            Storage::delete($article->file_path);
         }
 
         $article->delete();
