@@ -128,6 +128,19 @@
                         @enderror
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium mb-2" for="file_path">File Artikel (PDF)</label>
+                         @if($article->file_path)
+                            <div class="mb-4">
+                                <a href="{{ Storage::url($article->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm underline">Lihat File Saat Ini</a>
+                            </div>
+                        @endif
+                        <input id="file_path" class="form-input w-full @error('file_path') is-invalid @enderror" type="file" name="file_path" accept="application/pdf"/>
+                        @error('file_path')
+                            <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </div>
 
                 {{-- Sections --}}

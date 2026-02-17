@@ -18,6 +18,7 @@ class ScientificArticle extends Model
         'category',
         'published_at',
         'cover_image',
+        'file_path',
         'notebook_id',
         'status',
     ];

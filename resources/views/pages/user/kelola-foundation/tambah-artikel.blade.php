@@ -102,6 +102,14 @@
                         @enderror
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium mb-2" for="file_path">File Artikel (PDF)</label>
+                        <input id="file_path" class="form-input w-full @error('file_path') is-invalid @enderror" type="file" name="file_path" accept="application/pdf"/>
+                        @error('file_path')
+                            <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </div>
 
                 {{-- Sections --}}
