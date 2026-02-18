@@ -71,7 +71,7 @@
                                                 <th class="px-6 py-4 w-20 text-center">Hari</th>
                                                 <th class="px-6 py-4 w-40">Tanggal</th>
                                                 <th class="px-6 py-4 w-32">Waktu</th>
-                                                <th class="px-6 py-4">Penceramah</th>
+                                                <th class="px-6 py-4 w-1 whitespace-nowrap">Penceramah</th>
                                                 <th class="px-6 py-4">Judul / Tema</th>
                                             </tr>
                                         </thead>
@@ -89,7 +89,7 @@
                                                     <td class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
                                                         {{ \Carbon\Carbon::parse($lecture->time)->format('H:i') }} WIB
                                                     </td>
-                                                    <td class="px-6 py-4">
+                                                    <td class="px-6 py-4 whitespace-nowrap">
                                                         @if($lecture->teacher)
                                                             <div class="flex items-center gap-3">
                                                                 @if($lecture->teacher->foto)
