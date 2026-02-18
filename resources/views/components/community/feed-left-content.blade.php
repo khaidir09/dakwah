@@ -77,6 +77,15 @@
                             </a>
                         </li>
                         <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                             <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('ramadhan-*')) bg-white dark:bg-gray-800 @endif" href="{{ route('ramadhan-list') }}">
+                                <svg class="shrink-0 @if(request()->routeIs('ramadhan-*')) text-emerald-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 3c.132 0 .263 0 .393 .006a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+                                </svg>
+                                <span class="text-sm font-medium @if(request()->routeIs('ramadhan-*')) text-emerald-500 @else text-gray-600 dark:text-gray-300 @endif">Jadwal Ramadhan</span>
+                            </a>
+                        </li>
+                        <li class="mr-0.5 md:mr-0 md:mb-0.5">
                              <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('wirid*')) bg-white dark:bg-gray-800 @endif" href="{{ route('wirid-list') }}">
                                 <svg class="shrink-0 @if(request()->routeIs('wirid*')) text-emerald-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
