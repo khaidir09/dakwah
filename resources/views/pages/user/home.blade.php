@@ -23,6 +23,9 @@
                                 <livewire:daily-surah />
                             </div>
 
+                            <!-- Jadwal Ramadhan Hari Ini -->
+                            <livewire:home-ramadhan-today />
+
                             <!-- Title -->
                             <header>
                                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Majelis Hari Ini</h1>
