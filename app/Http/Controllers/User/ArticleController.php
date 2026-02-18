@@ -13,10 +13,12 @@ class ArticleController extends Controller
     {
         $article = ScientificArticle::where('status', 'PUBLISHED')
             ->where('slug', $slug)
-            ->with(['foundation', 'sections' => function($q) {
+            ->with(['foundation', 'sections' => function ($q) {
                 $q->orderBy('order');
             }, 'citations', 'bibliography'])
             ->firstOrFail();
+
+        $article->increment('views_count');
 
         return view('pages.user.article.detail', compact('article'));
     }
