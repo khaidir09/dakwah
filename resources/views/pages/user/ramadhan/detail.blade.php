@@ -91,13 +91,13 @@
                                                         @if($lecture->teacher)
                                                             <div class="flex items-center gap-3">
                                                                 @if($lecture->teacher->foto)
-                                                                     <img class="w-8 h-8 rounded-full object-cover" src="{{ \Illuminate\Support\Facades\Storage::url($lecture->teacher->foto) }}" alt="{{ $lecture->teacher->name }}">
+                                                                    <img class="w-8 h-8 rounded-full object-cover" src="{{ \Illuminate\Support\Facades\Storage::url($lecture->teacher->foto) }}" alt="{{ $lecture->teacher->name }}">
                                                                 @else
-                                                                     <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 text-xs font-bold">
+                                                                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 text-xs font-bold">
                                                                         {{ substr($lecture->teacher->name, 0, 1) }}
-                                                                     </div>
+                                                                    </div>
                                                                 @endif
-                                                                <span class="text-sm font-semibold text-gray-800 dark:text-gray-200">{{ $lecture->teacher->name }}</span>
+                                                                <a href="{{ route('guru-detail', $lecture->teacher) }}" class="text-sm font-semibold text-gray-800 dark:text-gray-200">{{ $lecture->teacher->name }}</a>
                                                             </div>
                                                         @else
                                                             <span class="text-sm font-semibold text-gray-800 dark:text-gray-200">{{ $lecture->custom_speaker_name ?? '-' }}</span>
