@@ -65,6 +65,9 @@ Route::get('/artikel/{slug}/download', [\App\Http\Controllers\User\ArticleContro
     ->name('artikel.download')
     ->middleware('auth');
 
+Route::get('/jadwal-ramadhan', [\App\Http\Controllers\User\RamadhanController::class, 'index'])->name('ramadhan-list');
+Route::get('/jadwal-ramadhan/{id}', [\App\Http\Controllers\User\RamadhanController::class, 'detail'])->name('ramadhan-detail');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
