@@ -70,9 +70,10 @@
                                             <tr>
                                                 <th class="px-6 py-4 w-20 text-center">Hari</th>
                                                 <th class="px-6 py-4 w-40">Tanggal</th>
-                                                <th class="px-6 py-4 w-32">Waktu</th>
-                                                <th class="px-6 py-4">Penceramah</th>
-                                                <th class="px-6 py-4">Judul / Tema</th>
+                                                <th class="px-6 py-4 w-1 whitespace-nowrap">Penceramah</th>
+                                                @if ($schedule->lectures->whereNotNull('title')->count() > 0)
+                                                    <th class="px-6 py-4">Judul / Tema</th>
+                                                @endif
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-100 dark:divide-gray-700/60">
@@ -84,12 +85,9 @@
                                                         </span>
                                                     </td>
                                                     <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 whitespace-nowrap">
-                                                        {{ \Carbon\Carbon::parse($schedule->gregorian_start_date)->addDays($lecture->day - 1)->translatedFormat('l, d M Y') }}
+                                                        {{ \Carbon\Carbon::parse($schedule->gregorian_start_date)->addDays($lecture->day - 1)->locale('id')->translatedFormat('l, d M Y') }}
                                                     </td>
-                                                    <td class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
-                                                        {{ \Carbon\Carbon::parse($lecture->time)->format('H:i') }} WIB
-                                                    </td>
-                                                    <td class="px-6 py-4">
+                                                    <td class="px-6 py-4 whitespace-nowrap">
                                                         @if($lecture->teacher)
                                                             <div class="flex items-center gap-3">
                                                                 @if($lecture->teacher->foto)
@@ -105,9 +103,11 @@
                                                             <span class="text-sm font-semibold text-gray-800 dark:text-gray-200">{{ $lecture->custom_speaker_name ?? '-' }}</span>
                                                         @endif
                                                     </td>
-                                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                                        {{ $lecture->title ?? '-' }}
-                                                    </td>
+                                                    @if ($schedule->lectures->whereNotNull('title')->count() > 0)
+                                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                                                            {{ $lecture->title ?? '-' }}
+                                                        </td>
+                                                    @endif
                                                 </tr>
                                             @empty
                                                 <tr>

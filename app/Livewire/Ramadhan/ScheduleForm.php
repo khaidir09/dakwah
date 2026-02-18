@@ -42,7 +42,7 @@ class ScheduleForm extends Component
 
             // Load existing lectures
             $lectures = $schedule->lectures()->orderBy('day')->get()->keyBy('day');
-            
+
             for ($i = 1; $i <= 30; $i++) {
                 if (isset($lectures[$i])) {
                     $l = $lectures[$i];
@@ -61,7 +61,7 @@ class ScheduleForm extends Component
             // New Schedule
             $this->hijri_year = Carbon::now()->year + 579;
             $this->gregorian_start_date = Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d');
-            
+
             // Set assembly_id
             if ($assembly_id) {
                 $this->assembly_id = $assembly_id;
@@ -72,7 +72,7 @@ class ScheduleForm extends Component
                     $this->assembly_id = $userAssembly->id;
                 }
             }
-            
+
             for ($i = 1; $i <= 30; $i++) {
                 $this->days[$i] = $this->emptyDay($i);
             }
@@ -153,7 +153,7 @@ class ScheduleForm extends Component
         }
 
         session()->flash('message', 'Jadwal Ramadhan berhasil disimpan.');
-        
+
         if ($this->isAdmin) {
             return redirect()->route('ramadhan-schedules.index');
         } else {
@@ -165,11 +165,11 @@ class ScheduleForm extends Component
     {
         $assemblies = [];
         if ($this->isAdmin) {
-            $assemblies = Assembly::orderBy('nama_majelis')->get();
+            $assemblies = Assembly::whereIn('tipe', ['Mesjid', 'Langgar'])->orderBy('nama_majelis')->get();
         }
 
         return view('livewire.ramadhan.schedule-form', [
-            'teachers' => Teacher::orderBy('name')->get(['id', 'name']),
+            'teachers' => Teacher::where('wafat_hijriah_year', '=', null)->orderBy('name')->get(['id', 'name']),
             'assemblies' => $assemblies,
         ]);
     }
