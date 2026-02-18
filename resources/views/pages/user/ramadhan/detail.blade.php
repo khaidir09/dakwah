@@ -43,9 +43,9 @@
                                                 <span class="text-emerald-600 dark:text-emerald-400 font-semibold">{{ $schedule->assembly->nama_majelis }}</span>
                                                 <span class="text-gray-300 dark:text-gray-600">•</span>
                                                 <span class="text-gray-500 dark:text-gray-400">{{ $schedule->hijri_year }} H</span>
-                                                @if($schedule->assembly->city)
+                                                @if($schedule->assembly->district)
                                                     <span class="text-gray-300 dark:text-gray-600">•</span>
-                                                    <span class="text-gray-500 dark:text-gray-400">{{ $schedule->assembly->city->name }}</span>
+                                                    <span class="text-gray-500 dark:text-gray-400">{{ $schedule->assembly->district->name }}</span>
                                                 @endif
                                             </div>
                                         </div>

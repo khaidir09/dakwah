@@ -41,7 +41,7 @@
                                                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 line-clamp-1 text-sm md:text-base">{{ $schedule->assembly->nama_majelis }}</h3>
                                                     <p class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
                                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                                        {{ $schedule->assembly->city->name ?? 'Lokasi tidak tersedia' }}
+                                                        {{ $schedule->assembly->district->name ?? 'Lokasi tidak tersedia' }}
                                                     </p>
                                                 </div>
                                             </div>
