@@ -40,7 +40,8 @@ class MajelisController extends Controller
             'nama_majelis' => 'required|string|max:255',
             'tipe' => 'nullable|string|in:Majelis,Mesjid,Langgar,Musholla',
             'deskripsi' => 'required|string',
-            'teacher_id' => 'required|exists:teachers,id',
+            'teacher_id' => 'nullable|required_without:custom_leader_name|exists:teachers,id',
+            'custom_leader_name' => 'nullable|required_without:teacher_id|string|max:255',
             'alamat' => 'required|string',
             'maps' => 'nullable|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
@@ -49,6 +50,13 @@ class MajelisController extends Controller
             'district' => 'nullable|string|max:20',
             'village' => 'nullable|string|max:20',
         ]);
+
+        // Logic to ensure only one is set
+        if (!empty($validatedData['teacher_id'])) {
+            $validatedData['custom_leader_name'] = null;
+        } else {
+            $validatedData['teacher_id'] = null;
+        }
 
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
@@ -85,6 +93,9 @@ class MajelisController extends Controller
             $validatedData['village']
         );
 
+        // Fill legacy 'guru' field to satisfy NOT NULL constraint
+        $validatedData['guru'] = '-';
+
         $assembly = new Assembly($validatedData);
         $assembly->save();
 
@@ -119,7 +130,8 @@ class MajelisController extends Controller
             'nama_majelis' => 'required|string|max:255',
             'tipe' => 'nullable|string|in:Majelis,Mesjid,Langgar,Musholla',
             'deskripsi'    => 'required|string',
-            'teacher_id'   => 'required|exists:teachers,id',
+            'teacher_id'   => 'nullable|required_without:custom_leader_name|exists:teachers,id',
+            'custom_leader_name' => 'nullable|required_without:teacher_id|string|max:255',
             'alamat'       => 'required|string',
             'maps'         => 'required|string|max:255',
             'gambar'       => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
@@ -128,6 +140,13 @@ class MajelisController extends Controller
             'district' => 'nullable|string|max:20',
             'village' => 'nullable|string|max:20',
         ]);
+
+        // Logic to ensure only one is set
+        if (!empty($validatedData['teacher_id'])) {
+            $validatedData['custom_leader_name'] = null;
+        } else {
+            $validatedData['teacher_id'] = null;
+        }
 
         $majelis = Assembly::findOrFail($id);
 

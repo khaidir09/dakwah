@@ -57,17 +57,36 @@
                             @enderror
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-2" for="teacher_id">Nama Guru <span class="text-red-500">*</span></label>
-                            <select id="teacher_id" class="form-select w-full @error('teacher_id') is-invalid @enderror" name="teacher_id" required>
-                                <option value="">Pilih Guru</option>
-                                @foreach($teachers as $item)
-                                    <option value="{{ $item->id }}" @if($item->id == $majelis->teacher_id) selected @endif>{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('teacher_id')
-                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                            @enderror
+                        <div x-data="{ manual: {{ old('custom_leader_name', $majelis->custom_leader_name) ? 'true' : 'false' }} }">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-sm font-medium" for="teacher_id">
+                                    <span x-text="manual ? 'Nama Pimpinan (Manual)' : 'Nama Guru'"></span>
+                                    <span class="text-red-500">*</span>
+                                </label>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="manual_toggle" x-model="manual" class="form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="manual_toggle" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Input Manual?</label>
+                                </div>
+                            </div>
+
+                            <div x-show="!manual">
+                                <select id="teacher_id" class="form-select w-full @error('teacher_id') is-invalid @enderror" name="teacher_id" :disabled="manual">
+                                    <option value="">Pilih Guru</option>
+                                    @foreach($teachers as $item)
+                                        <option value="{{ $item->id }}" @if($item->id == $majelis->teacher_id) selected @endif>{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('teacher_id')
+                                    <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div x-show="manual">
+                                <input id="custom_leader_name" class="form-input w-full @error('custom_leader_name') is-invalid @enderror" type="text" name="custom_leader_name" value="{{ old('custom_leader_name', $majelis->custom_leader_name) }}" placeholder="Masukkan nama pimpinan..." :disabled="!manual" />
+                                @error('custom_leader_name')
+                                    <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <div>
