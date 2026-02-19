@@ -94,4 +94,9 @@ class Assembly extends Model
     {
         return $this->belongsToMany(User::class, 'assembly_user');
     }
+
+    public function getLeaderNameAttribute()
+    {
+        return $this->teacher?->name ?? $this->custom_leader_name;
+    }
 }

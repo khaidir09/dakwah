@@ -76,6 +76,7 @@ class Majelis extends Component
 
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('nama_majelis', 'like', $searchTerm)
+                    ->orWhere('custom_leader_name', 'like', $searchTerm)
                     ->orWhereHas('teacher', function ($teacherQuery) use ($searchTerm) {
                         $teacherQuery->where('name', 'like', $searchTerm);
                     });
