@@ -240,7 +240,7 @@
                                         <aside class="xl:min-w-56 xl:w-56 space-y-3">
                                             <div class="text-sm">
                                                 <h3 class="font-medium text-gray-800 dark:text-gray-100">Pimpinan</h3>
-                                                <div>{{$assembly->teacher->name }}</div>
+                                                <div>{{$assembly->teacher->name ?? $assembly->leader_name }}</div>
                                             </div>
                                             <div class="text-sm">
                                                 <h3 class="font-medium text-gray-800 dark:text-gray-100">Kontak Penanggung Jawab</h3>

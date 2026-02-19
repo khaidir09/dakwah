@@ -93,9 +93,6 @@ class MajelisController extends Controller
             $validatedData['village']
         );
 
-        // Fill legacy 'guru' field to satisfy NOT NULL constraint
-        $validatedData['guru'] = '-';
-
         $assembly = new Assembly($validatedData);
         $assembly->save();
 
