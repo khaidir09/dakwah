@@ -30,7 +30,7 @@ class HomeUpcomingHaul extends Component
                 // Query 2: Full Next Month
                 // Handle Wrap Around (12 -> 1)
                 $nextMonth = ($month == 12) ? 1 : $month + 1;
-                
+
                 $nextMonthHauls = Teacher::where('wafat_hijriah_month', $nextMonth)
                     ->orderBy('wafat_hijriah_day', 'asc')
                     ->get();
@@ -58,9 +58,9 @@ class HomeUpcomingHaul extends Component
         if (preg_match('/^(\d+)\s+(.+)$/', trim($clean), $matches)) {
             $day = (int)$matches[1];
             $monthStr = trim($matches[2]);
-            
+
             $monthNum = $this->getMonthNumber(strtolower($monthStr));
-            
+
             if ($monthNum) {
                 return ['day' => $day, 'month' => $monthNum];
             }
@@ -79,12 +79,12 @@ class HomeUpcomingHaul extends Component
             'jumadil akhir' => 6,
             'rajab' => 7,
             'syakban' => 8,
-            'ramadhan' => 9,
+            'ramadan' => 9,
             'syawal' => 10,
             'zulkaidah' => 11,
             'zulhijah' => 12,
         ];
-        
+
         // Exact match first
         if (isset($months[$name])) {
             return $months[$name];
@@ -92,9 +92,9 @@ class HomeUpcomingHaul extends Component
 
         // Partial match
         foreach ($months as $key => $val) {
-             if (str_contains($name, $key)) {
-                 return $val;
-             }
+            if (str_contains($name, $key)) {
+                return $val;
+            }
         }
         return null;
     }
@@ -114,12 +114,13 @@ class HomeUpcomingHaul extends Component
                         $fullDate = $data['hijr']['today'];
                         $parts = explode(',', $fullDate);
                         if (count($parts) > 1) {
-                            return trim($parts[1]); 
+                            return trim($parts[1]);
                         }
                         return $fullDate;
                     }
                 }
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
             return 'Tanggal Hijriah Tidak Tersedia';
         });
     }
