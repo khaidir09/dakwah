@@ -16,7 +16,6 @@ class RamadhanDailyLecture extends Model
         'teacher_id',
         'custom_speaker_name',
         'title',
-        'time',
     ];
 
     public function schedule()

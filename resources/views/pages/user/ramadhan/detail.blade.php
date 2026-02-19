@@ -47,6 +47,10 @@
                                                     <span class="text-gray-300 dark:text-gray-600">•</span>
                                                     <span class="text-gray-500 dark:text-gray-400">{{ $schedule->assembly->district->name }}</span>
                                                 @endif
+                                                @if($schedule->time)
+                                                    <span class="text-gray-300 dark:text-gray-600">•</span>
+                                                    <span class="text-gray-500 dark:text-gray-400">Pukul {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}</span>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>

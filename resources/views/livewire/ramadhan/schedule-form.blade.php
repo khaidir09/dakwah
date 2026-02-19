@@ -34,6 +34,12 @@
             @error('gregorian_start_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
         </div>
 
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Waktu Pelaksanaan</label>
+            <input type="time" wire:model="time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50">
+            @error('time') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+        </div>
+
         <div class="md:col-span-2">
             <label class="block text-sm font-medium text-gray-700">Judul (Opsional)</label>
             <input type="text" wire:model="title" placeholder="Contoh: Kuliah Shubuh Masjid Agung" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50">
@@ -62,7 +68,6 @@
                 <tr>
                     <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">Hari</th>
                     <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">Tanggal</th>
-                    <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24">Waktu</th>
                     <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penceramah (Guru)</th>
                     <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Atau Nama Custom</th>
                     <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Topik / Judul</th>
@@ -80,9 +85,6 @@
                             @else
                                 -
                             @endif
-                        </td>
-                        <td class="px-3 py-2 whitespace-nowrap">
-                            <input type="time" wire:model="days.{{ $index }}.time" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 text-sm">
                         </td>
                         <td class="px-3 py-2">
                             <select wire:model="days.{{ $index }}.teacher_id" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 text-sm">
