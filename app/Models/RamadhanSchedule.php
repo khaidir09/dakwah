@@ -16,6 +16,7 @@ class RamadhanSchedule extends Model
         'title',
         'description',
         'is_active',
+        'time',
     ];
 
     protected $casts = [

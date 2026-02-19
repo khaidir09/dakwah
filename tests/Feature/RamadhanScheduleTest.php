@@ -18,13 +18,13 @@ class RamadhanScheduleTest extends TestCase
             'gregorian_start_date' => '2025-03-01',
             'title' => 'Test Schedule',
             'is_active' => true,
+            'time' => '04:30:00',
         ]);
 
         $lecture = RamadhanDailyLecture::create([
             'ramadhan_schedule_id' => $schedule->id,
             'day' => 1,
             'title' => 'First Day',
-            'time' => '04:30:00',
         ]);
 
         // Reload to ensure relationship can be fetched

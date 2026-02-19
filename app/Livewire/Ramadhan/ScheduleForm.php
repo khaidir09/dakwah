@@ -19,6 +19,7 @@ class ScheduleForm extends Component
     public $title;
     public $description;
     public $is_active = true;
+    public $time = '04:30';
     public $isAdmin = false;
 
     // Array to hold the 30 days schedule
@@ -39,6 +40,7 @@ class ScheduleForm extends Component
             $this->title = $schedule->title;
             $this->description = $schedule->description;
             $this->is_active = $schedule->is_active;
+            $this->time = Carbon::parse($schedule->time)->format('H:i');
 
             // Load existing lectures
             $lectures = $schedule->lectures()->orderBy('day')->get()->keyBy('day');
@@ -51,7 +53,6 @@ class ScheduleForm extends Component
                         'teacher_id' => $l->teacher_id,
                         'custom_speaker_name' => $l->custom_speaker_name,
                         'title' => $l->title,
-                        'time' => Carbon::parse($l->time)->format('H:i'),
                     ];
                 } else {
                     $this->days[$i] = $this->emptyDay($i);
@@ -86,7 +87,6 @@ class ScheduleForm extends Component
             'teacher_id' => null,
             'custom_speaker_name' => '',
             'title' => '',
-            'time' => '04:30',
         ];
     }
 
@@ -101,7 +101,7 @@ class ScheduleForm extends Component
             'days.*.teacher_id' => 'nullable|exists:teachers,id',
             'days.*.custom_speaker_name' => 'nullable|string',
             'days.*.title' => 'nullable|string',
-            'days.*.time' => 'required',
+            'time' => 'required',
         ];
     }
 
@@ -116,6 +116,7 @@ class ScheduleForm extends Component
             'title' => $this->title,
             'description' => $this->description,
             'is_active' => $this->is_active,
+            'time' => $this->time,
         ];
 
         if ($this->scheduleId) {
@@ -147,7 +148,6 @@ class ScheduleForm extends Component
                     'teacher_id' => $dayData['teacher_id'] ?: null,
                     'custom_speaker_name' => $dayData['custom_speaker_name'],
                     'title' => $dayData['title'],
-                    'time' => $dayData['time'],
                 ]);
             }
         }
