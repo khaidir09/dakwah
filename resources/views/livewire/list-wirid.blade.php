@@ -29,6 +29,7 @@
         <div class="w-full md:w-1/3">
              <select wire:model.live="waktu" class="form-select w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 text-gray-800 dark:text-gray-300 rounded-md shadow-sm focus:border-emerald-300 focus:ring focus:ring-emerald-200 focus:ring-opacity-50">
                  <option value="">Semua Waktu</option>
+                 <option value="Berbuka Puasa">Berbuka Puasa</option>
                  <option value="Seharian">Seharian</option>
                  <option value="Pagi & Petang">Pagi & Petang</option>
                  <option value="Ba'da Sholat">Ba'da Sholat</option>
