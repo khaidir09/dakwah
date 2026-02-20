@@ -12,7 +12,7 @@ class RamadhanController extends Controller
     {
         $schedules = RamadhanSchedule::with(['assembly', 'assembly.city', 'assembly.district'])
             ->where('is_active', true)
-            ->latest()
+            ->orderBy('time')
             ->paginate(12);
 
         return view('pages.user.ramadhan.index', compact('schedules'));
@@ -20,7 +20,7 @@ class RamadhanController extends Controller
 
     public function detail($id)
     {
-        $schedule = RamadhanSchedule::with(['assembly', 'assembly.city', 'lectures' => function($query) {
+        $schedule = RamadhanSchedule::with(['assembly', 'assembly.city', 'lectures' => function ($query) {
             $query->orderBy('day');
         }, 'lectures.teacher'])
             ->where('is_active', true)

@@ -29,12 +29,12 @@ class HomeRamadhanToday extends Component
             // We don't strictly cap at 30 because some might have extended schedules,
             // but usually Ramadhan is 29/30. The DB query will just return empty if day doesn't exist.
             if ($dayIndex > 0) {
-                 $scheduleDayMap[$schedule->id] = $dayIndex;
+                $scheduleDayMap[$schedule->id] = $dayIndex;
             }
         }
 
         if (empty($scheduleDayMap)) {
-             return view('livewire.home-ramadhan-today', ['lectures' => collect()]);
+            return view('livewire.home-ramadhan-today', ['lectures' => collect()]);
         }
 
         // 3. Query Lectures
@@ -44,11 +44,14 @@ class HomeRamadhanToday extends Component
                 foreach ($scheduleDayMap as $scheduleId => $day) {
                     $query->orWhere(function ($q) use ($scheduleId, $day) {
                         $q->where('ramadhan_schedule_id', $scheduleId)
-                          ->where('day', $day);
+                            ->where('day', $day);
                     });
                 }
             })
-            ->get();
+            ->get()
+            ->sortBy(function ($lecture) {
+                return $lecture->schedule->time;
+            });
 
         return view('livewire.home-ramadhan-today', [
             'lectures' => $lectures,
