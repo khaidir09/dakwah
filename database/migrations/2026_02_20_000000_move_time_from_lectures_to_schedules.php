@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('ramadhan_schedules', function (Blueprint $table) {
-            $table->time('time')->default('04:30:00')->after('gregorian_start_date');
+            $table->time('time')->default('05:30:00')->after('gregorian_start_date');
         });
 
         // Migrate data
@@ -42,13 +42,13 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('ramadhan_daily_lectures', function (Blueprint $table) {
-            $table->time('time')->default('04:30:00');
+            $table->time('time')->default('05:30:00');
         });
 
         // Migrate data back
         $schedules = DB::table('ramadhan_schedules')->get();
         foreach ($schedules as $schedule) {
-             DB::table('ramadhan_daily_lectures')
+            DB::table('ramadhan_daily_lectures')
                 ->where('ramadhan_schedule_id', $schedule->id)
                 ->update(['time' => $schedule->time]);
         }

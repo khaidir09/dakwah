@@ -63,7 +63,7 @@
                                 <div class="block flex-1 text-center text-sm text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200 font-medium px-3 py-4 group" href="#">
                                     <div class="flex items-center justify-center">
                                     <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 24 24"><rect x="6" width="2" height="5" fill="rgba(75, 85, 99, 1)" stroke-width="0" data-color="color-2"></rect><rect x="16" width="2" height="5" fill="rgba(75, 85, 99, 1)" stroke-width="0" data-color="color-2"></rect><path d="m20,3H4c-1.654,0-3,1.346-3,3v12c0,1.654,1.346,3,3,3h16c1.654,0,3-1.346,3-3V6c0-1.654-1.346-3-3-3Zm0,16H4c-.551,0-1-.448-1-1v-9h18v9c0,.552-.449,1-1,1Z" stroke-width="0" fill="rgba(75, 85, 99, 1)"></path></svg>
-                                        <span>{{ $lecture->time }} WITA</span>
+                                        <span>{{ \Carbon\Carbon::parse($lecture->schedule->time)->format('H:i') }} WITA</span>
                                     </div>
                                 </div>
                             </div>

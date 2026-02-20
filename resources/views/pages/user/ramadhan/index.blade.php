@@ -8,9 +8,7 @@
             <div class="md:flex flex-1">
 
                 <!-- Left content -->
-                <div class="hidden md:block w-full md:w-60 mb-8 md:mb-0">
-                     <x-community.feed-left-content />
-                </div>
+                <x-community.feed-left-content />
 
                 <!-- Middle content -->
                 <div class="flex-1 md:ml-8 xl:mx-4 2xl:mx-8">
@@ -56,7 +54,7 @@
 
                                         <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 dark:border-gray-700/60">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                                {{ $schedule->hijri_year }} H
+                                                {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }} WITA
                                             </span>
                                             <a href="{{ route('ramadhan-detail', $schedule->id) }}" class="inline-flex items-center text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors duration-150">
                                                 Lihat Jadwal

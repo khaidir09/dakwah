@@ -19,7 +19,7 @@ class ScheduleForm extends Component
     public $title;
     public $description;
     public $is_active = true;
-    public $time = '04:30';
+    public $time = '05:30';
     public $isAdmin = false;
 
     // Array to hold the 30 days schedule
@@ -30,7 +30,7 @@ class ScheduleForm extends Component
         // Determine if user is admin (Super Admin)
         // Adjust this logic based on your actual permission system
         $user = Auth::user();
-        $this->isAdmin = $user && ($user->hasRole('Super Admin') || $user->email === 'admin@example.com'); // Fallback check or verify Role existence
+        $this->isAdmin = $user && ($user->hasRole('Super Admin')); // Fallback check or verify Role existence
 
         if ($schedule) {
             $this->scheduleId = $schedule->id;
@@ -60,7 +60,7 @@ class ScheduleForm extends Component
             }
         } else {
             // New Schedule
-            $this->hijri_year = Carbon::now()->year + 579;
+            $this->hijri_year = Carbon::now()->year - 579;
             $this->gregorian_start_date = Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d');
 
             // Set assembly_id

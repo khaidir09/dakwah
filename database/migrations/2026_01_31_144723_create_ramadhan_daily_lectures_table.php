@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('teacher_id')->nullable()->constrained('teachers')->nullOnDelete();
             $table->string('custom_speaker_name')->nullable();
             $table->string('title')->nullable();
-            $table->time('time')->default('04:30:00');
+            $table->time('time')->default('05:30:00');
             $table->timestamps();
         });
     }

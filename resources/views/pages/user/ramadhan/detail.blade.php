@@ -8,9 +8,7 @@
             <div class="md:flex flex-1">
 
                  <!-- Left content -->
-                 <div class="hidden md:block w-full md:w-60 mb-8 md:mb-0">
-                    <x-community.feed-left-content />
-               </div>
+                <x-community.feed-left-content />
 
                 <!-- Middle content -->
                 <div class="flex-1 md:ml-8 xl:mx-4 2xl:mx-8">
@@ -49,7 +47,7 @@
                                                 @endif
                                                 @if($schedule->time)
                                                     <span class="text-gray-300 dark:text-gray-600">•</span>
-                                                    <span class="text-gray-500 dark:text-gray-400">Pukul {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}</span>
+                                                    <span class="text-gray-500 dark:text-gray-400">Pukul {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }} WITA</span>
                                                 @endif
                                             </div>
                                         </div>
