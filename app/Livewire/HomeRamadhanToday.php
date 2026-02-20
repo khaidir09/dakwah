@@ -48,7 +48,10 @@ class HomeRamadhanToday extends Component
                     });
                 }
             })
-            ->get();
+            ->get()
+            ->sortBy(function ($lecture) {
+                return $lecture->schedule->time;
+            });
 
         return view('livewire.home-ramadhan-today', [
             'lectures' => $lectures,
