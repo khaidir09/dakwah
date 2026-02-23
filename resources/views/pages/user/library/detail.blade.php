@@ -33,12 +33,21 @@
 
                                     <div class="mt-6">
                                         @if($library->file_path)
-                                            <a href="{{ Storage::url($library->file_path) }}" target="_blank" class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white">
-                                                <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2" viewBox="0 0 16 16">
-                                                    <path d="M15 15H1a1 1 0 01-1-1V2a1 1 0 011-1h4v2H2v10h12V3h-3V1h4a1 1 0 011 1v12a1 1 0 01-1 1zM9 7h3l-4 4-4-4h3V1h2v6z" />
-                                                </svg>
-                                                <span>Download / Baca PDF</span>
-                                            </a>
+                                            @auth
+                                                <a href="{{ Storage::url($library->file_path) }}" target="_blank" class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white">
+                                                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2" viewBox="0 0 16 16">
+                                                        <path d="M15 15H1a1 1 0 01-1-1V2a1 1 0 011-1h4v2H2v10h12V3h-3V1h4a1 1 0 011 1v12a1 1 0 01-1 1zM9 7h3l-4 4-4-4h3V1h2v6z" />
+                                                    </svg>
+                                                    <span>Download / Baca PDF</span>
+                                                </a>
+                                            @else
+                                                <a href="{{ route('login') }}" class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white">
+                                                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2" viewBox="0 0 24 24">
+                                                        <path d="M12 2C9.243 2 7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zm6 10v8H6v-8h12zm-9-2V7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9z"/>
+                                                    </svg>
+                                                    <span>Login untuk Baca PDF</span>
+                                                </a>
+                                            @endauth
                                         @else
                                             <button disabled class="btn w-full bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed">
                                                 File Tidak Tersedia
