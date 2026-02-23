@@ -45,7 +45,7 @@
                 {{ session('error') }}
             </div>
         @endif
-        @error('question')
+        @error('message')
             <div class="mb-2 text-xs text-red-600 font-medium">
                 {{ $message }}
             </div>
@@ -53,7 +53,7 @@
 
         <form wire:submit.prevent="ask" class="flex gap-2" @submit="scrollBottom()">
             <input 
-                wire:model="question" 
+                wire:model="message" 
                 type="text" 
                 placeholder="Tanyakan isi buku..." 
                 class="flex-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"

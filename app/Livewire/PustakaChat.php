@@ -7,17 +7,18 @@ use App\Models\Library;
 use App\Services\OpenNotebookService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
 class PustakaChat extends Component
 {
     public $pustakaId;
-    public $question = '';
-    // public $messages = [];
+    public string $message = '';
+    // public array $messages = [];
 
     public $chatSession;
     public $isLoading = false;
+
+    protected OpenNotebookService $service;
 
     protected $listeners = ['refreshChat' => '$refresh'];
 
@@ -46,83 +47,140 @@ class PustakaChat extends Component
         return $this->chatSession->messages()->oldest()->get();
     }
 
-    public function ask(OpenNotebookService $aiService)
+    public function ask(OpenNotebookService $service)
     {
-        // Validasi Login
         if (!Auth::check()) {
-            // Opsional: Redirect ke login atau tampilkan pesan error
-            $this->addError('question', 'Silakan login untuk bertanya.');
+            $this->addError('message', 'Silakan login untuk bertanya.');
             return;
         }
 
-        $this->validate(['question' => 'required|string|min:2']);
+        $this->validate([
+            'message' => 'required|string|min:2'
+        ]);
 
-        $pustaka = Library::find($this->pustakaId);
+        $pustaka = Library::findOrFail($this->pustakaId);
 
         $this->isLoading = true;
 
         try {
-            // 3. Cek/Buat Sesi Chat
-            if (!$this->chatSession) {
-                // Service otomatis menangani prefix 'notebook:'
-                $apiSessionId = $aiService->createSession($pustaka->notebook_id);
 
-                if (!$apiSessionId) {
-                    throw new \Exception("Gagal menghubungkan ke layanan AI.");
+            /*
+        |--------------------------------------------------------------------------
+        | 1️⃣ Pastikan Chat Session Ada
+        |--------------------------------------------------------------------------
+        */
+            if (!$this->chatSession) {
+
+                $openSession = $service->createSourceSession(
+                    $pustaka->open_notebook_source_id
+                );
+
+                if (empty($openSession['id'])) {
+                    throw new \Exception('Gagal membuat Open Notebook session.');
                 }
 
                 $this->chatSession = ChatSession::create([
                     'user_id' => Auth::id(),
-                    'library_id' => $this->pustakaId,
-                    'open_notebook_session_id' => $apiSessionId
+                    'library_id' => $pustaka->id,
+                    'open_notebook_session_id' => $openSession['id'],
                 ]);
             }
 
-            // 4. Simpan Pesan User (UI Update)
+            /*
+        |--------------------------------------------------------------------------
+        | 2️⃣ Simpan Pesan User ke DB Lokal
+        |--------------------------------------------------------------------------
+        */
+            $userQuestion = $this->message;
+
             $this->chatSession->messages()->create([
                 'role' => 'user',
-                'message' => $this->question
+                'message' => $userQuestion
             ]);
 
-            $userQuestion = $this->question;
-            $this->question = ''; // Reset input field
+            $this->message = '';
 
-            // 5. Kirim ke Service (Logic utama ada di Service)
-            // Service akan menormalisasi ID menjadi 'source:xxxx' dan 'notebook:xxxx'
-            $response = $aiService->sendMessage(
+            /*
+        |--------------------------------------------------------------------------
+        | 3️⃣ Kirim ke Open Notebook
+        |--------------------------------------------------------------------------
+        */
+            logger([
+                'DEBUG_SEND' => [
+                    'source_id' => $pustaka->open_notebook_source_id,
+                    'session_id' => $this->chatSession->open_notebook_session_id,
+                    'question' => $userQuestion
+                ]
+            ]);
+
+            $service->sendMessage(
+                $pustaka->open_notebook_source_id,
                 $this->chatSession->open_notebook_session_id,
-                $pustaka->notebook_id,
-                $userQuestion,
-                $pustaka->open_notebook_source_id
+                $userQuestion
             );
 
-            // 6. Parsing Jawaban
-            $aiAnswer = 'Maaf, saya tidak dapat menemukan jawaban dalam dokumen ini.';
+            /*
+        |--------------------------------------------------------------------------
+        | 4️⃣ Tunggu AI Generate (penting)
+        |--------------------------------------------------------------------------
+        */
+            usleep(800000); // 0.8 detik
 
-            if (isset($response['messages']) && is_array($response['messages'])) {
-                // Ambil pesan terakhir dari array
-                $lastMessage = end($response['messages']);
-                if (!empty($lastMessage['content'])) {
-                    $aiAnswer = $lastMessage['content'];
+            /*
+        |--------------------------------------------------------------------------
+        | 5️⃣ Ambil Session Terbaru
+        |--------------------------------------------------------------------------
+        */
+            $session = $service->getSession(
+                $pustaka->open_notebook_source_id,
+                $this->chatSession->open_notebook_session_id
+            );
+
+            logger(['DEBUG_SESSION' => $session]);
+
+            /*
+        |--------------------------------------------------------------------------
+        | 6️⃣ Ambil Jawaban AI
+        |--------------------------------------------------------------------------
+        */
+            $aiAnswer = null;
+
+            if (!empty($session['messages']) && is_array($session['messages'])) {
+
+                foreach (array_reverse($session['messages']) as $msg) {
+                    if (
+                        isset($msg['type']) &&
+                        $msg['type'] === 'ai' &&
+                        !empty($msg['content'])
+                    ) {
+                        $aiAnswer = $msg['content'];
+                        break;
+                    }
                 }
             }
 
-            // 7. Simpan Jawaban AI
+            if (!$aiAnswer) {
+                $aiAnswer = 'Maaf, saya tidak dapat menemukan jawaban dalam dokumen ini.';
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | 7️⃣ Simpan Jawaban AI
+        |--------------------------------------------------------------------------
+        */
             $this->chatSession->messages()->create([
                 'role' => 'ai',
                 'message' => $aiAnswer
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+
             Log::error('PustakaChat Error: ' . $e->getMessage());
 
-            // Berikan feedback visual tapi jangan break aplikasi
             if ($this->chatSession) {
                 $this->chatSession->messages()->create([
                     'role' => 'ai',
                     'message' => 'Terjadi kesalahan teknis. Silakan coba lagi nanti.'
                 ]);
-            } else {
-                session()->flash('error', 'Gagal memproses percakapan.');
             }
         }
 
@@ -130,15 +188,6 @@ class PustakaChat extends Component
 
         $this->dispatch('refreshChat');
     }
-
-    // protected function addMessage($role, $text)
-    // {
-    //     $this->messages[] = [
-    //         'role' => $role,
-    //         'text' => $text,
-    //         'time' => now()->format('H:i')
-    //     ];
-    // }
 
     public function render()
     {
