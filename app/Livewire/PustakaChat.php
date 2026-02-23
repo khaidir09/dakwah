@@ -7,6 +7,7 @@ use App\Models\Library;
 use App\Services\OpenNotebookService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Component;
 
 class PustakaChat extends Component
@@ -47,6 +48,25 @@ class PustakaChat extends Component
         return $this->chatSession->messages()->oldest()->get();
     }
 
+    private function stripMarkdown($text)
+    {
+        // 1. Hapus Bold (**teks**) dan Italic (*teks*) - Sisakan isinya
+        $text = preg_replace('/(\*{1,2})(.*?)\1/', '$2', $text);
+
+        // 2. Hapus Header Markdown (# Judul)
+        $text = preg_replace('/^#+\s+/m', '', $text);
+
+        // 3. Hapus List Bullet (* Item atau - Item) di awal baris
+        $text = preg_replace('/^\s*[\*\-]\s+/m', '', $text);
+
+        $text = preg_replace('/\[(source|note|insight):[a-zA-Z0-9]+\]/', '', $text);
+
+        // 4. Hapus karakter Markdown sisa yang tidak diinginkan (opsional)
+        // $text = str_replace('*', '', $text); 
+
+        return trim($text);
+    }
+
     public function ask(OpenNotebookService $service)
     {
         if (!Auth::check()) {
@@ -58,7 +78,17 @@ class PustakaChat extends Component
             'message' => 'required|string|min:2'
         ]);
 
+        // Limit harian: 5 pertanyaan per user per hari
+        $rateLimitKey = 'pustaka-chat-limit:' . Auth::id() . ':' . now()->format('Y-m-d');
+
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 10)) {
+            $this->addError('question', 'Maaf, Anda telah mencapai batas 10 pertanyaan hari ini.');
+            return;
+        }
+
         $pustaka = Library::findOrFail($this->pustakaId);
+
+        RateLimiter::hit($rateLimitKey, 86400);
 
         $this->isLoading = true;
 
@@ -168,9 +198,11 @@ class PustakaChat extends Component
         | 7️⃣ Simpan Jawaban AI
         |--------------------------------------------------------------------------
         */
+            $cleanMessage = $this->stripMarkdown($aiAnswer);
+
             $this->chatSession->messages()->create([
                 'role' => 'ai',
-                'message' => $aiAnswer
+                'message' => $cleanMessage
             ]);
         } catch (\Throwable $e) {
 
@@ -191,9 +223,16 @@ class PustakaChat extends Component
 
     public function render()
     {
+        $remaining = 10;
+        if (Auth::check()) {
+            $rateLimitKey = 'pustaka-chat-limit:' . Auth::id() . ':' . now()->format('Y-m-d');
+            $remaining = max(0, 10 - RateLimiter::attempts($rateLimitKey));
+        }
         return view('livewire.pustaka-chat', [
             // Kirim pesan lewat computed property
-            'messages' => $this->messages
+
+            'messages' => $this->messages,
+            'remaining' => $remaining
         ]);
     }
 }
