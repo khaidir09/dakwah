@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class PrayerSchedule extends Component
@@ -18,10 +19,53 @@ class PrayerSchedule extends Component
         $this->fetchPrayerSchedule();
     }
 
+    private function resolveCityId()
+    {
+        $defaultCityId = '2f2b265625d76a6704b08093c652fd79'; // Hulu Sungai Utara
+
+        if (Auth::check() && Auth::user()->city_code) {
+            $user = Auth::user();
+            $cityCode = $user->city_code;
+
+            // Try to get mapped ID from cache
+            $cacheKey = "myquran_id_{$cityCode}";
+            $mappedId = Cache::get($cacheKey);
+
+            if ($mappedId) {
+                return $mappedId;
+            }
+
+            // If not cached, search via API
+            try {
+                $cityName = optional($user->city)->name;
+
+                if ($cityName) {
+                    // Search API
+                    $response = Http::timeout(5)->get("https://api.myquran.com/v3/sholat/kota/cari/" . urlencode($cityName));
+
+                    if ($response->successful()) {
+                        $data = $response->json('data');
+                        // Take the first result if available
+                        if (!empty($data) && is_array($data) && isset($data[0]['id'])) {
+                            $mappedId = $data[0]['id'];
+                            // Cache for 30 days as city IDs rarely change
+                            Cache::put($cacheKey, $mappedId, 60 * 60 * 24 * 30);
+                            return $mappedId;
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                // Fallback to default on error
+            }
+        }
+
+        return $defaultCityId;
+    }
+
     public function fetchPrayerSchedule()
     {
-        // Default ID Hulu Sungai Utara
-        $cityId = '2f2b265625d76a6704b08093c652fd79';
+        // Default ID Hulu Sungai Utara or resolved from user
+        $cityId = $this->resolveCityId();
         $date = now();
         $cacheKey = "prayer_schedule_{$cityId}_" . $date->format('Y-m-d');
 
