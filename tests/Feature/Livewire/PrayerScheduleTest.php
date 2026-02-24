@@ -124,4 +124,35 @@ class PrayerScheduleTest extends TestCase
         Livewire::test(PrayerSchedule::class)
             ->assertSet('location', 'KOTA BANJARBARU');
     }
+
+    /** @test */
+    public function it_displays_source_information()
+    {
+        $defaultCityId = '2f2b265625d76a6704b08093c652fd79';
+
+        Http::fake([
+            "api.myquran.com/v3/sholat/jadwal/{$defaultCityId}/*" => Http::response([
+                'status' => true,
+                'data' => [
+                    'lokasi' => 'Hulu Sungai Utara',
+                    'jadwal' => [
+                        '2024-01-01' => [
+                            'tanggal' => 'Senin, 01/01/2024',
+                            'imsak' => '04:30',
+                            'subuh' => '04:40',
+                            'terbit' => '06:00',
+                            'dhuha' => '06:30',
+                            'dzuhur' => '12:00',
+                            'ashar' => '15:30',
+                            'maghrib' => '18:00',
+                            'isya' => '19:30',
+                        ]
+                    ]
+                ]
+            ], 200),
+        ]);
+
+        Livewire::test(PrayerSchedule::class)
+            ->assertSee('Sumber: SIHAT/KEMENAG');
+    }
 }
