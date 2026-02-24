@@ -25,37 +25,10 @@ class PrayerSchedule extends Component
 
         if (Auth::check() && Auth::user()->city_code) {
             $user = Auth::user();
-            $cityCode = $user->city_code;
+            $myQuranId = optional($user->city)->api_myquran;
 
-            // Try to get mapped ID from cache
-            $cacheKey = "myquran_id_{$cityCode}";
-            $mappedId = Cache::get($cacheKey);
-
-            if ($mappedId) {
-                return $mappedId;
-            }
-
-            // If not cached, search via API
-            try {
-                $cityName = optional($user->city)->name;
-
-                if ($cityName) {
-                    // Search API
-                    $response = Http::timeout(5)->get("https://api.myquran.com/v3/sholat/kota/cari/" . urlencode($cityName));
-
-                    if ($response->successful()) {
-                        $data = $response->json('data');
-                        // Take the first result if available
-                        if (!empty($data) && is_array($data) && isset($data[0]['id'])) {
-                            $mappedId = $data[0]['id'];
-                            // Cache for 30 days as city IDs rarely change
-                            Cache::put($cacheKey, $mappedId, 60 * 60 * 24 * 30);
-                            return $mappedId;
-                        }
-                    }
-                }
-            } catch (\Exception $e) {
-                // Fallback to default on error
+            if ($myQuranId) {
+                return $myQuranId;
             }
         }
 

@@ -53,10 +53,22 @@ class PrayerScheduleTest extends TestCase
     }
 
     /** @test */
-    public function it_uses_user_city_when_logged_in_and_mapped()
+    public function it_uses_user_city_api_myquran_when_logged_in()
     {
         $province = Province::create(['code' => '63', 'name' => 'Kalimantan Selatan']);
-        $city = City::create(['code' => '6372', 'province_code' => '63', 'name' => 'Banjarbaru']);
+
+        // We assume the column api_myquran exists now due to the migration running in RefreshDatabase
+        // But we need to use forceCreate or ensure fillable.
+        // Laravolt City model might not have api_myquran in fillable.
+        // So forceCreate is safer.
+        $mappedCityId = 'mapped_id_123';
+
+        $city = City::forceCreate([
+            'code' => '6372',
+            'province_code' => '63',
+            'name' => 'Banjarbaru',
+            'api_myquran' => $mappedCityId
+        ]);
 
         $user = User::factory()->create([
             'city_code' => '6372'
@@ -64,21 +76,8 @@ class PrayerScheduleTest extends TestCase
 
         $this->actingAs($user);
 
-        $mappedCityId = 'mapped_id_123';
-
         Http::fake([
-            // Mock Search
-            "api.myquran.com/v3/sholat/kota/cari/Banjarbaru" => Http::response([
-                'status' => true,
-                'data' => [
-                    [
-                        'id' => $mappedCityId,
-                        'lokasi' => 'KOTA BANJARBARU'
-                    ]
-                ]
-            ], 200),
-
-            // Mock Schedule with Mapped ID
+            // Mock Schedule with Mapped ID directly
             "api.myquran.com/v3/sholat/jadwal/{$mappedCityId}/*" => Http::response([
                 'status' => true,
                 'data' => [
@@ -94,27 +93,6 @@ class PrayerScheduleTest extends TestCase
                             'ashar' => '15:35',
                             'maghrib' => '18:05',
                             'isya' => '19:35',
-                        ]
-                    ]
-                ]
-            ], 200),
-
-             // Fallback default just in case logic fails (so test doesn't crash on unmocked request if it falls back)
-            "api.myquran.com/v3/sholat/jadwal/2f2b265625d76a6704b08093c652fd79/*" => Http::response([
-                'status' => true,
-                'data' => [
-                    'lokasi' => 'Hulu Sungai Utara',
-                    'jadwal' => [
-                        '2024-01-01' => [
-                            'tanggal' => 'Senin, 01/01/2024',
-                            'imsak' => '04:30',
-                            'subuh' => '04:40',
-                            'terbit' => '06:00',
-                            'dhuha' => '06:30',
-                            'dzuhur' => '12:00',
-                            'ashar' => '15:30',
-                            'maghrib' => '18:00',
-                            'isya' => '19:30',
                         ]
                     ]
                 ]
