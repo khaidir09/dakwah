@@ -43,8 +43,19 @@ class PrayerSchedule extends Component
         }
 
         if ($data) {
-            $this->location = $data['lokasi'] ?? 'Hulu Sungai Utara';
-            $this->schedule = $data['jadwal'] ?? null;
+            $this->location = $data['lokasi'] ?? $data['kabko'] ?? 'Hulu Sungai Utara';
+            $jadwal = $data['jadwal'] ?? null;
+
+            if ($jadwal && is_array($jadwal)) {
+                $firstKey = array_key_first($jadwal);
+                if ($firstKey !== null && is_array($jadwal[$firstKey])) {
+                    $this->schedule = $jadwal[$firstKey];
+                } else {
+                    $this->schedule = $jadwal;
+                }
+            } else {
+                $this->schedule = null;
+            }
         }
     }
 
