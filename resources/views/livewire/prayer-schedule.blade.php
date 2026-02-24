@@ -42,7 +42,7 @@
             @endforeach
         </div>
         <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700/60 text-center">
-            <span class="text-[10px] text-gray-400 dark:text-gray-500">{{ $schedule['tanggal'] }}</span>
+            <span class="text-[10px] text-gray-400 dark:text-gray-500">Sumber: SIHAT/KEMENAG</span>
         </div>
     @else
         <div class="text-center py-4 text-sm text-gray-500 dark:text-gray-400">
