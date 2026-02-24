@@ -20,6 +20,7 @@
                             <!-- Prayer Schedule (Mobile/Tablet) -->
                             <div class="xl:hidden space-y-4 mb-6">
                                 <livewire:hijri-calendar />
+                                <livewire:prayer-schedule />
                                 <livewire:daily-surah />
                             </div>
 

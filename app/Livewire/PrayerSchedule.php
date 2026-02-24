@@ -21,7 +21,7 @@ class PrayerSchedule extends Component
     public function fetchPrayerSchedule()
     {
         // Default Jakarta ID: 1301
-        $cityId = 2106;
+        $cityId = '2f2b265625d76a6704b08093c652fd79';
         $date = now();
         $cacheKey = "prayer_schedule_{$cityId}_" . $date->format('Y-m-d');
 
@@ -30,7 +30,7 @@ class PrayerSchedule extends Component
 
         if (! $data) {
             try {
-                $response = Http::timeout(5)->get("https://api.myquran.com/v3/sholat/jadwal/2f2b265625d76a6704b08093c652fd79/today?utc=Asia/Makassar");
+                $response = Http::timeout(5)->get("https://api.myquran.com/v3/sholat/jadwal/$cityId/today?utc=Asia/Makassar");
 
                 if ($response->successful()) {
                     $data = $response->json('data');
@@ -52,7 +52,7 @@ class PrayerSchedule extends Component
     {
         $activePrayer = null;
         $nextPrayer = null;
-        $prayerTimes = ['subuh', 'terbit', 'dhuha', 'dzuhur', 'ashar', 'maghrib', 'isya'];
+        $prayerTimes = ['imsak', 'subuh', 'terbit', 'dhuha', 'dzuhur', 'ashar', 'maghrib', 'isya'];
 
         if ($this->schedule) {
             $now = now()->setTimezone('Asia/Makassar')->format('H:i');
