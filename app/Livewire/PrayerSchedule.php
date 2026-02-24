@@ -20,7 +20,7 @@ class PrayerSchedule extends Component
 
     public function fetchPrayerSchedule()
     {
-        // Default Jakarta ID: 1301
+        // Default ID Hulu Sungai Utara
         $cityId = '2f2b265625d76a6704b08093c652fd79';
         $date = now();
         $cacheKey = "prayer_schedule_{$cityId}_" . $date->format('Y-m-d');

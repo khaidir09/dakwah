@@ -22,6 +22,8 @@
                 <!-- Block 1a: Hijri Calendar -->
                 <livewire:hijri-calendar />
 
+                <livewire:prayer-schedule />
+
                 <!-- Block 1b: Daily Surah Reading -->
                 <livewire:daily-surah />
 

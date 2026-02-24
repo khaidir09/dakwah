@@ -20,8 +20,9 @@
                             <!-- Prayer Schedule (Mobile/Tablet) -->
                             <div class="xl:hidden space-y-4 mb-6">
                                 <livewire:hijri-calendar />
-                                <livewire:prayer-schedule />
+                                <livewire:prayer-schedule layout="horizontal" />
                                 <livewire:daily-surah />
+                                
                             </div>
 
                             <!-- Jadwal Ramadhan Hari Ini -->
