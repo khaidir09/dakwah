@@ -28,6 +28,11 @@ class Library extends Model
         'podcast_metadata' => 'array',
     ];
 
+    public function episodes()
+    {
+        return $this->hasMany(LibraryEpisode::class)->orderBy('sort_order')->orderBy('created_at');
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';

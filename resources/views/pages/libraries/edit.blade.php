@@ -111,6 +111,62 @@
                             @enderror
                         </div>
                     </div>
+
+                    <!-- Podcast Episodes Section -->
+                    <div class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Episode Podcast</h3>
+
+                        <!-- Existing Episodes -->
+                        @if($library->episodes->count() > 0)
+                            <div class="mb-4 space-y-2">
+                                <p class="text-sm font-medium text-gray-500 mb-2">Episode Saat Ini:</p>
+                                @foreach($library->episodes as $episode)
+                                    <div class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800">
+                                        <div class="flex items-center gap-3">
+                                            <span class="text-gray-400 text-sm">#{{ $episode->sort_order + 1 }}</span>
+                                            <div>
+                                                <p class="font-medium text-gray-800 dark:text-gray-200">{{ $episode->title }}</p>
+                                                <a href="{{ Storage::url($episode->file_path) }}" target="_blank" class="text-xs text-indigo-500 hover:underline">Download/Listen</a>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="flex items-center space-x-2 text-sm text-red-500 cursor-pointer p-2 hover:bg-red-50 rounded">
+                                                <input type="checkbox" name="delete_episodes[]" value="{{ $episode->id }}" class="form-checkbox text-red-500 rounded border-gray-300">
+                                                <span>Hapus</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        <!-- New Episodes -->
+                        <div x-data="{ newEpisodes: [] }">
+                             <template x-for="(episode, index) in newEpisodes" :key="index">
+                                <div class="grid md:grid-cols-2 gap-4 mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-700/50">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Judul Episode Baru <span class="text-red-500">*</span></label>
+                                        <input type="text" :name="'new_episodes['+index+'][title]'" class="form-input w-full" required placeholder="Judul Episode">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">File Audio <span class="text-red-500">*</span></label>
+                                        <input type="file" :name="'new_episodes['+index+'][file]'" class="form-input w-full" accept="audio/*" required>
+                                        <div class="text-xs text-gray-500 mt-1">Format Audio (MP3, WAV, M4A)</div>
+                                    </div>
+                                    <div class="md:col-span-2 text-right">
+                                        <button type="button" @click="newEpisodes.splice(index, 1)" class="text-red-500 text-sm hover:underline">Batal</button>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <button type="button" @click="newEpisodes.push({})" class="btn bg-indigo-500 hover:bg-indigo-600 text-white mt-2">
+                                <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2" viewBox="0 0 16 16">
+                                    <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                                </svg>
+                                Tambah Episode Baru
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="flex items-center justify-end px-4 py-3 bg-gray-50 dark:bg-gray-800 text-end sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">

@@ -60,7 +60,24 @@ class LibraryController extends Controller
         // Remove 'file' from dataToCreate as it's not a column
         unset($dataToCreate['file']);
 
-        Library::create($dataToCreate);
+        $library = Library::create($dataToCreate);
+
+        // Handle Podcast Episodes
+        if ($request->has('episodes')) {
+            foreach ($request->episodes as $index => $episodeData) {
+                if (isset($episodeData['file']) && isset($episodeData['title'])) {
+                    $file = $episodeData['file'];
+                    $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+                    $path = $file->storeAs('libraries/podcasts', $filename, 'public');
+
+                    $library->episodes()->create([
+                        'title' => $episodeData['title'],
+                        'file_path' => $path,
+                        'sort_order' => $index,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('libraries.index')->with('message', 'Pustaka berhasil ditambahkan!');
     }
@@ -137,11 +154,51 @@ class LibraryController extends Controller
 
         $library->update($dataToUpdate);
 
+        // Handle New Episodes
+        if ($request->has('new_episodes')) {
+            $maxOrder = $library->episodes()->max('sort_order');
+            $startOrder = is_null($maxOrder) ? 0 : $maxOrder + 1;
+
+            foreach ($request->new_episodes as $index => $episodeData) {
+                if (isset($episodeData['file']) && isset($episodeData['title'])) {
+                    $file = $episodeData['file'];
+                    $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+                    $path = $file->storeAs('libraries/podcasts', $filename, 'public');
+
+                    $library->episodes()->create([
+                        'title' => $episodeData['title'],
+                        'file_path' => $path,
+                        'sort_order' => $startOrder + $index,
+                    ]);
+                }
+            }
+        }
+
+        // Handle Deletions
+        if ($request->has('delete_episodes')) {
+            foreach ($request->delete_episodes as $episodeId) {
+                $episode = $library->episodes()->find($episodeId);
+                if ($episode) {
+                    if (Storage::disk('public')->exists($episode->file_path)) {
+                        Storage::disk('public')->delete($episode->file_path);
+                    }
+                    $episode->delete();
+                }
+            }
+        }
+
         return redirect()->route('libraries.index')->with('message', 'Pustaka berhasil diperbarui!');
     }
 
     public function destroy(Library $library)
     {
+        // Delete Episodes Files
+        foreach ($library->episodes as $episode) {
+            if (Storage::disk('public')->exists($episode->file_path)) {
+                Storage::disk('public')->delete($episode->file_path);
+            }
+        }
+
         if ($library->file_path && Storage::disk('public')->exists($library->file_path)) {
             Storage::disk('public')->delete($library->file_path);
         }
