@@ -1,17 +1,47 @@
 
-   INFO  Server running on [http://127.0.0.1:8080].
+   INFO  Server running on [http://127.0.0.1:8081].
 
   Press Ctrl+C to stop the server
 
-  2026-02-14 15:35:29 /tulisan ................................... ~ 500.46ms
 
    INFO  Environment modified. Restarting server...
 
-   INFO  Server running on [http://127.0.0.1:8080].
+   INFO  Server running on [http://127.0.0.1:8081].
 
   Press Ctrl+C to stop the server
 
-  2026-02-14 15:36:25 /tulisan ......................................... ~ 1s
-  2026-02-14 15:37:08 /tulisan ..................................... ~ 0.16ms
-  2026-02-14 15:37:08 /build/assets/app-Cuv1mFIF.css ............... ~ 0.15ms
-  2026-02-14 15:37:08 /build/assets/app-SKZwaN8M.js ................ ~ 0.61ms
+  2026-02-25 15:35:37 /pustaka/frontend-verification-library ........... ~ 1s
+  2026-02-25 15:35:38 /build/assets/app.css ........................ ~ 0.06ms
+  2026-02-25 15:35:38 /build/assets/app.js ......................... ~ 0.26ms
+  2026-02-25 15:35:39 /login ....................................... ~ 0.10ms
+  2026-02-25 15:35:39 /build/assets/app.css ........................ ~ 0.05ms
+  2026-02-25 15:35:39 /build/assets/app.js ......................... ~ 0.30ms
+  2026-02-25 15:35:40 /login ..................................... ~ 500.62ms
+  2026-02-25 15:35:40 /beranda ..................................... ~ 0.03ms
+  2026-02-25 15:35:40 /build/assets/app.css ........................ ~ 0.04ms
+  2026-02-25 15:35:40 /build/assets/app.js ......................... ~ 0.23ms
+  2026-02-25 15:36:10 /pustaka/frontend-verification-library ....... ~ 0.11ms
+  2026-02-25 15:36:10 /build/assets/app.css ........................ ~ 0.07ms
+  2026-02-25 15:36:10 /build/assets/app.js ......................... ~ 0.29ms
+  2026-02-25 15:36:11 /storage/podcasts/test-episode.mp3 ........... ~ 0.19ms
+  2026-02-25 15:36:40 /pustaka/frontend-verification-library ....... ~ 0.13ms
+  2026-02-25 15:36:40 /build/assets/app.css ........................ ~ 0.05ms
+  2026-02-25 15:36:40 /build/assets/app.js ......................... ~ 0.26ms
+  2026-02-25 15:36:43 /login ....................................... ~ 0.10ms
+  2026-02-25 15:36:43 /build/assets/app.css ........................ ~ 0.05ms
+  2026-02-25 15:36:43 /build/assets/app.js ......................... ~ 0.25ms
+  2026-02-25 15:36:43 /login ..................................... ~ 500.50ms
+  2026-02-25 15:36:43 /beranda ..................................... ~ 0.03ms
+  2026-02-25 15:36:43 /build/assets/app.css ........................ ~ 0.04ms
+  2026-02-25 15:36:43 /build/assets/app.js ......................... ~ 0.22ms
+  2026-02-25 15:36:48 /pustaka/frontend-verification-library ....... ~ 0.11ms
+  2026-02-25 15:36:48 /build/assets/app.css ........................ ~ 0.05ms
+  2026-02-25 15:36:48 /build/assets/app.js ......................... ~ 0.25ms
+  2026-02-25 15:36:48 /storage/podcasts/test-episode.mp3 ........... ~ 0.03ms
+
+   INFO  Environment modified. Restarting server...
+
+   INFO  Server running on [http://127.0.0.1:8081].
+
+  Press Ctrl+C to stop the server
+

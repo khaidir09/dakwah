@@ -12,9 +12,10 @@ class LibraryPodcastTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_library_detail_displays_podcast_player_and_tabs_when_data_exists()
+    public function test_authenticated_user_can_access_podcast_content()
     {
         // Arrange
+        $user = User::factory()->create();
         $library = Library::create([
             'title' => 'Test Podcast Library',
             'slug' => 'test-podcast-library',
@@ -24,23 +25,23 @@ class LibraryPodcastTest extends TestCase
             'podcast_audio_path' => 'podcasts/test-episode.mp3',
             'podcast_metadata' => [
                 'outline' => [
-                    ['time' => '00:00', 'topic' => 'Intro Topic'],
-                    ['time' => '05:00', 'topic' => 'Main Topic']
+                    ['name' => '00:00', 'description' => 'Intro Topic'],
+                    ['name' => '05:00', 'description' => 'Main Topic']
                 ],
                 'transcript' => [
-                    ['speaker' => 'Host', 'text' => 'Welcome to the show.', 'timestamp' => '00:00'],
-                    ['speaker' => 'Guest', 'text' => 'Thanks for having me.', 'timestamp' => '00:10']
+                    ['speaker' => 'Host', 'dialogue' => 'Welcome to the show.'],
+                    ['speaker' => 'Guest', 'dialogue' => 'Thanks for having me.']
                 ]
             ],
             'is_active' => true,
         ]);
 
         // Act
-        $response = $this->get(route('pustaka-detail', $library));
+        $response = $this->actingAs($user)->get(route('pustaka-detail', $library));
 
         // Assert
         $response->assertStatus(200);
-        $response->assertSee('Podcast');
+        $response->assertSee('Podcast AI');
         $response->assertSee('Outline');
         $response->assertSee('Transcript');
 
@@ -54,6 +55,46 @@ class LibraryPodcastTest extends TestCase
         // Check for transcript content
         $response->assertSee('Welcome to the show.');
         $response->assertSee('Thanks for having me.');
+    }
+
+    public function test_guest_cannot_access_podcast_content_and_sees_login_prompt()
+    {
+        // Arrange
+        $library = Library::create([
+            'title' => 'Test Podcast Library Guest',
+            'slug' => 'test-podcast-library-guest',
+            'category' => 'General',
+            'description' => 'A test description',
+            'file_path' => 'books/test.pdf',
+            'podcast_audio_path' => 'podcasts/test-episode.mp3',
+             'podcast_metadata' => [
+                'outline' => [
+                    ['name' => '00:00', 'description' => 'Intro Topic'],
+                    ['name' => '05:00', 'description' => 'Main Topic']
+                ],
+                'transcript' => [
+                    ['speaker' => 'Host', 'dialogue' => 'Welcome to the show.'],
+                    ['speaker' => 'Guest', 'dialogue' => 'Thanks for having me.']
+                ]
+            ],
+            'is_active' => true,
+        ]);
+
+        // Act
+        $response = $this->get(route('pustaka-detail', $library));
+
+        // Assert
+        $response->assertStatus(200);
+        $response->assertSee('Podcast AI'); // Header is visible
+
+        // Content should be hidden
+        $response->assertDontSee('podcasts/test-episode.mp3');
+        $response->assertDontSee('Intro Topic');
+        $response->assertDontSee('Welcome to the show.');
+
+        // Login prompt should be visible
+        $response->assertSee('Login untuk mendengarkan podcast');
+        $response->assertSee(route('login'));
     }
 
     public function test_library_detail_does_not_display_podcast_section_when_no_audio()
@@ -75,7 +116,7 @@ class LibraryPodcastTest extends TestCase
 
         // Assert
         $response->assertStatus(200);
-        $response->assertDontSee('Podcast'); // Should not see the podcast header (make sure "Podcast" word isn't in description/title)
+        $response->assertDontSee('Podcast AI'); // Should not see the podcast header
         $response->assertDontSee('audio controls', false);
     }
 }
