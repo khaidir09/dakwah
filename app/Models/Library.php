@@ -20,6 +20,12 @@ class Library extends Model
         'is_active',
         'visit_count',
         'like_count',
+        'podcast_audio_path',
+        'podcast_metadata',
+    ];
+
+    protected $casts = [
+        'podcast_metadata' => 'array',
     ];
 
     public function getRouteKeyName()
