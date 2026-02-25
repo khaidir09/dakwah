@@ -80,70 +80,85 @@
                                 <div class="mt-8 border-t border-gray-100 dark:border-gray-700/60 pt-8" x-data="{ activeTab: 'outline' }">
                                     <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Podcast AI</h2>
 
-                                    <!-- Audio Player -->
-                                    <div class="mb-6">
-                                        <audio controls class="w-full rounded-lg">
-                                            <source src="{{ Storage::url($library->podcast_audio_path) }}" type="audio/mpeg">
-                                            Browser Anda tidak mendukung elemen audio.
-                                        </audio>
-                                    </div>
-
-                                    <!-- Tabs -->
-                                    <div class="flex border-b border-gray-200 dark:border-gray-700 mb-4">
-                                        <button
-                                            @click="activeTab = 'outline'"
-                                            :class="{ 'border-indigo-500 text-indigo-600 dark:text-indigo-400': activeTab === 'outline', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300': activeTab !== 'outline' }"
-                                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm mr-8 focus:outline-none"
-                                        >
-                                            Outline
-                                        </button>
-                                        <button
-                                            @click="activeTab = 'transcript'"
-                                            :class="{ 'border-indigo-500 text-indigo-600 dark:text-indigo-400': activeTab === 'transcript', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300': activeTab !== 'transcript' }"
-                                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm focus:outline-none"
-                                        >
-                                            Transcript
-                                        </button>
-                                    </div>
-
-                                    <!-- Content -->
-                                    <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 max-h-96 overflow-y-auto">
-                                        <!-- Outline -->
-                                        <div x-show="activeTab === 'outline'">
-                                            @if(isset($library->podcast_metadata['outline']) && is_array($library->podcast_metadata['outline']))
-                                                <ul class="space-y-4">
-                                                    @foreach($library->podcast_metadata['outline'] as $item)
-                                                        <div class="flex flex-col gap-1">
-                                                            <div class="flex items-center gap-2">
-                                                            <span class="text-indigo-500 font-mono text-sm shrink-0">{{ $item['name'] }}</span>
-                                                        </div>
-                                                        <p class="text-gray-600 dark:text-gray-400">{{ $item['description'] }}</p>
-                                                    @endforeach
-                                                </ul>
-                                            @else
-                                                <p class="text-gray-500 italic">Outline tidak tersedia.</p>
-                                            @endif
+                                    @auth
+                                        <!-- Audio Player -->
+                                        <div class="mb-6">
+                                            <audio controls class="w-full rounded-lg">
+                                                <source src="{{ Storage::url($library->podcast_audio_path) }}" type="audio/mpeg">
+                                                Browser Anda tidak mendukung elemen audio.
+                                            </audio>
                                         </div>
 
-                                        <!-- Transcript -->
-                                        <div x-show="activeTab === 'transcript'">
-                                             @if(isset($library->podcast_metadata['transcript']) && is_array($library->podcast_metadata['transcript']))
-                                                <div class="space-y-4">
-                                                    @foreach($library->podcast_metadata['transcript'] as $segment)
-                                                        <div class="flex flex-col gap-1">
-                                                            <div class="flex items-center gap-2">
-                                                                 <span class="font-semibold text-gray-800 dark:text-gray-200 text-sm">{{ $segment['speaker'] ?? 'Speaker' }}</span>
-                                                                 {{-- <span class="text-xs text-gray-500">{{ $segment['dialogue'] ?? '' }}</span> --}}
+                                        <!-- Tabs -->
+                                        <div class="flex border-b border-gray-200 dark:border-gray-700 mb-4">
+                                            <button
+                                                @click="activeTab = 'outline'"
+                                                :class="{ 'border-indigo-500 text-indigo-600 dark:text-indigo-400': activeTab === 'outline', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300': activeTab !== 'outline' }"
+                                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm mr-8 focus:outline-none"
+                                            >
+                                                Outline
+                                            </button>
+                                            <button
+                                                @click="activeTab = 'transcript'"
+                                                :class="{ 'border-indigo-500 text-indigo-600 dark:text-indigo-400': activeTab === 'transcript', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300': activeTab !== 'transcript' }"
+                                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm focus:outline-none"
+                                            >
+                                                Transcript
+                                            </button>
+                                        </div>
+
+                                        <!-- Content -->
+                                        <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 max-h-96 overflow-y-auto">
+                                            <!-- Outline -->
+                                            <div x-show="activeTab === 'outline'">
+                                                @if(isset($library->podcast_metadata['outline']) && is_array($library->podcast_metadata['outline']))
+                                                    <ul class="space-y-4">
+                                                        @foreach($library->podcast_metadata['outline'] as $item)
+                                                            <div class="flex flex-col gap-1">
+                                                                <div class="flex items-center gap-2">
+                                                                <span class="text-indigo-500 font-mono text-sm shrink-0">{{ $item['name'] }}</span>
                                                             </div>
-                                                            <p class="text-gray-600 dark:text-gray-400">{{ $segment['dialogue'] ?? '' }}</p>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                             @else
-                                                <p class="text-gray-500 italic">Transkrip tidak tersedia.</p>
-                                             @endif
+                                                            <p class="text-gray-600 dark:text-gray-400">{{ $item['description'] }}</p>
+                                                        @endforeach
+                                                    </ul>
+                                                @else
+                                                    <p class="text-gray-500 italic">Outline tidak tersedia.</p>
+                                                @endif
+                                            </div>
+
+                                            <!-- Transcript -->
+                                            <div x-show="activeTab === 'transcript'">
+                                                @if(isset($library->podcast_metadata['transcript']) && is_array($library->podcast_metadata['transcript']))
+                                                    <div class="space-y-4">
+                                                        @foreach($library->podcast_metadata['transcript'] as $segment)
+                                                            <div class="flex flex-col gap-1">
+                                                                <div class="flex items-center gap-2">
+                                                                    <span class="font-semibold text-gray-800 dark:text-gray-200 text-sm">{{ $segment['speaker'] ?? 'Speaker' }}</span>
+                                                                    {{-- <span class="text-xs text-gray-500">{{ $segment['dialogue'] ?? '' }}</span> --}}
+                                                                </div>
+                                                                <p class="text-gray-600 dark:text-gray-400">{{ $segment['dialogue'] ?? '' }}</p>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                    <p class="text-gray-500 italic">Transkrip tidak tersedia.</p>
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-8 text-center border border-gray-100 dark:border-gray-700">
+                                            <div class="mb-4">
+                                                <svg class="w-12 h-12 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                                </svg>
+                                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Dengarkan Podcast</h3>
+                                                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1 max-w-sm mx-auto">Login untuk mendengarkan podcast dan melihat transkrip lengkap dari pustaka ini.</p>
+                                            </div>
+                                            <a href="{{ route('login') }}" class="btn bg-indigo-500 hover:bg-indigo-600 text-white w-full sm:w-auto px-6 py-2.5 rounded-lg font-medium transition-colors duration-200">
+                                                Login Sekarang
+                                            </a>
+                                        </div>
+                                    @endauth
                                 </div>
                             @endif
 
