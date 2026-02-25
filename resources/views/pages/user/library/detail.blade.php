@@ -76,7 +76,106 @@
                                 </div>
                             </div>
 
-                            @if($library->podcast_audio_path)
+                            @if($library->episodes->count() > 0)
+                                <div class="mt-8 border-t border-gray-100 dark:border-gray-700/60 pt-8"
+                                    x-data="{
+                                        currentEpisodeIndex: 0,
+                                        episodes: {{ Js::from($library->episodes->map(fn($e) => ['title' => $e->title, 'url' => Storage::url($e->file_path)])) }},
+                                        isPlaying: false,
+                                        audio: null,
+                                        init() {
+                                            this.audio = this.$refs.audioPlayer;
+                                            // Don't auto-load src to avoid pre-loading all if multiple players on page, but here we have one.
+                                            if(this.episodes.length > 0) {
+                                                this.audio.src = this.episodes[0].url;
+                                            }
+                                        },
+                                        playEpisode(index) {
+                                            if (this.currentEpisodeIndex === index) {
+                                                if (this.audio.paused) {
+                                                    this.audio.play();
+                                                    this.isPlaying = true;
+                                                } else {
+                                                    this.audio.pause();
+                                                    this.isPlaying = false;
+                                                }
+                                            } else {
+                                                this.currentEpisodeIndex = index;
+                                                this.audio.src = this.episodes[index].url;
+                                                this.audio.play();
+                                                this.isPlaying = true;
+                                            }
+                                        },
+                                        togglePlay() {
+                                            if (this.audio.paused) {
+                                                this.audio.play();
+                                                this.isPlaying = true;
+                                            } else {
+                                                this.audio.pause();
+                                                this.isPlaying = false;
+                                            }
+                                        }
+                                    }">
+
+                                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Podcast Episodes</h2>
+
+                                    @auth
+                                        <!-- Player Control -->
+                                        <div class="mb-6 bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                                            <div class="flex items-center gap-4">
+                                                <button @click="togglePlay()" class="w-12 h-12 flex items-center justify-center rounded-full bg-indigo-500 hover:bg-indigo-600 text-white transition-colors shrink-0">
+                                                    <svg x-show="!isPlaying" class="w-5 h-5 ml-1 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                                    <svg x-show="isPlaying" class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                                </button>
+                                                <div class="flex-1 overflow-hidden">
+                                                    <p class="text-sm text-indigo-500 font-medium mb-1">Now Playing</p>
+                                                    <p class="text-gray-900 dark:text-gray-100 font-bold truncate" x-text="episodes[currentEpisodeIndex].title"></p>
+                                                </div>
+                                            </div>
+                                            <audio x-ref="audioPlayer" @play="isPlaying = true" @pause="isPlaying = false" @ended="isPlaying = false" controls class="w-full mt-4"></audio>
+                                        </div>
+
+                                        <!-- Playlist -->
+                                        <div class="space-y-2 max-h-96 overflow-y-auto">
+                                            <template x-for="(episode, index) in episodes" :key="index">
+                                                <div
+                                                    @click="playEpisode(index)"
+                                                    class="flex items-center justify-between p-3 rounded-lg cursor-pointer transition-colors"
+                                                    :class="currentEpisodeIndex === index ? 'bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800' : 'hover:bg-gray-50 dark:hover:bg-gray-800 border border-transparent'"
+                                                >
+                                                    <div class="flex items-center gap-3 overflow-hidden">
+                                                        <span class="w-8 h-8 flex items-center justify-center rounded-full text-xs font-medium shrink-0"
+                                                            :class="currentEpisodeIndex === index ? 'bg-indigo-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-500'">
+                                                            <span x-text="index + 1"></span>
+                                                        </span>
+                                                        <span class="font-medium text-gray-800 dark:text-gray-200 truncate" x-text="episode.title"></span>
+                                                    </div>
+                                                    <div x-show="currentEpisodeIndex === index && isPlaying">
+                                                        <span class="flex h-3 w-3 relative">
+                                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                                                            <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    @else
+                                        <!-- Auth Wall -->
+                                        <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-8 text-center border border-gray-100 dark:border-gray-700">
+                                            <div class="mb-4">
+                                                <svg class="w-12 h-12 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                                </svg>
+                                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Dengarkan Podcast</h3>
+                                                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1 max-w-sm mx-auto">Login untuk mendengarkan {{ $library->episodes->count() }} episode podcast ini.</p>
+                                            </div>
+                                            <a href="{{ route('login') }}" class="btn bg-indigo-500 hover:bg-indigo-600 text-white w-full sm:w-auto px-6 py-2.5 rounded-lg font-medium transition-colors duration-200">
+                                                Login Sekarang
+                                            </a>
+                                        </div>
+                                    @endauth
+                                </div>
+                            @elseif($library->podcast_audio_path)
                                 <div class="mt-8 border-t border-gray-100 dark:border-gray-700/60 pt-8" x-data="{ activeTab: 'outline' }">
                                     <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Podcast AI</h2>
 

@@ -93,6 +93,35 @@
                             @enderror
                         </div>
                     </div>
+
+                    <!-- Podcast Episodes Section -->
+                    <div class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6" x-data="{ episodes: [] }">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Episode Podcast</h3>
+
+                        <template x-for="(episode, index) in episodes" :key="index">
+                            <div class="grid md:grid-cols-2 gap-4 mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-700/50">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Judul Episode <span class="text-red-500">*</span></label>
+                                    <input type="text" :name="'episodes['+index+'][title]'" class="form-input w-full" required placeholder="Judul Episode">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">File Audio <span class="text-red-500">*</span></label>
+                                    <input type="file" :name="'episodes['+index+'][file]'" class="form-input w-full" accept="audio/*" required>
+                                    <div class="text-xs text-gray-500 mt-1">Format Audio (MP3, WAV, M4A)</div>
+                                </div>
+                                <div class="md:col-span-2 text-right">
+                                    <button type="button" @click="episodes.splice(index, 1)" class="text-red-500 text-sm hover:underline">Hapus Episode</button>
+                                </div>
+                            </div>
+                        </template>
+
+                        <button type="button" @click="episodes.push({ title: '', file: null })" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                            <svg class="w-4 h-4 fill-current opacity-50 shrink-0 mr-2" viewBox="0 0 16 16">
+                                <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                            </svg>
+                            Tambah Episode
+                        </button>
+                    </div>
                 </div>
 
                 <div class="flex items-center justify-end px-4 py-3 bg-gray-50 dark:bg-gray-800 text-end sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
