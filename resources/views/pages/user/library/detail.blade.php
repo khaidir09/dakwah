@@ -78,7 +78,7 @@
 
                             @if($library->podcast_audio_path)
                                 <div class="mt-8 border-t border-gray-100 dark:border-gray-700/60 pt-8" x-data="{ activeTab: 'outline' }">
-                                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Podcast</h2>
+                                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Podcast AI</h2>
 
                                     <!-- Audio Player -->
                                     <div class="mb-6">
@@ -111,12 +111,13 @@
                                         <!-- Outline -->
                                         <div x-show="activeTab === 'outline'">
                                             @if(isset($library->podcast_metadata['outline']) && is_array($library->podcast_metadata['outline']))
-                                                <ul class="space-y-3">
+                                                <ul class="space-y-4">
                                                     @foreach($library->podcast_metadata['outline'] as $item)
-                                                        <li class="flex gap-4">
-                                                            <span class="text-indigo-500 font-mono text-sm shrink-0">{{ $item['timestamp'] ?? $item['time'] ?? '00:00' }}</span>
-                                                            <span class="text-gray-700 dark:text-gray-300">{{ $item['title'] ?? $item['topic'] ?? '' }}</span>
-                                                        </li>
+                                                        <div class="flex flex-col gap-1">
+                                                            <div class="flex items-center gap-2">
+                                                            <span class="text-indigo-500 font-mono text-sm shrink-0">{{ $item['name'] }}</span>
+                                                        </div>
+                                                        <p class="text-gray-600 dark:text-gray-400">{{ $item['description'] }}</p>
                                                     @endforeach
                                                 </ul>
                                             @else
@@ -132,9 +133,9 @@
                                                         <div class="flex flex-col gap-1">
                                                             <div class="flex items-center gap-2">
                                                                  <span class="font-semibold text-gray-800 dark:text-gray-200 text-sm">{{ $segment['speaker'] ?? 'Speaker' }}</span>
-                                                                 <span class="text-xs text-gray-500">{{ $segment['timestamp'] ?? '' }}</span>
+                                                                 {{-- <span class="text-xs text-gray-500">{{ $segment['dialogue'] ?? '' }}</span> --}}
                                                             </div>
-                                                            <p class="text-gray-600 dark:text-gray-400">{{ $segment['text'] ?? '' }}</p>
+                                                            <p class="text-gray-600 dark:text-gray-400">{{ $segment['dialogue'] ?? '' }}</p>
                                                         </div>
                                                     @endforeach
                                                 </div>
