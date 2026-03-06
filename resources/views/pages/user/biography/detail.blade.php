@@ -77,7 +77,7 @@
 
                             <!-- Description -->
                             <div class="text-lg/8 max-w-none text-gray-800 dark:text-gray-200 text-justify">
-                                {!! $biography->biografi !!}
+                                {!! nl2br(e($biography->biografi)) !!}
                             </div>
 
                             @if(!empty($biography->source) && is_array($biography->source))

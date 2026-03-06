@@ -103,7 +103,9 @@
                                             <div>
                                                 <h2 class="text-gray-800 dark:text-gray-100 font-semibold mb-2">Tentang Guru</h2>
                                                 <div class="text-sm space-y-2">
-                                                    <p class="text-justify">{{ $teacher->biografi }}</p>
+                                                    <p class="text-justify">
+                                                        {{ nl2br(e($teacher->biografi)) }}
+                                                    </p>
                                                     @if(!empty($teacher->source) && is_array($teacher->source))
                                                         <div class="mt-4 border-t pt-4 border-gray-100 dark:border-gray-700/60">
                                                             <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">Sumber:</h4>
