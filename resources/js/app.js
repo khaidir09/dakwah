@@ -4,6 +4,8 @@ Livewire.start();
 
 import "./bootstrap";
 
+import 'flowbite';
+
 // Import Chart.js
 import { Chart } from "chart.js";
 
