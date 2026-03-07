@@ -6,6 +6,9 @@
     strategy: base;
 }
 
+@plugin "flowbite/plugin";
+@plugin "flowbite-typography";
+
 @custom-variant dark (&:is(.dark *));
 @custom-variant sidebar-expanded (&:is(.sidebar-expanded *));
 

@@ -96,7 +96,116 @@
                         <div class="col-span-2">
                             <div>
                                 <label class="block text-sm font-medium mb-1" for="content">Isi Tulisan <span class="text-red-500">*</span></label>
-                                <textarea id="content" class="form-textarea w-full" name="content" rows="10" required>{{ old('content') }}</textarea>
+
+                                <div class="w-full bg-neutral-secondary-medium border border-gray-200 dark:border-gray-700/60 rounded-md">
+                                    <div class="p-2 border-b border-gray-200 dark:border-gray-700/60">
+                                        <div class="flex flex-wrap items-center">
+                                            <div class="flex items-center space-x-1 rtl:space-x-reverse flex-wrap">
+                                                <button id="toggleBoldButton" data-tooltip-target="tooltip-bold" type="button" class="p-1.5 text-gray-800 dark:text-gray-300 rounded-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5h4.5a3.5 3.5 0 1 1 0 7H8m0-7v7m0-7H6m2 7h6.5a3.5 3.5 0 1 1 0 7H8m0-7v7m0 0H6"/></svg>
+                                                    <span class="sr-only">Bold</span>
+                                                </button>
+                                                <div id="tooltip-bold" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                    Toggle bold
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
+
+                                                <button id="toggleItalicButton" data-tooltip-target="tooltip-italic" type="button" class="p-1.5 text-gray-800 dark:text-gray-300 rounded-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.874 19 6.143-14M6 19h6.33m-.66-14H18"/></svg>
+                                                    <span class="sr-only">Italic</span>
+                                                </button>
+                                                <div id="tooltip-italic" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                    Toggle italic
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
+
+                                                <button id="toggleUnderlineButton" data-tooltip-target="tooltip-underline" type="button" class="p-1.5 text-gray-800 dark:text-gray-300 rounded-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 19h12M8 5v9a4 4 0 0 0 8 0V5M6 5h4m4 0h4"/></svg>
+                                                    <span class="sr-only">Underline</span>
+                                                </button>
+                                                <div id="tooltip-underline" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                    Toggle underline
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
+
+                                                <button id="toggleStrikeButton" data-tooltip-target="tooltip-strike" type="button" class="p-1.5 text-gray-800 dark:text-gray-300 rounded-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 6.2V5h12v1.2M7 19h6m.2-14-1.677 6.523M9.6 19l1.029-4M5 5l6.523 6.523M19 19l-7.477-7.477"/></svg>
+                                                    <span class="sr-only">Strike</span>
+                                                </button>
+                                                <div id="tooltip-strike" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                    Toggle strike
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
+
+                                                <div class="px-1">
+                                                    <span class="block w-px h-4 bg-gray-300 dark:bg-gray-600"></span>
+                                                </div>
+
+                                                <button id="toggleListButton" type="button" data-tooltip-target="tooltip-list" class="p-1.5 text-gray-800 dark:text-gray-300 rounded-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5"/></svg>
+                                                    <span class="sr-only">Toggle list</span>
+                                                </button>
+                                                <div id="tooltip-list" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                    Toggle list
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
+
+                                                <button id="toggleOrderedListButton" type="button" data-tooltip-target="tooltip-ordered-list" class="p-1.5 text-gray-800 dark:text-gray-300 rounded-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6h8m-8 6h8m-8 6h8M4 16a2 2 0 1 1 3.321 1.5L4 20h5M4 5l2-1v6m-2 0h4"/></svg>
+                                                    <span class="sr-only">Toggle ordered list</span>
+                                                </button>
+                                                <div id="tooltip-ordered-list" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                    Toggle ordered list
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
+
+                                                <button id="toggleBlockquoteButton" type="button" data-tooltip-target="tooltip-blockquote-list" class="p-1.5 text-gray-800 dark:text-gray-300 rounded-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V8a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1Zm0 0v2a4 4 0 0 1-4 4H5m14-6V8a1 1 0 0 0-1-1h-3a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1Zm0 0v2a4 4 0 0 1-4 4h-1"/></svg>
+                                                    <span class="sr-only">Toggle blockquote</span>
+                                                </button>
+                                                <div id="tooltip-blockquote-list" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                    Toggle blockquote
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
+
+                                                <div class="px-1">
+                                                    <span class="block w-px h-4 bg-gray-300 dark:bg-gray-600"></span>
+                                                </div>
+
+                                                <button id="toggleLeftAlignButton" type="button" data-tooltip-target="tooltip-left-align" class="p-1.5 text-gray-800 dark:text-gray-300 rounded-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6h8m-8 4h12M6 14h8m-8 4h12"/></svg>
+                                                    <span class="sr-only">Align left</span>
+                                                </button>
+                                                <div id="tooltip-left-align" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                    Align left
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
+
+                                                <button id="toggleCenterAlignButton" type="button" data-tooltip-target="tooltip-center-align" class="p-1.5 text-gray-800 dark:text-gray-300 rounded-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h8M6 10h12M8 14h8M6 18h12"/></svg>
+                                                    <span class="sr-only">Align center</span>
+                                                </button>
+                                                <div id="tooltip-center-align" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                    Align center
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
+
+                                                <button id="toggleRightAlignButton" type="button" data-tooltip-target="tooltip-right-align" class="p-1.5 text-gray-800 dark:text-gray-300 rounded-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6h-8m8 4H6m12 4h-8m8 4H6"/></svg>
+                                                    <span class="sr-only">Align right</span>
+                                                </button>
+                                                <div id="tooltip-right-align" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                    Align right
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="px-4 py-2 bg-white dark:bg-gray-800 rounded-b-md">
+                                        <div id="wysiwyg-example" class="block w-full px-0 text-sm text-gray-800 dark:text-gray-300 bg-white dark:bg-gray-800 border-0 focus:ring-0 min-h-[200px]"></div>
+                                    </div>
+                                </div>
+                                <textarea id="content" class="hidden form-textarea w-full" name="content" rows="10">{{ old('content') }}</textarea>
                                 @error('content') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
                             </div>
                         </div>
@@ -112,4 +221,51 @@
             </form>
         </div>
     </div>
+
+    @push('scripts')
+    <script type="module">
+        import { Editor } from '@tiptap/core';
+        import StarterKit from '@tiptap/starter-kit';
+        import Underline from '@tiptap/extension-underline';
+        import TextAlign from '@tiptap/extension-text-align';
+
+        window.addEventListener('load', function() {
+            if (document.getElementById("wysiwyg-example")) {
+                const editor = new Editor({
+                    element: document.querySelector('#wysiwyg-example'),
+                    extensions: [
+                        StarterKit,
+                        Underline,
+                        TextAlign.configure({
+                            types: ['heading', 'paragraph'],
+                        }),
+                    ],
+                    content: document.getElementById('content').value,
+                    editorProps: {
+                        attributes: {
+                            class: 'format lg:format-lg dark:format-invert focus:outline-none format-blue max-w-none prose dark:prose-invert min-h-[200px]',
+                        },
+                    },
+                    onUpdate: ({ editor }) => {
+                        document.getElementById('content').value = editor.getHTML();
+                    }
+                });
+
+                // set up custom event listeners for the buttons
+                document.getElementById('toggleBoldButton').addEventListener('click', () => editor.chain().focus().toggleBold().run());
+                document.getElementById('toggleItalicButton').addEventListener('click', () => editor.chain().focus().toggleItalic().run());
+                document.getElementById('toggleUnderlineButton').addEventListener('click', () => editor.chain().focus().toggleUnderline().run());
+                document.getElementById('toggleStrikeButton').addEventListener('click', () => editor.chain().focus().toggleStrike().run());
+
+                document.getElementById('toggleListButton').addEventListener('click', () => editor.chain().focus().toggleBulletList().run());
+                document.getElementById('toggleOrderedListButton').addEventListener('click', () => editor.chain().focus().toggleOrderedList().run());
+                document.getElementById('toggleBlockquoteButton').addEventListener('click', () => editor.chain().focus().toggleBlockquote().run());
+
+                document.getElementById('toggleLeftAlignButton').addEventListener('click', () => editor.chain().focus().setTextAlign('left').run());
+                document.getElementById('toggleCenterAlignButton').addEventListener('click', () => editor.chain().focus().setTextAlign('center').run());
+                document.getElementById('toggleRightAlignButton').addEventListener('click', () => editor.chain().focus().setTextAlign('right').run());
+            }
+        });
+    </script>
+    @endpush
 </x-app-layout>
