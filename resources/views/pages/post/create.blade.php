@@ -566,11 +566,14 @@
                     Image,
                     YouTube,
                 ],
-                content: '<p>Text here</p>',
+                content: document.getElementById('content').value,
                 editorProps: {
                     attributes: {
-                        class: 'format lg:format-lg dark:format-invert focus:outline-none format-blue max-w-none',
-                    },
+                            class: 'format lg:format-lg dark:format-invert focus:outline-none format-blue max-w-none prose dark:prose-invert min-h-[200px]',
+                        },
+                },
+                onUpdate: ({ editor }) => {
+                    document.getElementById('content').value = editor.getHTML();
                 }
             });
 

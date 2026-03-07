@@ -51,7 +51,7 @@
                             @endif
 
                             <div class="prose max-w-none text-gray-600 dark:text-gray-300 text-justify">
-                                {!! nl2br(e($post->content)) !!}
+                                {!! $post->content !!}
                             </div>
 
                             @if ($post->source && is_array($post->source) && count($post->source) > 0)
