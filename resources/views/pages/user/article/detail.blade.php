@@ -58,7 +58,7 @@
                             @endif
 
                             <!-- Sections -->
-                            <div class="prose max-w-none text-gray-600 dark:text-gray-300 text-justify space-y-8">
+                            <div class="format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-300 text-justify space-y-8">
                                 @foreach ($article->sections as $section)
                                     <section>
                                         @if($section->heading)
