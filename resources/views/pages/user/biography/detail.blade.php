@@ -76,8 +76,8 @@
                             </header>
 
                             <!-- Description -->
-                            <div class="text-lg/8 max-w-none text-gray-800 dark:text-gray-200 text-justify">
-                                {!! nl2br(e($biography->biografi)) !!}
+                            <div class="format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-300 text-justify">
+                                {!! $biography->biografi !!}
                             </div>
 
                             @if(!empty($biography->source) && is_array($biography->source))
