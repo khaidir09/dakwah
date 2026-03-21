@@ -80,7 +80,7 @@ class PrayerSchedule extends Component
     {
         $activePrayer = null;
         $nextPrayer = null;
-        $prayerTimes = ['imsak', 'subuh', 'terbit', 'dhuha', 'dzuhur', 'ashar', 'maghrib', 'isya'];
+        $prayerTimes = ['subuh', 'terbit', 'dzuhur', 'ashar', 'maghrib', 'isya'];
 
         if ($this->schedule) {
             $now = now()->setTimezone('Asia/Makassar')->format('H:i');
