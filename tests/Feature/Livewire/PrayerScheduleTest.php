@@ -56,7 +56,7 @@ class PrayerScheduleTest extends TestCase
     public function it_uses_user_city_when_logged_in_and_mapped()
     {
         $province = Province::create(['code' => '63', 'name' => 'Kalimantan Selatan']);
-        $city = City::create(['code' => '6372', 'province_code' => '63', 'name' => 'Banjarbaru']);
+        $city = City::create(['code' => '6372', 'province_code' => '63', 'name' => 'Banjarbaru', 'api_myquran' => 'mapped_id_123']);
 
         $user = User::factory()->create([
             'city_code' => '6372'
