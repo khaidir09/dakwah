@@ -71,7 +71,7 @@ class ListMajelis extends Component
 
     public function render()
     {
-        $query = Assembly::with('teacher');
+        $query = Assembly::with('teacher')->where('status', 'Aktif');
 
         if (auth()->check()) {
             $query->withExists(['followers as is_followed' => function ($q) {

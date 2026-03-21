@@ -19,7 +19,7 @@
                                 <span class="text-sm font-medium @if(request()->routeIs('beranda')) text-emerald-500 @else text-gray-600 dark:text-gray-300 @endif">Beranda</span>
                             </a>
                         </li>
-                        <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                        {{-- <li class="mr-0.5 md:mr-0 md:mb-0.5">
                              <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('ramadhan-*')) bg-white dark:bg-gray-800 @endif" href="{{ route('ramadhan-list') }}">
                                 <svg class="shrink-0 @if(request()->routeIs('ramadhan-*')) text-emerald-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -27,7 +27,7 @@
                                 </svg>
                                 <span class="text-sm font-medium @if(request()->routeIs('ramadhan-*')) text-emerald-500 @else text-gray-600 dark:text-gray-300 @endif">Jadwal Ramadhan</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="mr-0.5 md:mr-0 md:mb-0.5">
                              <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('majelis*')) bg-white dark:bg-gray-800 @endif" href="{{ route('majelis-list') }}">
                                 <svg class="shrink-0 @if(request()->routeIs('majelis*')) text-emerald-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

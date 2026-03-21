@@ -26,7 +26,7 @@
                             </div>
 
                             <!-- Jadwal Ramadhan Hari Ini -->
-                            <livewire:home-ramadhan-today />
+                            {{-- <livewire:home-ramadhan-today /> --}}
 
                             <!-- Title -->
                             <header>
