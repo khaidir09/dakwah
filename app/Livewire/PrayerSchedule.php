@@ -70,6 +70,12 @@ class PrayerSchedule extends Component
                 } else {
                     $this->schedule = $jadwal;
                 }
+
+                if (isset($this->schedule['terbit'])) {
+                    $terbitTime = \Carbon\Carbon::createFromFormat('H:i', $this->schedule['terbit']);
+                    $this->schedule['isyraq'] = $terbitTime->addMinutes(15)->format('H:i');
+                    unset($this->schedule['terbit']);
+                }
             } else {
                 $this->schedule = null;
             }
@@ -80,7 +86,7 @@ class PrayerSchedule extends Component
     {
         $activePrayer = null;
         $nextPrayer = null;
-        $prayerTimes = ['subuh', 'terbit', 'dzuhur', 'ashar', 'maghrib', 'isya'];
+        $prayerTimes = ['subuh', 'isyraq', 'dzuhur', 'ashar', 'maghrib', 'isya'];
 
         if ($this->schedule) {
             $now = now()->setTimezone('Asia/Makassar')->format('H:i');
