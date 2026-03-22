@@ -715,7 +715,6 @@
                     }),
                     // Include the custom Bold extension
                     CustomBold,
-                    TextStyle,
                     Color,
                     FontSizeTextStyle,
                     FontFamily,
