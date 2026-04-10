@@ -21,6 +21,7 @@ class ScientificArticle extends Model
         'file_path',
         'notebook_id',
         'status',
+        'content',
     ];
 
     protected $casts = [
@@ -30,11 +31,6 @@ class ScientificArticle extends Model
     public function foundation()
     {
         return $this->belongsTo(Foundation::class);
-    }
-
-    public function sections()
-    {
-        return $this->hasMany(ArticleSection::class, 'article_id');
     }
 
     public function citations()

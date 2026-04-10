@@ -92,10 +92,7 @@ class ManagedFoundationController extends Controller
             'category' => 'required|string|max:255',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'file_path' => 'nullable|mimes:pdf|max:10240',
-            'sections' => 'nullable|array',
-            'sections.*.heading' => 'required|string|max:255',
-            'sections.*.content' => 'required|string',
-            'sections.*.order' => 'nullable|integer',
+            'content' => 'required|string',
             'citations' => 'nullable|array',
             'citations.*.type' => 'required|in:QURAN,HADITH,KITAB,SAINS',
             'citations.*.source_text_arabic' => 'nullable|string',
@@ -110,7 +107,7 @@ class ManagedFoundationController extends Controller
             abort(403, 'Anda tidak memiliki akses ke yayasan ini.');
         }
 
-        $data = $request->except(['sections', 'citations', 'bibliography']);
+        $data = $request->except(['citations', 'bibliography']);
         $data['slug'] = Str::slug($request->title) . '-' . time();
 
         if ($request->hasFile('cover_image')) {
@@ -128,13 +125,6 @@ class ManagedFoundationController extends Controller
         }
 
         $article = ScientificArticle::create($data);
-
-        // Save Sections
-        if ($request->has('sections')) {
-            foreach ($request->sections as $sectionData) {
-                $article->sections()->create($sectionData);
-            }
-        }
 
         // Save Citations
         if ($request->has('citations')) {
@@ -158,7 +148,7 @@ class ManagedFoundationController extends Controller
      */
     public function editArticle($id)
     {
-        $article = ScientificArticle::with(['sections', 'citations', 'bibliography'])->findOrFail($id);
+        $article = ScientificArticle::with(['citations', 'bibliography'])->findOrFail($id);
 
         // Authorization check: User must belong to the foundation of the article
         if (!Auth::user()->foundations()->where('foundations.id', $article->foundation_id)->exists()) {
@@ -192,10 +182,7 @@ class ManagedFoundationController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'file_path' => 'nullable|mimes:pdf|max:10240',
             'status' => 'required|in:DRAFT,PUBLISHED',
-            'sections' => 'nullable|array',
-            'sections.*.heading' => 'required|string|max:255',
-            'sections.*.content' => 'required|string',
-            'sections.*.order' => 'nullable|integer',
+            'content' => 'required|string',
             'citations' => 'nullable|array',
             'citations.*.type' => 'required|in:QURAN,HADITH,KITAB,SAINS',
             'citations.*.source_text_arabic' => 'nullable|string',
@@ -210,7 +197,7 @@ class ManagedFoundationController extends Controller
             abort(403, 'Anda tidak memiliki akses ke yayasan ini.');
         }
 
-        $data = $request->except(['cover_image', 'file_path', 'sections', 'citations', 'bibliography']);
+        $data = $request->except(['cover_image', 'file_path', 'citations', 'bibliography']);
 
         if ($article->title !== $request->title) {
             $data['slug'] = Str::slug($request->title) . '-' . time();
@@ -241,14 +228,6 @@ class ManagedFoundationController extends Controller
         }
 
         $article->update($data);
-
-        // Sync Sections
-        $article->sections()->delete();
-        if ($request->has('sections')) {
-            foreach ($request->sections as $sectionData) {
-                $article->sections()->create($sectionData);
-            }
-        }
 
         // Sync Citations
         $article->citations()->delete();
