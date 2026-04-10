@@ -461,7 +461,7 @@
 
                                 <div class="px-4 py-2 bg-neutral-primary rounded-b-lg">
                                     <label for="wysiwyg-example" class="sr-only">Publish post</label>
-                                    <div id="wysiwyg-example"class="block w-full px-0 text-xs text-body bg-neutral-primary border-0 focus:ring-0"></div>
+                                    <div id="wysiwyg-example" class="block w-full px-0 text-xs text-body bg-neutral-primary border-0 focus:ring-0"></div>
                                 </div>
                                 </div>
 

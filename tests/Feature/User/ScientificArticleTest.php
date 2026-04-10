@@ -39,18 +39,7 @@ class ScientificArticleTest extends TestCase
             'author_name' => 'Author Name',
             'category' => 'Fiqih',
             'status' => 'DRAFT',
-            'sections' => [
-                [
-                    'heading' => 'Section 1',
-                    'content' => 'Content 1',
-                    'order' => 1
-                ],
-                [
-                    'heading' => 'Section 2',
-                    'content' => 'Content 2',
-                    'order' => 2
-                ]
-            ],
+            'content' => '<p>Article Content</p>',
             'citations' => [
                 [
                     'type' => 'QURAN',
@@ -70,13 +59,12 @@ class ScientificArticleTest extends TestCase
 
         $response->assertRedirect(route('kelola-artikel.index'));
 
-        $this->assertDatabaseHas('scientific_articles', ['title' => 'Test Article']);
+        $this->assertDatabaseHas('scientific_articles', [
+            'title' => 'Test Article',
+            'content' => '<p>Article Content</p>'
+        ]);
         $article = ScientificArticle::where('title', 'Test Article')->first();
 
-        $this->assertDatabaseHas('article_sections', [
-            'article_id' => $article->id,
-            'heading' => 'Section 1'
-        ]);
         $this->assertDatabaseHas('article_citations', [
             'article_id' => $article->id,
             'type' => 'QURAN'
@@ -105,10 +93,9 @@ class ScientificArticleTest extends TestCase
             'slug' => 'original-title',
             'author_name' => 'Original Author',
             'category' => 'Fiqih',
-            'status' => 'DRAFT'
+            'status' => 'DRAFT',
+            'content' => 'Old content'
         ]);
-
-        $article->sections()->create(['heading' => 'Old Section', 'content' => 'Old Content', 'order' => 1]);
 
         $data = [
             'title' => 'Updated Title',
@@ -116,13 +103,7 @@ class ScientificArticleTest extends TestCase
             'author_name' => 'Updated Author',
             'category' => 'Fiqih',
             'status' => 'PUBLISHED',
-            'sections' => [
-                [
-                    'heading' => 'New Section',
-                    'content' => 'New Content',
-                    'order' => 1
-                ]
-            ],
+            'content' => 'Updated content',
             // Sending empty citations/bibliography to verify update handles them (or lack thereof)
         ];
 
@@ -130,8 +111,9 @@ class ScientificArticleTest extends TestCase
 
         $response->assertRedirect(route('kelola-artikel.index'));
 
-        $this->assertDatabaseHas('scientific_articles', ['title' => 'Updated Title']);
-        $this->assertDatabaseMissing('article_sections', ['heading' => 'Old Section']);
-        $this->assertDatabaseHas('article_sections', ['heading' => 'New Section']);
+        $this->assertDatabaseHas('scientific_articles', [
+            'title' => 'Updated Title',
+            'content' => 'Updated content'
+        ]);
     }
 }

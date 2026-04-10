@@ -59,14 +59,9 @@
 
                             <!-- Sections -->
                             <div class="format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-300 text-justify space-y-8">
-                                @foreach ($article->sections as $section)
-                                    <section>
-                                        @if($section->heading)
-                                            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3">{{ $section->heading }}</h3>
-                                        @endif
-                                        <div class="whitespace-pre-wrap">{!! nl2br(e($section->content)) !!}</div>
-                                    </section>
-                                @endforeach
+
+                                {!! $article->content !!}
+
                             </div>
 
                             <!-- Citations -->
