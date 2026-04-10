@@ -42,8 +42,7 @@
                     </div>
                 @endif
 
-                <div class="grid md:grid-cols-2 gap-6 mb-6">
-
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
                     {{-- Foundation Selection --}}
                     <div>
                         <label class="block text-sm font-medium mb-2" for="foundation_id">Yayasan <span class="text-red-500">*</span></label>
@@ -62,23 +61,6 @@
                             <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-2" for="title">Judul <span class="text-red-500">*</span></label>
-                        <input id="title" class="form-input w-full @error('title') is-invalid @enderror" type="text" name="title" value="{{ old('title', $article->title) }}" required/>
-                        @error('title')
-                            <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-2" for="subtitle">Sub Judul</label>
-                        <input id="subtitle" class="form-input w-full @error('subtitle') is-invalid @enderror" type="text" name="subtitle" value="{{ old('subtitle', $article->subtitle) }}"/>
-                        @error('subtitle')
-                            <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                        @enderror
-                    </div>
-
                     <div>
                         <label class="block text-sm font-medium mb-2" for="author_name">Penulis <span class="text-red-500">*</span></label>
                         <input id="author_name" class="form-input w-full @error('author_name') is-invalid @enderror" type="text" name="author_name" value="{{ old('author_name', $article->author_name) }}" required/>
@@ -91,6 +73,25 @@
                         <label class="block text-sm font-medium mb-2" for="category">Kategori <span class="text-red-500">*</span></label>
                         <input id="category" class="form-input w-full @error('category') is-invalid @enderror" type="text" name="category" value="{{ old('category', $article->category) }}" placeholder="Contoh: Fiqih, Aqidah" required/>
                         @error('category')
+                            <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2" for="title">Judul <span class="text-red-500">*</span></label>
+                        <input id="title" class="form-input w-full @error('title') is-invalid @enderror" type="text" name="title" value="{{ old('title', $article->title) }}" required/>
+                        @error('title')
+                            <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2" for="subtitle">Sub Judul</label>
+                        <input id="subtitle" class="form-input w-full @error('subtitle') is-invalid @enderror" type="text" name="subtitle" value="{{ old('subtitle', $article->subtitle) }}"/>
+                        @error('subtitle')
                             <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                         @enderror
                     </div>
@@ -129,12 +130,11 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2" for="file_path">File Artikel (PDF)</label>
-                         @if($article->file_path)
-                            <div class="mb-4">
-                                <a href="{{ Storage::url($article->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm underline">Lihat File Saat Ini</a>
-                            </div>
-                        @endif
+                        <label class="block text-sm font-medium mb-2" for="file_path">File Artikel (PDF) 
+                            @if($article->file_path)
+                                <a href="{{ Storage::url($article->file_path) }}" target="_blank" class="ms-3 text-blue-600 hover:text-blue-800 text-sm underline">Lihat File Saat Ini</a>
+                            @endif
+                        </label>
                         <input id="file_path" class="form-input w-full @error('file_path') is-invalid @enderror" type="file" name="file_path" accept="application/pdf"/>
                         @error('file_path')
                             <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
@@ -143,7 +143,7 @@
 
                 </div>
 
-
+                
                 {{-- Content Editor --}}
                 <div class="mb-6 border-t pt-6">
                     <label class="block text-sm font-medium mb-2" for="content">Isi Artikel <span class="text-red-500">*</span></label>
@@ -226,7 +226,7 @@
                                                 <div id="textSizeDropdown" class="z-10 hidden bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-72">
                                                     <ul class="p-2 space-y-1 text-sm text-body font-medium" aria-labelledby="toggleTextSizeButton">
                                                         <li>
-                                                            <button data-text-size="16px" type="button" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">16px (Default)
+                                                            <button data-text-size="16px" type="button" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">16px (Default) 
                                                             </button>
                                                         </li>
                                                         <li>
@@ -394,7 +394,7 @@
                                         <div id="typographyDropdown" class="z-10 hidden bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-72">
                                             <ul class="p-2 space-y-1 text-sm text-body font-medium" aria-labelledby="typographyDropdownButton">
                                                 <li>
-                                                    <button id="toggleParagraphButton" type="button" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Paragraph
+                                                    <button id="toggleParagraphButton" type="button" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Paragraph 
                                                         <div class="space-x-1.5 ms-4">
                                                             <kbd class="px-2 py-1 text-xs font-semibold text-body bg-neutral-tertiary-medium border border-default-strong rounded">Cmd</kbd>
                                                             <kbd class="px-2 py-1 text-xs font-semibold text-body bg-neutral-tertiary-medium border border-default-strong rounded">Alt</kbd>
@@ -403,7 +403,7 @@
                                                     </button>
                                                 </li>
                                                 <li>
-                                                    <button data-heading-level="1" type="button" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Heading 1
+                                                    <button data-heading-level="1" type="button" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Heading 1 
                                                         <div class="space-x-1.5 ms-4">
                                                             <kbd class="px-2 py-1 text-xs font-semibold text-body bg-neutral-tertiary-medium border border-default-strong rounded">Cmd</kbd>
                                                             <kbd class="px-2 py-1 text-xs font-semibold text-body bg-neutral-tertiary-medium border border-default-strong rounded">Alt</kbd>
@@ -412,7 +412,7 @@
                                                     </button>
                                                 </li>
                                                 <li>
-                                                    <button  data-heading-level="2" type="button" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Heading 2
+                                                    <button  data-heading-level="2" type="button" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Heading 2 
                                                         <div class="space-x-1.5 ms-4">
                                                             <kbd class="px-2 py-1 text-xs font-semibold text-body bg-neutral-tertiary-medium border border-default-strong rounded">Cmd</kbd>
                                                             <kbd class="px-2 py-1 text-xs font-semibold text-body bg-neutral-tertiary-medium border border-default-strong rounded">Alt</kbd>
@@ -516,7 +516,7 @@
                                 </div>
 
                                 <textarea id="content" class="hidden form-textarea w-full" name="content" rows="10">{{ old('content', $article->content) }}</textarea>
-                                @error('content') <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                                @error('content') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
                 </div>
 
 {{-- Citations --}}
@@ -593,7 +593,7 @@
 
     @push('scripts')
     <script type="module">
-
+        
         import { Editor } from 'https://esm.sh/@tiptap/core@2.6.6';
         import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.6.6';
         import Highlight from 'https://esm.sh/@tiptap/extension-highlight@2.6.6';
@@ -754,7 +754,7 @@
                 editor.chain().focus().setParagraph().run();
                 typographyDropdown.hide();
             });
-
+            
             document.querySelectorAll('[data-heading-level]').forEach((button) => {
                 button.addEventListener('click', () => {
                     const level = button.getAttribute('data-heading-level');
