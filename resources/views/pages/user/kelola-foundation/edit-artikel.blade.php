@@ -516,7 +516,7 @@
                                 </div>
 
                                 <textarea id="content" class="hidden form-textarea w-full" name="content" rows="10">{{ old('content', $article->content) }}</textarea>
-                                @error('content') <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                                @error('content') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
                 </div>
 
 {{-- Citations --}}
