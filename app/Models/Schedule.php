@@ -19,6 +19,11 @@ class Schedule extends Model
         return $this->belongsTo(Teacher::class);
     }
 
+    public function notes()
+    {
+        return $this->hasMany(ScheduleNote::class);
+    }
+
     public function getWaktuFormattedAttribute()
     {
         // Cek jika 'waktu' ada isinya sebelum mem-format

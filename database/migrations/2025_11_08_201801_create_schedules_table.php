@@ -17,6 +17,7 @@ return new class extends Migration
             $table->longText('deskripsi');
             $table->foreignId('assembly_id')->constrained()->onDelete('cascade');
             $table->dateTime('waktu');
+            $table->string('hari')->nullable();
             $table->enum('status', ['Aktif', 'Selesai', 'Batal', 'Libur Ramadhan'])->default('Aktif');
             $table->timestamps();
         });

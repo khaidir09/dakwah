@@ -27,4 +27,22 @@ class JadwalMajelisController extends Controller
 
         return view('pages/user/jadwal-majelis/list', compact('schedules', 'isRamadhan'));
     }
+
+    public function detail($id)
+    {
+        $schedule = Schedule::with(['teacher', 'assembly'])->findOrFail($id);
+
+        $notesQuery = $schedule->notes()->with('user')->latest();
+
+        if (auth()->check()) {
+            $notes = $notesQuery->where(function ($query) {
+                $query->where('visibility', 'Public')->where('status', 'Approved')
+                      ->orWhere('user_id', auth()->id());
+            })->get();
+        } else {
+            $notes = $notesQuery->where('visibility', 'Public')->where('status', 'Approved')->get();
+        }
+
+        return view('pages/user/jadwal-majelis/detail', compact('schedule', 'notes'));
+    }
 }
