@@ -48,6 +48,7 @@ Route::redirect('/', 'beranda');
 Route::get('/beranda', [HomeController::class, 'index'])->name('beranda');
 Route::get('/majelis', [UserMajelisController::class, 'list'])->name('majelis-list');
 Route::get('/jadwal-majelis', [UserJadwalMajelisController::class, 'list'])->name('jadwal-majelis-list');
+Route::get('/jadwal-majelis/{id}', [UserJadwalMajelisController::class, 'detail'])->name('jadwal-majelis-detail');
 Route::get('/majelis/{id}', [UserMajelisController::class, 'detail'])->name('majelis-detail');
 Route::get('/guru', [UserGuruController::class, 'list'])->name('guru-list');
 Route::get('/guru/{teacher}', [UserGuruController::class, 'detail'])->name('guru-detail');
@@ -135,12 +136,20 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         ->name('majelis.onboarding');
 
     Route::get('/favorit-saya', [\App\Http\Controllers\User\FavoriteController::class, 'index'])->name('favorit-saya');
+
+    Route::post('/jadwal-majelis/{id}/notes', [\App\Http\Controllers\User\ScheduleNoteController::class, 'store'])->name('jadwal-majelis.notes.store');
+    Route::delete('/jadwal-majelis/notes/{id}', [\App\Http\Controllers\User\ScheduleNoteController::class, 'destroy'])->name('jadwal-majelis.notes.destroy');
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth:sanctum', 'verified'])->name('dashboard');
     Route::resource('/majelis', MajelisController::class);
     Route::resource('/jadwal-majelis', JadwalMajelisController::class);
+
+    // Schedule Notes Admin Moderation
+    Route::get('/schedule-notes', [\App\Http\Controllers\ScheduleNoteController::class, 'index'])->name('schedule-notes.index');
+    Route::patch('/schedule-notes/{id}/approve', [\App\Http\Controllers\ScheduleNoteController::class, 'approve'])->name('schedule-notes.approve');
+    Route::patch('/schedule-notes/{id}/reject', [\App\Http\Controllers\ScheduleNoteController::class, 'reject'])->name('schedule-notes.reject');
     Route::resource('/guru', GuruController::class);
     Route::resource('/event', \App\Http\Controllers\EventController::class);
     Route::resource('/video', VideoController::class);
