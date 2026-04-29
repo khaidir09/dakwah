@@ -91,37 +91,55 @@
                                 @endauth
 
                                 <!-- List Catatan -->
-                                <div class="space-y-4">
+                                <div class="space-y-4" x-data="{ activeNote: {{ $notes->count() > 0 ? $notes->first()->id : 'null' }} }">
                                     @forelse($notes as $note)
-                                        <div class="bg-gray-50 dark:bg-gray-900/20 p-4 rounded-lg border border-gray-100 dark:border-gray-700/60">
-                                            <div class="flex justify-between items-start mb-2">
-                                                <div class="flex items-center">
-                                                    <div class="font-medium text-gray-800 dark:text-gray-100 mr-2">{{ $note->user->name }}</div>
-                                                    <div class="text-xs text-gray-500">{{ $note->created_at->locale('id')->diffForHumans() }}</div>
-                                                </div>
-                                                <div class="flex items-center space-x-2 text-xs font-medium">
-                                                    @if($note->visibility === 'Private')
-                                                        <span class="text-gray-500 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">Privat</span>
-                                                    @else
-                                                        @if($note->status === 'Pending')
-                                                            <span class="text-yellow-600 bg-yellow-100 dark:bg-yellow-900 px-2 py-1 rounded">Menunggu Moderasi</span>
-                                                        @elseif($note->status === 'Approved')
-                                                            <span class="text-emerald-600 bg-emerald-100 dark:bg-emerald-900 px-2 py-1 rounded">Publik</span>
+                                        <div class="bg-gray-50 dark:bg-gray-900/20 p-4 rounded-lg border border-gray-100 dark:border-gray-700/60 transition-all duration-200">
+                                            <!-- Accordion Header -->
+                                            <div class="cursor-pointer group" @click="activeNote = activeNote === {{ $note->id }} ? null : {{ $note->id }}">
+                                                <div class="flex justify-between items-start mb-2">
+                                                    <div class="flex items-center">
+                                                        <div class="font-medium text-gray-800 dark:text-gray-100 mr-2">{{ $note->user->name }}</div>
+                                                        <div class="text-xs text-gray-500">{{ $note->created_at->locale('id')->diffForHumans() }}</div>
+                                                    </div>
+                                                    <div class="flex items-center space-x-2 text-xs font-medium">
+                                                        @if($note->visibility === 'Private')
+                                                            <span class="text-gray-500 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">Privat</span>
+                                                        @else
+                                                            @if($note->status === 'Pending')
+                                                                <span class="text-yellow-600 bg-yellow-100 dark:bg-yellow-900 px-2 py-1 rounded">Menunggu Moderasi</span>
+                                                            @elseif($note->status === 'Approved')
+                                                                <span class="text-emerald-600 bg-emerald-100 dark:bg-emerald-900 px-2 py-1 rounded">Publik</span>
+                                                            @endif
                                                         @endif
-                                                    @endif
 
-                                                    @auth
-                                                        @if(auth()->id() === $note->user_id)
-                                                            <form action="{{ route('jadwal-majelis.notes.destroy', $note->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?');">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="text-red-500 hover:text-red-600">Hapus</button>
-                                                            </form>
-                                                        @endif
-                                                    @endauth
+                                                        @auth
+                                                            @if(auth()->id() === $note->user_id)
+                                                                <form action="{{ route('jadwal-majelis.notes.destroy', $note->id) }}" method="POST" class="inline-block" @click.stop onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="text-red-500 hover:text-red-600">Hapus</button>
+                                                                </form>
+                                                            @endif
+                                                        @endauth
+
+                                                        <!-- Chevron -->
+                                                        <svg class="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-200" 
+                                                             :class="{'rotate-180': activeNote === {{ $note->id }}}" 
+                                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <!-- Snippet (visible only when collapsed) -->
+                                                <div x-show="activeNote !== {{ $note->id }}" class="text-sm text-gray-500 dark:text-gray-400 truncate">
+                                                    {{ \Illuminate\Support\Str::limit($note->content, 60) }}
                                                 </div>
                                             </div>
-                                            <div class="format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-400 whitespace-pre-wrap text-justify">{{ $note->content }}</div>
+
+                                            <!-- Accordion Content -->
+                                            <div x-show="activeNote === {{ $note->id }}" x-collapse x-cloak>
+                                                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700/60 format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-400 whitespace-pre-wrap text-justify">{{ $note->content }}</div>
+                                            </div>
                                         </div>
                                     @empty
                                         <div class="text-center py-6">
