@@ -139,6 +139,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::post('/jadwal-majelis/{id}/notes', [\App\Http\Controllers\User\ScheduleNoteController::class, 'store'])->name('jadwal-majelis.notes.store');
     Route::delete('/jadwal-majelis/notes/{id}', [\App\Http\Controllers\User\ScheduleNoteController::class, 'destroy'])->name('jadwal-majelis.notes.destroy');
+
+    Route::get('/kelola-catatan', [\App\Http\Controllers\User\KelolaCatatanController::class, 'index'])->name('kelola-catatan.index');
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
