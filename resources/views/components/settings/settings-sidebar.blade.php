@@ -107,6 +107,17 @@
                 </li>
             @endif
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('kelola-catatan*')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kelola-catatan.index') }}">
+                    <svg class="shrink-0 @if(request()->routeIs('kelola-catatan*')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                        <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                        <line x1="16" y1="5" x2="19" y2="8" />
+                    </svg>
+                    <span class="text-sm font-medium @if(Route::is('kelola-catatan*')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Kelola Catatan</span>
+                </a>
+            </li>
+            <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('notifications')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="#">
                     <svg class="shrink-0 fill-current mr-2 @if(Route::is('notifications')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">
                         <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917z"/>
