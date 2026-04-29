@@ -169,10 +169,16 @@
                                 <span>{{ $schedule->assembly->nama_majelis }}</span>
                             </div>
                         </a>
-                        <a class="block flex-1 text-center text-sm text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200 font-medium px-3 py-4 group" href="#">
+                        <div class="block flex-1 text-center text-sm text-gray-600 dark:text-gray-300 font-medium px-3 py-4 group">
                             <div class="flex items-center justify-center">
                             <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 24 24"><rect x="6" width="2" height="5" fill="rgba(75, 85, 99, 1)" stroke-width="0" data-color="color-2"></rect><rect x="16" width="2" height="5" fill="rgba(75, 85, 99, 1)" stroke-width="0" data-color="color-2"></rect><path d="m20,3H4c-1.654,0-3,1.346-3,3v12c0,1.654,1.346,3,3,3h16c1.654,0,3-1.346,3-3V6c0-1.654-1.346-3-3-3Zm0,16H4c-.551,0-1-.448-1-1v-9h18v9c0,.552-.449,1-1,1Z" stroke-width="0" fill="rgba(75, 85, 99, 1)"></path></svg>
                                 <span>{{ $schedule->hari }}, {{ $schedule->waktu_formatted }} WITA</span>
+                            </div>
+                        </div>
+                        <a class="block flex-1 text-center text-sm text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 font-medium px-3 py-4 group" href="{{ route('jadwal-majelis-detail', $schedule->id) }}">
+                            <div class="flex items-center justify-center">
+                                <svg class="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                                <span>Catatan</span>
                             </div>
                         </a>
                     </div>
