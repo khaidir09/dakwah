@@ -97,7 +97,7 @@
                                             <div class="flex justify-between items-start mb-2">
                                                 <div class="flex items-center">
                                                     <div class="font-medium text-gray-800 dark:text-gray-100 mr-2">{{ $note->user->name }}</div>
-                                                    <div class="text-xs text-gray-500">{{ $note->created_at->diffForHumans() }}</div>
+                                                    <div class="text-xs text-gray-500">{{ $note->created_at->locale('id')->diffForHumans() }}</div>
                                                 </div>
                                                 <div class="flex items-center space-x-2 text-xs font-medium">
                                                     @if($note->visibility === 'Private')
@@ -121,7 +121,7 @@
                                                     @endauth
                                                 </div>
                                             </div>
-                                            <div class="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">{{ $note->content }}</div>
+                                            <div class="format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-400 whitespace-pre-wrap text-justify">{{ $note->content }}</div>
                                         </div>
                                     @empty
                                         <div class="text-center py-6">
