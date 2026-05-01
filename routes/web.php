@@ -101,8 +101,6 @@ Route::get('/get-cities/{province_code}', [DependantDropdownController::class, '
 Route::get('/get-districts/{city_code}', [DependantDropdownController::class, 'getDistricts'])->name('get-districts');
 Route::get('/get-villages/{district_code}', [DependantDropdownController::class, 'getVillages'])->name('get-villages');
 
-Route::get('/catatan-pengajian', [\App\Http\Controllers\User\CatatanPengajianController::class, 'index'])->name('catatan-pengajian.list');
-
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/kelola-majelis/{id}', [ManagedMajelisController::class, 'edit'])->name('kelola-majelis.edit');
     Route::put('/kelola-majelis/{id}', [ManagedMajelisController::class, 'update'])->name('kelola-majelis.update');
