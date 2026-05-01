@@ -248,11 +248,19 @@
                 <div class="px-5 py-4">
                     <div class="space-y-4">
                         <div>
+                            <div class="mb-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 p-2 rounded">
+                                Info: Jika pilihan jadwal majelis tidak muncul, berarti Anda belum mengikuti majelisnya. Silakan cari dan ikuti majelis melalui <a href="{{ route('majelis-list') }}" class="text-blue-500 hover:underline">Daftar Majelis</a>.
+                            </div>
                             <label class="block text-sm font-medium mb-1" for="schedule_id">Jadwal Majelis <span class="text-red-500">*</span></label>
-                            <select id="schedule_id" wire:model="schedule_id" class="form-select w-full" required>
+                            <select id="schedule_id" wire:model="schedule_id" class="form-select w-full truncate" required>
                                 <option value="">Pilih Jadwal</option>
                                 @foreach($availableSchedules as $schedule)
-                                    <option value="{{ $schedule->id }}">{{ $schedule->assembly->nama_majelis ?? 'Unknown' }} - {{ $schedule->nama_jadwal }}</option>
+                                    @php
+                                        $fullScheduleName = ($schedule->assembly->nama_majelis ?? 'Unknown') . ' - ' . $schedule->nama_jadwal;
+                                    @endphp
+                                    <option value="{{ $schedule->id }}" title="{{ $fullScheduleName }}">
+                                        {{ \Illuminate\Support\Str::limit($fullScheduleName, 60) }}
+                                    </option>
                                 @endforeach
                             </select>
                             @error('schedule_id') <div class="text-xs text-red-500 mt-1">{{ $message }}</div> @enderror
