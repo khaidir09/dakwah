@@ -135,6 +135,17 @@
                                 <span class="text-sm font-medium @if(request()->routeIs(['tulisan*', 'artikel*'])) text-emerald-500 @else text-gray-600 dark:text-gray-300 @endif">Tulisan</span>
                             </a>
                         </li>
+                        <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                             <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(request()->routeIs('catatan-pengajian.list')) bg-white dark:bg-gray-800 @endif" href="{{ route('catatan-pengajian.list') }}">
+                                <svg class="shrink-0 @if(request()->routeIs('catatan-pengajian.list')) text-emerald-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                                    <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                                    <line x1="16" y1="5" x2="19" y2="8" />
+                                </svg>
+                                <span class="text-sm font-medium @if(request()->routeIs('catatan-pengajian.list')) text-emerald-500 @else text-gray-600 dark:text-gray-300 @endif">Catatan Pengajian</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

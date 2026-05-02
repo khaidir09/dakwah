@@ -1,17 +1,41 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Catatan Pengajian') }}
-        </h2>
-    </x-slot>
+<x-user-layout>
+    @section('title', 'Catatan Pengajian')
+    <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <livewire:user.catatan-pengajian-list />
+        <div class="xl:flex">
+
+            <!-- Left + Middle content -->
+            <div class="md:flex flex-1">
+
+                <!-- Left content -->
+                <x-community.feed-left-content />
+
+                <!-- Middle content -->
+                <div class="flex-1 md:ml-8 xl:mx-4 2xl:mx-8">
+                    <div class="md:py-8">
+
+                        <!-- Blocks -->
+                        <div class="space-y-4">
+
+                            <!-- Title -->
+                            <header>
+                                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Catatan Pengajian</h1>
+                            </header>
+
+                            <!-- Posts -->
+                            <livewire:user.catatan-pengajian-list />
+
+                        </div>
+
+                    </div>
                 </div>
+
             </div>
+
+            <!-- Right content -->
+            <x-community.feed-right-content />
+
         </div>
+
     </div>
-</x-app-layout>
+</x-user-layout>

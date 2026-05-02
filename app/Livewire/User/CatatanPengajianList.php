@@ -19,9 +19,9 @@ class CatatanPengajianList extends Component
     {
         // Top 3 Pencatat Terbanyak (visibility = 'Public', status = 'Approved')
         $topUsers = User::withCount(['scheduleNotes as notes_count' => function ($query) {
-                $query->where('visibility', 'Public')
-                      ->where('status', 'Approved');
-            }])
+            $query->where('visibility', 'Public')
+                ->where('status', 'Approved');
+        }])
             ->orderByDesc('notes_count')
             ->limit(3)
             ->get();
