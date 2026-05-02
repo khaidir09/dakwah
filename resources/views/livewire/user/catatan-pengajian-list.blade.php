@@ -26,8 +26,8 @@
                         <tr>
                             <td class="p-2">
                                 <div class="flex items-center">
-                                    @if($topUser->foto != null)
-                                        <img class="rounded-full w-16 h-16 object-cover" src="{{ Storage::url($topUser->foto) }}" alt="{{ $topUser->name }}" />
+                                    @if($topUser->profile_photo_path != null)
+                                        <img class="rounded-full w-10 h-10 object-cover" src="{{ Storage::url($topUser->profile_photo_path) }}" alt="{{ $topUser->name }}" />
                                     @else
                                         <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold">
                                             {{ substr($topUser->name, 0, 1) }}
