@@ -22,6 +22,10 @@ class CatatanPengajianList extends Component
             $query->where('visibility', 'Public')
                 ->where('status', 'Approved');
         }])
+            ->whereHas('scheduleNotes', function ($query) {
+                $query->where('visibility', 'Public')
+                    ->where('status', 'Approved');
+            })
             ->orderByDesc('notes_count')
             ->limit(3)
             ->get();
