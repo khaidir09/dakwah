@@ -52,15 +52,28 @@
     <div>
         <div class="space-y-4">
             @foreach($notes as $note)
-            <div class="bg-white rounded-lg shadow p-4 border">
-                <div class="flex justify-between items-start mb-2">
-                    <div>
-                        <h3 class="font-bold text-lg">{{ $note->schedule->assembly->nama_majelis ?? 'Majelis' }}</h3>
-                        <p class="text-sm text-gray-500">Oleh: {{ $note->user->name }} | {{ $note->created_at->format('d M Y H:i') }}</p>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xs p-5 border border-gray-100 dark:border-gray-700/60 transition-all hover:shadow-md">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+                    <div class="space-y-1 flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                                {{ $note->schedule->nama_jadwal ?? 'Jadwal Majelis' }}
+                            </span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">
+                                {{ $note->created_at->format('d M Y') }}
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100">{{ $note->schedule->assembly->nama_majelis ?? 'Majelis' }}</h3>
+                        <div class="flex items-center gap-2 mt-2 text-sm text-gray-600 dark:text-gray-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            <span>Pencatat: <strong>{{ $note->user->name }}</strong></span>
+                        </div>
                     </div>
-                </div>
-                <div class="prose max-w-none text-gray-700 mt-2">
-                    {!! nl2br(e($note->content)) !!}
+                    <div class="md:ml-4 shrink-0">
+                        <a href="{{ route('catatan-pengajian.detail', $note->id) }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors w-full md:w-auto">
+                            Lihat Detail
+                        </a>
+                    </div>
                 </div>
             </div>
             @endforeach
