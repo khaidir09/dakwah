@@ -105,7 +105,7 @@ class HomeUpcomingHaul extends Component
         $key = 'hijri_date_' . $date;
 
         return Cache::remember($key, 60 * 60 * 24, function () {
-            $url = "https://api.myquran.com/v3/cal/today?adj=-1&tz=Asia%2FMakassar";
+            $url = "https://api.myquran.com/v3/cal/today?m=islamic-civil&tz=Asia%2FMakassar";
             try {
                 $response = Http::timeout(5)->get($url);
                 if ($response->successful()) {
