@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Schedule;
+use App\Models\ScheduleNote;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Laravolt\Indonesia\Models\City;
@@ -138,6 +139,10 @@ class ListJadwalMajelis extends Component
         // Ambil hasil akhir dengan paginasi
         $schedules = $query->simplePaginate($this->paginate);
 
+        $schedule_notes_count = $schedules->pluck('id')->mapWithKeys(function ($id) {
+            return [$id => ScheduleNote::where('schedule_id', $id)->count()];
+        })->toArray();
+
         // Fetch Data for Dropdowns
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
 
@@ -156,6 +161,7 @@ class ListJadwalMajelis extends Component
             'cities' => $cities,
             'districts' => $districts,
             'types' => ['Majelis', 'Mesjid', 'Langgar', 'Musholla'],
+            'schedule_notes_count' => $schedule_notes_count,
         ]);
     }
 }

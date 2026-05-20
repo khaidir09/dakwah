@@ -182,7 +182,7 @@
                         <a class="block flex-1 text-center text-sm text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 font-medium px-3 py-4 group" href="{{ route('jadwal-majelis-detail', $schedule->id) }}">
                             <div class="flex items-center justify-center">
                                 <svg class="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                                <span>Catatan</span>
+                                <span> Catatan ({{ $schedule_notes_count[$schedule->id] ?? 0 }})</span>
                             </div>
                         </a>
                     </div>

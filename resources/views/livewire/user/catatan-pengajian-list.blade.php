@@ -60,7 +60,7 @@
                                 {{ $note->schedule->nama_jadwal ?? 'Jadwal Majelis' }}
                             </span>
                             <span class="text-xs text-gray-500 dark:text-gray-400">
-                                {{ $note->created_at->format('d M Y') }}
+                                {{ $note->created_at->locale('id')->translatedFormat('d M Y') }}
                             </span>
                         </div>
                         <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100">{{ $note->schedule->assembly->nama_majelis ?? 'Majelis' }}</h3>

@@ -70,7 +70,7 @@
                                             <label for="content" class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Tulis Catatan</label>
                                             <textarea id="content" name="content" rows="3" class="form-textarea w-full" required placeholder="Tuliskan catatan kajian, hikmah, atau buku harian spiritual di sini..."></textarea>
                                         </div>
-                                        <div class="flex items-center justify-between">
+                                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                             <div class="flex items-center space-x-4">
                                                 <label class="flex items-center">
                                                     <input type="radio" name="visibility" value="Private" class="form-radio text-emerald-500" checked>
@@ -81,7 +81,7 @@
                                                     <span class="text-sm ml-2 text-gray-600 dark:text-gray-400">Publik (Dibaca Jamaah Lain)</span>
                                                 </label>
                                             </div>
-                                            <button type="submit" class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">Simpan Catatan</button>
+                                            <button type="submit" class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white w-full md:w-auto">Simpan Catatan</button>
                                         </div>
                                     </form>
                                 @else
