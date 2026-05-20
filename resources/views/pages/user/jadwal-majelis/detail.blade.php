@@ -96,40 +96,57 @@
                                         <div class="bg-gray-50 dark:bg-gray-900/20 p-4 rounded-lg border border-gray-100 dark:border-gray-700/60 transition-all duration-200">
                                             <!-- Accordion Header -->
                                             <div class="cursor-pointer group" @click="activeNote = activeNote === {{ $note->id }} ? null : {{ $note->id }}">
-                                                <div class="flex justify-between items-start mb-2">
-                                                    <div class="flex items-center">
-                                                        <div class="font-medium text-gray-800 dark:text-gray-100 mr-2">{{ $note->user->name }}</div>
-                                                        <div class="text-xs text-gray-500">{{ $note->created_at->locale('id')->diffForHumans() }}</div>
+                                                
+                                                <!-- BAGIAN YANG DIPERBAIKI -->
+                                                <div class="flex justify-between items-start mb-2 gap-4">
+                                                    
+                                                    <!-- Grup Kiri: Nama, Waktu, Status, Hapus -->
+                                                    <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 w-full">
+                                                        
+                                                        <!-- Nama & Waktu -->
+                                                        <div class="flex items-center">
+                                                            <div class="font-medium text-gray-800 dark:text-gray-100 mr-2">{{ $note->user->name }}</div>
+                                                            <div class="text-xs text-gray-500">{{ $note->created_at->locale('id')->diffForHumans() }}</div>
+                                                        </div>
+
+                                                        <!-- Badge Status & Hapus (Turun di HP, Sejajar di MD) -->
+                                                        <!-- Menggunakan gap-2 flex-wrap menggantikan space-x-2 agar aman saat turun baris -->
+                                                        <div class="flex flex-wrap items-center gap-2 text-xs font-medium">
+                                                            @if($note->visibility === 'Private')
+                                                                <span class="text-gray-500 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">Privat</span>
+                                                            @else
+                                                                @if($note->status === 'Pending')
+                                                                    <span class="text-yellow-600 bg-yellow-100 dark:bg-yellow-900 px-2 py-1 rounded">Menunggu Moderasi</span>
+                                                                @elseif($note->status === 'Approved')
+                                                                    <span class="text-emerald-600 bg-emerald-100 dark:bg-emerald-900 px-2 py-1 rounded">Publik</span>
+                                                                @endif
+                                                            @endif
+
+                                                            @auth
+                                                                @if(auth()->id() === $note->user_id)
+                                                                    <form action="{{ route('jadwal-majelis.notes.destroy', $note->id) }}" method="POST" class="inline-block" @click.stop onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?');">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="text-red-500 hover:text-red-600">Hapus</button>
+                                                                    </form>
+                                                                @endif
+                                                            @endauth
+                                                        </div>
+
                                                     </div>
-                                                    <div class="flex items-center space-x-2 text-xs font-medium">
-                                                        @if($note->visibility === 'Private')
-                                                            <span class="text-gray-500 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">Privat</span>
-                                                        @else
-                                                            @if($note->status === 'Pending')
-                                                                <span class="text-yellow-600 bg-yellow-100 dark:bg-yellow-900 px-2 py-1 rounded">Menunggu Moderasi</span>
-                                                            @elseif($note->status === 'Approved')
-                                                                <span class="text-emerald-600 bg-emerald-100 dark:bg-emerald-900 px-2 py-1 rounded">Publik</span>
-                                                            @endif
-                                                        @endif
 
-                                                        @auth
-                                                            @if(auth()->id() === $note->user_id)
-                                                                <form action="{{ route('jadwal-majelis.notes.destroy', $note->id) }}" method="POST" class="inline-block" @click.stop onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?');">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" class="text-red-500 hover:text-red-600">Hapus</button>
-                                                                </form>
-                                                            @endif
-                                                        @endauth
-
-                                                        <!-- Chevron -->
+                                                    <!-- Chevron (Selalu diam di Kanan Atas) -->
+                                                    <div class="flex-shrink-0 mt-0.5">
                                                         <svg class="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-200" 
-                                                             :class="{'rotate-180': activeNote === {{ $note->id }}}" 
-                                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            :class="{'rotate-180': activeNote === {{ $note->id }}}" 
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                                         </svg>
                                                     </div>
+                                                    
                                                 </div>
+                                                <!-- END BAGIAN YANG DIPERBAIKI -->
+
                                                 <!-- Snippet (visible only when collapsed) -->
                                                 <div x-show="activeNote !== {{ $note->id }}" class="text-sm text-gray-500 dark:text-gray-400 truncate">
                                                     {{ \Illuminate\Support\Str::limit($note->content, 60) }}
