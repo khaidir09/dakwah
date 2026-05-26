@@ -23,11 +23,13 @@ class KelolaCatatan extends Component
     public $schedule_id;
     public $content;
     public $visibility = 'Private';
+    public $created_at;
 
     protected $rules = [
         'schedule_id' => 'required|exists:schedules,id',
         'content' => 'required|string',
         'visibility' => 'required|in:Private,Public',
+        'created_at' => 'nullable|date',
     ];
 
     public function create()
@@ -46,6 +48,7 @@ class KelolaCatatan extends Component
         $this->schedule_id = $note->schedule_id;
         $this->content = $note->content;
         $this->visibility = $note->visibility;
+        $this->created_at = $note->created_at ? $note->created_at->format('Y-m-d') : null;
 
         $this->isEditMode = true;
         $this->isModalOpen = true;
@@ -55,13 +58,19 @@ class KelolaCatatan extends Component
     {
         $this->validate();
 
-        ScheduleNote::create([
+        $data = [
             'user_id' => Auth::id(),
             'schedule_id' => $this->schedule_id,
             'content' => $this->content,
             'visibility' => $this->visibility,
             'status' => $this->visibility === 'Public' ? 'Pending' : 'Approved',
-        ]);
+        ];
+
+        if (!empty($this->created_at)) {
+            $data['created_at'] = $this->created_at . ' ' . now()->format('H:i:s');
+        }
+
+        ScheduleNote::create($data);
 
         session()->flash('message', 'Catatan berhasil ditambahkan.');
         $this->isModalOpen = false;
@@ -79,12 +88,18 @@ class KelolaCatatan extends Component
              $status = 'Pending';
         }
 
-        $note->update([
+        $updateData = [
             'schedule_id' => $this->schedule_id,
             'content' => $this->content,
             'visibility' => $this->visibility,
             'status' => $status,
-        ]);
+        ];
+
+        if (!empty($this->created_at)) {
+            $updateData['created_at'] = $this->created_at . ' ' . $note->created_at->format('H:i:s');
+        }
+
+        $note->update($updateData);
 
         session()->flash('message', 'Catatan berhasil diperbarui.');
         $this->isModalOpen = false;
@@ -118,6 +133,7 @@ class KelolaCatatan extends Component
         $this->schedule_id = null;
         $this->content = '';
         $this->visibility = 'Private';
+        $this->created_at = null;
     }
 
     public function render()

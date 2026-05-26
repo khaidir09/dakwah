@@ -280,6 +280,13 @@
                             </select>
                             @error('visibility') <div class="text-xs text-red-500 mt-1">{{ $message }}</div> @enderror
                         </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1" for="created_at">Tanggal (Opsional)</label>
+                            <input id="created_at" type="date" wire:model="created_at" class="form-input w-full" />
+                            <div class="text-xs text-gray-500 mt-1">Jika dikosongkan, akan menggunakan waktu saat ini.</div>
+                            @error('created_at') <div class="text-xs text-red-500 mt-1">{{ $message }}</div> @enderror
+                        </div>
                     </div>
                 </div>
                 <!-- Modal footer -->
