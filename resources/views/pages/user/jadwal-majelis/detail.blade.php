@@ -106,7 +106,7 @@
                                                         <!-- Nama & Waktu -->
                                                         <div class="flex items-center">
                                                             <div class="font-medium text-gray-800 dark:text-gray-100 mr-2">{{ $note->user->name }}</div>
-                                                            <div class="text-xs text-gray-500">{{ $note->created_at->locale('id')->diffForHumans() }}</div>
+                                                            <div class="text-xs text-gray-500">{{ $note->created_at->locale('id')->translatedFormat('d F Y') }}</div>
                                                         </div>
 
                                                         <!-- Badge Status & Hapus (Turun di HP, Sejajar di MD) -->
