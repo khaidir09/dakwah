@@ -1,0 +1,21 @@
+<<<<<<< SEARCH
+    public $content;
+    public $visibility = 'Private';
+
+    protected $rules = [
+        'schedule_id' => 'required|exists:schedules,id',
+        'content' => 'required|string',
+        'visibility' => 'required|in:Private,Public',
+    ];
+=======
+    public $content;
+    public $visibility = 'Private';
+    public $created_at;
+
+    protected $rules = [
+        'schedule_id' => 'required|exists:schedules,id',
+        'content' => 'required|string',
+        'visibility' => 'required|in:Private,Public',
+        'created_at' => 'nullable|date',
+    ];
+>>>>>>> REPLACE
