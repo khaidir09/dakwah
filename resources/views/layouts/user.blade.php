@@ -15,14 +15,14 @@
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:title" content="@yield('title', config('app.name', 'Syaikhuna'))">
         <meta property="og:description" content="@yield('meta_description', 'Platform informasi jadwal majelis & acara terkini, profil ulama, dan konten islami.')">
-        {{-- <meta property="og:image" content="@yield('meta_image', asset('images/auth-image.jpg'))"> --}}
+        <meta property="og:image" content="@yield('meta_image', asset('images/android-chrome-512x512.png'))">
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:url" content="{{ url()->current() }}">
         <meta property="twitter:title" content="@yield('title', config('app.name', 'Syaikhuna'))">
         <meta property="twitter:description" content="@yield('meta_description', 'Platform informasi jadwal majelis & acara terkini, profil ulama, dan konten islami.')">
-        {{-- <meta property="twitter:image" content="@yield('meta_image', asset('images/auth-image.jpg'))"> --}}
+        <meta property="twitter:image" content="@yield('meta_image', asset('images/android-chrome-512x512.png'))">
 
         <!-- Favicon -->
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
