@@ -1,5 +1,8 @@
 <x-user-layout>
     @section('title', $article->title)
+    @if($article->cover_image)
+        @section('meta_image', asset(Storage::url($article->cover_image)))
+    @endif
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
         <div class="xl:flex">
             <!-- Left + Middle content -->
