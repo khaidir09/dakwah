@@ -51,11 +51,7 @@ class HomeUpcomingHaul extends Component
     private function parseHijriDate($hijriStr)
     {
         // Example: "17 Syakban 1447 H"
-        // Remove Year (4 digits) and "H"
-        $clean = trim(preg_replace('/(\d{4}|H)/i', '', $hijriStr));
-        // Result: "17 Syakban " or "17 Rabiul Awal "
-
-        if (preg_match('/^(\d+)\s+(.+)$/', trim($clean), $matches)) {
+        if (preg_match('/^(\d+)\s+([a-zA-Z\s\']+?)\s+\d{4}\s*H?$/i', trim($hijriStr), $matches)) {
             $day = (int)$matches[1];
             $monthStr = trim($matches[2]);
 
