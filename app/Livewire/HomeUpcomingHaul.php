@@ -39,7 +39,7 @@ class HomeUpcomingHaul extends Component
                 $upcomingHauls = $currentMonthHauls->merge($nextMonthHauls);
 
                 // Limit to 5 items
-                $upcomingHauls = $upcomingHauls->take(5);
+                $upcomingHauls = $upcomingHauls->take(6);
             }
         }
 
