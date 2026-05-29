@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Schedule;
 use App\Services\HijriService;
+use Illuminate\Http\Request;
 
 class JadwalMajelisController extends Controller
 {
@@ -28,11 +29,15 @@ class JadwalMajelisController extends Controller
         return view('pages/user/jadwal-majelis/list', compact('schedules', 'isRamadhan'));
     }
 
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
         $schedule = Schedule::with(['teacher', 'assembly'])->findOrFail($id);
 
         $notesQuery = $schedule->notes()->with('user')->latest();
+
+        if ($request->has('search')) {
+            $notesQuery->where('content', 'like', '%' . $request->search . '%');
+        }
 
         if (auth()->check()) {
             $notes = $notesQuery->where(function ($query) {
