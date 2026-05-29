@@ -83,4 +83,98 @@ class ScheduleNoteTest extends TestCase
             'schedule_id' => $schedule->id,
         ]);
     }
+
+
+    public function test_user_can_edit_public_note_created_by_another_user()
+    {
+        $this->withoutVite();
+
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+
+        $assembly = Assembly::create([
+            'nama_majelis' => 'Test Majelis',
+            'deskripsi' => 'test',
+            'province_code' => '62',
+            'status' => 'Aktif',
+            'guru' => '-',
+            'alamat' => 'test',
+            'maps' => 'test',
+        ]);
+
+        $schedule = Schedule::create([
+            'nama_jadwal' => 'Test Jadwal',
+            'deskripsi' => 'Test desk',
+            'assembly_id' => $assembly->id,
+            'waktu' => now(),
+            'status' => 'Aktif',
+            'hari' => 'Senin',
+        ]);
+
+        $note = ScheduleNote::create([
+            'user_id' => $user1->id,
+            'schedule_id' => $schedule->id,
+            'content' => 'Original public note content',
+            'visibility' => 'Public',
+            'status' => 'Approved',
+        ]);
+
+        $response = $this->actingAs($user2)->put(route('jadwal-majelis.notes.update', $note->id), [
+            'content' => 'Updated public note content by user 2',
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('schedule_notes', [
+            'id' => $note->id,
+            'content' => 'Updated public note content by user 2',
+        ]);
+    }
+
+    public function test_user_cannot_edit_private_note_created_by_another_user()
+    {
+        $this->withoutVite();
+
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+
+        $assembly = Assembly::create([
+            'nama_majelis' => 'Test Majelis',
+            'deskripsi' => 'test',
+            'province_code' => '62',
+            'status' => 'Aktif',
+            'guru' => '-',
+            'alamat' => 'test',
+            'maps' => 'test',
+        ]);
+
+        $schedule = Schedule::create([
+            'nama_jadwal' => 'Test Jadwal',
+            'deskripsi' => 'Test desk',
+            'assembly_id' => $assembly->id,
+            'waktu' => now(),
+            'status' => 'Aktif',
+            'hari' => 'Senin',
+        ]);
+
+        $note = ScheduleNote::create([
+            'user_id' => $user1->id,
+            'schedule_id' => $schedule->id,
+            'content' => 'Original private note content',
+            'visibility' => 'Private',
+            'status' => 'Approved',
+        ]);
+
+        $response = $this->actingAs($user2)->put(route('jadwal-majelis.notes.update', $note->id), [
+            'content' => 'Updated private note content by user 2',
+        ]);
+
+        $response->assertStatus(403);
+
+        $this->assertDatabaseHas('schedule_notes', [
+            'id' => $note->id,
+            'content' => 'Original private note content',
+        ]);
+    }
+
 }

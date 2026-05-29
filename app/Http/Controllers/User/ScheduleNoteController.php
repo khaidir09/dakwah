@@ -38,6 +38,24 @@ class ScheduleNoteController extends Controller
         return redirect()->back()->with('success', $message);
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        $note = ScheduleNote::findOrFail($id);
+
+        if ($note->visibility !== 'Public' && $note->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $note->content = $request->content;
+        $note->save();
+
+        return redirect()->back()->with('success', 'Catatan berhasil diperbarui.');
+    }
+
     public function destroy($id)
     {
         $note = ScheduleNote::findOrFail($id);
