@@ -23,6 +23,8 @@ class ArticleController extends Controller
 
     public function download($slug)
     {
+        abort_if(!auth()->check(), 403, 'Unauthorized. Anda harus login untuk mengunduh file ini.');
+
         $article = ScientificArticle::where('status', 'PUBLISHED')
             ->where('slug', $slug)
             ->firstOrFail();
