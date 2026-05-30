@@ -79,7 +79,7 @@ class ListJadwalMajelis extends Component
     public function render()
     {
         $schedules_count = Schedule::count();
-        $query = Schedule::with('teacher', 'assembly')->orderByRaw("
+        $query = Schedule::with('teacher', 'assembly')->withCount('notes')->orderByRaw("
             CASE hari
                 WHEN 'Senin' THEN 1
                 WHEN 'Selasa' THEN 2
@@ -139,9 +139,7 @@ class ListJadwalMajelis extends Component
         // Ambil hasil akhir dengan paginasi
         $schedules = $query->simplePaginate($this->paginate);
 
-        $schedule_notes_count = $schedules->pluck('id')->mapWithKeys(function ($id) {
-            return [$id => ScheduleNote::where('schedule_id', $id)->count()];
-        })->toArray();
+        $schedule_notes_count = $schedules->pluck('notes_count', 'id')->toArray();
 
         // Fetch Data for Dropdowns
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
