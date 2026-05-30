@@ -108,7 +108,7 @@
                                 </form>
 
                                 <!-- List Catatan -->
-                                <div class="space-y-4" x-data="{ activeNote: {{ $notes->count() > 0 ? $notes->first()->id : 'null' }} }">
+                                <div class="space-y-4" x-data="{ activeNote: {{ $notes->count() > 0 ? $notes->first()->id : 'null' }}, editingNote: null, editContent: '' }">
                                     @forelse($notes as $note)
                                         <div class="bg-gray-50 dark:bg-gray-900/20 p-4 rounded-lg border border-gray-100 dark:border-gray-700/60 transition-all duration-200">
                                             <!-- Accordion Header -->
@@ -140,12 +140,17 @@
                                                             @endif
 
                                                             @auth
-                                                                @if(auth()->id() === $note->user_id)
-                                                                    <form action="{{ route('jadwal-majelis.notes.destroy', $note->id) }}" method="POST" class="inline-block" @click.stop onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?');">
-                                                                        @csrf
-                                                                        @method('DELETE')
-                                                                        <button type="submit" class="text-red-500 hover:text-red-600">Hapus</button>
-                                                                    </form>
+                                                                @if(auth()->id() === $note->user_id || $note->visibility === 'Public')
+                                                                    <div class="flex items-center gap-2">
+                                                                        <button type="button" class="text-blue-500 hover:text-blue-600" @click.stop="activeNote = {{ $note->id }}; editingNote = {{ $note->id }}; editContent = {{ Js::from($note->content) }}">Edit</button>
+                                                                        @if(auth()->id() === $note->user_id)
+                                                                            <form action="{{ route('jadwal-majelis.notes.destroy', $note->id) }}" method="POST" class="inline-block" @click.stop onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?');">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <button type="submit" class="text-red-500 hover:text-red-600">Hapus</button>
+                                                                            </form>
+                                                                        @endif
+                                                                    </div>
                                                                 @endif
                                                             @endauth
                                                         </div>
@@ -172,7 +177,21 @@
 
                                             <!-- Accordion Content -->
                                             <div x-show="activeNote === {{ $note->id }}" x-collapse x-cloak>
-                                                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700/60 format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-400 whitespace-pre-wrap text-justify">{{ $note->content }}</div>
+                                                <div x-show="editingNote !== {{ $note->id }}" class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700/60 format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-400 whitespace-pre-wrap text-justify">{{ $note->content }}</div>
+
+                                                <div x-show="editingNote === {{ $note->id }}" class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700/60" @click.stop>
+                                                    <form action="{{ route('jadwal-majelis.notes.update', $note->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="mb-4">
+                                                            <textarea name="content" rows="4" class="form-textarea w-full" required x-model="editContent"></textarea>
+                                                        </div>
+                                                        <div class="flex justify-end gap-2">
+                                                            <button type="button" class="btn bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600" @click="editingNote = null">Batal</button>
+                                                            <button type="submit" class="btn bg-emerald-500 text-white hover:bg-emerald-600">Simpan Perubahan</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     @empty
