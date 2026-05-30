@@ -141,15 +141,25 @@ class ScheduleForm extends Component
         // Sync Lectures
         $schedule->lectures()->delete();
 
+        $now = now();
+        $lecturesToInsert = [];
+        $foreignKeyName = $schedule->lectures()->getForeignKeyName();
         foreach ($this->days as $dayData) {
             if (!empty($dayData['teacher_id']) || !empty($dayData['custom_speaker_name']) || !empty($dayData['title'])) {
-                $schedule->lectures()->create([
+                $lecturesToInsert[] = [
+                    $foreignKeyName => $schedule->id,
                     'day' => $dayData['day'],
                     'teacher_id' => $dayData['teacher_id'] ?: null,
                     'custom_speaker_name' => $dayData['custom_speaker_name'],
                     'title' => $dayData['title'],
-                ]);
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
             }
+        }
+
+        if (!empty($lecturesToInsert)) {
+            $schedule->lectures()->insert($lecturesToInsert);
         }
 
         session()->flash('message', 'Jadwal Ramadhan berhasil disimpan.');
