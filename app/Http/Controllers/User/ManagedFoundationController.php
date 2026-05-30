@@ -128,16 +128,12 @@ class ManagedFoundationController extends Controller
 
         // Save Citations
         if ($request->has('citations')) {
-            foreach ($request->citations as $citationData) {
-                $article->citations()->create($citationData);
-            }
+            $article->citations()->createMany($request->citations);
         }
 
         // Save Bibliography
         if ($request->has('bibliography')) {
-            foreach ($request->bibliography as $biblioData) {
-                $article->bibliography()->create($biblioData);
-            }
+            $article->bibliography()->createMany($request->bibliography);
         }
 
         return redirect()->route('kelola-artikel.index')->with('message', 'Artikel berhasil ditambahkan!');
@@ -232,17 +228,13 @@ class ManagedFoundationController extends Controller
         // Sync Citations
         $article->citations()->delete();
         if ($request->has('citations')) {
-            foreach ($request->citations as $citationData) {
-                $article->citations()->create($citationData);
-            }
+            $article->citations()->createMany($request->citations);
         }
 
         // Sync Bibliography
         $article->bibliography()->delete();
         if ($request->has('bibliography')) {
-            foreach ($request->bibliography as $biblioData) {
-                $article->bibliography()->create($biblioData);
-            }
+            $article->bibliography()->createMany($request->bibliography);
         }
 
         return redirect()->route('kelola-artikel.index')->with('message', 'Artikel berhasil diperbarui!');
