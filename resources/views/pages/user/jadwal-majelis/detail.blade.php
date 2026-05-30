@@ -91,7 +91,7 @@
                                 @endauth
 
                                 <!-- List Catatan -->
-                                <div class="space-y-4" x-data="{ activeNote: {{ $notes->count() > 0 ? $notes->first()->id : 'null' }}, editingNote: null, editContent: '' }">
+                                <div class="space-y-4" x-data="{ activeNote: {{ $notes->count() > 0 ? $notes->first()->id : 'null' }} }">
                                     @forelse($notes as $note)
                                         <div class="bg-gray-50 dark:bg-gray-900/20 p-4 rounded-lg border border-gray-100 dark:border-gray-700/60 transition-all duration-200">
                                             <!-- Accordion Header -->
@@ -123,17 +123,12 @@
                                                             @endif
 
                                                             @auth
-                                                                @if(auth()->id() === $note->user_id || $note->visibility === 'Public')
-                                                                    <div class="flex items-center gap-2">
-                                                                        <button type="button" class="text-blue-500 hover:text-blue-600" @click.stop="activeNote = {{ $note->id }}; editingNote = {{ $note->id }}; editContent = {{ Js::from($note->content) }}">Edit</button>
-                                                                        @if(auth()->id() === $note->user_id)
-                                                                            <form action="{{ route('jadwal-majelis.notes.destroy', $note->id) }}" method="POST" class="inline-block" @click.stop onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?');">
-                                                                                @csrf
-                                                                                @method('DELETE')
-                                                                                <button type="submit" class="text-red-500 hover:text-red-600">Hapus</button>
-                                                                            </form>
-                                                                        @endif
-                                                                    </div>
+                                                                @if(auth()->id() === $note->user_id)
+                                                                    <form action="{{ route('jadwal-majelis.notes.destroy', $note->id) }}" method="POST" class="inline-block" @click.stop onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan ini?');">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="text-red-500 hover:text-red-600">Hapus</button>
+                                                                    </form>
                                                                 @endif
                                                             @endauth
                                                         </div>
@@ -160,21 +155,53 @@
 
                                             <!-- Accordion Content -->
                                             <div x-show="activeNote === {{ $note->id }}" x-collapse x-cloak>
-                                                <div x-show="editingNote !== {{ $note->id }}" class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700/60 format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-400 whitespace-pre-wrap text-justify">{{ $note->content }}</div>
+                                                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700/60 format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-400 whitespace-pre-wrap text-justify">{{ $note->content }}</div>
 
-                                                <div x-show="editingNote === {{ $note->id }}" class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700/60" @click.stop>
-                                                    <form action="{{ route('jadwal-majelis.notes.update', $note->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <div class="mb-4">
-                                                            <textarea name="content" rows="4" class="form-textarea w-full" required x-model="editContent"></textarea>
+                                                @if($note->visibility === 'Public' && $note->status === 'Approved')
+                                                    <!-- Comments Section -->
+                                                    <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700/60">
+                                                        <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-4">Komentar / Koreksi</h4>
+
+                                                        <!-- List of comments -->
+                                                        <div class="space-y-3 mb-4">
+                                                            @forelse($note->comments as $comment)
+                                                                <div class="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-100 dark:border-gray-700/60 text-sm">
+                                                                    <div class="flex justify-between items-start mb-1">
+                                                                        <div class="flex items-center gap-2">
+                                                                            <span class="font-medium text-gray-800 dark:text-gray-200">{{ $comment->user->name }}</span>
+                                                                            <span class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
+                                                                        </div>
+                                                                        @auth
+                                                                            @if(auth()->id() === $comment->user_id)
+                                                                                <form action="{{ route('jadwal-majelis.notes.comments.destroy', $comment->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus komentar ini?');">
+                                                                                    @csrf
+                                                                                    @method('DELETE')
+                                                                                    <button type="submit" class="text-xs text-red-500 hover:text-red-600">Hapus</button>
+                                                                                </form>
+                                                                            @endif
+                                                                        @endauth
+                                                                    </div>
+                                                                    <div class="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">{{ $comment->content }}</div>
+                                                                </div>
+                                                            @empty
+                                                                <p class="text-xs text-gray-500 italic">Belum ada komentar atau koreksi.</p>
+                                                            @endforelse
                                                         </div>
-                                                        <div class="flex justify-end gap-2">
-                                                            <button type="button" class="btn bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600" @click="editingNote = null">Batal</button>
-                                                            <button type="submit" class="btn bg-emerald-500 text-white hover:bg-emerald-600">Simpan Perubahan</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
+
+                                                        <!-- Add comment form -->
+                                                        @auth
+                                                            <form action="{{ route('jadwal-majelis.notes.comments.store', $note->id) }}" method="POST">
+                                                                @csrf
+                                                                <div class="flex flex-col sm:flex-row gap-2">
+                                                                    <input type="text" name="content" required placeholder="Tambahkan komentar atau koreksi..." class="form-input text-sm w-full sm:flex-1 py-2 px-3 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-emerald-500 focus:ring-emerald-500">
+                                                                    <button type="submit" class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white text-sm py-2 px-4 w-full sm:w-auto">Kirim</button>
+                                                                </div>
+                                                            </form>
+                                                        @else
+                                                            <p class="text-xs text-gray-500 mt-2">Silakan <a href="{{ route('login') }}" class="text-emerald-500 hover:underline">login</a> untuk menambahkan komentar.</p>
+                                                        @endauth
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     @empty

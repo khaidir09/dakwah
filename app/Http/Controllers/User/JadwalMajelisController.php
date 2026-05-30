@@ -32,7 +32,7 @@ class JadwalMajelisController extends Controller
     {
         $schedule = Schedule::with(['teacher', 'assembly'])->findOrFail($id);
 
-        $notesQuery = $schedule->notes()->with('user')->latest();
+        $notesQuery = $schedule->notes()->with(['user', 'comments.user'])->latest();
 
         if (auth()->check()) {
             $notes = $notesQuery->where(function ($query) {

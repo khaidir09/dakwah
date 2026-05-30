@@ -84,8 +84,7 @@ class ScheduleNoteTest extends TestCase
         ]);
     }
 
-
-    public function test_user_can_edit_public_note_created_by_another_user()
+    public function test_user_can_comment_on_public_note()
     {
         $this->withoutVite();
 
@@ -114,24 +113,25 @@ class ScheduleNoteTest extends TestCase
         $note = ScheduleNote::create([
             'user_id' => $user1->id,
             'schedule_id' => $schedule->id,
-            'content' => 'Original public note content',
+            'content' => 'Public note content',
             'visibility' => 'Public',
             'status' => 'Approved',
         ]);
 
-        $response = $this->actingAs($user2)->put(route('jadwal-majelis.notes.update', $note->id), [
-            'content' => 'Updated public note content by user 2',
+        $response = $this->actingAs($user2)->post(route('jadwal-majelis.notes.comments.store', $note->id), [
+            'content' => 'This is a comment',
         ]);
 
         $response->assertRedirect();
 
-        $this->assertDatabaseHas('schedule_notes', [
-            'id' => $note->id,
-            'content' => 'Updated public note content by user 2',
+        $this->assertDatabaseHas('schedule_note_comments', [
+            'schedule_note_id' => $note->id,
+            'user_id' => $user2->id,
+            'content' => 'This is a comment',
         ]);
     }
 
-    public function test_user_cannot_edit_private_note_created_by_another_user()
+    public function test_user_cannot_comment_on_private_note()
     {
         $this->withoutVite();
 
@@ -160,21 +160,63 @@ class ScheduleNoteTest extends TestCase
         $note = ScheduleNote::create([
             'user_id' => $user1->id,
             'schedule_id' => $schedule->id,
-            'content' => 'Original private note content',
+            'content' => 'Private note content',
             'visibility' => 'Private',
             'status' => 'Approved',
         ]);
 
-        $response = $this->actingAs($user2)->put(route('jadwal-majelis.notes.update', $note->id), [
-            'content' => 'Updated private note content by user 2',
+        $response = $this->actingAs($user2)->post(route('jadwal-majelis.notes.comments.store', $note->id), [
+            'content' => 'This is a comment',
         ]);
 
         $response->assertStatus(403);
-
-        $this->assertDatabaseHas('schedule_notes', [
-            'id' => $note->id,
-            'content' => 'Original private note content',
-        ]);
     }
 
+    public function test_user_can_delete_own_comment()
+    {
+        $this->withoutVite();
+
+        $user = User::factory()->create();
+
+        $assembly = Assembly::create([
+            'nama_majelis' => 'Test Majelis',
+            'deskripsi' => 'test',
+            'province_code' => '62',
+            'status' => 'Aktif',
+            'guru' => '-',
+            'alamat' => 'test',
+            'maps' => 'test',
+        ]);
+
+        $schedule = Schedule::create([
+            'nama_jadwal' => 'Test Jadwal',
+            'deskripsi' => 'Test desk',
+            'assembly_id' => $assembly->id,
+            'waktu' => now(),
+            'status' => 'Aktif',
+            'hari' => 'Senin',
+        ]);
+
+        $note = ScheduleNote::create([
+            'user_id' => $user->id,
+            'schedule_id' => $schedule->id,
+            'content' => 'Public note content',
+            'visibility' => 'Public',
+            'status' => 'Approved',
+        ]);
+
+        $comment = \App\Models\ScheduleNoteComment::create([
+            'schedule_note_id' => $note->id,
+            'user_id' => $user->id,
+            'content' => 'My comment',
+        ]);
+
+        $response = $this->actingAs($user)->delete(route('jadwal-majelis.notes.comments.destroy', $comment->id));
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseMissing('schedule_note_comments', [
+            'id' => $comment->id,
+        ]);
+    }
 }
