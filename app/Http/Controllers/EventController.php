@@ -6,12 +6,14 @@ use App\Models\Event;
 use App\Models\Assembly;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Traits\HandlesImageUpload;
 use Illuminate\Support\Facades\Storage;
 use Laravolt\Indonesia\Models\Province;
-use Intervention\Image\Laravel\Facades\Image;
 
 class EventController extends Controller
 {
+    use HandlesImageUpload;
+
     /**
      * Display a listing of the resource.
      */
@@ -70,18 +72,10 @@ class EventController extends Controller
 
         // 2. Handle Image Upload
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = Str::uuid() . '.webp';
-
-            // Create Thumbnail
-            $thumb = Image::read($file)
-                ->scaleDown(800)
-                ->toWebp(80);
-
-            // Save to Storage
-            Storage::disk('public')->put('events/' . $filename, $thumb);
-
-            $dataToCreate['image'] = 'events/' . $filename;
+            $dataToCreate['image'] = $this->handleImageUpload(
+                $request->file('image'),
+                'events'
+            );
         }
 
         // 3. Handle Location Logic
@@ -173,20 +167,13 @@ class EventController extends Controller
         $dataToUpdate = $validatedData;
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = Str::uuid() . '.webp';
-
-            $thumb = Image::read($file)
-                ->scaleDown(800)
-                ->toWebp(80);
-
-            Storage::disk('public')->put('events/' . $filename, (string) $thumb);
-
-            if ($event->image) {
-                Storage::disk('public')->delete($event->image);
-            }
-
-            $dataToUpdate['image'] = 'events/' . $filename;
+            $dataToUpdate['image'] = $this->handleImageUpload(
+                $request->file('image'),
+                'events',
+                800,
+                80,
+                $event->image
+            );
         } else {
             unset($dataToUpdate['image']);
         }
