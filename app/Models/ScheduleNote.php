@@ -20,6 +20,6 @@ class ScheduleNote extends Model
 
     public function comments()
     {
-        return $this->hasMany(ScheduleNoteComment::class);
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }
