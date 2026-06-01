@@ -5,6 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Models\Foundation;
 use App\Models\ScientificArticle;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreScientificArticleRequest;
+use App\Http\Requests\UpdateScientificArticleRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -82,26 +84,8 @@ class ManagedFoundationController extends Controller
     /**
      * Store a newly created scientific article in storage.
      */
-    public function storeArticle(Request $request)
+    public function storeArticle(StoreScientificArticleRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'foundation_id' => 'required|exists:foundations,id',
-            'author_name' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'file_path' => 'nullable|mimes:pdf|max:10240',
-            'content' => 'required|string',
-            'citations' => 'nullable|array',
-            'citations.*.type' => 'required|in:QURAN,HADITH,KITAB,SAINS',
-            'citations.*.source_text_arabic' => 'nullable|string',
-            'citations.*.translation' => 'nullable|string',
-            'citations.*.reference' => 'required|string|max:255',
-            'bibliography' => 'nullable|array',
-            'bibliography.*.full_citation' => 'required|string',
-        ]);
-
         // Ensure user belongs to the foundation
         if (!Auth::user()->foundations()->where('foundations.id', $request->foundation_id)->exists()) {
             abort(403, 'Anda tidak memiliki akses ke yayasan ini.');
@@ -111,17 +95,11 @@ class ManagedFoundationController extends Controller
         $data['slug'] = Str::slug($request->title) . '-' . time();
 
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-            $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('public/articles/covers', $filename);
-            $data['cover_image'] = $path;
+            $data['cover_image'] = $this->handleFileUpload($request, 'cover_image', 'public/articles/covers');
         }
 
         if ($request->hasFile('file_path')) {
-            $file = $request->file('file_path');
-            $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('public/articles/files', $filename);
-            $data['file_path'] = $path;
+            $data['file_path'] = $this->handleFileUpload($request, 'file_path', 'public/articles/files');
         }
 
         $article = ScientificArticle::create($data);
@@ -159,7 +137,7 @@ class ManagedFoundationController extends Controller
     /**
      * Update the specified scientific article in storage.
      */
-    public function updateArticle(Request $request, $id)
+    public function updateArticle(UpdateScientificArticleRequest $request, $id)
     {
         $article = ScientificArticle::findOrFail($id);
 
@@ -167,26 +145,6 @@ class ManagedFoundationController extends Controller
         if (!Auth::user()->foundations()->where('foundations.id', $article->foundation_id)->exists()) {
             abort(403, 'Anda tidak berhak mengupdate artikel ini.');
         }
-
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'foundation_id' => 'required|exists:foundations,id',
-            'author_name' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
-            'published_at' => 'nullable|date',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'file_path' => 'nullable|mimes:pdf|max:10240',
-            'status' => 'required|in:DRAFT,PUBLISHED',
-            'content' => 'required|string',
-            'citations' => 'nullable|array',
-            'citations.*.type' => 'required|in:QURAN,HADITH,KITAB,SAINS',
-            'citations.*.source_text_arabic' => 'nullable|string',
-            'citations.*.translation' => 'nullable|string',
-            'citations.*.reference' => 'required|string|max:255',
-            'bibliography' => 'nullable|array',
-            'bibliography.*.full_citation' => 'required|string',
-        ]);
 
         // Ensure user belongs to the new foundation (if changed)
         if (!Auth::user()->foundations()->where('foundations.id', $request->foundation_id)->exists()) {
@@ -200,27 +158,11 @@ class ManagedFoundationController extends Controller
         }
 
         if ($request->hasFile('cover_image')) {
-            // Delete old image
-            if ($article->cover_image) {
-                Storage::delete($article->cover_image);
-            }
-
-            $file = $request->file('cover_image');
-            $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('public/articles/covers', $filename);
-            $data['cover_image'] = $path;
+            $data['cover_image'] = $this->handleFileUpload($request, 'cover_image', 'public/articles/covers', $article->cover_image);
         }
 
         if ($request->hasFile('file_path')) {
-            // Delete old file
-            if ($article->file_path) {
-                Storage::delete($article->file_path);
-            }
-
-            $file = $request->file('file_path');
-            $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('public/articles/files', $filename);
-            $data['file_path'] = $path;
+            $data['file_path'] = $this->handleFileUpload($request, 'file_path', 'public/articles/files', $article->file_path);
         }
 
         $article->update($data);
@@ -238,6 +180,20 @@ class ManagedFoundationController extends Controller
         }
 
         return redirect()->route('kelola-artikel.index')->with('message', 'Artikel berhasil diperbarui!');
+    }
+
+    /**
+     * Handle file upload.
+     */
+    private function handleFileUpload(Request $request, string $fileKey, string $storagePath, ?string $oldPath = null): string
+    {
+        if ($oldPath) {
+            Storage::delete($oldPath);
+        }
+
+        $file = $request->file($fileKey);
+        $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+        return $file->storeAs($storagePath, $filename);
     }
 
     /**
