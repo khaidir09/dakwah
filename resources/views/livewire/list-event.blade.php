@@ -19,7 +19,7 @@
             <li class="m-1">
                 <button wire:click="$set('category', null)" class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border {{ is_null($category) ? 'border-transparent shadow-xs bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-800' : 'border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 shadow-xs bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400' }} transition">Semua</button>
             </li>
-            @foreach(['Taklim', 'Maulid', 'Dzikir', 'Haul', 'Tabligh Akbar'] as $cat)
+            @foreach(['Taklim', 'Maulid', 'Dzikir', 'Haul', 'Tabligh Akbar', 'Peringatan Hari Besar Islam'] as $cat)
             <li class="m-1">
                 <button wire:click="$set('category', '{{ $cat }}')" class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border {{ $category === $cat ? 'border-transparent shadow-xs bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-800' : 'border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 shadow-xs bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400' }} transition">{{ $cat }}</button>
             </li>
