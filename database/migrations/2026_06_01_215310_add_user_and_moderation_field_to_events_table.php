@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
-            $table->dropColumn(['user_id', 'moderated_by', 'moderated_at']);
+            $table->dropColumn(['user_id', 'moderated_at']);
         });
     }
 };
