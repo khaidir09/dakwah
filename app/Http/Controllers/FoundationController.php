@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
+use App\Traits\HasImageUploads;
 
 class FoundationController extends Controller
 {
+    use HasImageUploads;
     public function index()
     {
         return view('pages.foundations.index');
@@ -37,17 +39,13 @@ class FoundationController extends Controller
 
         // Handle Logo Upload
         if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $filename = Str::uuid() . '.webp';
-
             // Resize to standard logo size (e.g., 200x200 or maintain aspect ratio)
             // Assuming square or fit
-            $thumb = Image::read($file)
-                ->scaleDown(width: 300)
-                ->toWebp(80);
-
-            Storage::disk('public')->put('foundations/logos/' . $filename, (string) $thumb);
-            $dataToCreate['logo_path'] = 'foundations/logos/' . $filename;
+            $dataToCreate['logo_path'] = $this->uploadImage(
+                $request->file('logo'),
+                'foundations/logos',
+                fn($image) => $image->scaleDown(width: 300)
+            );
         }
 
         $foundation = Foundation::create($dataToCreate);
@@ -81,20 +79,12 @@ class FoundationController extends Controller
 
         // Handle Logo Upload
         if ($request->hasFile('logo')) {
-            // Delete old logo
-            if ($foundation->logo_path && Storage::disk('public')->exists($foundation->logo_path)) {
-                Storage::disk('public')->delete($foundation->logo_path);
-            }
-
-            $file = $request->file('logo');
-            $filename = Str::uuid() . '.webp';
-
-            $thumb = Image::read($file)
-                ->scaleDown(width: 300)
-                ->toWebp(80);
-
-            Storage::disk('public')->put('foundations/logos/' . $filename, (string) $thumb);
-            $dataToUpdate['logo_path'] = 'foundations/logos/' . $filename;
+            $dataToUpdate['logo_path'] = $this->uploadImage(
+                $request->file('logo'),
+                'foundations/logos',
+                fn($image) => $image->scaleDown(width: 300),
+                $foundation->logo_path
+            );
         }
 
         $foundation->update($dataToUpdate);
@@ -107,9 +97,7 @@ class FoundationController extends Controller
 
     public function destroy(Foundation $foundation)
     {
-        if ($foundation->logo_path && Storage::disk('public')->exists($foundation->logo_path)) {
-            Storage::disk('public')->delete($foundation->logo_path);
-        }
+        $this->deleteImage($foundation->logo_path);
 
         $foundation->delete();
         return redirect()->route('foundations.index')->with('message', 'Foundation deleted successfully.');

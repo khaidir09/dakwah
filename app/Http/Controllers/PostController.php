@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
+use App\Traits\HasImageUploads;
 
 class PostController extends Controller
 {
+    use HasImageUploads;
     /**
      * Display a listing of the resource.
      */
@@ -71,15 +73,12 @@ class PostController extends Controller
         }
 
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-            $filename = Str::uuid() . '.webp';
-
             // Resize logic similar to Majelis
-            $image = Image::read($file);
-            $image->scaleDown(width: 800);
-
-            Storage::disk('public')->put('posts/' . $filename, $image->toWebp(80));
-            $post->cover_image = 'posts/' . $filename;
+            $post->cover_image = $this->uploadImage(
+                $request->file('cover_image'),
+                'posts',
+                fn($image) => $image->scaleDown(width: 800)
+            );
         }
 
         $post->save();
@@ -165,19 +164,12 @@ class PostController extends Controller
         }
 
         if ($request->hasFile('cover_image')) {
-            // Delete old image
-            if ($post->cover_image) {
-                Storage::disk('public')->delete($post->cover_image);
-            }
-
-            $file = $request->file('cover_image');
-            $filename = Str::uuid() . '.webp';
-
-            $image = Image::read($file);
-            $image->scaleDown(width: 800);
-
-            Storage::disk('public')->put('posts/' . $filename, $image->toWebp(80));
-            $post->cover_image = 'posts/' . $filename;
+            $post->cover_image = $this->uploadImage(
+                $request->file('cover_image'),
+                'posts',
+                fn($image) => $image->scaleDown(width: 800),
+                $post->cover_image
+            );
         }
 
         $post->save();
@@ -222,9 +214,7 @@ class PostController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        if ($post->cover_image) {
-            Storage::disk('public')->delete($post->cover_image);
-        }
+        $this->deleteImage($post->cover_image);
 
         $post->labels()->detach();
         $post->delete();
