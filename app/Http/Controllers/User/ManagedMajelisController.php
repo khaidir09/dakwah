@@ -10,9 +10,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
+use App\Traits\HandlesImageUploads;
 
 class ManagedMajelisController extends Controller
 {
+    use HandlesImageUploads;
     public function register()
     {
         return view('pages.user.registrasi-majelis');
@@ -44,42 +46,16 @@ class ManagedMajelisController extends Controller
         $data = $request->except(['gambar']);
 
         if ($request->hasFile('gambar')) {
-            // Delete old image
+            // A. Delete old image
             if ($majelis->gambar) {
-                Storage::delete($majelis->gambar);
-                Storage::delete(str_replace('large', 'thumb', $majelis->gambar));
+                $this->deleteImageWithThumbnail($majelis->gambar);
             }
 
-            // Upload new image
-            $file = $request->file('gambar');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-
-            // Simpan gambar original (large)
-            $pathLarge = $file->storeAs('public/majelis/large', $filename);
-
-            // Buat thumbnail
-            $thumbPath = 'public/majelis/thumb/' . $filename;
-
-            // Pastikan direktori thumb ada (storage link harus sudah jalan)
-            // Menggunakan Intervention Image untuk resize
-            $image = Image::read($file);
-
-            // Resize logic: scale down to 800px width constraint, maintain aspect ratio
-            $image->scaleDown(width: 800);
-
-            // Save resized large image to storage
-            Storage::put($pathLarge, $image->toWebp(80));
-
-            // Untuk thumb, kita buat lebih kecil, misal 200px
-            $imageThumb = Image::read($file);
-            $imageThumb->scaleDown(width: 400);
-
-            // Simpan manual ke storage (karena Intervention Image biasanya save ke local path)
-            // Disini kita perlu simpan stream ke Storage facade agar kompatibel dengan filesystem driver (S3/Local)
-            Storage::put($thumbPath, $imageThumb->toWebp(80)); // Simpan sebagai JPEG kualitas 80
+            // B. Upload new image
+            $paths = $this->uploadImageWithThumbnail($request->file('gambar'), 'majelis');
 
             // Kita simpan path large ke database
-            $data['gambar'] = $pathLarge;
+            $data['gambar'] = $paths['large'];
         }
 
         $majelis->update($data);

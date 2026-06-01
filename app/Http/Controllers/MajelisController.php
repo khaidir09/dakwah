@@ -9,9 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Laravolt\Indonesia\Models\Province;
 use Intervention\Image\Laravel\Facades\Image;
+use App\Traits\HandlesImageUploads;
 
 class MajelisController extends Controller
 {
+    use HandlesImageUploads;
     /**
      * Display a listing of the resource.
      */
@@ -59,24 +61,8 @@ class MajelisController extends Controller
         }
 
         if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $filename = Str::uuid() . '.webp';
-
-            // 1. Buat Versi THUMBNAIL (Untuk List/Avatar) - Crop Persegi
-            $thumb = Image::read($file)
-                ->scaleDown(width: 400)
-                ->toWebp(80);
-
-            // 2. Buat Versi LARGE (Untuk Detail) - Resize Lebar, Tinggi menyesuaikan
-            $large = Image::read($file)
-                ->scaleDown(width: 800)
-                ->toWebp(80);
-
-            // 3. Simpan ke Storage (Folder public)
-            Storage::disk('public')->put('majelis/thumb/' . $filename, $thumb);
-            Storage::disk('public')->put('majelis/large/' . $filename, $large);
-
-            $validatedData['gambar'] = 'majelis/large/' . $filename;
+            $paths = $this->uploadImageWithThumbnail($request->file('gambar'), 'majelis');
+            $validatedData['gambar'] = $paths['large'];
         } else {
             unset($validatedData['gambar']);
         }
@@ -148,38 +134,16 @@ class MajelisController extends Controller
         $majelis = Assembly::findOrFail($id);
 
         if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $filename = Str::uuid() . '.webp';
+            // A. Proses dan Simpan Gambar Baru
+            $paths = $this->uploadImageWithThumbnail($request->file('gambar'), 'majelis');
 
-            // A. Proses Gambar Baru (Sama seperti store)
-            $thumb = Image::read($file)
-                ->scaleDown(width: 400)
-                ->toWebp(80);
-
-            $large = Image::read($file)
-                ->scaleDown(width: 800)
-                ->toWebp(80);
-
-            // B. Simpan Gambar Baru
-            Storage::disk('public')->put('majelis/thumb/' . $filename, (string) $thumb);
-            Storage::disk('public')->put('majelis/large/' . $filename, (string) $large);
-
-            // C. Hapus Gambar Lama (PENTING)
+            // B. Hapus Gambar Lama (PENTING)
             if ($majelis->gambar) {
-                // Hapus file 'large' (sesuai path di database)
-                Storage::disk('public')->delete($majelis->gambar);
-
-                // Hapus file 'thumb'. Kita perlu menebak path thumb berdasarkan path large.
-                // Path DB: 'majelis/large/namafile.webp' -> Ubah 'large' jadi 'thumb'
-                $oldThumbPath = str_replace('large', 'thumb', $majelis->gambar);
-
-                if (Storage::disk('public')->exists($oldThumbPath)) {
-                    Storage::disk('public')->delete($oldThumbPath);
-                }
+                $this->deleteImageWithThumbnail($majelis->gambar);
             }
 
-            // D. Update array data dengan path baru
-            $validatedData['gambar'] = 'majelis/large/' . $filename;
+            // C. Update array data dengan path baru
+            $validatedData['gambar'] = $paths['large'];
         } else {
             // Jika tidak upload gambar baru, hapus key 'gambar' dari array
             // supaya data gambar lama di database tidak tertimpa null
