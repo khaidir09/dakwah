@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
+use App\Services\ImageService;
 
 class ManageEventController extends Controller
 {
@@ -57,22 +57,12 @@ class ManageEventController extends Controller
         $dataToCreate['village_code'] = $assembly->village_code;
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = Str::uuid() . '.webp';
-
-            // 1. Buat Versi THUMBNAIL (Untuk List/Avatar) - Crop Persegi
-            // Note: Adjust size as needed for events (maybe landscape?)
-            // Guru uses 600x600. Events often need 16:9. Let's stick to cover style or standard.
-            // But to "mimic guru", I'll use similar logic but maybe different dimensions if appropriate?
-            // "Guru" uses 600x600 cover. Let's use that for now to be safe, or 800x600.
-            $thumb = Image::read($file)
-                ->scaleDown(800)
-                ->toWebp(80);
-
-            // 3. Simpan ke Storage (Folder public)
-            Storage::disk('public')->put('events/' . $filename, $thumb);
-
-            $dataToCreate['image'] = 'events/' . $filename;
+            $dataToCreate['image'] = ImageService::uploadAndResize(
+                $request->file('image'),
+                'events',
+                'scaleDown',
+                800
+            );
         }
 
         // 6. Buat record baru di database
@@ -125,25 +115,14 @@ class ManageEventController extends Controller
         $dataToUpdate = $validatedData;
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = Str::uuid() . '.webp';
+            ImageService::delete($event->image);
 
-            // A. Proses Gambar Baru (Sama seperti store)
-            $thumb = Image::read($file)
-                ->scaleDown(800)
-                ->toWebp(80);
-
-            // B. Simpan Gambar Baru
-            Storage::disk('public')->put('events/' . $filename, (string) $thumb);
-
-            // C. Hapus Gambar Lama (PENTING)
-            if ($event->image) {
-                // Hapus file 'large' (sesuai path di database)
-                Storage::disk('public')->delete($event->image);
-            }
-
-            // D. Update array data dengan path baru
-            $dataToUpdate['image'] = 'events/' . $filename;
+            $dataToUpdate['image'] = ImageService::uploadAndResize(
+                $request->file('image'),
+                'events',
+                'scaleDown',
+                800
+            );
         } else {
             // Jika tidak ada file baru, hapus 'image' dari array
             // agar tidak menimpa file yang ada dengan nilai null.

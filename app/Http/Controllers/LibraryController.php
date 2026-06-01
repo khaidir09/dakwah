@@ -6,7 +6,7 @@ use App\Models\Library;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
+use App\Services\ImageService;
 
 class LibraryController extends Controller
 {
@@ -45,16 +45,13 @@ class LibraryController extends Controller
 
         // Handle Cover Image Upload
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-            $filename = Str::uuid() . '.webp';
-
-            // Resize/Crop 400x600 (Book ratio) and convert to WebP
-            $thumb = Image::read($file)
-                ->cover(400, 600)
-                ->toWebp(80);
-
-            Storage::disk('public')->put('libraries/covers/' . $filename, (string) $thumb);
-            $dataToCreate['cover_image'] = 'libraries/covers/' . $filename;
+            $dataToCreate['cover_image'] = ImageService::uploadAndResize(
+                $request->file('cover_image'),
+                'libraries/covers',
+                'cover',
+                400,
+                600
+            );
         }
 
         // Remove 'file' from dataToCreate as it's not a column
@@ -104,20 +101,15 @@ class LibraryController extends Controller
 
         // Handle Cover Image Upload
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-            $filename = Str::uuid() . '.webp';
+            ImageService::delete($library->cover_image);
 
-            $thumb = Image::read($file)
-                ->cover(400, 600)
-                ->toWebp(80);
-
-            Storage::disk('public')->put('libraries/covers/' . $filename, (string) $thumb);
-
-            if ($library->cover_image && Storage::disk('public')->exists($library->cover_image)) {
-                Storage::disk('public')->delete($library->cover_image);
-            }
-
-            $dataToUpdate['cover_image'] = 'libraries/covers/' . $filename;
+            $dataToUpdate['cover_image'] = ImageService::uploadAndResize(
+                $request->file('cover_image'),
+                'libraries/covers',
+                'cover',
+                400,
+                600
+            );
         } else {
             unset($dataToUpdate['cover_image']);
         }
@@ -145,9 +137,7 @@ class LibraryController extends Controller
         if ($library->file_path && Storage::disk('public')->exists($library->file_path)) {
             Storage::disk('public')->delete($library->file_path);
         }
-        if ($library->cover_image && Storage::disk('public')->exists($library->cover_image)) {
-            Storage::disk('public')->delete($library->cover_image);
-        }
+        ImageService::delete($library->cover_image);
 
         $library->delete();
 

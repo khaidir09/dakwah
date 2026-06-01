@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Laravolt\Indonesia\Models\Province;
-use Intervention\Image\Laravel\Facades\Image;
+use App\Services\ImageService;
 
 class EventController extends Controller
 {
@@ -70,18 +70,12 @@ class EventController extends Controller
 
         // 2. Handle Image Upload
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = Str::uuid() . '.webp';
-
-            // Create Thumbnail
-            $thumb = Image::read($file)
-                ->scaleDown(800)
-                ->toWebp(80);
-
-            // Save to Storage
-            Storage::disk('public')->put('events/' . $filename, $thumb);
-
-            $dataToCreate['image'] = 'events/' . $filename;
+            $dataToCreate['image'] = ImageService::uploadAndResize(
+                $request->file('image'),
+                'events',
+                'scaleDown',
+                800
+            );
         }
 
         // 3. Handle Location Logic
@@ -173,20 +167,14 @@ class EventController extends Controller
         $dataToUpdate = $validatedData;
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = Str::uuid() . '.webp';
+            ImageService::delete($event->image);
 
-            $thumb = Image::read($file)
-                ->scaleDown(800)
-                ->toWebp(80);
-
-            Storage::disk('public')->put('events/' . $filename, (string) $thumb);
-
-            if ($event->image) {
-                Storage::disk('public')->delete($event->image);
-            }
-
-            $dataToUpdate['image'] = 'events/' . $filename;
+            $dataToUpdate['image'] = ImageService::uploadAndResize(
+                $request->file('image'),
+                'events',
+                'scaleDown',
+                800
+            );
         } else {
             unset($dataToUpdate['image']);
         }

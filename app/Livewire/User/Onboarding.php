@@ -13,7 +13,7 @@ use Laravolt\Indonesia\Models\Village;
 use Illuminate\Support\Facades\Storage;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
-use Intervention\Image\Laravel\Facades\Image;
+use App\Services\ImageService;
 
 class Onboarding extends Component
 {
@@ -157,18 +157,13 @@ class Onboarding extends Component
 
         $photoPath = null;
         if ($this->teacherPhoto) {
-            // Process Photo (Match GuruController logic)
-            $file = $this->teacherPhoto;
-            $filename = Str::uuid() . '.webp';
-
-            $thumb = Image::read($file->getRealPath())
-                ->cover(600, 600)
-                ->toWebp(80);
-
-            // Upload Photo
-            Storage::disk('public')->put('guru/' . $filename, $thumb);
-
-            $photoPath = 'guru/' . $filename;
+            $photoPath = ImageService::uploadAndResize(
+                $this->teacherPhoto,
+                'guru',
+                'cover',
+                600,
+                600
+            );
         }
 
         $teacher = Teacher::create([
@@ -241,24 +236,17 @@ class Onboarding extends Component
         $imagePath = null;
 
         if ($this->gambar) {
-            // Replicating logic from ManagedMajelisController
-            $file = $this->gambar;
-            $filename = Str::uuid() . '.webp';
+            $paths = ImageService::uploadVariations(
+                $this->gambar,
+                'majelis',
+                [
+                    'thumb' => ['width' => 400, 'method' => 'scaleDown'],
+                    'large' => ['width' => 800, 'method' => 'scaleDown'],
+                ]
+            );
 
-            // Paths
-            $pathLarge = 'public/majelis/large/' . $filename;
-            $pathThumb = 'public/majelis/thumb/' . $filename;
-
-            // Processing
-            $image = Image::read($file->getRealPath());
-            $image->scaleDown(width: 800);
-            Storage::put($pathLarge, $image->toWebp(80));
-
-            $imageThumb = Image::read($file->getRealPath());
-            $imageThumb->scaleDown(width: 400);
-            Storage::put($pathThumb, $imageThumb->toWebp(80));
-
-            $imagePath = $pathLarge;
+            // Using the same format as ManagedMajelisController for consistency
+            $imagePath = 'public/' . $paths['large'];
         }
 
         Assembly::create([

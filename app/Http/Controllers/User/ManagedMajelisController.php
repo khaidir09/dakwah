@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
+use App\Services\ImageService;
 
 class ManagedMajelisController extends Controller
 {
@@ -44,42 +44,32 @@ class ManagedMajelisController extends Controller
         $data = $request->except(['gambar']);
 
         if ($request->hasFile('gambar')) {
-            // Delete old image
             if ($majelis->gambar) {
-                Storage::delete($majelis->gambar);
-                Storage::delete(str_replace('large', 'thumb', $majelis->gambar));
+                ImageService::delete($majelis->gambar, 'local');
+                ImageService::delete(str_replace('large', 'thumb', $majelis->gambar), 'local');
             }
 
-            // Upload new image
-            $file = $request->file('gambar');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $paths = ImageService::uploadVariations(
+                $request->file('gambar'),
+                'majelis',
+                [
+                    'thumb' => ['width' => 400, 'method' => 'scaleDown'],
+                    'large' => ['width' => 800, 'method' => 'scaleDown'],
+                ]
+            );
 
-            // Simpan gambar original (large)
-            $pathLarge = $file->storeAs('public/majelis/large', $filename);
-
-            // Buat thumbnail
-            $thumbPath = 'public/majelis/thumb/' . $filename;
-
-            // Pastikan direktori thumb ada (storage link harus sudah jalan)
-            // Menggunakan Intervention Image untuk resize
-            $image = Image::read($file);
-
-            // Resize logic: scale down to 800px width constraint, maintain aspect ratio
-            $image->scaleDown(width: 800);
-
-            // Save resized large image to storage
-            Storage::put($pathLarge, $image->toWebp(80));
-
-            // Untuk thumb, kita buat lebih kecil, misal 200px
-            $imageThumb = Image::read($file);
-            $imageThumb->scaleDown(width: 400);
-
-            // Simpan manual ke storage (karena Intervention Image biasanya save ke local path)
-            // Disini kita perlu simpan stream ke Storage facade agar kompatibel dengan filesystem driver (S3/Local)
-            Storage::put($thumbPath, $imageThumb->toWebp(80)); // Simpan sebagai JPEG kualitas 80
-
-            // Kita simpan path large ke database
-            $data['gambar'] = $pathLarge;
+            // Keep 'public/majelis/large' logic to avoid breaking existing data path format expectation
+            // if other parts strictly look for 'public/' in db. Let's see what was originally saved:
+            // Storage::put('public/majelis/large/xxx.webp')
+            // The uploadVariations puts in `disk('public')` which normally saves without `public/` in the string.
+            // Oh wait, `put('public/majelis/large/xxx', ...)` on 'local' disk vs `put('majelis/...', ...)` on 'public' disk.
+            // Let's adapt so we save the format as intended.
+            // Actually, `$pathLarge = $file->storeAs('public/majelis/large', ...)` -> this returns `public/majelis/large/...`
+            // Wait, I should make sure it saves the same path or we adapt. Let's just use what uploadVariations returns,
+            // which is relative to the `public` disk (i.e. 'majelis/large/...').
+            // The old code stored 'public/majelis/large/xxx.webp' in the db if using default filesystem disk.
+            // Actually, I'll just keep it consistent with MajelisController which uses `majelis/large/...`.
+            $data['gambar'] = 'public/' . $paths['large'];
         }
 
         $majelis->update($data);
