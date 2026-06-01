@@ -65,7 +65,6 @@
 
                 <main class="grow">
                     {{ $slot }}
-                    <x-install-prompt />
                 </main>
 
             </div>
