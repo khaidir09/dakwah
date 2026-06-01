@@ -49,4 +49,9 @@ class Event extends Model
     {
         return $this->belongsTo(Village::class, 'village_code', 'code');
     }
+
+    public function contributions()
+    {
+        return $this->morphMany(Contribution::class, 'contributable');
+    }
 }

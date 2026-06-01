@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Assembly;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\Contribution;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -55,6 +56,11 @@ class ManageEventController extends Controller
         $dataToCreate['city_code'] = $assembly->city_code;
         $dataToCreate['district_code'] = $assembly->district_code;
         $dataToCreate['village_code'] = $assembly->village_code;
+        $dataToCreate['user_id'] = Auth::id();
+
+        if (Auth::user()->hasRole('Super Admin')) {
+            $dataToCreate['moderated_at'] = now();
+        }
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -76,7 +82,14 @@ class ManageEventController extends Controller
         }
 
         // 6. Buat record baru di database
-        Event::create($dataToCreate);
+        $event = Event::create($dataToCreate);
+
+        Contribution::create([
+            'user_id' => Auth::id(),
+            'contributable_id' => $event->id,
+            'contributable_type' => Event::class,
+            'points_earned' => 10,
+        ]);
 
         return redirect()->route('kelola-acara-majelis')->with('message', 'Event berhasil ditambahkan!');
     }
