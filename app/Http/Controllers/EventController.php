@@ -37,73 +37,17 @@ class EventController extends Controller
     public function store(Request $request)
     {
         // 1. Determine Validation Rules
-        $rules = [
-            'name' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048',
-            'date' => 'required|date',
-            'access' => 'required|in:Umum,Khusus',
-            'category' => 'required|string|max:255',
-            'assembly_id' => 'nullable|exists:assemblies,id',
-            'maps_link' => 'nullable|url',
-        ];
-
-        // If assembly_id is provided, location fields are nullable (will be inherited)
-        if ($request->filled('assembly_id')) {
-            $rules['location'] = 'nullable|string|max:255';
-            $rules['province'] = 'nullable|string|max:20';
-            $rules['city'] = 'nullable|string|max:20';
-            $rules['district'] = 'nullable|string|max:20';
-            $rules['village'] = 'nullable|string|max:20';
-        } else {
-            // Otherwise, they are required (as per original logic)
-            // Note: Original code had nullable for regions but required for location.
-            // I'll keep location required if no assembly.
-            $rules['location'] = 'required|string|max:255';
-            $rules['province'] = 'nullable|string|max:20';
-            $rules['city'] = 'nullable|string|max:20';
-            $rules['district'] = 'nullable|string|max:20';
-            $rules['village'] = 'nullable|string|max:20';
-        }
-
-        $validatedData = $request->validate($rules);
+        $validatedData = $request->validate($this->getValidationRules($request));
         $dataToCreate = $validatedData;
 
         // 2. Handle Image Upload
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = Str::uuid() . '.webp';
-
-            // Create Thumbnail
-            $thumb = Image::read($file)
-                ->scaleDown(800)
-                ->toWebp(80);
-
-            // Save to Storage
-            Storage::disk('public')->put('events/' . $filename, $thumb);
-
-            $dataToCreate['image'] = 'events/' . $filename;
+        $uploadedImage = $this->handleImageUpload($request);
+        if ($uploadedImage) {
+            $dataToCreate['image'] = $uploadedImage;
         }
 
         // 3. Handle Location Logic
-        if ($request->filled('assembly_id')) {
-            $assembly = Assembly::find($request->assembly_id);
-            if ($assembly) {
-                // Inherit from Assembly
-                // Use 'nama_majelis' as the location name, or 'alamat' if preferred.
-                // Usually location name is the venue name.
-                $dataToCreate['location'] = $assembly->nama_majelis; // Or $assembly->alamat? using nama_majelis seems better for "Venue Name"
-                $dataToCreate['province_code'] = $assembly->province_code;
-                $dataToCreate['city_code'] = $assembly->city_code;
-                $dataToCreate['district_code'] = $assembly->district_code;
-                $dataToCreate['village_code'] = $assembly->village_code;
-            }
-        } else {
-            // Use Input Data
-            $dataToCreate['province_code'] = $validatedData['province'] ?? null;
-            $dataToCreate['city_code'] = $validatedData['city'] ?? null;
-            $dataToCreate['district_code'] = $validatedData['district'] ?? null;
-            $dataToCreate['village_code'] = $validatedData['village'] ?? null;
-        }
+        $dataToCreate = array_merge($dataToCreate, $this->resolveLocationData($request, $validatedData));
 
         // 4. Remove temporary keys
         unset(
@@ -143,70 +87,21 @@ class EventController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Similar logic to store, but for update
-        $rules = [
-            'name' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048',
-            'date' => 'required|date',
-            'access' => 'required|in:Umum,Khusus',
-            'category' => 'required|string|max:255',
-            'assembly_id' => 'nullable|exists:assemblies,id',
-        ];
-
-        if ($request->filled('assembly_id')) {
-            $rules['location'] = 'nullable|string|max:255';
-            $rules['province'] = 'nullable|string|max:20';
-            $rules['city'] = 'nullable|string|max:20';
-            $rules['district'] = 'nullable|string|max:20';
-            $rules['village'] = 'nullable|string|max:20';
-        } else {
-            $rules['location'] = 'required|string|max:255';
-            $rules['province'] = 'nullable|string|max:20';
-            $rules['city'] = 'nullable|string|max:20';
-            $rules['district'] = 'nullable|string|max:20';
-            $rules['village'] = 'nullable|string|max:20';
-        }
-
-        $validatedData = $request->validate($rules);
+        // 1. Determine Validation Rules
+        $validatedData = $request->validate($this->getValidationRules($request));
 
         $event = Event::findOrFail($id);
         $dataToUpdate = $validatedData;
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = Str::uuid() . '.webp';
-
-            $thumb = Image::read($file)
-                ->scaleDown(800)
-                ->toWebp(80);
-
-            Storage::disk('public')->put('events/' . $filename, (string) $thumb);
-
-            if ($event->image) {
-                Storage::disk('public')->delete($event->image);
-            }
-
-            $dataToUpdate['image'] = 'events/' . $filename;
+        $uploadedImage = $this->handleImageUpload($request, $event);
+        if ($uploadedImage) {
+            $dataToUpdate['image'] = $uploadedImage;
         } else {
             unset($dataToUpdate['image']);
         }
 
         // Handle Location Logic
-        if ($request->filled('assembly_id')) {
-            $assembly = Assembly::find($request->assembly_id);
-            if ($assembly) {
-                $dataToUpdate['location'] = $assembly->nama_majelis;
-                $dataToUpdate['province_code'] = $assembly->province_code;
-                $dataToUpdate['city_code'] = $assembly->city_code;
-                $dataToUpdate['district_code'] = $assembly->district_code;
-                $dataToUpdate['village_code'] = $assembly->village_code;
-            }
-        } else {
-            $dataToUpdate['province_code'] = $validatedData['province'] ?? null;
-            $dataToUpdate['city_code'] = $validatedData['city'] ?? null;
-            $dataToUpdate['district_code'] = $validatedData['district'] ?? null;
-            $dataToUpdate['village_code'] = $validatedData['village'] ?? null;
-        }
+        $dataToUpdate = array_merge($dataToUpdate, $this->resolveLocationData($request, $validatedData));
 
         unset(
             $dataToUpdate['province'],
@@ -226,5 +121,88 @@ class EventController extends Controller
     public function destroy(string $id)
     {
         // Handled by Livewire
+    }
+
+    /**
+     * Get validation rules for store and update methods.
+     */
+    private function getValidationRules(Request $request): array
+    {
+        $rules = [
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|max:2048',
+            'date' => 'required|date',
+            'access' => 'required|in:Umum,Khusus',
+            'category' => 'required|string|max:255',
+            'assembly_id' => 'nullable|exists:assemblies,id',
+            'maps_link' => 'nullable|url',
+        ];
+
+        if ($request->filled('assembly_id')) {
+            $rules['location'] = 'nullable|string|max:255';
+            $rules['province'] = 'nullable|string|max:20';
+            $rules['city'] = 'nullable|string|max:20';
+            $rules['district'] = 'nullable|string|max:20';
+            $rules['village'] = 'nullable|string|max:20';
+        } else {
+            $rules['location'] = 'required|string|max:255';
+            $rules['province'] = 'nullable|string|max:20';
+            $rules['city'] = 'nullable|string|max:20';
+            $rules['district'] = 'nullable|string|max:20';
+            $rules['village'] = 'nullable|string|max:20';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Handle image upload, scaling, conversion, and optional deletion of the old image.
+     */
+    private function handleImageUpload(Request $request, ?Event $event = null): ?string
+    {
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = Str::uuid() . '.webp';
+
+            $thumb = Image::read($file)
+                ->scaleDown(800)
+                ->toWebp(80);
+
+            Storage::disk('public')->put('events/' . $filename, (string) $thumb);
+
+            if ($event && $event->image) {
+                Storage::disk('public')->delete($event->image);
+            }
+
+            return 'events/' . $filename;
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve location data either from a related Assembly or from provided input data.
+     */
+    private function resolveLocationData(Request $request, array $validatedData): array
+    {
+        $locationData = [];
+
+        if ($request->filled('assembly_id')) {
+            $assembly = Assembly::find($request->assembly_id);
+            if ($assembly) {
+                $locationData['location'] = $assembly->nama_majelis;
+                $locationData['province_code'] = $assembly->province_code;
+                $locationData['city_code'] = $assembly->city_code;
+                $locationData['district_code'] = $assembly->district_code;
+                $locationData['village_code'] = $assembly->village_code;
+            }
+        } else {
+            $locationData['province_code'] = $validatedData['province'] ?? null;
+            $locationData['city_code'] = $validatedData['city'] ?? null;
+            $locationData['district_code'] = $validatedData['district'] ?? null;
+            $locationData['village_code'] = $validatedData['village'] ?? null;
+        }
+
+        return $locationData;
     }
 }
