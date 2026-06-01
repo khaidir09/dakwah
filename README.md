@@ -1,154 +1,190 @@
 # Syaikhuna
-## Sistem Operasi Digital Keilmuan & Syiar Banua
 
-**Syaikhuna** adalah platform digital (berbasis web dan mobile) yang didedikasikan untuk melestarikan, mengelola, dan mendistribusikan khazanah keilmuan Islam Ahlussunnah wal Jamaah di Kalimantan Selatan, Kalimantan Tengah, dan Kalimantan Timur.
+## Digital Operating System for Islamic Knowledge & Da'wah in Borneo
 
-Platform ini dirancang khusus untuk menghubungkan jamaah, santri, mahasiswa, dan profesional dengan jaringan majelis ilmu yang diasuh oleh zuriyat Syekh Muhammad Arsyad Al-Banjari (Datu Kalampayan) serta murid-murid KH. Muhammad Zaini bin Abdul Ghani (Abah Guru Sekumpul).
+**Syaikhuna** is a web and mobile platform dedicated to preserving, managing, and distributing the Islamic scholarly heritage of *Ahlussunnah wal Jama'ah* across South, Central, and East Kalimantan (Borneo, Indonesia).
 
-Syaikhuna bukan sekadar portal jadwal pengajian statis, melainkan sebuah ekosistem pintar yang mengintegrasikan pencatatan kolaboratif, pustaka digital cerdas berbasis kecerdasan buatan (RAG), serta logistik acara keagamaan berskala masif.
+The platform is designed to connect congregants, students, academics, and professionals with a network of Islamic study circles (*majelis ilmu*) led by the descendants of **Shaykh Muhammad Arsyad Al-Banjari (Datu Kalampayan)** and the students of **KH. Muhammad Zaini bin Abdul Ghani (Abah Guru Sekumpul)**.
 
----
-
-# 🚀 Fitur Unggulan
-
-## 1. Peta Majelis & Jadwal Dinamis (Live Religious Map)
-
-- Sistem pemantauan status jadwal majelis secara real-time:
-  - 🟢 Buka
-  - 🔴 Libur
-  - 🟡 Tentatif
-- Otorisasi perubahan status hanya dapat dilakukan oleh perwakilan resmi atau admin masing-masing majelis.
-- Integrasi peta interaktif untuk membantu jamaah menuju lokasi majelis.
+Rather than serving merely as a static religious event directory, Syaikhuna aims to become an intelligent ecosystem that integrates collaborative knowledge documentation, community management, AI-powered digital libraries, and large-scale religious event logistics.
 
 ---
 
-## 2. Pustaka Cerdas & Chatbot AI (Open Notebook Integration)
+# 🚀 Key Features
 
-### Kemampuan Utama
+## 1. Live Religious Map & Dynamic Schedules
 
-- **Chat with Kitab**
-  - Tanya jawab interaktif langsung terhadap kitab yang telah tervalidasi.
-  - Contoh: *Terjemah Kitab Sabilal Muhtadin*.
+A real-time monitoring system for religious gatherings and study circles.
 
-- **Semantic Search**
-  - Mencari esensi makna dari ribuan halaman kitab, risalah, dan artikel ilmiah Islam.
-  - Tidak terbatas pada pencarian kata kunci literal.
+### Features
 
-### Teknologi
+* Live schedule status:
 
-- Retrieval-Augmented Generation (RAG)
-- Embedding Vector Search
-- PostgreSQL + pgvector
+  * 🟢 Open
+  * 🔴 Closed / Holiday
+  * 🟡 Tentative
+* Authorized schedule management by official representatives of each study circle.
+* Interactive map integration for navigation and travel routes.
 
 ---
 
-## 3. Podcast Generator (Audio-Based Talaqqi)
+## 2. Digital Sinoman (Community Funeral Mutual Aid System)
 
-Mengubah naskah keagamaan menjadi dialog audio dinamis berformat **Deep Dive Discussion**.
+A digital transformation of the traditional Banjar community mutual-aid system for funeral services (*Fardhu Kifayah*) and bereavement support.
 
-### Sumber Konten
+### Features
 
-- Kitab dan terjemahan
-- Manaqib ulama
-- Artikel ilmiah populer
-- Risalah pengajian
+* Automatic membership contribution payments via:
 
-### Manfaat
-
-- Mendukung pembelajaran sambil berkendara.
-- Cocok bagi mahasiswa dan profesional yang memiliki mobilitas tinggi.
+  * QRIS
+  * Virtual Accounts
+* Improved financial transparency and reduced unpaid contributions.
+* Emergency **"Report Bereavement"** panic button for rapid volunteer mobilization.
 
 ---
 
-## 4. Catatan Pengajian Kolaboratif (Risalah Jamaah)
+## 3. Smart Library & AI Chatbot
 
-Fitur pencatatan faedah pengajian secara kolaboratif oleh jamaah.
+### Core Capabilities
 
-### Alur Kerja
+#### Chat with Books
 
-1. Jamaah membuat catatan pengajian.
-2. Catatan terhubung dengan jadwal majelis terkait.
-3. Admin resmi melakukan proses **Tashih**.
-4. Catatan yang lolos verifikasi dapat dipublikasikan.
+Users can interact directly with verified Islamic manuscripts and reference works using Retrieval-Augmented Generation (RAG).
 
-### Tujuan
+Examples include:
 
-- Mengurangi kesalahan kutipan dalil.
-- Menjaga akurasi penyampaian fatwa ulama.
-- Membangun arsip ilmu yang terdokumentasi dengan baik.
+* *Sabilal Muhtadin*
+* Classical Islamic texts
+* Verified religious publications
 
----
+#### Semantic Search
 
-# 🛠️ Stack Teknologi
+Search by meaning rather than exact keywords.
 
-Syaikhuna menggunakan arsitektur hibrida yang dirancang agar tetap optimal pada VPS dengan sumber daya terbatas (< 4 GB RAM).
+The system can identify relevant passages across thousands of pages of:
 
-| Komponen | Teknologi |
-|-----------|------------|
-| Frontend | Tailwind CSS, Alpine.js |
-| Backend | Laravel, Livewire |
-| Framework | Laravel TALL Stack |
-| Database Relasional | PostgreSQL |
-| Vector Database | pgvector |
-| AI Service | Open Notebook (FastAPI + Python + SurrealDB) |
-| Containerization | Docker |
-| Push Notification | OneSignal |
-| Messaging | WhatsApp Business API |
+* Religious books
+* Study notes
+* Academic publications
+* Historical documents
 
-### Keunggulan Arsitektur
+### Technologies
 
-- SEO Friendly
-- Reaktif tanpa SPA kompleks
-- Hemat RAM VPS
-- Mudah dipelihara
-- Skalabel untuk fitur AI
+* Retrieval-Augmented Generation (RAG)
+* Vector Embeddings
+* Semantic Search
+* PostgreSQL + pgvector
 
 ---
 
-# 📦 Panduan Instalasi Server (VPS)
+## 4. Podcast Generator (Audio-Based Learning)
 
-## 1. Prasyarat Sistem
+Automatically transforms written content into engaging audio discussions.
 
-### Sistem Operasi
+### Supported Content
 
-- Ubuntu 22.04 LTS
-- Debian 11+
+* Religious manuscripts
+* Scholar biographies (*Manaqib*)
+* Academic articles
+* Study notes
 
-### Minimum Resource
+### Benefits
 
-- RAM: 2 GB
-- Swap File: 4 GB
-- CPU: 2 Core
-
-### Software
-
-- Docker
-- Docker Compose
-- PHP 8.2+
-- Composer
-- PostgreSQL
-- Ekstensi `pgvector`
+* Supports learning during commuting.
+* Suitable for professionals and university students.
+* Encourages continuous engagement with Islamic knowledge.
 
 ---
 
-## 2. Setup AI Service (Open Notebook - Single Container Lite)
+## 5. Collaborative Study Notes (Risalah Jamaah)
 
-### Membuat Direktori Kerja
+A collaborative note-taking platform for attendees of religious gatherings.
+
+### Workflow
+
+1. Participants create study notes.
+2. Notes are linked to specific events or study sessions.
+3. Official administrators perform **Tashih** (verification and correction).
+4. Approved notes become searchable and publicly accessible.
+
+### Objectives
+
+* Prevent quotation errors.
+* Preserve scholarly accuracy.
+* Build a long-term community knowledge archive.
+
+---
+
+# 🛠️ Technology Stack
+
+Syaikhuna is designed to run efficiently on affordable VPS infrastructure with limited resources (< 4 GB RAM).
+
+| Layer              | Technology                                   |
+| ------------------ | -------------------------------------------- |
+| Frontend           | Tailwind CSS, Alpine.js                      |
+| Backend            | Laravel, Livewire                            |
+| Framework          | Laravel TALL Stack                           |
+| Database           | PostgreSQL                                   |
+| Vector Search      | pgvector                                     |
+| AI Services        | Open Notebook (FastAPI + Python + SurrealDB) |
+| Containerization   | Docker                                       |
+| Push Notifications | OneSignal                                    |
+| Messaging          | WhatsApp Business API                        |
+
+### Architecture Benefits
+
+* SEO-friendly
+* Lightweight resource consumption
+* Server-side rendering support
+* AI-ready infrastructure
+* Cost-efficient deployment
+
+---
+
+# 📦 VPS Installation Guide
+
+## System Requirements
+
+### Operating System
+
+* Ubuntu 22.04 LTS
+* Debian 11+
+
+### Minimum Resources
+
+* RAM: 2 GB
+* Swap: 4 GB
+* CPU: 2 vCPU
+
+### Required Software
+
+* Docker
+* Docker Compose
+* PHP 8.2+
+* Composer
+* PostgreSQL
+* pgvector Extension
+
+---
+
+## Open Notebook AI Service Setup
+
+### Create Working Directory
 
 ```bash
 mkdir -p ~/open-notebook
 cd ~/open-notebook
 ```
 
-### Membuat Docker Compose
+### Create Docker Compose Configuration
 
 ```bash
 nano docker-compose.yml
 ```
 
-Tambahkan konfigurasi sesuai kebutuhan deployment.
+Add the required deployment configuration.
 
-### Menjalankan Container
+### Start Services
 
 ```bash
 docker compose up -d
@@ -156,155 +192,159 @@ docker compose up -d
 
 ---
 
-# 🗄️ Struktur Database Utama
+# 🗄️ Core Database Structure
 
-## Tabel `seasonal_schedules`
+## `seasonal_schedules`
 
-Digunakan untuk jadwal yang memiliki pola pengulangan (recurrence).
+Stores recurring schedules and religious events.
 
-### Contoh
+### Examples
 
-- Kuliah Shubuh
-- Ramadhan
-- Maulid rutin
-- Haul tahunan
+* Fajr Lectures
+* Ramadan Programs
+* Mawlid Gatherings
+* Annual Commemorations
 
-### Manfaat
+### Benefits
 
-- Mengurangi redundansi data.
-- Menghemat kapasitas database.
-- Mempercepat query jadwal.
-
----
-
-## Tabel `scientific_articles`
-
-Menyimpan artikel ilmiah populer dari mitra lembaga dan yayasan.
-
-| Kolom | Tipe Data | Deskripsi |
-|---------|-----------|------------|
-| id | BigInt (PK) | Identifier unik artikel |
-| foundation_id | Int (FK) | Relasi ke yayasan/lembaga |
-| title | Varchar | Judul artikel |
-| slug | Varchar | URL SEO-friendly |
-| notebook_id | Varchar | Mapping ke Open Notebook |
-| views_count | BigInt | Total kunjungan |
-| likes_count | BigInt | Total apresiasi jamaah |
+* Reduces data duplication.
+* Optimizes storage.
+* Improves query performance.
 
 ---
 
-# 🧠 Mekanisme Pengindeksan Catatan (One-Time Indexing)
+## `scientific_articles`
 
-Untuk mendukung pencarian semantik berskala besar tanpa membebani biaya API, Syaikhuna menerapkan skema **One-Time Indexing berbasis RAG**.
+Stores scholarly and public-facing scientific publications contributed by partner institutions.
 
-## 1. Sistem Antrean (Queue)
+| Column        | Type        | Description                          |
+| ------------- | ----------- | ------------------------------------ |
+| id            | BigInt (PK) | Unique article identifier            |
+| foundation_id | Int (FK)    | Associated institution or foundation |
+| title         | Varchar     | Article title                        |
+| slug          | Varchar     | SEO-friendly URL                     |
+| notebook_id   | Varchar     | Linked Open Notebook identifier      |
+| views_count   | BigInt      | Total page views                     |
+| likes_count   | BigInt      | Community appreciation count         |
 
-Setelah catatan pengajian lolos proses tashih:
+---
+
+# 🧠 One-Time Indexing Architecture
+
+To support semantic search across thousands of study notes while minimizing API costs, Syaikhuna implements a **One-Time Indexing RAG pipeline**.
+
+## 1. Queue System
+
+After a note passes the verification process:
 
 ```text
-Catatan ➜ Queue Laravel ➜ Proses Embedding
+Study Note → Laravel Queue → Embedding Process
 ```
 
 ---
 
-## 2. Chunking
+## 2. Text Chunking
 
-Teks dipotong menjadi:
+Documents are automatically divided into:
 
-- Maksimal 500 token per chunk
-- Overlap 10%
+* Maximum 500 tokens per chunk
+* 10% overlap
 
-Tujuannya menjaga kesinambungan konteks antar potongan teks.
+This preserves contextual continuity between chunks.
 
 ---
 
 ## 3. Batch Embedding
 
-Setiap tengah malam:
+Every midnight:
 
-1. Laravel mengumpulkan seluruh chunk baru.
-2. Data dikirim secara kolektif ke OpenAI Batch API.
-3. Menggunakan model:
+1. Laravel collects newly approved content.
+2. Data is sent in batches through the OpenAI Batch API.
+3. Embeddings are generated using:
 
 ```text
 text-embedding-3-small
 ```
 
-### Efisiensi Biaya
+### Cost Efficiency
 
-- Standard API: ± $0.02 / 1 juta token
-- Batch API: ± $0.01 / 1 juta token
+| Method       | Cost per 1M Tokens |
+| ------------ | ------------------ |
+| Standard API | ~$0.02             |
+| Batch API    | ~$0.01             |
 
-Penghematan biaya hingga **50%**.
-
----
-
-## 4. Penyimpanan Vektor
-
-Hasil embedding:
-
-- 1.536 dimensi
-- Disimpan pada kolom bertipe `vector`
-- Menggunakan PostgreSQL + pgvector
+Up to **50% cost reduction** compared to standard embedding requests.
 
 ---
 
-## 5. Semantic Search Lokal
+## 4. Vector Storage
 
-Saat pengguna melakukan pencarian:
+Embedding vectors are stored in PostgreSQL using pgvector.
+
+### Specifications
+
+* 1,536 dimensions
+* Native vector data type
+* Local similarity computation
+
+---
+
+## 5. Local Semantic Retrieval
+
+User searches are performed entirely within the local database:
 
 ```sql
 embedding <=> query_embedding
 ```
 
-### Keuntungan
+### Advantages
 
-- Tidak perlu memanggil API eksternal.
-- Respon sangat cepat.
-- Biaya operasional rendah.
-- Data tetap berada di server sendiri.
-
----
-
-# 📜 Lisensi & Adab Penggunaan
-
-Syaikhuna dibangun dengan mengedepankan keberkahan ilmu dan penghormatan terhadap sanad keilmuan.
-
-## Ketentuan
-
-### 1. Hak Cipta Naskah
-
-Seluruh naskah digital yang dipublikasikan wajib memiliki:
-
-- Izin tertulis dari ahli waris pengarang; atau
-- Kontrak lisensi digital yang sah dari penerbit terkait.
-
-### 2. Penggunaan AI
-
-AI hanya digunakan sebagai:
-
-- Pencari referensi sumber
-- Asisten penelusuran teks
-- Mesin pencarian semantik
-
-AI **bukan** alat pembuat fatwa mandiri.
-
-### 3. Larangan Penyalahgunaan
-
-Aplikasi tidak boleh digunakan untuk:
-
-- Kepentingan politik praktis
-- Propaganda kelompok tertentu
-- Penyebaran paham di luar koridor Ahlussunnah wal Jamaah An-Nahdliyah di Kalimantan
+* No repeated external API calls.
+* Fast response times.
+* Predictable operational costs.
+* Full control over data ownership.
 
 ---
 
-# 🤝 Visi
+# 📜 License & Ethical Usage
 
-> Merawat sanad keilmuan para guru, mendampingi langkah kaki umat menuju majelis, serta menghadirkan teknologi yang bermanfaat, tenang, dan penuh keberkahan bagi Banua.
+Syaikhuna is developed with a strong commitment to preserving scholarly integrity and respecting intellectual property rights.
+
+## Principles
+
+### 1. Content Licensing
+
+All digital manuscripts and publications must have:
+
+* Written permission from copyright holders; or
+* A valid publishing or digital licensing agreement.
+
+### 2. Responsible AI Usage
+
+Artificial Intelligence is used exclusively as:
+
+* A knowledge retrieval assistant
+* A semantic search engine
+* A source discovery tool
+
+AI must **not** be treated as an independent authority for issuing religious rulings (*fatwas*).
+
+### 3. Prohibited Uses
+
+The platform must not be used for:
+
+* Practical political campaigns
+* Sectarian propaganda
+* Distribution of teachings outside the traditional *Ahlussunnah wal Jama'ah* framework represented by the platform
 
 ---
 
-## Persembahan
+# 🤝 Vision
 
-**Syaikhuna** merupakan persembahan bakti pemuda Banua untuk menjaga, mendokumentasikan, dan menyebarluaskan khazanah keilmuan Islam kepada generasi mendatang.
+> Preserving scholarly chains of transmission, supporting communities on their journey toward knowledge, and harnessing technology to serve faith, learning, and future generations.
+
+---
+
+## Dedication
+
+**Syaikhuna** is a contribution from the youth of Borneo dedicated to safeguarding, documenting, and disseminating Islamic scholarly heritage for generations to come.
