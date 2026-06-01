@@ -50,6 +50,9 @@
                                     <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 text-justify leading-relaxed text-base md:text-lg">
                                         {!! nl2br(e($note->content)) !!}
                                     </div>
+
+                                    <!-- Comment Section -->
+                                    @livewire('schedule-note.comment-section', ['note' => $note])
                                 </div>
                             </article>
                         </div>
