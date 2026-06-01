@@ -45,7 +45,8 @@ class ListEvent extends Component
             $query->where('category', $this->category);
         }
 
-        $query->where('date', '>=', now());
+        $query->where('date', '>=', now())
+            ->whereNotNull('moderated_at');
 
         $events_count = $query->count();
         $events = $query->simplePaginate($this->paginate);

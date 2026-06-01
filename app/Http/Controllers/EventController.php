@@ -6,6 +6,8 @@ use App\Models\Event;
 use App\Models\Assembly;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\Contribution;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Laravolt\Indonesia\Models\Province;
 use Intervention\Image\Laravel\Facades\Image;
@@ -55,7 +57,20 @@ class EventController extends Controller
         $locationData = $this->resolveLocationData($request, $validatedData);
         $dataToCreate = array_merge($dataToCreate, $locationData);
 
-        Event::create($dataToCreate);
+        $dataToCreate['user_id'] = Auth::id();
+
+        if (Auth::user()->hasRole('Super Admin')) {
+            $dataToCreate['moderated_at'] = now();
+        }
+
+        $event = Event::create($dataToCreate);
+
+        Contribution::create([
+            'user_id' => Auth::id(),
+            'contributable_id' => $event->id,
+            'contributable_type' => Event::class,
+            'points_earned' => 10,
+        ]);
 
         return redirect()->route('event.index')->with('message', 'Event berhasil ditambahkan!');
     }
