@@ -141,7 +141,7 @@
                                                                 {{ $item->nama_jadwal }}
                                                             </div>
                                                             <!-- Card content -->
-                                                            <div class="text-sm mb-3">{!! $item->deskripsi !!}</div>
+                                                            <div class="text-sm mb-3">{!! nl2br(e($item->deskripsi)) !!}</div>
                                                             <!-- Card footer -->
                                                             <div class="flex justify-between items-center">
                                                                 <!-- Link -->
