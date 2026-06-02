@@ -77,7 +77,7 @@
 
                             <!-- Description -->
                             <div class="format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-300 text-justify">
-                                {!! $biography->biografi !!}
+                                {!! clean($biography->biografi) !!}
                             </div>
 
                             @if(!empty($biography->source) && is_array($biography->source))
