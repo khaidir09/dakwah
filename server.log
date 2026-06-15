@@ -3,6 +3,9 @@
 
   Press Ctrl+C to stop the server
 
+  2026-06-01 08:40:48 /acara ........................................... ~ 1s
+  2026-06-01 08:43:24 /event ....................................... ~ 0.18ms
+  2026-06-01 08:44:13 /event ....................................... ~ 0.13ms
 
    INFO  Environment modified. Restarting server...
 
@@ -17,9 +20,13 @@
 
   Press Ctrl+C to stop the server
 
-  2026-05-02 04:15:09 /catatan-pengajian ............................... ~ 2s
-  2026-05-02 04:15:11 /build/assets/app-DIs8Wm0g.css ............... ~ 0.18ms
-  2026-05-02 04:15:11 /build/assets/app-DAjwOxX4.js ................ ~ 0.94ms
-  2026-05-02 04:15:12 /catatan-pengajian/1 ....................... ~ 500.57ms
-  2026-05-02 04:15:12 /build/assets/app-DIs8Wm0g.css ............... ~ 0.07ms
-  2026-05-02 04:15:12 /build/assets/app-DAjwOxX4.js ................ ~ 0.28ms
+
+   INFO  Environment modified. Restarting server...
+
+   INFO  Server running on [http://127.0.0.1:8000].
+
+  Press Ctrl+C to stop the server
+
+  2026-06-01 08:47:23 /event ........................................... ~ 1s
+  2026-06-01 08:47:24 /build/assets/app-BpSdeHLK.css ............... ~ 0.07ms
+  2026-06-01 08:47:24 /build/assets/app-DAjwOxX4.js ................ ~ 0.21ms
