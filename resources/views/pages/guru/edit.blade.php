@@ -40,10 +40,24 @@
                             @enderror
                         </div>
 
-                        <div>
+                        <div x-data="{ unknown: {{ old('_token') ? (old('is_unknown_year') ? 'true' : 'false') : ($guru->tahun_lahir ? 'false' : 'true') }} }">
                             <label class="block text-sm font-medium mb-2" for="tahun_lahir">Tahun Lahir</label>
+                            <div class="flex items-center gap-2 mb-2">
+                                <input type="checkbox" id="unknown_year" name="is_unknown_year" value="1" x-model="unknown" class="form-checkbox">
+                                <label for="unknown_year" class="text-sm text-gray-600 dark:text-gray-400">Tidak Diketahui</label>
+                            </div>
+                            <input type="hidden" name="tahun_lahir" value="">
                             {{-- DIUBAH: Tambah old() dengan data $guru --}}
-                            <input id="tahun_lahir" class="form-input w-full @error('tahun_lahir') is-invalid @enderror" type="number" name="tahun_lahir" value="{{ old('tahun_lahir', $guru->tahun_lahir) }}"/>
+                            <input
+                                id="tahun_lahir"
+                                x-ref="tahunLahirInput"
+                                class="form-input w-full @error('tahun_lahir') is-invalid @enderror disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:text-gray-400"
+                                type="number"
+                                name="tahun_lahir"
+                                value="{{ old('tahun_lahir', $guru->tahun_lahir) }}"
+                                :disabled="unknown"
+                                x-effect="if(unknown) $refs.tahunLahirInput.value = ''"
+                            />
                             @error('tahun_lahir')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
