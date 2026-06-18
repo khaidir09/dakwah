@@ -65,4 +65,43 @@ class LibraryTest extends TestCase
         $responseDetail->assertStatus(200);
         $responseDetail->assertSee('Public Book');
     }
+
+    public function test_public_cannot_view_pdf_link()
+    {
+        $library = Library::create([
+            'title' => 'Public Book 2',
+            'slug' => 'public-book-2',
+            'category' => 'Sejarah',
+            'description' => 'Desc',
+            'file_path' => 'path/to/file.pdf',
+            'price_type' => 'free',
+            'is_active' => true,
+        ]);
+
+        $responseDetail = $this->get(route('pustaka-detail', $library->slug));
+        $responseDetail->assertStatus(200);
+        $responseDetail->assertSee('Public Book 2');
+        $responseDetail->assertDontSee('Download / Baca PDF');
+        $responseDetail->assertSee('Login untuk Baca PDF');
+    }
+
+    public function test_authenticated_user_can_view_pdf_link()
+    {
+        $library = Library::create([
+            'title' => 'Public Book 3',
+            'slug' => 'public-book-3',
+            'category' => 'Sejarah',
+            'description' => 'Desc',
+            'file_path' => 'path/to/file.pdf',
+            'price_type' => 'free',
+            'is_active' => true,
+        ]);
+
+        $user = User::factory()->create();
+
+        $responseDetail = $this->actingAs($user)->get(route('pustaka-detail', $library->slug));
+        $responseDetail->assertStatus(200);
+        $responseDetail->assertSee('Download / Baca PDF');
+        $responseDetail->assertDontSee('Login untuk Baca PDF');
+    }
 }
