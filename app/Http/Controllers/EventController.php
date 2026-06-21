@@ -65,12 +65,14 @@ class EventController extends Controller
 
         $event = Event::create($dataToCreate);
 
-        Contribution::create([
-            'user_id' => Auth::id(),
-            'contributable_id' => $event->id,
-            'contributable_type' => Event::class,
-            'points_earned' => 10,
-        ]);
+        if (!Auth::user()->hasRole('Super Admin')) {
+            Contribution::create([
+                'user_id' => Auth::id(),
+                'contributable_id' => $event->id,
+                'contributable_type' => Event::class,
+                'points_earned' => 10,
+            ]);
+        }
 
         return redirect()->route('event.index')->with('message', 'Event berhasil ditambahkan!');
     }
