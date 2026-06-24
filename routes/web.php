@@ -134,9 +134,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::put('/kelola-artikel-ilmiah/{id}', [\App\Http\Controllers\User\ManagedFoundationController::class, 'updateArticle'])->name('kelola-artikel.update');
     Route::delete('/kelola-artikel-ilmiah/{id}', [\App\Http\Controllers\User\ManagedFoundationController::class, 'destroyArticle'])->name('kelola-artikel.destroy');
 
-    // Route khusus onboarding majelis (hanya bisa diakses via link khusus)
+    // Route khusus onboarding majelis (hanya bisa diakses via link yang di-generate artisan majelis:invite)
     Route::get('/registrasi-majelis/baru', [ManagedMajelisController::class, 'register'])
-        ->name('majelis.onboarding');
+        ->name('majelis.onboarding')
+        ->middleware('signed');
 
     Route::get('/favorit-saya', [\App\Http\Controllers\User\FavoriteController::class, 'index'])->name('favorit-saya');
 
