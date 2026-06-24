@@ -71,6 +71,8 @@ Dual-controller pattern — same resource has separate admin and user-facing con
 - `app/Http/Controllers/` — admin controllers (unrestricted CRUD)
 - `app/Http/Controllers/User/` — user controllers (ownership-scoped: `Assembly::where('user_id', Auth::id())`, `Auth::user()->foundations()->findOrFail()`)
 
+**Pengecualian — `PostController`**: `app/Http/Controllers/PostController.php` melayani dua rute sekaligus — `Route::resource('kelola-tulisan', ...)` (user) dan `Route::resource('/posts', ...)` (admin) — bukan dua controller terpisah. Otorisasi dilakukan di dalam controller dengan `hasAnyRole(['Super Admin', 'Penulis'])`. Jangan ikuti pola ini untuk resource baru; gunakan dual-controller yang benar.
+
 ### Content Moderation
 
 Events (`ManageEventController`) and ScheduleNotes (`ScheduleNoteController`) follow a `Pending → Approved/Rejected` workflow. Admin approves via dedicated admin routes; public views only show `Approved` content.
@@ -91,6 +93,15 @@ Events (`ManageEventController`) and ScheduleNotes (`ScheduleNoteController`) fo
 | `Comment`                    | Polymorphic (commentable: Teacher, ScheduleNote)                                         |
 | `Contribution`               | Polymorphic (contributable: Event)                                                       |
 | `ChatSession`, `ChatMessage` | AI library chat history                                                                  |
+
+### Image Upload Traits
+
+Ada dua trait dengan perilaku berbeda — pilih sesuai kebutuhan:
+
+- `app/Traits/HandlesImageUploads.php` — menghasilkan **dua file**: `{folder}/large/{uuid}.webp` dan `{folder}/thumb/{uuid}.webp`. Simpan path `large` ke database; gunakan accessor `str_replace('large', 'thumb', ...)` untuk thumb. Dipakai oleh: `ManagedMajelisController`. Gunakan trait ini untuk resource baru yang butuh tampilan list (thumbnail) dan detail (large).
+- `app/Traits/ImageUploadTrait.php` — menghasilkan **satu file** tanpa variant thumb. Dipakai oleh: `LibraryController`.
+
+`EventController` dan `ManageEventController` tidak menggunakan trait — image upload dilakukan inline dan menghasilkan satu file flat di `events/{uuid}.webp`.
 
 ### Services
 
@@ -113,7 +124,7 @@ Homepage widgets: `HomeEvent`, `HomeJadwalMajelis`, `HomeRamadhanToday`, `HomeUp
 
 ### Layouts
 
-Four layout types: `AppLayout` (admin), `DashboardLayout` (authenticated user), `UserLayout` (public), `AuthenticationLayout`.
+Four layout types: `AppLayout` (untuk SuperAdmin), `DashboardLayout` (untuk pengguna yang sudah login), `UserLayout` (publik, tidak login), `AuthenticationLayout`.
 
 ## Environment Variables
 
@@ -142,6 +153,18 @@ Session driver defaults to `database` (`SESSION_DRIVER=database`).
 - Always use `clean()` (mews/purifier) before persisting any user-supplied HTML — this project has had XSS issues in post content, guru descriptions, and biographies (see recent commits).
 - The `IsAdmin` middleware (`app/Http/Middleware/IsAdmin.php`) checks `hasRole('Super Admin')` — do not bypass this for admin routes.
 - User controllers must scope all queries to the authenticated user's owned resources to prevent IDOR.
+
+## Template Debris — Jangan Disentuh atau Dijadikan Referensi
+
+Sebagian besar isi admin area berasal dari **template UI Flowbite/Mosaic** dan **tidak ada hubungannya dengan logika bisnis Syaikhuna**. Jangan jadikan ini referensi, jangan perluas, dan jangan hapus tanpa diskusi.
+
+**Routes** (semua di bawah `/admin/`): `/ecommerce/*`, `/community/*`, `/finance/*`, `/job/*`, `/messages`, `/tasks/*`, `/inbox`, `/calendar`, `/settings/account`, `/campaigns`, `/onboarding-0*`, `/component/*`, `/utility/*`
+
+**Controllers**: `CampaignController`, `CustomerController`, `InvoiceController`, `JobController`, `MemberController`, `OrderController`, `TransactionController`
+
+**Models**: `Campaign`, `Customer`, `DataFeed`, `Invoice`, `Marketer`, `Member`, `Order`, `Transaction`
+
+**Seeders**: Semua seeder kecuali `PostRoleSeeder`, `SpesialisasiSeeder`, `DailySurahReadingSeeder`
 
 ## IMPORTANT
 
