@@ -115,7 +115,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function assembly()
     {
-        return $this->hasOne(Assembly::class);
+        return $this->hasMany(Assembly::class);
     }
 
     public function followingAssemblies()
