@@ -37,6 +37,11 @@ php artisan test --filter=TestName  # Run a single test
 
 # Code style
 ./vendor/bin/pint                   # Fix code style (PSR-12)
+
+# Artisan commands khusus aplikasi
+php artisan majelis:invite           # Generate signed URL onboarding majelis (default: 1440 menit)
+php artisan majelis:invite 60        # Link valid 60 menit
+php artisan app:make-author {email}  # Assign role Penulis ke user
 ```
 
 Tests use SQLite in-memory; the database is automatically switched in `phpunit.xml`.
@@ -47,7 +52,9 @@ Tests use SQLite in-memory; the database is automatically switched in `phpunit.x
 
 - **Framework**: Laravel 11 with TALL stack (Tailwind CSS v4, Alpine.js via Livewire, Livewire 3)
 - **Auth**: Jetstream + Fortify (2FA, email verify, API tokens) + Google OAuth (Socialite)
-- **Roles**: Spatie Laravel Permission v6 — primary role is `Super Admin`
+- **Roles**: Spatie Laravel Permission v6 — dua role yang digunakan:
+  - `Super Admin` — akses penuh ke semua area admin
+  - `Penulis` — hanya bisa membuat dan mengedit tulisan miliknya sendiri (`kelola-tulisan`); assign via `php artisan app:make-author {email}`
 - **Database**: MySQL (dev), SQLite in-memory (tests)
 - **Images**: Intervention Image — generates both `large` and `thumb` variants in `public/` disk
 - **HTML sanitization**: mews/purifier — use `clean()` helper on all user-supplied HTML content

@@ -54,4 +54,17 @@ class Event extends Model
     {
         return $this->morphMany(Contribution::class, 'contributable');
     }
+
+    public function contributor()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function scopePubliclyVisible($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('status')
+              ->orWhere('status', 'approved');
+        });
+    }
 }

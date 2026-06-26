@@ -12,11 +12,12 @@ class Guru extends Component
 
     public $paginate = 10;
     public $search;
+    public $tab = 'semua';
 
     public $confirmingDeletion = false;
     public $teacher_id_to_delete;
 
-    protected $updatesQueryString = ['search'];
+    protected $updatesQueryString = ['search', 'tab'];
 
     public function mount()
     {
@@ -52,26 +53,35 @@ class Guru extends Component
         $this->teacher_id_to_delete = null;
     }
 
+    public function switchTab(string $tab)
+    {
+        $this->tab = $tab;
+        $this->resetPage();
+    }
+
     public function render()
     {
         $teachers_count = Teacher::count();
+        $pending_count = Teacher::where('contribution_status', 'pending')->count();
         $query = Teacher::with('province', 'city', 'district', 'village')->latest();
 
-        // Jika ada pencarian, tambahkan kondisi where
+        if ($this->tab === 'moderasi') {
+            $query->where('contribution_status', 'pending');
+        }
+
         if ($this->search) {
             $searchTerm = '%' . $this->search . '%';
-
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('name', 'like', $searchTerm);
             });
         }
 
-        // Ambil hasil akhir dengan paginasi
         $teachers = $query->simplePaginate($this->paginate);
 
         return view('livewire.guru', [
             'teachers_count' => $teachers_count,
-            'teachers' => $teachers
+            'pending_count' => $pending_count,
+            'teachers' => $teachers,
         ]);
     }
 }

@@ -65,7 +65,7 @@ class ListGuru extends Component
 
     public function render()
     {
-        $query = Teacher::where('wafat_hijriah_year', null)->latest();
+        $query = Teacher::publiclyVisible()->where('wafat_hijriah_year', null)->latest();
 
         // Apply Region Filters
         if ($this->selectedProvince) {

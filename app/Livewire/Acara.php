@@ -12,11 +12,12 @@ class Acara extends Component
 
     public $paginate = 10;
     public $search;
+    public $tab = 'semua';
 
     public $confirmingDeletion = false;
     public $event_id_to_delete;
 
-    protected $updatesQueryString = ['search'];
+    protected $updatesQueryString = ['search', 'tab'];
 
     public function mount()
     {
@@ -52,15 +53,24 @@ class Acara extends Component
         $this->event_id_to_delete = null;
     }
 
+    public function switchTab(string $tab)
+    {
+        $this->tab = $tab;
+        $this->resetPage();
+    }
+
     public function render()
     {
         $events_count = Event::count();
+        $pending_count = Event::where('status', 'pending')->whereNotNull('user_id')->count();
         $query = Event::with('province', 'city', 'district', 'village')->latest();
 
-        // Jika ada pencarian, tambahkan kondisi where
+        if ($this->tab === 'moderasi') {
+            $query->where('status', 'pending')->whereNotNull('user_id');
+        }
+
         if ($this->search) {
             $searchTerm = '%' . $this->search . '%';
-
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('name', 'like', $searchTerm)
                     ->orWhere('location', 'like', $searchTerm)
@@ -68,12 +78,12 @@ class Acara extends Component
             });
         }
 
-        // Ambil hasil akhir dengan paginasi
         $events = $query->simplePaginate($this->paginate);
 
         return view('livewire.event', [
             'events_count' => $events_count,
-            'events' => $events
+            'pending_count' => $pending_count,
+            'events' => $events,
         ]);
     }
 }

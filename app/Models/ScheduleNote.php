@@ -8,6 +8,11 @@ class ScheduleNote extends Model
 {
     protected $guarded = [];
 
+    public function contribution()
+    {
+        return $this->morphOne(Contribution::class, 'contributable');
+    }
+
     public function schedule()
     {
         return $this->belongsTo(Schedule::class);

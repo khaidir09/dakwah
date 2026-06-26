@@ -68,16 +68,19 @@
                                         @csrf
                                         <div class="mb-4">
                                             <label for="content" class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Tulis Catatan</label>
-                                            <textarea id="content" name="content" rows="3" class="form-textarea w-full" required placeholder="Tuliskan catatan kajian, hikmah, atau buku harian spiritual di sini..."></textarea>
+                                            <textarea id="content" name="content" rows="3" class="form-textarea w-full @error('content') border-red-400 @enderror" placeholder="Tuliskan catatan kajian, hikmah, atau buku harian spiritual di sini...">{{ old('content') }}</textarea>
+                                            @error('content')
+                                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                            @enderror
                                         </div>
                                         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                             <div class="flex items-center space-x-4">
                                                 <label class="flex items-center">
-                                                    <input type="radio" name="visibility" value="Private" class="form-radio text-emerald-500" checked>
+                                                    <input type="radio" name="visibility" value="Private" class="form-radio text-emerald-500" {{ old('visibility', 'Private') === 'Private' ? 'checked' : '' }}>
                                                     <span class="text-sm ml-2 text-gray-600 dark:text-gray-400">Privat (Hanya Anda)</span>
                                                 </label>
                                                 <label class="flex items-center">
-                                                    <input type="radio" name="visibility" value="Public" class="form-radio text-emerald-500">
+                                                    <input type="radio" name="visibility" value="Public" class="form-radio text-emerald-500" {{ old('visibility') === 'Public' ? 'checked' : '' }}>
                                                     <span class="text-sm ml-2 text-gray-600 dark:text-gray-400">Publik (Dibaca Jamaah Lain)</span>
                                                 </label>
                                             </div>

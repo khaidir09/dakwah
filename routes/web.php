@@ -31,6 +31,15 @@ use App\Http\Controllers\User\VideoController as UserVideoController;
 use App\Http\Controllers\User\WiridController as UserWiridController;
 use App\Http\Controllers\User\MajelisController as UserMajelisController;
 use App\Http\Controllers\User\JadwalMajelisController as UserJadwalMajelisController;
+use App\Http\Controllers\KontributorController;
+use App\Http\Controllers\User\KontribusiController;
+use App\Http\Controllers\User\KontribusiMajelisController;
+use App\Http\Controllers\User\KontribusiGuruController;
+use App\Http\Controllers\User\KontribusiJadwalController;
+use App\Http\Controllers\User\KontribusiAcaraController;
+use App\Http\Controllers\User\KontribusiAmalanController;
+use App\Http\Controllers\Admin\XpSettingController;
+use App\Http\Controllers\Admin\ModerasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +101,9 @@ Route::middleware(['auth'])->group(function () {
 Route::get('auth', [\App\Http\Controllers\GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google', [\App\Http\Controllers\GoogleAuthController::class, 'handleGoogleCallback']);
 
+// Kontributor (public)
+Route::get('/kontributor', [KontributorController::class, 'index'])->name('kontributor.index');
+
 Route::get('/tentang-kami', function () {
     return view('pages/user/tentang-kami');
 })->name('tentang-kami');
@@ -147,6 +159,39 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::delete('/jadwal-majelis/notes/comments/{id}', [\App\Http\Controllers\User\ScheduleNoteCommentController::class, 'destroy'])->name('jadwal-majelis.notes.comments.destroy');
 
     Route::get('/kelola-catatan', [\App\Http\Controllers\User\KelolaCatatanController::class, 'index'])->name('kelola-catatan.index');
+
+    // Daftar Kontributor
+    Route::post('/kontributor/daftar', [KontributorController::class, 'daftar'])->name('kontributor.daftar');
+
+    // Dashboard & CRUD Kontribusi (hanya Kontributor)
+    Route::middleware(['role:Kontributor'])->group(function () {
+        Route::get('/kontributor/saya', [KontribusiController::class, 'index'])->name('kontributor.saya');
+
+        Route::get('/kontributor/saya/majelis/create', [KontribusiMajelisController::class, 'create'])->name('kontributor.majelis.create');
+        Route::post('/kontributor/saya/majelis', [KontribusiMajelisController::class, 'store'])->name('kontributor.majelis.store');
+        Route::get('/kontributor/saya/majelis/{id}/edit', [KontribusiMajelisController::class, 'edit'])->name('kontributor.majelis.edit');
+        Route::put('/kontributor/saya/majelis/{id}', [KontribusiMajelisController::class, 'update'])->name('kontributor.majelis.update');
+
+        Route::get('/kontributor/saya/guru/create', [KontribusiGuruController::class, 'create'])->name('kontributor.guru.create');
+        Route::post('/kontributor/saya/guru', [KontribusiGuruController::class, 'store'])->name('kontributor.guru.store');
+        Route::get('/kontributor/saya/guru/{id}/edit', [KontribusiGuruController::class, 'edit'])->name('kontributor.guru.edit');
+        Route::put('/kontributor/saya/guru/{id}', [KontribusiGuruController::class, 'update'])->name('kontributor.guru.update');
+
+        Route::get('/kontributor/saya/jadwal/create', [KontribusiJadwalController::class, 'create'])->name('kontributor.jadwal.create');
+        Route::post('/kontributor/saya/jadwal', [KontribusiJadwalController::class, 'store'])->name('kontributor.jadwal.store');
+        Route::get('/kontributor/saya/jadwal/{id}/edit', [KontribusiJadwalController::class, 'edit'])->name('kontributor.jadwal.edit');
+        Route::put('/kontributor/saya/jadwal/{id}', [KontribusiJadwalController::class, 'update'])->name('kontributor.jadwal.update');
+
+        Route::get('/kontributor/saya/acara/create', [KontribusiAcaraController::class, 'create'])->name('kontributor.acara.create');
+        Route::post('/kontributor/saya/acara', [KontribusiAcaraController::class, 'store'])->name('kontributor.acara.store');
+        Route::get('/kontributor/saya/acara/{id}/edit', [KontribusiAcaraController::class, 'edit'])->name('kontributor.acara.edit');
+        Route::put('/kontributor/saya/acara/{id}', [KontribusiAcaraController::class, 'update'])->name('kontributor.acara.update');
+
+        Route::get('/kontributor/saya/amalan/create', [KontribusiAmalanController::class, 'create'])->name('kontributor.amalan.create');
+        Route::post('/kontributor/saya/amalan', [KontribusiAmalanController::class, 'store'])->name('kontributor.amalan.store');
+        Route::get('/kontributor/saya/amalan/{id}/edit', [KontribusiAmalanController::class, 'edit'])->name('kontributor.amalan.edit');
+        Route::put('/kontributor/saya/amalan/{id}', [KontribusiAmalanController::class, 'update'])->name('kontributor.amalan.update');
+    });
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
@@ -169,6 +214,21 @@ Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->gr
     Route::resource('/permissions', \App\Http\Controllers\PermissionController::class);
     Route::resource('/posts', \App\Http\Controllers\PostController::class);
     Route::resource('/foundations', \App\Http\Controllers\FoundationController::class);
+    // XP Settings & Moderasi Kontributor
+    Route::get('/pengaturan/xp-kontribusi', [XpSettingController::class, 'index'])->name('admin.xp-settings.index');
+    Route::put('/pengaturan/xp-kontribusi', [XpSettingController::class, 'update'])->name('admin.xp-settings.update');
+
+    Route::put('/majelis/{id}/moderasi', [ModerasiController::class, 'moderasiAssembly'])->name('admin.moderasi.majelis');
+    Route::put('/majelis/{id}/revoke', [ModerasiController::class, 'revokeAssembly'])->name('admin.revoke.majelis');
+    Route::put('/guru/{id}/moderasi', [ModerasiController::class, 'moderasiTeacher'])->name('admin.moderasi.guru');
+    Route::put('/guru/{id}/revoke', [ModerasiController::class, 'revokeTeacher'])->name('admin.revoke.guru');
+    Route::put('/jadwal-majelis/{id}/moderasi', [ModerasiController::class, 'moderasiJadwal'])->name('admin.moderasi.jadwal');
+    Route::put('/jadwal-majelis/{id}/revoke', [ModerasiController::class, 'revokeJadwal'])->name('admin.revoke.jadwal');
+    Route::put('/event/{id}/moderasi', [ModerasiController::class, 'moderasiEvent'])->name('admin.moderasi.event');
+    Route::put('/event/{id}/revoke', [ModerasiController::class, 'revokeEvent'])->name('admin.revoke.event');
+    Route::put('/wirid/{id}/moderasi', [ModerasiController::class, 'moderasiWirid'])->name('admin.moderasi.wirid');
+    Route::put('/wirid/{id}/revoke', [ModerasiController::class, 'revokeWirid'])->name('admin.revoke.wirid');
+
     // Route for the getting the data feed
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
     Route::get('/dashboard/analytics', [DashboardController::class, 'analytics'])->name('analytics');

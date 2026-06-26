@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contribution;
 use App\Models\ScheduleNote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,8 +12,13 @@ class ScheduleNoteController extends Controller
 {
     public function store(Request $request, $scheduleId)
     {
+        $contentRules = ['required', 'string'];
+        if ($request->visibility === 'Public') {
+            $contentRules[] = 'min:50';
+        }
+
         $request->validate([
-            'content' => 'required|string',
+            'content' => $contentRules,
             'visibility' => 'required|in:Private,Public',
         ]);
 
@@ -24,11 +30,21 @@ class ScheduleNoteController extends Controller
 
         if ($request->visibility === 'Public') {
             $note->status = 'Pending';
+            $note->contribution_status = 'pending';
         } else {
             $note->status = 'Approved';
         }
 
         $note->save();
+
+        if ($request->visibility === 'Public') {
+            Contribution::create([
+                'user_id' => Auth::id(),
+                'contributable_id' => $note->id,
+                'contributable_type' => ScheduleNote::class,
+                'points_earned' => 0,
+            ]);
+        }
 
         $message = 'Catatan berhasil disimpan.';
         if ($request->visibility === 'Public') {

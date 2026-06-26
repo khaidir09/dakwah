@@ -12,11 +12,12 @@ class JadwalMajelis extends Component
 
     public $paginate = 10;
     public $search;
+    public $tab = 'semua';
 
     public $confirmingDeletion = false;
     public $schedule_id_to_delete;
 
-    protected $updatesQueryString = ['search'];
+    protected $updatesQueryString = ['search', 'tab'];
 
     public function mount()
     {
@@ -52,30 +53,41 @@ class JadwalMajelis extends Component
         $this->schedule_id_to_delete = null;
     }
 
+    public function switchTab(string $tab)
+    {
+        $this->tab = $tab;
+        $this->resetPage();
+    }
+
     public function render()
     {
         $schedules_count = Schedule::count();
-        $query = Schedule::with('teacher')->latest();
+        $pending_count = Schedule::where('contribution_status', 'pending')->count();
+        $query = Schedule::with('teacher', 'assembly')->latest();
 
-        // Jika ada pencarian, tambahkan kondisi where
+        if ($this->tab === 'moderasi') {
+            $query->where('contribution_status', 'pending');
+        }
+
         if ($this->search) {
             $searchTerm = '%' . $this->search . '%';
-
             $query->where(function ($subQuery) use ($searchTerm) {
-                $subQuery->where('nama_jadwal', 'like', $searchTerm)->orWhereHas('teacher', function ($teacherQuery) use ($searchTerm) {
-                    $teacherQuery->where('name', 'like', $searchTerm);
-                })->orWhereHas('assembly', function ($assemblyQuery) use ($searchTerm) {
-                    $assemblyQuery->where('nama_majelis', 'like', $searchTerm);
-                });;
+                $subQuery->where('nama_jadwal', 'like', $searchTerm)
+                    ->orWhereHas('teacher', function ($teacherQuery) use ($searchTerm) {
+                        $teacherQuery->where('name', 'like', $searchTerm);
+                    })
+                    ->orWhereHas('assembly', function ($assemblyQuery) use ($searchTerm) {
+                        $assemblyQuery->where('nama_majelis', 'like', $searchTerm);
+                    });
             });
         }
 
-        // Ambil hasil akhir dengan paginasi
         $schedules = $query->simplePaginate($this->paginate);
 
         return view('livewire.jadwal-majelis', [
             'schedules_count' => $schedules_count,
-            'schedules' => $schedules
+            'pending_count' => $pending_count,
+            'schedules' => $schedules,
         ]);
     }
 }

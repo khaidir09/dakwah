@@ -2,6 +2,27 @@
     <!-- Group 1 -->
     <div>
         <ul class="flex flex-nowrap md:block mr-3 md:mr-0">
+            @if(Auth::user()->hasRole('Kontributor'))
+            <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('kontributor.*')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kontributor.saya') }}">
+                    <svg class="shrink-0 fill-current mr-2 @if(Route::is('kontributor.saya')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+                    </svg>
+                    <span class="text-sm font-medium @if(Route::is('kontributor.*')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Dashboard Kontributor</span>
+                </a>
+            </li>
+            <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('kelola-catatan*')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kelola-catatan.index') }}">
+                    <svg class="shrink-0 @if(request()->routeIs('kelola-catatan*')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                        <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                        <line x1="16" y1="5" x2="19" y2="8" />
+                    </svg>
+                    <span class="text-sm font-medium @if(Route::is('kelola-catatan*')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Kelola Catatan</span>
+                </a>
+            </li>
+            @endif
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('pengaturan-akun')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('pengaturan-akun') }}">
                     <svg class="shrink-0 fill-current mr-2 @if(Route::is('pengaturan-akun')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">
@@ -20,9 +41,10 @@
                 </a>
             </li>
             @endif
-            @if (Auth::user()->assembly != null)
-                <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                    <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('kelola-majelis.edit')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kelola-majelis.edit', Auth::user()->assembly->id) }}">
+            @php($userFirstAssembly = Auth::user()->assemblies()->whereNull('contribution_status')->first())
+            @if ($userFirstAssembly)
+                {{-- <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('kelola-majelis.edit')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kelola-majelis.edit', $userFirstAssembly->id) }}">
                         <svg class="shrink-0 @if(request()->routeIs('kelola-majelis.edit')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                             <path d="M12 5c-3.333 0 -6 3 -6 6v9h12v-9c0 -3 -2.667 -6 -6 -6z" />
@@ -57,9 +79,9 @@
                         </svg>
                         <span class="text-sm font-medium @if(Route::is('kelola-acara-majelis*')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Acara Majelis</span>
                     </a>
-                </li>
+                </li> --}}
                 {{-- show if the assembly tipe is mesjid/musholla/langgar --}}
-                @if(in_array(Auth::user()->assembly->tipe, ['Mesjid', 'Musholla', 'Langgar']))
+                @if($userFirstAssembly && in_array($userFirstAssembly->tipe, ['Mesjid', 'Musholla', 'Langgar']))
                     <li class="mr-0.5 md:mr-0 md:mb-0.5">
                         <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('kelola-ramadhan*')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kelola-ramadhan.index')}}">
                             <svg class="shrink-0 @if(request()->routeIs('kelola-ramadhan*')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -106,17 +128,6 @@
                     </a>
                 </li>
             @endif
-            <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('kelola-catatan*')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="{{ route('kelola-catatan.index') }}">
-                    <svg class="shrink-0 @if(request()->routeIs('kelola-catatan*')) text-violet-500 @else text-gray-400 dark:text-gray-500 @endif mr-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
-                        <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
-                        <line x1="16" y1="5" x2="19" y2="8" />
-                    </svg>
-                    <span class="text-sm font-medium @if(Route::is('kelola-catatan*')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}@endif">Kelola Catatan</span>
-                </a>
-            </li>
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if(Route::is('notifications')){{ 'bg-linear-to-r from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" href="#">
                     <svg class="shrink-0 fill-current mr-2 @if(Route::is('notifications')){{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16" viewBox="0 0 16 16">

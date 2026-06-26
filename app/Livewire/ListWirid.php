@@ -62,8 +62,8 @@ class ListWirid extends Component
 
     public function render()
     {
-        $wirids_count = Wirid::where('kategori', $this->kategori)->count();
-        $query = Wirid::where('kategori', $this->kategori);
+        $wirids_count = Wirid::publiclyVisible()->where('kategori', $this->kategori)->count();
+        $query = Wirid::publiclyVisible()->where('kategori', $this->kategori);
 
         // Jika user login, cek apakah dilike
         if (auth()->check()) {

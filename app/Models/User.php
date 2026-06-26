@@ -113,9 +113,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Village::class, 'village_code', 'code');
     }
 
-    public function assembly()
+    public function assemblies()
     {
         return $this->hasMany(Assembly::class);
+    }
+
+    public function contributions()
+    {
+        return $this->hasMany(Contribution::class);
     }
 
     public function followingAssemblies()
@@ -136,6 +141,32 @@ class User extends Authenticatable implements MustVerifyEmail
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function updateBadge(): bool
+    {
+        $badge = match (true) {
+            $this->total_khidmah_points >= 501 => 'Khadam Banua',
+            $this->total_khidmah_points >= 101 => 'Penuntut Ilmu',
+            default => 'Jamaah Aktif',
+        };
+
+        if ($this->badge_title !== $badge) {
+            $this->badge_title = $badge;
+            $this->save();
+            return true;
+        }
+
+        return false;
+    }
+
+    public function nextBadgeThreshold(): ?int
+    {
+        return match ($this->badge_title) {
+            'Jamaah Aktif' => 101,
+            'Penuntut Ilmu' => 501,
+            default => null,
+        };
     }
 
     public function foundations()

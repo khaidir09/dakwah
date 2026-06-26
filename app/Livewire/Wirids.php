@@ -12,11 +12,12 @@ class Wirids extends Component
 
     public $paginate = 10;
     public $search;
+    public $tab = 'semua';
 
     public $confirmingDeletion = false;
     public $wirid_id_to_delete;
 
-    protected $updatesQueryString = ['search'];
+    protected $updatesQueryString = ['search', 'tab'];
 
     public function mount()
     {
@@ -52,26 +53,35 @@ class Wirids extends Component
         $this->wirid_id_to_delete = null;
     }
 
+    public function switchTab(string $tab)
+    {
+        $this->tab = $tab;
+        $this->resetPage();
+    }
+
     public function render()
     {
         $wirids_count = Wirid::count();
+        $pending_count = Wirid::where('contribution_status', 'pending')->count();
         $query = Wirid::latest();
 
-        // Jika ada pencarian, tambahkan kondisi where
+        if ($this->tab === 'moderasi') {
+            $query->where('contribution_status', 'pending');
+        }
+
         if ($this->search) {
             $searchTerm = '%' . $this->search . '%';
-
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('nama', 'like', $searchTerm)->orWhere('waktu', 'like', $searchTerm);
             });
         }
 
-        // Ambil hasil akhir dengan paginasi
         $wirids = $query->simplePaginate($this->paginate);
 
         return view('livewire.wirid', [
             'wirids_count' => $wirids_count,
-            'wirids' => $wirids
+            'pending_count' => $pending_count,
+            'wirids' => $wirids,
         ]);
     }
 }

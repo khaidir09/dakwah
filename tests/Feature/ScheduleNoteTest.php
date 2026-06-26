@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Contribution;
 use App\Models\User;
 use App\Models\Schedule;
 use App\Models\Assembly;
@@ -84,6 +85,119 @@ class ScheduleNoteTest extends TestCase
         ]);
     }
 
+
+    public function test_public_note_requires_minimum_150_characters()
+    {
+        $this->withoutVite();
+
+        $user = User::factory()->create();
+
+        $assembly = Assembly::create([
+            'nama_majelis' => 'Test Majelis',
+            'deskripsi' => 'test',
+            'province_code' => '62',
+            'status' => 'Aktif',
+            'guru' => '-',
+            'alamat' => 'test',
+            'maps' => 'test',
+        ]);
+
+        $schedule = Schedule::create([
+            'nama_jadwal' => 'Test Jadwal',
+            'deskripsi' => 'Test desk',
+            'assembly_id' => $assembly->id,
+            'waktu' => now(),
+            'status' => 'Aktif',
+            'hari' => 'Senin',
+        ]);
+
+        $response = $this->actingAs($user)->post(route('jadwal-majelis.notes.store', $schedule->id), [
+            'content' => 'Catatan terlalu pendek.',
+            'visibility' => 'Public',
+        ]);
+
+        $response->assertSessionHasErrors('content');
+        $this->assertDatabaseMissing('schedule_notes', ['user_id' => $user->id, 'schedule_id' => $schedule->id]);
+    }
+
+    public function test_public_note_creates_contribution_record()
+    {
+        $this->withoutVite();
+
+        $user = User::factory()->create();
+
+        $assembly = Assembly::create([
+            'nama_majelis' => 'Test Majelis',
+            'deskripsi' => 'test',
+            'province_code' => '62',
+            'status' => 'Aktif',
+            'guru' => '-',
+            'alamat' => 'test',
+            'maps' => 'test',
+        ]);
+
+        $schedule = Schedule::create([
+            'nama_jadwal' => 'Test Jadwal',
+            'deskripsi' => 'Test desk',
+            'assembly_id' => $assembly->id,
+            'waktu' => now(),
+            'status' => 'Aktif',
+            'hari' => 'Senin',
+        ]);
+
+        $content = str_repeat('Isi catatan pengajian yang bermakna dan informatif. ', 5);
+
+        $response = $this->actingAs($user)->post(route('jadwal-majelis.notes.store', $schedule->id), [
+            'content' => $content,
+            'visibility' => 'Public',
+        ]);
+
+        $response->assertRedirect();
+
+        $note = ScheduleNote::where('user_id', $user->id)->first();
+        $this->assertNotNull($note);
+        $this->assertEquals('pending', $note->contribution_status);
+
+        $this->assertDatabaseHas('contributions', [
+            'user_id' => $user->id,
+            'contributable_id' => $note->id,
+            'contributable_type' => ScheduleNote::class,
+        ]);
+    }
+
+    public function test_private_note_does_not_require_minimum_characters()
+    {
+        $this->withoutVite();
+
+        $user = User::factory()->create();
+
+        $assembly = Assembly::create([
+            'nama_majelis' => 'Test Majelis',
+            'deskripsi' => 'test',
+            'province_code' => '62',
+            'status' => 'Aktif',
+            'guru' => '-',
+            'alamat' => 'test',
+            'maps' => 'test',
+        ]);
+
+        $schedule = Schedule::create([
+            'nama_jadwal' => 'Test Jadwal',
+            'deskripsi' => 'Test desk',
+            'assembly_id' => $assembly->id,
+            'waktu' => now(),
+            'status' => 'Aktif',
+            'hari' => 'Senin',
+        ]);
+
+        $response = $this->actingAs($user)->post(route('jadwal-majelis.notes.store', $schedule->id), [
+            'content' => 'Catatan pendek pribadi.',
+            'visibility' => 'Private',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHasNoErrors();
+    }
 
     public function test_user_can_edit_public_note_created_by_another_user()
     {

@@ -66,11 +66,68 @@
     @endif
 
     <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl">
-        <header class="px-5 py-4">
-            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Semua Majelis <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $assemblies_count }}</span></h2>
+        <header class="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
+            <div class="flex items-center justify-between">
+                <h2 class="font-semibold text-gray-800 dark:text-gray-100">Majelis <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $assemblies_count }}</span></h2>
+                <div class="flex gap-2">
+                    <button wire:click="switchTab('semua')" class="px-3 py-1 text-sm rounded-full {{ $tab === 'semua' ? 'bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-800' : 'text-gray-500 hover:text-gray-700' }}">Semua</button>
+                    <button wire:click="switchTab('moderasi')" class="px-3 py-1 text-sm rounded-full {{ $tab === 'moderasi' ? 'bg-amber-500 text-white' : 'text-gray-500 hover:text-gray-700' }}">
+                        Perlu Moderasi @if($pending_count > 0) <span class="ml-1 bg-red-500 text-white text-xs rounded-full px-1.5">{{ $pending_count }}</span> @endif
+                    </button>
+                </div>
+            </div>
         </header>
 
-        <!-- Table -->
+        @if($tab === 'moderasi')
+        <!-- Tabel Moderasi -->
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full dark:text-gray-300">
+                <thead class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60">
+                    <tr>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-center">No.</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Nama Majelis</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Kontributor</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Guru</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Alamat</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Aksi</div></th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm divide-y divide-gray-100 dark:divide-gray-700/60">
+                    @forelse($assemblies as $i => $item)
+                    <tr>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 text-center">{{ $i + 1 }}</td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3">{{ $item->nama_majelis }}</td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 text-xs text-gray-500">{{ $item->user?->name }}</td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3">{{ $item->leader_name }}</td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3">{{ $item->alamat }}</td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3">
+                            <div class="flex items-center gap-2">
+                                <form action="{{ route('admin.moderasi.majelis', $item->id) }}" method="POST">
+                                    @csrf @method('PUT')
+                                    <input type="hidden" name="aksi" value="setujui">
+                                    <button type="submit" class="btn-xs bg-green-500 hover:bg-green-600 text-white">Setujui</button>
+                                </form>
+                                <form action="{{ route('admin.moderasi.majelis', $item->id) }}" method="POST" x-data x-on:submit.prevent="
+                                    let reason = prompt('Alasan penolakan:');
+                                    if (reason) { $el.querySelector('[name=rejection_reason]').value = reason; $el.submit(); }
+                                ">
+                                    @csrf @method('PUT')
+                                    <input type="hidden" name="aksi" value="tolak">
+                                    <input type="hidden" name="rejection_reason">
+                                    <button type="submit" class="btn-xs bg-red-500 hover:bg-red-600 text-white">Tolak</button>
+                                </form>
+                                <a href="{{ route('majelis.edit', $item->id) }}" class="btn-xs bg-gray-200 hover:bg-gray-300 text-gray-700">Lihat</a>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="6" class="px-5 py-8 text-center text-gray-400">Tidak ada data yang perlu dimoderasi.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @else
+        <!-- Tabel Semua -->
         <div class="overflow-x-auto">
             <table class="table-auto w-full dark:text-gray-300">
                 <!-- Table header -->
@@ -119,21 +176,33 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 @if ($item->status === 'Aktif')
                                     <div class="text-sm inline-flex font-medium bg-violet-500/20 text-violet-600 rounded-full text-center px-2.5 py-1">{{ $item->status }}</div>
+                                @elseif($item->contribution_status === 'approved')
+                                    <div class="text-sm inline-flex font-medium bg-green-500/20 text-green-600 rounded-full text-center px-2.5 py-1">Disetujui</div>
                                 @else
                                     <div class="text-sm inline-flex font-medium bg-red-500/20 text-red-700 rounded-full text-center px-2.5 py-1">{{ $item->status }}</div>
                                 @endif
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1 flex">
+                                    @if($item->contribution_status === 'approved')
+                                    <form action="{{ route('admin.revoke.majelis', $item->id) }}" method="POST" x-data x-on:submit.prevent="
+                                        let reason = prompt('Alasan pencabutan:');
+                                        if (reason) { $el.querySelector('[name=rejection_reason]').value = reason; $el.submit(); }
+                                    ">
+                                        @csrf @method('PUT')
+                                        <input type="hidden" name="rejection_reason">
+                                        <button type="submit" class="btn-xs bg-amber-500 hover:bg-amber-600 text-white text-xs">Cabut</button>
+                                    </form>
+                                    @endif
                                     <a href="{{ route('majelis.edit', $item->id) }}" class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 rounded-full">
                                         <span class="sr-only">Edit</span>
                                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                             <path d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
                                         </svg>
                                     </a>
-                                    <button 
-                                        wire:click="confirmDelete({{ $item->id }})" 
-                                        class="text-red-500 hover:text-red-600 rounded-full" 
+                                    <button
+                                        wire:click="confirmDelete({{ $item->id }})"
+                                        class="text-red-500 hover:text-red-600 rounded-full"
                                         aria-controls="danger-modal">
                                         <span class="sr-only">Delete</span>
                                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
@@ -143,7 +212,7 @@
                                     </button>
                                 </div>
                             </td>
-                        </tr>                    
+                        </tr>
                     @endforeach
                     <div x-data="{ deleteOpen: @entangle('confirmingDeletion').live }">
                         <div
@@ -210,6 +279,7 @@
             </table>
 
         </div>
+        @endif
     </div>
 
     <div class="mt-8">

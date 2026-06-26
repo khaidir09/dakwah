@@ -41,7 +41,11 @@
             </div>
             <ul>
                 <li>
-                    <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3" href="{{ route('pengaturan-akun') }}" @click="open = false" @focus="open = true" @focusout="open = false">
+                    <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3" href="@if (Auth::user()->hasRole('Kontributor'))
+                        {{ route('kontributor.saya') }}
+                    @else
+                        {{ route('pengaturan-akun') }}
+                    @endif" @click="open = false" @focus="open = true" @focusout="open = false">
                         Dasbor Akun
                     </a>
                 </li>
@@ -50,11 +54,6 @@
                     <li>
                         <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3" href="{{ route('favorit-saya') }}" @click="open = false" @focus="open = true" @focusout="open = false">
                             Favorit Saya
-                        </a>
-                    </li>
-                    <li>
-                        <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3" href="{{ route('kelola-catatan.index') }}" @click="open = false" @focus="open = true" @focusout="open = false">
-                            Kelola Catatan
                         </a>
                     </li>
                 @endif

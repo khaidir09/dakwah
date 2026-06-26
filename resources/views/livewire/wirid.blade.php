@@ -58,10 +58,64 @@
     @endif
 
     <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl">
-        <header class="px-5 py-4">
-            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Semua Amalan <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $wirids_count }}</span></h2>
+        <header class="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
+            <div class="flex items-center justify-between">
+                <h2 class="font-semibold text-gray-800 dark:text-gray-100">Amalan <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $wirids_count }}</span></h2>
+                <div class="flex gap-2">
+                    <button wire:click="switchTab('semua')" class="px-3 py-1 text-sm rounded-full {{ $tab === 'semua' ? 'bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-800' : 'text-gray-500 hover:text-gray-700' }}">Semua</button>
+                    <button wire:click="switchTab('moderasi')" class="px-3 py-1 text-sm rounded-full {{ $tab === 'moderasi' ? 'bg-amber-500 text-white' : 'text-gray-500 hover:text-gray-700' }}">
+                        Perlu Moderasi @if($pending_count > 0) <span class="ml-1 bg-red-500 text-white text-xs rounded-full px-1.5">{{ $pending_count }}</span> @endif
+                    </button>
+                </div>
+            </div>
         </header>
 
+        @if($tab === 'moderasi')
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full dark:text-gray-300">
+                <thead class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60">
+                    <tr>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-center">No.</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Nama Amalan</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Kontributor</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Kategori</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Aksi</div></th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm divide-y divide-gray-100 dark:divide-gray-700/60">
+                    @forelse($wirids as $i => $item)
+                    <tr>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 text-center">{{ $i + 1 }}</td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 font-medium">{{ $item->nama }}</td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 text-xs text-gray-500">{{ $item->contributor?->name }}</td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3">{{ $item->kategori }}</td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3">
+                            <div class="flex items-center gap-2">
+                                <form action="{{ route('admin.moderasi.wirid', $item->id) }}" method="POST">
+                                    @csrf @method('PUT')
+                                    <input type="hidden" name="aksi" value="setujui">
+                                    <button type="submit" class="btn-xs bg-green-500 hover:bg-green-600 text-white">Setujui</button>
+                                </form>
+                                <form action="{{ route('admin.moderasi.wirid', $item->id) }}" method="POST" x-data x-on:submit.prevent="
+                                    let reason = prompt('Alasan penolakan:');
+                                    if (reason) { $el.querySelector('[name=rejection_reason]').value = reason; $el.submit(); }
+                                ">
+                                    @csrf @method('PUT')
+                                    <input type="hidden" name="aksi" value="tolak">
+                                    <input type="hidden" name="rejection_reason">
+                                    <button type="submit" class="btn-xs bg-red-500 hover:bg-red-600 text-white">Tolak</button>
+                                </form>
+                                <a href="{{ route('wirid.edit', $item->id) }}" class="btn-xs bg-gray-200 hover:bg-gray-300 text-gray-700">Lihat</a>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="5" class="px-5 py-8 text-center text-gray-400">Tidak ada data yang perlu dimoderasi.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @else
         <!-- Table -->
         <div class="overflow-x-auto">
             <table class="table-auto w-full dark:text-gray-300">
@@ -208,6 +262,7 @@
             </table>
 
         </div>
+        @endif
     </div>
 
     <div class="mt-8">

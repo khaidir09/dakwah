@@ -13,6 +13,7 @@ class Majelis extends Component
 
     public $paginate = 10;
     public $search;
+    public $tab = 'semua';
 
     public $generatedLink;
     public $showLinkModal = false;
@@ -20,7 +21,7 @@ class Majelis extends Component
     public $confirmingDeletion = false;
     public $assembly_id_to_delete;
 
-    protected $updatesQueryString = ['search'];
+    protected $updatesQueryString = ['search', 'tab'];
 
     public function mount()
     {
@@ -65,15 +66,24 @@ class Majelis extends Component
         $this->showLinkModal = true;
     }
 
+    public function switchTab(string $tab)
+    {
+        $this->tab = $tab;
+        $this->resetPage();
+    }
+
     public function render()
     {
         $assemblies_count = Assembly::count();
+        $pending_count = Assembly::where('contribution_status', 'pending')->count();
         $query = Assembly::with('teacher')->latest();
 
-        // Jika ada pencarian, tambahkan kondisi where
+        if ($this->tab === 'moderasi') {
+            $query->where('contribution_status', 'pending');
+        }
+
         if ($this->search) {
             $searchTerm = '%' . $this->search . '%';
-
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('nama_majelis', 'like', $searchTerm)
                     ->orWhere('custom_leader_name', 'like', $searchTerm)
@@ -83,12 +93,12 @@ class Majelis extends Component
             });
         }
 
-        // Ambil hasil akhir dengan paginasi
         $assemblies = $query->simplePaginate($this->paginate);
 
         return view('livewire.majelis', [
             'assemblies_count' => $assemblies_count,
-            'assemblies' => $assemblies
+            'pending_count' => $pending_count,
+            'assemblies' => $assemblies,
         ]);
     }
 }

@@ -55,6 +55,12 @@
                     </svg>
                     <span>Tentang Kami</span>
                 </a>
+                <a class="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3" href="{{ route('kontributor.index') }}" @click="open = false" @focus="open = true" @focusout="open = false">
+                    <svg class="w-3 h-3 fill-current text-violet-500 shrink-0 mr-2" viewBox="0 0 12 12">
+                        <path d="M3.5 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm5 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM3.5 6C1.57 6 0 7.57 0 9.5V11h7V9.5C7 7.57 5.43 6 3.5 6zm5 .5c-.47 0-.92.1-1.33.27.84.82 1.33 1.96 1.33 3.23V11H12V9.5C12 7.84 10.66 6.5 8.5 6.5z" />
+                    </svg>
+                    <span>Kontributor</span>
+                </a>
             </li>
         </ul>                
     </div>
