@@ -11,9 +11,13 @@ class ListWirid extends Component
     use WithPagination;
 
     public $paginate = 10;
+
     public $search;
+
     public $waktu;
+
     public $kategori = 'wirid';
+
     public $availableWaktu = [];
 
     protected $updatesQueryString = ['search', 'waktu'];
@@ -43,8 +47,9 @@ class ListWirid extends Component
 
     public function toggleLike($wiridId)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             session()->flash('message', 'Silakan login terlebih dahulu untuk menambahkan wirid ke favorit.');
+
             return redirect()->route('login');
         }
 
@@ -63,7 +68,7 @@ class ListWirid extends Component
     public function render()
     {
         $wirids_count = Wirid::publiclyVisible()->where('kategori', $this->kategori)->count();
-        $query = Wirid::publiclyVisible()->where('kategori', $this->kategori);
+        $query = Wirid::publiclyVisible()->where('kategori', $this->kategori)->with('contributor');
 
         // Jika user login, cek apakah dilike
         if (auth()->check()) {
@@ -82,7 +87,7 @@ class ListWirid extends Component
 
         // Jika ada pencarian, tambahkan kondisi where
         if ($this->search) {
-            $searchTerm = '%' . $this->search . '%';
+            $searchTerm = '%'.$this->search.'%';
 
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('nama', 'like', $searchTerm);
@@ -94,7 +99,7 @@ class ListWirid extends Component
 
         return view('livewire.list-wirid', [
             'wirids_count' => $wirids_count,
-            'wirids' => $wirids
+            'wirids' => $wirids,
         ]);
     }
 }

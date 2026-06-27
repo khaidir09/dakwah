@@ -32,6 +32,11 @@
                                     {{ session('success') }}
                                 </div>
                             @endif
+                            @if(session('error'))
+                                <div class="bg-red-50 text-red-700 border border-red-200 p-4 rounded-lg mb-4">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
 
                             <!-- Schedule Info -->
                             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-5">
@@ -64,7 +69,13 @@
 
                                 @auth
                                     <!-- Form Tambah Catatan -->
-                                    <form action="{{ route('jadwal-majelis.notes.store', $schedule->id) }}" method="POST" class="mb-6">
+                                    <form action="{{ route('jadwal-majelis.notes.store', $schedule->id) }}" method="POST" class="mb-6"
+                                        x-data="{
+                                            isPublic: {{ old('visibility') === 'Public' ? 'true' : 'false' }},
+                                            isKontributor: {{ auth()->user()->hasRole('Kontributor') ? 'true' : 'false' }},
+                                            get showKontributorNotice() { return this.isPublic && !this.isKontributor; }
+                                        }"
+                                    >
                                         @csrf
                                         <div class="mb-4">
                                             <label for="content" class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Tulis Catatan</label>
@@ -76,15 +87,38 @@
                                         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                             <div class="flex items-center space-x-4">
                                                 <label class="flex items-center">
-                                                    <input type="radio" name="visibility" value="Private" class="form-radio text-emerald-500" {{ old('visibility', 'Private') === 'Private' ? 'checked' : '' }}>
+                                                    <input type="radio" name="visibility" value="Private" class="form-radio text-emerald-500"
+                                                        {{ old('visibility', 'Private') === 'Private' ? 'checked' : '' }}
+                                                        @change="isPublic = false">
                                                     <span class="text-sm ml-2 text-gray-600 dark:text-gray-400">Privat (Hanya Anda)</span>
                                                 </label>
                                                 <label class="flex items-center">
-                                                    <input type="radio" name="visibility" value="Public" class="form-radio text-emerald-500" {{ old('visibility') === 'Public' ? 'checked' : '' }}>
+                                                    <input type="radio" name="visibility" value="Public" class="form-radio text-emerald-500"
+                                                        {{ old('visibility') === 'Public' ? 'checked' : '' }}
+                                                        @change="isPublic = true">
                                                     <span class="text-sm ml-2 text-gray-600 dark:text-gray-400">Publik (Dibaca Jamaah Lain)</span>
                                                 </label>
                                             </div>
-                                            <button type="submit" class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white w-full md:w-auto">Simpan Catatan</button>
+                                            <button type="submit"
+                                                class="btn w-full md:w-auto"
+                                                :class="showKontributorNotice
+                                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-500'
+                                                    : 'bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white'"
+                                                :disabled="showKontributorNotice">
+                                                Simpan Catatan
+                                            </button>
+                                        </div>
+
+                                        <!-- Notifikasi wajib kontributor -->
+                                        <div x-show="showKontributorNotice" x-cloak
+                                            class="mt-3 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-lg">
+                                            <p class="text-sm text-amber-800 dark:text-amber-300">
+                                                Untuk berbagi catatan secara publik, Anda perlu terdaftar sebagai
+                                                <strong>Kontributor Syaikhuna</strong> terlebih dahulu.
+                                                <a href="{{ route('kontributor.index') }}" class="font-semibold underline hover:text-amber-600 dark:hover:text-amber-200">
+                                                    Daftar sekarang &rarr;
+                                                </a>
+                                            </p>
                                         </div>
                                     </form>
                                 @else

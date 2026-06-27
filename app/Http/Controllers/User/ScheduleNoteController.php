@@ -12,6 +12,12 @@ class ScheduleNoteController extends Controller
 {
     public function store(Request $request, $scheduleId)
     {
+        if ($request->visibility === 'Public' && ! Auth::user()->hasRole('Kontributor')) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Anda harus terdaftar sebagai Kontributor untuk berbagi catatan secara publik.');
+        }
+
         $contentRules = ['required', 'string'];
         if ($request->visibility === 'Public') {
             $contentRules[] = 'min:50';

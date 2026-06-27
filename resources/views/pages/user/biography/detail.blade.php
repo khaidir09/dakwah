@@ -75,6 +75,9 @@
                                 </div>
                             </header>
 
+                            <!-- Atribusi kontributor -->
+                            <x-kontributor.attribution :user="$biography->contributor" class="mb-6" />
+
                             <!-- Description -->
                             <div class="format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-300 text-justify">
                                 {!! clean($biography->biografi) !!}
@@ -109,6 +112,9 @@
                                     </div>
                                 </div>
                             @endif
+
+                            <!-- Ajakan jadi kontributor -->
+                            <x-kontributor.cta class="mt-6" />
 
                             <livewire:biography.comment-section :biography="$biography" />
 

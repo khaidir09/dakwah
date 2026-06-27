@@ -27,4 +27,12 @@ class ScheduleNote extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+
+    public function scopePubliclyVisible($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('contribution_status')
+                ->orWhere('contribution_status', 'approved');
+        });
+    }
 }

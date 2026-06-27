@@ -103,6 +103,7 @@ Route::get('auth/google', [\App\Http\Controllers\GoogleAuthController::class, 'h
 
 // Kontributor (public)
 Route::get('/kontributor', [KontributorController::class, 'index'])->name('kontributor.index');
+Route::get('/kontributor/profil/{username}', [KontributorController::class, 'profil'])->name('kontributor.profil');
 
 Route::get('/tentang-kami', function () {
     return view('pages/user/tentang-kami');

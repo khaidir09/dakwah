@@ -22,6 +22,9 @@
                                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Amalan</h1>
                             </header>
 
+                            <!-- Ajakan jadi kontributor -->
+                            <x-kontributor.cta />
+
                             <!-- Posts -->
                             <livewire:list-wirid />
 

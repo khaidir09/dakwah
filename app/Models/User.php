@@ -2,28 +2,29 @@
 
 namespace App\Models;
 
-use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\VerifyEmail;
-use Laravolt\Indonesia\Models\City;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravolt\Indonesia\Models\Village;
-use Spatie\Permission\Traits\HasRoles;
-use Laravolt\Indonesia\Models\District;
-use Laravolt\Indonesia\Models\Province;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Sanctum\HasApiTokens;
+use Laravolt\Indonesia\Models\City;
+use Laravolt\Indonesia\Models\District;
+use Laravolt\Indonesia\Models\Province;
+use Laravolt\Indonesia\Models\Village;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
+    use HasRoles;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'province_code',
@@ -64,6 +66,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'kontributor_since' => 'datetime',
     ];
 
     /**
@@ -88,6 +91,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Relasi ke Kota/Kabupaten
+     *
      * * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function city()
@@ -97,6 +101,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Relasi ke Kecamatan
+     *
      * * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function district()
@@ -106,6 +111,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Relasi ke Desa/Kelurahan
+     *
      * * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function village()
@@ -154,6 +160,7 @@ class User extends Authenticatable implements MustVerifyEmail
         if ($this->badge_title !== $badge) {
             $this->badge_title = $badge;
             $this->save();
+
             return true;
         }
 
@@ -172,5 +179,24 @@ class User extends Authenticatable implements MustVerifyEmail
     public function foundations()
     {
         return $this->belongsToMany(Foundation::class, 'foundation_user');
+    }
+
+    /**
+     * Bentuk username unik dari nama untuk URL profil publik kontributor.
+     * Menambahkan suffix angka jika terjadi bentrokan.
+     */
+    public function generateUniqueUsername(): string
+    {
+        $base = Str::slug($this->name) ?: 'kontributor';
+        $username = $base;
+        $count = 1;
+
+        while (static::where('username', $username)
+            ->where('id', '!=', $this->id)
+            ->exists()) {
+            $username = $base.'-'.$count++;
+        }
+
+        return $username;
     }
 }

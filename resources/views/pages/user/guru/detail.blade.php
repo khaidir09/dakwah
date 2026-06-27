@@ -98,7 +98,10 @@
 
                                         <!-- Main content -->
                                         <div class="flex-1 space-y-5 mb-8 xl:mb-0">
-                                
+
+                                            <!-- Atribusi kontributor -->
+                                            <x-kontributor.attribution :user="$teacher->contributor" />
+
                                             <!-- About Me -->
                                             <div>
                                                 <h2 class="text-gray-800 dark:text-gray-100 font-semibold mb-2">Tentang Guru</h2>
@@ -160,6 +163,9 @@
 
                                             </div>
                                 
+                                            <!-- Ajakan jadi kontributor -->
+                                            <x-kontributor.cta />
+
                                         </div>
 
                                         <!-- Sidebar -->

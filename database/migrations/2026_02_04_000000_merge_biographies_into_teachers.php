@@ -18,6 +18,11 @@ return new class extends Migration
             $table->text('maps')->nullable()->after('biografi');
         });
 
+        // Lewati migrasi data pada DB baru yang tidak punya tabel biographies (mis. fresh install / test)
+        if (! Schema::hasTable('biographies')) {
+            return;
+        }
+
         // Migrate data
         $biographies = DB::table('biographies')->get();
 

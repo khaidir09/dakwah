@@ -78,6 +78,10 @@
                                 </div> 
                             @endif
                         </div>
+                        <!-- Atribusi kontributor -->
+                        <div class="mb-3 pt-3 border-t border-gray-100 dark:border-gray-700/60">
+                            <x-kontributor.attribution :user="$wirid->contributor" compact />
+                        </div>
                         <!-- Footer -->
                         <footer class="flex justify-between items-center space-x-3">
                             <div class="flex items-start space-x-3">

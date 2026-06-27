@@ -60,6 +60,53 @@
                 </div>
             </div>
 
+            {{-- XP per Kontribusi --}}
+            @if($xpSettings->isNotEmpty())
+            <div>
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100 font-serif">Poin XP per Kontribusi</h2>
+                    <p class="text-gray-500 dark:text-gray-400 mt-2 max-w-2xl mx-auto">
+                        Setiap jenis data yang Anda tambahkan bernilai poin <em>Khidmah</em> (XP) yang berbeda. Berikut perolehannya:
+                    </p>
+                </div>
+
+                @php
+                    $xpIcons = [
+                        'majelis' => '🕌',
+                        'guru' => '🧑‍🏫',
+                        'jadwal' => '🗓️',
+                        'acara' => '📅',
+                        'amalan' => '📿',
+                        'catatan_pengajian' => '📝',
+                    ];
+                @endphp
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    @foreach($xpSettings as $setting)
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 border border-gray-100 dark:border-gray-700 flex items-center gap-4">
+                        <div class="text-3xl shrink-0">{{ $xpIcons[$setting->contribution_type] ?? '⭐' }}</div>
+                        <div class="min-w-0">
+                            <p class="font-semibold text-gray-800 dark:text-gray-100 truncate">{{ $setting->label }}</p>
+                            <p class="text-sm font-bold text-emerald-600 dark:text-emerald-400">+{{ number_format($setting->points) }} XP</p>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+                {{-- Catatan: XP didapat setelah disetujui admin --}}
+                <div class="mt-6 flex items-start gap-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
+                    <svg class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M12 3a9 9 0 100 18 9 9 0 000-18z" />
+                    </svg>
+                    <p class="text-sm text-amber-800 dark:text-amber-300">
+                        <span class="font-semibold">Catatan:</span> Poin XP hanya diberikan setelah kontribusi Anda
+                        <span class="font-semibold">disetujui (diverifikasi) oleh admin</span>. Selama kontribusi masih menunggu moderasi,
+                        XP belum ditambahkan. Jika kontribusi ditolak, XP tidak diberikan.
+                    </p>
+                </div>
+            </div>
+            @endif
+
             {{-- Tombol Daftar --}}
             <div class="text-center mb-14">
                 @guest
@@ -103,7 +150,15 @@
                             @foreach($leaderboard as $i => $kontributor)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                                 <td class="px-4 py-3 font-medium text-gray-500">{{ $i + 1 }}</td>
-                                <td class="px-4 py-3 font-medium text-gray-800 dark:text-gray-100">{{ $kontributor->name }}</td>
+                                <td class="px-4 py-3 font-medium">
+                                    @if(!empty($kontributor->username))
+                                        <a href="{{ route('kontributor.profil', $kontributor->username) }}" class="text-gray-800 dark:text-gray-100 hover:text-emerald-600 dark:hover:text-emerald-400">
+                                            {{ $kontributor->name }}
+                                        </a>
+                                    @else
+                                        <span class="text-gray-800 dark:text-gray-100">{{ $kontributor->name }}</span>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-3">
                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
                                         {{ $kontributor->badge_title }}
