@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Assembly;
 use App\Models\Event;
 use App\Models\KontribusiXpSetting;
+use App\Models\RewardSetting;
 use App\Models\Schedule;
 use App\Models\ScheduleNote;
 use App\Models\Teacher;
@@ -25,7 +26,9 @@ class KontributorController extends Controller
 
         $xpSettings = KontribusiXpSetting::orderByDesc('points')->get();
 
-        return view('pages.kontributor.index', compact('leaderboard', 'xpSettings'));
+        $rewardSetting = RewardSetting::current();
+
+        return view('pages.kontributor.index', compact('leaderboard', 'xpSettings', 'rewardSetting'));
     }
 
     public function daftar(Request $request)

@@ -55,10 +55,33 @@
                 <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl shadow-sm p-6 text-center border border-emerald-200 dark:border-emerald-700">
                     <div class="text-3xl mb-2">⭐</div>
                     <h3 class="font-semibold text-emerald-800 dark:text-emerald-300 mb-1">Khadam Banua</h3>
-                    <p class="text-sm text-emerald-600 dark:text-emerald-400">≥ 501 XP</p>
+                    <p class="text-sm text-emerald-600 dark:text-emerald-400">≥ {{ number_format($rewardSetting->min_xp) }} XP</p>
                     <p class="text-xs text-emerald-500 mt-2">Gelar tertinggi pengabdi komunitas</p>
+                    @if($rewardSetting->is_active)
+                        <span class="inline-flex items-center gap-1 mt-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                            🎁 Reward Rp {{ number_format($rewardSetting->amount, 0, ',', '.') }}
+                        </span>
+                    @endif
                 </div>
             </div>
+
+            {{-- Reward Khadam Banua --}}
+            @if($rewardSetting->is_active)
+            <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-2xl shadow-sm p-8 text-white text-center">
+                <div class="text-4xl mb-3">🎁</div>
+                <h2 class="text-2xl md:text-3xl font-bold font-serif mb-3">Reward Rp {{ number_format($rewardSetting->amount, 0, ',', '.') }} untuk Khadam Banua</h2>
+                <p class="text-emerald-100 max-w-2xl mx-auto">
+                    Sebagai bentuk apresiasi, setiap kontributor yang mencapai gelar <span class="font-semibold text-white">Khadam Banua</span>
+                    (≥ {{ number_format($rewardSetting->min_xp) }} XP) berhak mengklaim reward uang tunai sebesar
+                    <span class="font-semibold text-white">Rp {{ number_format($rewardSetting->amount, 0, ',', '.') }}</span>,
+                    ditransfer ke akun e-wallet Anda.
+                </p>
+                <p class="text-xs text-emerald-200/90 mt-4 max-w-2xl mx-auto">
+                    Reward diberikan <span class="font-semibold">sekali</span> per kontributor dan dapat diklaim melalui Dasbor Akun pada menu
+                    <em>Dashboard Kontributor</em> setelah Anda mencapai gelar Khadam Banua.
+                </p>
+            </div>
+            @endif
 
             {{-- XP per Kontribusi --}}
             @if($xpSettings->isNotEmpty())

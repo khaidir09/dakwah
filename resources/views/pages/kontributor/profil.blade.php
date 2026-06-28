@@ -43,31 +43,31 @@
 
             {{-- Statistik ringkas --}}
             <div class="grid grid-cols-3 gap-4">
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 text-center">
-                    <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $stats['guru'] }}</div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Guru</div>
+                <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl shadow-sm p-5 text-white text-center">
+                    <div class="text-2xl font-bold">{{ $stats['guru'] }}</div>
+                    <div class="text-xs mt-1">Guru</div>
                 </div>
                 @if($stats['majelis'] > 0)
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 text-center">
-                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $stats['majelis'] }}</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Majelis</div>
+                    <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl shadow-sm p-5 text-white text-center">
+                        <div class="text-2xl font-bold">{{ $stats['majelis'] }}</div>
+                        <div class="text-xs mt-1">Majelis</div>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 text-center">
-                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $stats['jadwal'] }}</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Jadwal Pengajian</div>
+                    <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl shadow-sm p-5 text-white text-center">
+                        <div class="text-2xl font-bold">{{ $stats['jadwal'] }}</div>
+                        <div class="text-xs mt-1">Jadwal Pengajian</div>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 text-center">
-                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $stats['acara'] }}</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Acara</div>
+                    <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl shadow-sm p-5 text-white text-center">
+                        <div class="text-2xl font-bold">{{ $stats['acara'] }}</div>
+                        <div class="text-xs mt-1">Acara</div>
                     </div>
                 @endif
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 text-center">
-                    <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $stats['amalan'] }}</div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Amalan</div>
+                <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl shadow-sm p-5 text-white text-center">
+                    <div class="text-2xl font-bold">{{ $stats['amalan'] }}</div>
+                    <div class="text-xs mt-1">Amalan</div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 text-center">
-                    <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $stats['catatan'] }}</div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Catatan Pengajian</div>
+                <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl shadow-sm p-5 text-white text-center">
+                    <div class="text-2xl font-bold">{{ $stats['catatan'] }}</div>
+                    <div class="text-xs mt-1">Catatan Pengajian</div>
                 </div>
             </div>
 
