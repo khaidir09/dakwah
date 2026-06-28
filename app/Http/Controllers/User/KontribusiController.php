@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Assembly;
 use App\Models\Event;
+use App\Models\RewardSetting;
 use App\Models\Schedule;
 use App\Models\ScheduleNote;
 use App\Models\Teacher;
@@ -54,8 +55,13 @@ class KontribusiController extends Controller
             ->sortByDesc('date')
             ->values();
 
+        $rewardSetting = RewardSetting::current();
+        $rewardEligible = $user->eligibleForReward();
+        $latestClaim = $user->rewardClaims()->latest()->first();
+
         return view('pages.kontributor.saya', compact(
-            'user', 'majelis', 'guru', 'jadwal', 'acara', 'amalan', 'catatan', 'semua'
+            'user', 'majelis', 'guru', 'jadwal', 'acara', 'amalan', 'catatan', 'semua',
+            'rewardSetting', 'rewardEligible', 'latestClaim'
         ));
     }
 }

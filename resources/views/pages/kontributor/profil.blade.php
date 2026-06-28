@@ -23,7 +23,7 @@
 
                         @if($kontributor->city || $kontributor->province)
                             <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                {{ collect([$kontributor->city?->name, $kontributor->province?->name])->filter()->join(', ') }}
+                                {{ collect([$kontributor->village?->name, $kontributor->city?->name, $kontributor->province?->name])->filter()->join(', ') }}
                             </div>
                         @endif
 

@@ -181,6 +181,52 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Foundation::class, 'foundation_user');
     }
 
+    public function rewardClaims()
+    {
+        return $this->hasMany(RewardClaim::class);
+    }
+
+    /**
+     * Apakah user pernah berhasil menerima reward (klaim berstatus paid).
+     * Reward bersifat sekali seumur hidup.
+     */
+    public function hasPaidRewardClaim(): bool
+    {
+        return $this->rewardClaims()
+            ->where('status', RewardClaim::STATUS_PAID)
+            ->exists();
+    }
+
+    /**
+     * Apakah user berhak mengajukan klaim reward saat ini (evaluasi snapshot).
+     * Syarat: program aktif, role Kontributor, XP >= threshold, belum pernah paid,
+     * dan tidak sedang memiliki klaim pending.
+     */
+    public function eligibleForReward(): bool
+    {
+        $setting = RewardSetting::current();
+
+        if (! $setting->is_active) {
+            return false;
+        }
+
+        if (! $this->hasRole('Kontributor')) {
+            return false;
+        }
+
+        if ($this->total_khidmah_points < $setting->min_xp) {
+            return false;
+        }
+
+        if ($this->hasPaidRewardClaim()) {
+            return false;
+        }
+
+        return ! $this->rewardClaims()
+            ->where('status', RewardClaim::STATUS_PENDING)
+            ->exists();
+    }
+
     /**
      * Bentuk username unik dari nama untuk URL profil publik kontributor.
      * Menambahkan suffix angka jika terjadi bentrokan.

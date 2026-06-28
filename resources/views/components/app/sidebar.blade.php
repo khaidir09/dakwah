@@ -65,6 +65,28 @@
                             </div>
                         </a>
                     </li>
+                    <!-- Klaim Reward -->
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(request()->routeIs('admin.reward-klaim.*')){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
+                        <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('admin.reward-klaim.*')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('admin.reward-klaim.index') }}">
+                            <div class="flex items-center">
+                                <svg class="shrink-0 fill-current @if(request()->routeIs('admin.reward-klaim.*')){{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                    <path d="M15 4h-2.2a3 3 0 0 0-4.8-2 3 3 0 0 0-4.8 2H1a1 1 0 0 0-1 1v3h1v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8h1V5a1 1 0 0 0-1-1ZM9 3a1 1 0 1 1 2 0 1 1 0 0 1-2 0ZM5 3a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm2 11H3V8h4v6Zm6 0H9V8h4v6Z" />
+                                </svg>
+                                <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Klaim Reward</span>
+                            </div>
+                        </a>
+                    </li>
+                    <!-- Pengaturan Reward -->
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(request()->routeIs('admin.reward-settings.*')){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
+                        <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('admin.reward-settings.*')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('admin.reward-settings.index') }}">
+                            <div class="flex items-center">
+                                <svg class="shrink-0 fill-current @if(request()->routeIs('admin.reward-settings.*')){{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0Zm.93 5.95-.3 4.07h-1.3l-.3-4.07h1.9Zm-.93 6.05a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pengaturan Reward</span>
+                            </div>
+                        </a>
+                    </li>
                     <!-- Pengguna -->
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(in_array(Request::segment(1), ['dashboard'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
                         <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['dashboard'])){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('dashboard') }}">

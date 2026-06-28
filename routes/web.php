@@ -1,45 +1,47 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\GuruController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\VideoController;
-use App\Http\Controllers\WiridController;
-use App\Http\Controllers\DoaController;
-use App\Http\Controllers\MemberController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\MajelisController;
+use App\Http\Controllers\Admin\ModerasiController;
+use App\Http\Controllers\Admin\RewardClaimController as AdminRewardClaimController;
+use App\Http\Controllers\Admin\RewardSettingController;
+use App\Http\Controllers\Admin\XpSettingController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\DataFeedController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\User\SettingController;
-use App\Http\Controllers\JadwalMajelisController;
-use App\Http\Controllers\User\ManageEventController;
-use App\Http\Controllers\RamadhanController;
+use App\Http\Controllers\DataFeedController;
 use App\Http\Controllers\DependantDropdownController;
-use App\Http\Controllers\User\ManagedMajelisController;
-use App\Http\Controllers\User\ManagedRamadhanController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use App\Http\Controllers\User\GuruController as UserGuruController;
-use App\Http\Controllers\User\EventController as UserEventController;
-use App\Http\Controllers\User\VideoController as UserVideoController;
-use App\Http\Controllers\User\WiridController as UserWiridController;
-use App\Http\Controllers\User\MajelisController as UserMajelisController;
-use App\Http\Controllers\User\JadwalMajelisController as UserJadwalMajelisController;
+use App\Http\Controllers\DoaController;
+use App\Http\Controllers\GuruController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\JadwalMajelisController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\KontributorController;
-use App\Http\Controllers\User\KontribusiController;
-use App\Http\Controllers\User\KontribusiMajelisController;
-use App\Http\Controllers\User\KontribusiGuruController;
-use App\Http\Controllers\User\KontribusiJadwalController;
+use App\Http\Controllers\MajelisController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\RamadhanController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\User\EventController as UserEventController;
+use App\Http\Controllers\User\GuruController as UserGuruController;
+use App\Http\Controllers\User\JadwalMajelisController as UserJadwalMajelisController;
 use App\Http\Controllers\User\KontribusiAcaraController;
 use App\Http\Controllers\User\KontribusiAmalanController;
-use App\Http\Controllers\Admin\XpSettingController;
-use App\Http\Controllers\Admin\ModerasiController;
+use App\Http\Controllers\User\KontribusiController;
+use App\Http\Controllers\User\KontribusiGuruController;
+use App\Http\Controllers\User\KontribusiJadwalController;
+use App\Http\Controllers\User\KontribusiMajelisController;
+use App\Http\Controllers\User\MajelisController as UserMajelisController;
+use App\Http\Controllers\User\ManagedMajelisController;
+use App\Http\Controllers\User\ManagedRamadhanController;
+use App\Http\Controllers\User\ManageEventController;
+use App\Http\Controllers\User\SettingController;
+use App\Http\Controllers\User\VideoController as UserVideoController;
+use App\Http\Controllers\User\WiridController as UserWiridController;
+use App\Http\Controllers\VideoController;
+use App\Http\Controllers\WiridController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,11 +87,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
+
         return redirect('/beranda');
     })->middleware('signed')->name('verification.verify');
 
     Route::post('/email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
+
         return back()->with('status', 'verification-link-sent');
     })->middleware('throttle:6,1')->name('verification.send');
 
@@ -118,6 +122,8 @@ Route::get('/catatan-pengajian', [\App\Http\Controllers\User\CatatanPengajianCon
 Route::get('/catatan-pengajian/{id}', [\App\Http\Controllers\User\CatatanPengajianController::class, 'show'])->name('catatan-pengajian.detail');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/reward-klaim/{claim}/bukti', [\App\Http\Controllers\RewardProofController::class, 'show'])->name('reward-klaim.bukti');
+
     Route::get('/kelola-majelis/{id}', [ManagedMajelisController::class, 'edit'])->name('kelola-majelis.edit');
     Route::put('/kelola-majelis/{id}', [ManagedMajelisController::class, 'update'])->name('kelola-majelis.update');
     Route::get('/kelola-jadwal-majelis', [ManagedMajelisController::class, 'list'])->name('kelola-jadwal-majelis');
@@ -167,6 +173,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Dashboard & CRUD Kontribusi (hanya Kontributor)
     Route::middleware(['role:Kontributor'])->group(function () {
         Route::get('/kontributor/saya', [KontribusiController::class, 'index'])->name('kontributor.saya');
+
+        Route::post('/kontributor/saya/reward', [\App\Http\Controllers\User\RewardClaimController::class, 'store'])->name('kontributor.reward.store');
 
         Route::get('/kontributor/saya/majelis/create', [KontribusiMajelisController::class, 'create'])->name('kontributor.majelis.create');
         Route::post('/kontributor/saya/majelis', [KontribusiMajelisController::class, 'store'])->name('kontributor.majelis.store');
@@ -218,6 +226,13 @@ Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->gr
     // XP Settings & Moderasi Kontributor
     Route::get('/pengaturan/xp-kontribusi', [XpSettingController::class, 'index'])->name('admin.xp-settings.index');
     Route::put('/pengaturan/xp-kontribusi', [XpSettingController::class, 'update'])->name('admin.xp-settings.update');
+
+    Route::get('/pengaturan/reward', [RewardSettingController::class, 'index'])->name('admin.reward-settings.index');
+    Route::put('/pengaturan/reward', [RewardSettingController::class, 'update'])->name('admin.reward-settings.update');
+
+    Route::get('/reward-klaim', [AdminRewardClaimController::class, 'index'])->name('admin.reward-klaim.index');
+    Route::put('/reward-klaim/{claim}/paid', [AdminRewardClaimController::class, 'markPaid'])->name('admin.reward-klaim.paid');
+    Route::put('/reward-klaim/{claim}/reject', [AdminRewardClaimController::class, 'reject'])->name('admin.reward-klaim.reject');
 
     Route::put('/majelis/{id}/moderasi', [ModerasiController::class, 'moderasiAssembly'])->name('admin.moderasi.majelis');
     Route::put('/majelis/{id}/revoke', [ModerasiController::class, 'revokeAssembly'])->name('admin.revoke.majelis');

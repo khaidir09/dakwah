@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\KontribusiXpSetting;
+use App\Models\RewardSetting;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -29,5 +30,8 @@ class KontributorSeeder extends Seeder
                 ['points' => $row['points'], 'label' => $row['label']]
             );
         }
+
+        // Konfigurasi reward kontributor (single-row, default Rp 50.000 / 501 XP / aktif)
+        RewardSetting::current();
     }
 }

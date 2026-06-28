@@ -5,11 +5,14 @@ namespace App\Http\Controllers\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use App\Traits\ImageUploadTrait;
 use Illuminate\Support\Facades\Hash;
 use Laravolt\Indonesia\Models\Province;
 
 class SettingController extends Controller
 {
+    use ImageUploadTrait;
+
     public function index()
     {
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
@@ -26,7 +29,9 @@ class SettingController extends Controller
             'password' => ['nullable', 'string', 'min:8'],
             'current_password' => ['nullable', 'required_with:password', 'current_password'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'photo' => ['nullable', 'image', 'max:1024'], // 1MB Max
+            // Tidak ada batas 1MB: file dikompres & dikonversi ke WebP secara otomatis.
+            // Batas 10MB hanya untuk mencegah upload berukuran ekstrem.
+            'photo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,webp', 'max:10240'],
             'province_code' => ['nullable', 'exists:indonesia_provinces,code'],
             'city_code' => ['nullable', 'exists:indonesia_cities,code'],
             'district_code' => ['nullable', 'exists:indonesia_districts,code'],
@@ -56,9 +61,13 @@ class SettingController extends Controller
             ]);
         }
 
-        // Handle Profile Photo
+        // Handle Profile Photo — kompres & konversi ke WebP, simpan path large.
         if ($request->hasFile('photo')) {
-            $user->updateProfilePhoto($request->file('photo'));
+            $this->deleteImage($user->profile_photo_path);
+
+            $path = $this->handleImageUpload($request->file('photo'), 'profile-photos', 400, 400);
+
+            $user->forceFill(['profile_photo_path' => $path]);
         }
 
         // Handle Regions

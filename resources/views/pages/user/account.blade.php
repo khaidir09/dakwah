@@ -54,19 +54,36 @@
                 @endif
 
                 <!-- Picture -->
-                <section>
+                <section x-data="{ photoName: null, photoPreview: null }">
                     <div class="flex items-center">
                         <div class="mr-4">
-                            @if (Auth::user()->profile_photo_path != null)
-                                <img class="w-20 h-20 rounded-full object-cover" src="{{ Storage::url(Auth::user()->profile_photo_path) }}" width="80" height="80" alt="{{ Auth::user()->name }}" />
-                            @else
-                                <img class="w-20 h-20 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" width="80" height="80" alt="{{ Auth::user()->name }}" />
-                            @endif
+                            <!-- Preview foto yang baru dipilih -->
+                            <template x-if="photoPreview">
+                                <img class="w-20 h-20 rounded-full object-cover" :src="photoPreview" width="80" height="80" alt="Pratinjau foto profil" />
+                            </template>
+                            <!-- Foto saat ini -->
+                            <template x-if="!photoPreview">
+                                <img class="w-20 h-20 rounded-full object-cover"
+                                    src="{{ Auth::user()->profile_photo_path != null ? Storage::url(Auth::user()->profile_photo_path) : Auth::user()->profile_photo_url }}"
+                                    width="80" height="80" alt="{{ Auth::user()->name }}" />
+                            </template>
                         </div>
-                        <label class="btn-sm dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300 cursor-pointer">
-                            <span>Ganti Foto Profil</span>
-                            <input type="file" name="photo" class="hidden" accept="image/*" />
-                        </label>
+                        <div>
+                            <label class="btn-sm dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300 cursor-pointer">
+                                <span>Ganti Foto Profil</span>
+                                <input type="file" name="photo" class="hidden" accept="image/*"
+                                    @change="
+                                        const file = $event.target.files[0];
+                                        if (file) {
+                                            photoName = file.name;
+                                            const reader = new FileReader();
+                                            reader.onload = (e) => { photoPreview = e.target.result; };
+                                            reader.readAsDataURL(file);
+                                        }
+                                    " />
+                            </label>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" x-show="photoName" x-text="photoName"></p>
+                        </div>
                     </div>
                 </section>
 

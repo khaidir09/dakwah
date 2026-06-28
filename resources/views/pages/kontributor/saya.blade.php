@@ -65,6 +65,9 @@
                 </div>
             </div>
 
+            {{-- Reward Kontributor --}}
+            @include('pages.kontributor._reward')
+
             {{-- Riwayat Kontribusi --}}
             <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
