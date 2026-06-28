@@ -8,7 +8,7 @@
     {{-- Versi ringkas untuk kartu (mis. daftar amalan) --}}
     <div {{ $attributes->merge(['class' => 'flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400']) }}>
         @if($user)
-            <img class="w-6 h-6 rounded-full object-cover shrink-0" src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}">
+            <img class="w-6 h-6 rounded-full object-cover shrink-0" src="{{ Storage::url($user->profile_photo_path) }}" alt="{{ $user->name }}">
             <span>
                 Kontributor:
                 @if($hasProfile)
@@ -28,7 +28,7 @@
     {{-- Versi penuh untuk halaman detail --}}
     <div {{ $attributes->merge(['class' => 'flex items-center gap-3 rounded-lg border border-gray-200 dark:border-gray-700/60 bg-gray-50 dark:bg-gray-900/40 px-4 py-3']) }}>
         @if($user)
-            <img class="w-10 h-10 rounded-full object-cover shrink-0" src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}">
+            <img class="w-10 h-10 rounded-full object-cover shrink-0" src="{{ Storage::url($user->profile_photo_path) }}" alt="{{ $user->name }}">
             <div class="min-w-0">
                 <div class="text-xs text-gray-500 dark:text-gray-400">Dikontribusikan oleh</div>
                 @if($hasProfile)

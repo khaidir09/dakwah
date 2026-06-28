@@ -67,11 +67,13 @@ class KontributorController extends Controller
             ->firstOrFail();
 
         $assemblies = Assembly::where('user_id', $kontributor->id)
+            ->with(['teacher', 'village', 'district', 'schedule'])
             ->publiclyVisible()
             ->latest()
             ->get();
 
         $teachers = Teacher::where('contributor_user_id', $kontributor->id)
+            ->with('village')
             ->publiclyVisible()
             ->latest()
             ->get();
@@ -82,16 +84,19 @@ class KontributorController extends Controller
             ->get();
 
         $notes = ScheduleNote::where('user_id', $kontributor->id)
+            ->with('schedule.assembly')
             ->publiclyVisible()
             ->latest()
             ->get();
 
         $events = Event::where('user_id', $kontributor->id)
+            ->with(['village', 'district'])
             ->publiclyVisible()
             ->latest()
             ->get();
 
         $schedules = Schedule::where('contributor_user_id', $kontributor->id)
+            ->with(['teacher', 'assembly'])
             ->publiclyVisible()
             ->latest()
             ->get();
