@@ -15,6 +15,12 @@
             </div>
 
             <div>
+                @if ($errors->has('date'))
+                    <div class="mb-4 p-4 text-sm text-red-800 bg-red-50 border border-red-200 rounded-lg" role="alert">
+                        {{ $errors->first('date') }}
+                    </div>
+                @endif
+
                 <form action="{{ route('kelola-acara-majelis.update', $event->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')

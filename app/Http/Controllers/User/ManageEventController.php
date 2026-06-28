@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Event;
 use App\Models\Assembly;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Contribution;
@@ -38,9 +39,11 @@ class ManageEventController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
-            'date' => 'required|date',
+            'date' => $this->dateRules(),
             'access' => 'required|in:Umum,Khusus',
             'category' => 'required|string|max:255',
+        ], [
+            'date.after_or_equal' => 'Tanggal acara harus minimal 7 hari dari hari ini.',
         ]);
 
         $assembly = Assembly::where('user_id', Auth::id())->first();
@@ -123,9 +126,11 @@ class ManageEventController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
-            'date' => 'required|date',
+            'date' => $this->dateRules(),
             'access' => 'required|in:Umum,Khusus',
             'category' => 'required|string|max:255',
+        ], [
+            'date.after_or_equal' => 'Tanggal acara harus minimal 7 hari dari hari ini.',
         ]);
 
         $event = Event::findOrFail($id);
@@ -175,5 +180,16 @@ class ManageEventController extends Controller
     public function destroy(string $id)
     {
         // Handled by Livewire
+    }
+
+    private function dateRules(): array
+    {
+        $rules = ['required', 'date'];
+
+        if (! Auth::user()->hasRole('Super Admin')) {
+            $rules[] = 'after_or_equal:' . Carbon::today()->addDays(7)->toDateString();
+        }
+
+        return $rules;
     }
 }
