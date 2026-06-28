@@ -152,7 +152,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function updateBadge(): bool
     {
         $badge = match (true) {
-            $this->total_khidmah_points >= 501 => 'Khadam Banua',
+            $this->total_khidmah_points >= 501 => 'Khadam Syaikhuna',
             $this->total_khidmah_points >= 101 => 'Penuntut Ilmu',
             default => 'Jamaah Aktif',
         };

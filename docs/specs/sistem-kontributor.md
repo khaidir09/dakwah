@@ -2,7 +2,7 @@
 
 **Status Dokumen:** Final Draft  
 **Tanggal:** 2026-06-24  
-**Author:** Muhammad Khaidir  
+**Author:** Muhammad Khaidir
 
 ---
 
@@ -39,11 +39,11 @@ Penggambaran data yang kaya dan akurat memerlukan kontribusi komunitas, namun ti
 
 ## Aktor dan Role
 
-| Aktor | Spatie Role | Keterangan |
-|---|---|---|
-| Jamaah | _(tidak ada role khusus)_ | Pengguna terautentikasi, belum mendaftar Kontributor |
-| Kontributor | `Kontributor` | Pengguna terautentikasi yang sudah mendaftar dan memenuhi syarat |
-| Admin | `Super Admin` | Memoderasi submission dan mengelola pengaturan XP |
+| Aktor       | Spatie Role               | Keterangan                                                       |
+| ----------- | ------------------------- | ---------------------------------------------------------------- |
+| Jamaah      | _(tidak ada role khusus)_ | Pengguna terautentikasi, belum mendaftar Kontributor             |
+| Kontributor | `Kontributor`             | Pengguna terautentikasi yang sudah mendaftar dan memenuhi syarat |
+| Admin       | `Super Admin`             | Memoderasi submission dan mengelola pengaturan XP                |
 
 ---
 
@@ -75,11 +75,13 @@ Penggambaran data yang kaya dan akurat memerlukan kontribusi komunitas, namun ti
 ## User Stories
 
 ### Pendaftaran Kontributor
+
 - **US-01:** Sebagai Jamaah, saya ingin membaca informasi tentang program Kontributor agar saya memahami manfaatnya sebelum mendaftar.
 - **US-02:** Sebagai Jamaah yang profilnya sudah lengkap dan email terverifikasi, saya ingin mendaftar menjadi Kontributor dengan satu klik agar saya bisa mulai berkontribusi.
 - **US-03:** Sebagai Jamaah yang profilnya belum lengkap, saya ingin mendapat informasi field apa yang masih perlu diisi agar saya tahu apa yang harus dilengkapi.
 
 ### Pengiriman Kontribusi
+
 - **US-04:** Sebagai Kontributor, saya ingin menambahkan Majelis baru agar data majelis di Syaikhuna semakin lengkap.
 - **US-05:** Sebagai Kontributor, saya ingin menambahkan Guru baru agar informasi ulama bisa diakses komunitas.
 - **US-06:** Sebagai Kontributor, saya ingin menambahkan Jadwal pada Majelis yang saya buat agar jadwal pengajian terdaftar dengan lengkap.
@@ -87,16 +89,19 @@ Penggambaran data yang kaya dan akurat memerlukan kontribusi komunitas, namun ti
 - **US-08:** Sebagai Kontributor, saya ingin menambahkan Amalan/Wirid baru agar koleksi amalan bertambah.
 
 ### Riwayat Kontribusi
+
 - **US-09:** Sebagai Kontributor, saya ingin melihat riwayat semua kontribusi saya beserta statusnya (Menunggu/Disetujui/Ditolak) agar saya tahu progres saya.
 - **US-10:** Sebagai Kontributor, saya ingin mengedit dan mengirim ulang submission yang ditolak agar saya bisa memperbaiki data yang kurang tepat.
 - **US-11:** Sebagai Kontributor, saya ingin mengedit data kontribusi saya yang sudah disetujui agar informasinya tetap akurat.
 
 ### Moderasi Admin
+
 - **US-12:** Sebagai Admin, saya ingin melihat semua submission pending melalui tab di halaman admin yang sudah ada agar workflow moderasi tidak terpisah-pisah.
 - **US-13:** Sebagai Admin, saya ingin menyetujui atau menolak submission dengan alasan agar Kontributor mendapat feedback yang jelas.
 - **US-14:** Sebagai Admin, saya ingin mengatur nilai XP per jenis kontribusi agar sistem gamifikasi bisa disesuaikan.
 
 ### XP, Badge, dan Leaderboard
+
 - **US-15:** Sebagai Kontributor, saya ingin mendapat XP setelah kontribusi disetujui dan naik badge secara otomatis agar kontribusi saya terasa dihargai.
 - **US-16:** Sebagai pengguna publik, saya ingin melihat leaderboard kontributor agar saya termotivasi untuk ikut berkontribusi.
 
@@ -175,16 +180,19 @@ Kontributor melihat status "Disetujui" di /kontributor/saya
 ## Functional Requirements
 
 ### FR-01: Halaman Informasi Kontributor
+
 - Tersedia di `/kontributor` (publik, tanpa login).
 - Menampilkan: deskripsi program, daftar manfaat, tabel badge (nama + threshold XP), tabel top 10 kontributor (nama, badge, total poin), tombol "Daftar Jadi Kontributor".
 
 ### FR-02: Pendaftaran Kontributor
+
 - Syarat: email terverifikasi + `name`, `phone`, `province_code`, `city_code`, `district_code`, `village_code` semua terisi.
 - Jika syarat terpenuhi: role `Kontributor` diberikan langsung, tanpa persetujuan admin.
 - Jika syarat tidak terpenuhi: tampilkan daftar field yang belum diisi dengan link ke halaman edit profil.
 - Jika sudah menjadi Kontributor: tombol "Daftar" diganti dengan "Kelola Kontribusi Saya".
 
 ### FR-03: Dashboard Kontributor
+
 - Tersedia di `/kontributor/saya` (auth + verified + role Kontributor).
 - Menggunakan `DashboardLayout`.
 - Menampilkan: total XP, badge saat ini, progress ke badge berikutnya, riwayat semua kontribusi dengan status.
@@ -192,11 +200,13 @@ Kontributor melihat status "Disetujui" di /kontributor/saya
 - Riwayat kontribusi menggunakan pagination.
 
 ### FR-04: Form Kontribusi
+
 - Tersedia untuk: Majelis, Guru, Jadwal (hanya ke majelis milik sendiri), Acara, Amalan/Wirid.
 - Field identik dengan form admin untuk masing-masing entitas.
 - Jadwal: dropdown majelis hanya menampilkan majelis milik Kontributor yang bersangkutan.
 
 ### FR-05: Moderasi Admin
+
 - Di setiap halaman admin yang relevan (`/admin/majelis`, `/admin/guru`, `/admin/jadwal-majelis`, `/admin/events`, `/admin/wirid`): tambahkan tab atau filter "Perlu Moderasi".
 - Tab tersebut menampilkan daftar submission berstatus `pending` beserta nama Kontributor pengirim.
 - Tombol "Setujui" dan "Tolak" tersedia pada setiap item pending.
@@ -204,43 +214,48 @@ Kontributor melihat status "Disetujui" di /kontributor/saya
 - Pada item yang sudah berstatus `approved`, Admin dapat membatalkan persetujuan (revoke). Revoke memerlukan alasan (wajib diisi), mengubah status kembali ke `rejected`, mengurangi `total_khidmah_points` sejumlah XP yang pernah diberikan, memperbarui `badge_title` jika XP turun di bawah threshold, dan mengirim notifikasi ke Kontributor.
 
 ### FR-06: Sistem XP dan Badge
+
 - XP diberikan ke Kontributor hanya saat submission disetujui.
 - `users.total_khidmah_points` diperbarui atomik (increment).
 - `users.badge_title` diperbarui otomatis setelah XP berubah berdasarkan threshold.
 - Threshold badge:
-  - `0–100` XP → `Jamaah Aktif`
-  - `101–500` XP → `Penuntut Ilmu`
-  - `≥501` XP → `Khadam Banua`
+    - `0–100` XP → `Jamaah Aktif`
+    - `101–500` XP → `Penuntut Ilmu`
+    - `≥501` XP → `Khadam Syaikhuna`
 
 ### FR-07: Pengaturan XP Admin
+
 - Tersedia di `/admin/pengaturan/xp-kontribusi`.
 - Admin dapat mengubah nilai XP per jenis kontribusi.
 - Nilai XP default yang diusulkan:
 
 | Jenis Kontribusi | XP Default |
-|---|---|
-| Majelis baru | 50 |
-| Guru baru | 40 |
-| Jadwal Majelis | 15 |
-| Acara/Event | 25 |
-| Amalan/Wirid | 30 |
+| ---------------- | ---------- |
+| Majelis baru     | 50         |
+| Guru baru        | 40         |
+| Jadwal Majelis   | 15         |
+| Acara/Event      | 25         |
+| Amalan/Wirid     | 30         |
 
 - Nilai disimpan di tabel `kontribusi_xp_settings`.
 
 ### FR-08: Notifikasi
+
 - Channel: in-app (Laravel database notifications) + email.
 - Trigger notifikasi:
-  1. Submission disetujui → nama data + XP yang diperoleh.
-  2. Submission ditolak → nama data + alasan penolakan.
-  3. Badge naik → badge baru yang diperoleh.
+    1. Submission disetujui → nama data + XP yang diperoleh.
+    2. Submission ditolak → nama data + alasan penolakan.
+    3. Badge naik → badge baru yang diperoleh.
 
 ### FR-09: Leaderboard
+
 - Menampilkan 10 kontributor teratas berdasarkan `total_khidmah_points` tertinggi.
 - Data yang ditampilkan: nama, badge_title, total_khidmah_points.
 - Ditampilkan di halaman `/kontributor` (publik).
 - Tidak ada filter periode.
 
 ### FR-10: Edit Data Disetujui
+
 - Kontributor dapat mengedit data kontribusi miliknya yang berstatus `approved`.
 - Perubahan langsung tersimpan tanpa moderasi ulang.
 - `contribution_status` tetap `approved`.
@@ -265,27 +280,29 @@ Kontributor melihat status "Disetujui" di /kontributor/saya
 
 ## Authorization Rules
 
-| Aksi | Syarat |
-|---|---|
-| Melihat `/kontributor` | Publik |
-| Daftar jadi Kontributor | Auth + email verified + profil lengkap |
-| Mengakses `/kontributor/saya` | Auth + email verified + role `Kontributor` |
-| Submit kontribusi baru | Auth + email verified + role `Kontributor` |
+| Aksi                          | Syarat                                                          |
+| ----------------------------- | --------------------------------------------------------------- |
+| Melihat `/kontributor`        | Publik                                                          |
+| Daftar jadi Kontributor       | Auth + email verified + profil lengkap                          |
+| Mengakses `/kontributor/saya` | Auth + email verified + role `Kontributor`                      |
+| Submit kontribusi baru        | Auth + email verified + role `Kontributor`                      |
 | Edit kontribusi milik sendiri | Auth + role `Kontributor` + `contributor_user_id == Auth::id()` |
-| Memoderasi submission | Role `Super Admin` |
-| Mengelola pengaturan XP | Role `Super Admin` |
+| Memoderasi submission         | Role `Super Admin`                                              |
+| Mengelola pengaturan XP       | Role `Super Admin`                                              |
 
 ---
 
 ## Data Requirements
 
 ### Data yang Dibaca
+
 - `users`: profil, total_khidmah_points, badge_title
 - `contributions`: riwayat kontribusi per user
 - `assemblies`, `teachers`, `schedules`, `events`, `wirids`: data utama + status moderasi
 - `kontribusi_xp_settings`: nilai XP per jenis
 
 ### Data yang Dibuat
+
 - Record baru di `assemblies`, `teachers`, `schedules`, `events`, `wirids` (dengan contribution_status = pending)
 - Record baru di `contributions`
 - Record baru di `notifications`
@@ -293,11 +310,13 @@ Kontributor melihat status "Disetujui" di /kontributor/saya
 - Record baru di `kontribusi_xp_settings` (saat seed/default)
 
 ### Data yang Diubah
+
 - `assemblies/teachers/schedules/events/wirids`: `contribution_status`, `moderated_at`, `rejection_reason`, konten data (saat edit)
 - `users`: `total_khidmah_points`, `badge_title`
 - `contributions`: `points_earned` (diisi saat approved)
 
 ### Data yang Tidak Dihapus
+
 - Submission yang ditolak tidak dihapus; tetap ada dengan status `rejected`.
 - Data kontributor yang akunnya dihapus tetap ada (`contributor_user_id = NULL`).
 
@@ -308,6 +327,7 @@ Kontributor melihat status "Disetujui" di /kontributor/saya
 ### Tabel Baru
 
 #### `kontribusi_xp_settings`
+
 ```
 id                  bigint PK
 contribution_type   enum('majelis', 'guru', 'jadwal', 'acara', 'amalan')  UNIQUE
@@ -318,15 +338,18 @@ timestamps
 ### Perubahan Tabel yang Ada
 
 #### `assemblies` — tambah kolom
+
 ```
 contribution_status  enum('pending','approved','rejected') NULL
                      (NULL = dibuat Admin, bukan kontribusi)
 rejection_reason     text NULL
 moderated_at         timestamp NULL
 ```
+
 > `user_id` sudah ada (nullable, FK ke users ON DELETE SET NULL). Tidak ada unique constraint — tidak perlu migration baru untuk mendukung `hasMany`.
 
 #### `teachers` — tambah kolom
+
 ```
 contributor_user_id  bigint unsigned NULL, FK users(id) ON DELETE SET NULL
 contribution_status  enum('pending','approved','rejected') NULL
@@ -335,15 +358,18 @@ moderated_at         timestamp NULL
 ```
 
 #### `schedules` — tambah kolom
+
 ```
 contributor_user_id  bigint unsigned NULL, FK users(id) ON DELETE SET NULL
 contribution_status  enum('pending','approved','rejected') NULL
 rejection_reason     text NULL
 moderated_at         timestamp NULL
 ```
+
 > `schedules.status` yang ada adalah status operasional (Aktif/Selesai/Batal/Libur Ramadhan) — kolom ini berbeda.
 
 #### `wirids` — tambah kolom
+
 ```
 contributor_user_id  bigint unsigned NULL, FK users(id) ON DELETE SET NULL
 contribution_status  enum('pending','approved','rejected') NULL
@@ -352,9 +378,11 @@ moderated_at         timestamp NULL
 ```
 
 #### `events` — tambah kolom
+
 ```
 rejection_reason     text NULL
 ```
+
 > `events` sudah memiliki `user_id`, `status` (pending/approved/rejected), `moderated_at` — hanya butuh `rejection_reason`.
 
 ### Perubahan Model (bukan migration)
@@ -364,6 +392,7 @@ rejection_reason     text NULL
 - `Assembly`, `Teacher`, `Schedule`, `Event`, `Wirid`: tambah scope `publiclyVisible()` untuk filter `contribution_status IS NULL OR contribution_status = 'approved'`
 
 ### Tabel Laravel Baru
+
 - `notifications` — dibuat via `php artisan notifications:table` + migrate
 
 ---
@@ -450,10 +479,12 @@ app/Notifications/BadgeNaik.php
 ```
 
 ### UI: Perubahan Halaman Admin yang Ada
+
 - `/admin/majelis`, `/admin/guru`, `/admin/jadwal-majelis`, `/admin/events`, `/admin/wirid`: tambah tab "Perlu Moderasi" di atas tabel data.
 - Tab ini menampilkan item dengan `contribution_status = 'pending'` beserta nama Kontributor.
 
 ### UI: Halaman Baru
+
 - `/kontributor` — halaman publik informasi + leaderboard.
 - `/kontributor/saya` — dashboard Kontributor: ringkasan XP/badge, riwayat kontribusi, tombol tambah data.
 - Form create/edit per jenis kontribusi.
@@ -465,26 +496,26 @@ app/Notifications/BadgeNaik.php
 
 Validasi form kontribusi mengikuti validasi form admin yang sudah ada untuk masing-masing entitas. Tambahan khusus:
 
-| Field | Rule |
-|---|---|
-| Jadwal → assembly_id | Wajib milik `Auth::id()` (validasi server-side) |
-| Moderasi → alasan penolakan | Wajib diisi jika aksi = tolak |
-| Pengaturan XP → points | Integer, min: 1, max: 1000 |
+| Field                       | Rule                                            |
+| --------------------------- | ----------------------------------------------- |
+| Jadwal → assembly_id        | Wajib milik `Auth::id()` (validasi server-side) |
+| Moderasi → alasan penolakan | Wajib diisi jika aksi = tolak                   |
+| Pengaturan XP → points      | Integer, min: 1, max: 1000                      |
 
 ---
 
 ## Error Handling
 
-| Skenario | Respons |
-|---|---|
-| Jamaah mencoba daftar Kontributor tapi profil belum lengkap | Flash message + daftar field yang kurang + link ke edit profil |
-| Kontributor mencoba akses `/kontributor/saya` tanpa role | Redirect ke `/kontributor` dengan pesan "Daftar dulu" |
-| Kontributor mencoba edit data milik orang lain | 403 Forbidden |
-| Kontributor mengirim jadwal ke majelis bukan miliknya | Validasi gagal: "Majelis tidak valid" |
-| Admin menolak tanpa mengisi alasan | Validasi gagal: "Alasan penolakan wajib diisi" |
-| Admin revoke tanpa mengisi alasan | Validasi gagal: "Alasan pembatalan wajib diisi" |
-| Revoke menyebabkan XP negatif (data tidak konsisten) | XP di-clamp ke 0, badge dikembalikan ke 'Jamaah Aktif', log warning |
-| Notifikasi email gagal terkirim | Log error, tidak block alur moderasi |
+| Skenario                                                    | Respons                                                             |
+| ----------------------------------------------------------- | ------------------------------------------------------------------- |
+| Jamaah mencoba daftar Kontributor tapi profil belum lengkap | Flash message + daftar field yang kurang + link ke edit profil      |
+| Kontributor mencoba akses `/kontributor/saya` tanpa role    | Redirect ke `/kontributor` dengan pesan "Daftar dulu"               |
+| Kontributor mencoba edit data milik orang lain              | 403 Forbidden                                                       |
+| Kontributor mengirim jadwal ke majelis bukan miliknya       | Validasi gagal: "Majelis tidak valid"                               |
+| Admin menolak tanpa mengisi alasan                          | Validasi gagal: "Alasan penolakan wajib diisi"                      |
+| Admin revoke tanpa mengisi alasan                           | Validasi gagal: "Alasan pembatalan wajib diisi"                     |
+| Revoke menyebabkan XP negatif (data tidak konsisten)        | XP di-clamp ke 0, badge dikembalikan ke 'Jamaah Aktif', log warning |
+| Notifikasi email gagal terkirim                             | Log error, tidak block alur moderasi                                |
 
 ---
 
@@ -517,8 +548,8 @@ Validasi form kontribusi mengikuti validasi form admin yang sudah ada untuk masi
 ## Compatibility Considerations
 
 - **CC-01:** Perubahan `User::assembly()` dari `hasOne` ke `hasMany` adalah breaking change. Semua referensi `$user->assembly` (singular) di codebase harus diaudit dan diperbarui:
-  - Cek seluruh view, controller, dan Livewire component yang mengakses `$user->assembly`.
-  - Pola umum yang perlu diperbarui: `$user->assembly->id`, `$user->assembly?->nama_majelis`, dll.
+    - Cek seluruh view, controller, dan Livewire component yang mengakses `$user->assembly`.
+    - Pola umum yang perlu diperbarui: `$user->assembly->id`, `$user->assembly?->nama_majelis`, dll.
 - **CC-02:** `assemblies.user_id` sudah nullable tanpa unique constraint → tidak perlu migration baru untuk mendukung `hasMany`. Relasi sudah kompatibel di level database.
 - **CC-03:** Data admin lama di `assemblies`, `teachers`, `schedules`, `events`, `wirids` akan memiliki `contribution_status = NULL` setelah migration. Query publik harus mengakomodasi kondisi ini: `WHERE contribution_status IS NULL OR contribution_status = 'approved'`.
 - **CC-04:** `events` sudah memiliki pola moderasi sendiri. Perlu diselaraskan: pastikan tab "Perlu Moderasi" pada `/admin/events` menggunakan `status` (bukan `contribution_status`) yang sudah ada.
@@ -528,6 +559,7 @@ Validasi form kontribusi mengikuti validasi form admin yang sudah ada untuk masi
 ## Acceptance Criteria
 
 ### AC-01: Pendaftaran Kontributor Berhasil
+
 ```
 Given pengguna sudah login, email terverifikasi, dan semua field profil terisi (name, phone, province, city, district, village)
 When pengguna mengklik "Daftar Jadi Kontributor" di halaman /kontributor
@@ -536,6 +568,7 @@ And pengguna diarahkan ke /kontributor/saya dengan pesan sukses
 ```
 
 ### AC-02: Pendaftaran Kontributor Gagal — Profil Tidak Lengkap
+
 ```
 Given pengguna sudah login dan email terverifikasi, namun belum mengisi field phone
 When pengguna mengklik "Daftar Jadi Kontributor"
@@ -545,6 +578,7 @@ And terdapat link menuju halaman edit profil
 ```
 
 ### AC-03: Kontribusi Majelis Baru
+
 ```
 Given pengguna memiliki role Kontributor
 When pengguna mengisi dan mengirim form tambah Majelis baru
@@ -555,6 +589,7 @@ And data tampil di /kontributor/saya dengan status "Menunggu"
 ```
 
 ### AC-04: Admin Menyetujui Kontribusi
+
 ```
 Given ada submission Majelis dengan contribution_status = 'pending'
 When Admin mengklik "Setujui" di tab Perlu Moderasi
@@ -567,6 +602,7 @@ And data tampil di halaman publik /majelis
 ```
 
 ### AC-05: Admin Menolak Kontribusi
+
 ```
 Given ada submission Guru dengan contribution_status = 'pending'
 When Admin mengklik "Tolak" dan mengisi alasan "Foto tidak jelas"
@@ -577,6 +613,7 @@ And data tidak tampil di halaman publik /guru
 ```
 
 ### AC-06: Edit dan Kirim Ulang Submission Ditolak
+
 ```
 Given Kontributor memiliki submission Guru dengan contribution_status = 'rejected'
 When Kontributor mengedit data dan menekan "Kirim Ulang"
@@ -586,6 +623,7 @@ And rejection_reason dikosongkan (NULL)
 ```
 
 ### AC-07: Badge Naik Otomatis
+
 ```
 Given Kontributor memiliki total_khidmah_points = 98 dan badge_title = 'Jamaah Aktif'
 When Admin menyetujui kontribusi Majelis (XP = 50)
@@ -595,6 +633,7 @@ And notifikasi in-app dan email "Selamat, Anda naik badge ke Penuntut Ilmu" diki
 ```
 
 ### AC-12: Admin Revoke Approval
+
 ```
 Given ada Majelis dengan contribution_status = 'approved' dan Kontributor mendapat 50 XP dari approval ini
 And total_khidmah_points Kontributor adalah 120 (badge: Penuntut Ilmu)
@@ -604,7 +643,9 @@ And rejection_reason diisi "Data duplikat"
 And total_khidmah_points Kontributor berkurang 50, menjadi 70
 And badge_title tetap 'Penuntut Ilmu' (70 masih di rentang 101–500... tunggu, 70 < 101)
 ```
+
 > Koreksi: 70 XP masuk rentang 0–100, maka badge turun ke 'Jamaah Aktif'.
+
 ```
 And badge_title diperbarui menjadi 'Jamaah Aktif'
 And notifikasi in-app + email dikirim ke Kontributor
@@ -612,6 +653,7 @@ And data tidak tampil di halaman publik
 ```
 
 ### AC-08: Admin Ubah Nilai XP
+
 ```
 Given Admin mengakses /admin/pengaturan/xp-kontribusi
 When Admin mengubah nilai XP untuk 'majelis' dari 50 menjadi 75 dan menyimpan
@@ -621,6 +663,7 @@ And approval sebelumnya tidak terpengaruh
 ```
 
 ### AC-09: Kontributor Tambah Jadwal ke Majelis Sendiri
+
 ```
 Given Kontributor memiliki Majelis dengan id = 5
 When Kontributor membuka form tambah Jadwal
@@ -630,6 +673,7 @@ Then jadwal tersimpan dengan contribution_status = 'pending'
 ```
 
 ### AC-10: Kontributor Tidak Bisa Tambah Jadwal ke Majelis Orang Lain
+
 ```
 Given Kontributor A dan Majelis milik Kontributor B (id = 10)
 When Kontributor A mencoba POST ke /kontributor/saya/jadwal dengan assembly_id = 10
@@ -638,6 +682,7 @@ And data tidak tersimpan
 ```
 
 ### AC-11: Leaderboard Publik
+
 ```
 Given ada beberapa Kontributor dengan total_khidmah_points berbeda
 When pengguna (tanpa login) mengunjungi /kontributor
@@ -650,17 +695,20 @@ And diurutkan dari poin tertinggi ke terendah
 ## Testing and Verification
 
 ### Unit Test
+
 - `KontributorRegistrationTest`: validasi syarat profil lengkap (semua kombinasi field kosong).
 - `XpBadgeTest`: threshold badge untuk setiap perubahan XP.
 - `ContributionOwnershipTest`: IDOR check — Kontributor tidak bisa akses/edit data milik orang lain.
 
 ### Feature Test
+
 - `KontributorFlowTest`: full flow pendaftaran → submit → approve → XP bertambah → badge naik.
 - `ModerasiTest`: approve dan reject dari admin, verifikasi notifikasi.
 - `EditAfterRejectionTest`: edit dan resubmit submission yang ditolak.
 - `JadwalOwnershipTest`: Kontributor hanya bisa tambah jadwal ke majelis sendiri.
 
 ### Manual Verification
+
 1. Daftar sebagai Kontributor dengan profil tidak lengkap → verifikasi pesan error spesifik.
 2. Submit Majelis baru → konfirmasi tidak muncul di `/majelis` publik.
 3. Admin setujui → konfirmasi muncul di `/majelis` publik + XP bertambah di profil Kontributor.
@@ -675,15 +723,16 @@ And diurutkan dari poin tertinggi ke terendah
 
 ## Risks and Dependencies
 
-| # | Risiko | Dampak | Mitigasi |
-|---|---|---|---|
-| R-01 | Perubahan `hasOne` → `hasMany` pada Assembly memecah fitur yang sudah ada | Tinggi | Audit seluruh referensi `$user->assembly` sebelum implementasi |
-| R-02 | Query publik tidak memfilter `contribution_status` dengan benar → data pending bocor ke publik | Tinggi | Tambahkan scope `publiclyVisible()` ke semua model yang terdampak dan gunakan secara konsisten |
-| R-03 | Race condition saat admin menyetujui dua kali → XP double credit | Sedang | Gunakan database transaction + cek status sebelum update |
-| R-04 | Nilai XP diubah admin saat ada banyak submission pending → ketidakkonsistenan ekspektasi Kontributor | Rendah | Dokumentasikan di UI admin bahwa perubahan XP hanya berlaku ke depan |
-| R-05 | Email notifikasi gagal (SMTP down) → Kontributor tidak tahu status moderasi | Rendah | In-app notification sebagai fallback utama; log error email tanpa blocking |
+| #    | Risiko                                                                                               | Dampak | Mitigasi                                                                                       |
+| ---- | ---------------------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------- |
+| R-01 | Perubahan `hasOne` → `hasMany` pada Assembly memecah fitur yang sudah ada                            | Tinggi | Audit seluruh referensi `$user->assembly` sebelum implementasi                                 |
+| R-02 | Query publik tidak memfilter `contribution_status` dengan benar → data pending bocor ke publik       | Tinggi | Tambahkan scope `publiclyVisible()` ke semua model yang terdampak dan gunakan secara konsisten |
+| R-03 | Race condition saat admin menyetujui dua kali → XP double credit                                     | Sedang | Gunakan database transaction + cek status sebelum update                                       |
+| R-04 | Nilai XP diubah admin saat ada banyak submission pending → ketidakkonsistenan ekspektasi Kontributor | Rendah | Dokumentasikan di UI admin bahwa perubahan XP hanya berlaku ke depan                           |
+| R-05 | Email notifikasi gagal (SMTP down) → Kontributor tidak tahu status moderasi                          | Rendah | In-app notification sebagai fallback utama; log error email tanpa blocking                     |
 
 ### Dependensi
+
 - `php artisan notifications:table` harus dijalankan sebelum implementasi notifikasi.
 - Role `Kontributor` harus di-seed ke tabel Spatie sebelum fitur daftar bisa berfungsi.
 - Nilai default `kontribusi_xp_settings` harus di-seed saat deployment.
@@ -698,18 +747,18 @@ Semua open questions sudah dijawab dan diintegrasikan ke dalam spesifikasi ini. 
 
 ## Referensi File Proyek
 
-| File | Relevansi |
-|---|---|
-| `app/Models/User.php` | Relasi assembly (hasOne → hasMany), total_khidmah_points, badge_title |
-| `app/Models/Contribution.php` | Model kontribusi dengan morphTo |
-| `app/Models/Assembly.php` | Model utama yang terdampak |
-| `database/migrations/2026_06_01_211308_add_contributions_table.php` | Skema tabel contributions |
-| `database/migrations/2026_06_01_211843_add_points_and_badge_field_to_users_table.php` | Kolom XP dan badge di users |
-| `database/migrations/2025_12_23_000111_add_user_id_to_assemblies_table.php` | FK user_id di assemblies (nullable, no unique) |
-| `database/migrations/2026_06_01_215310_add_user_and_moderation_field_to_events_table.php` | Pola moderasi yang sudah ada di events |
-| `database/migrations/2026_06_01_224943_add_status_to_events_table.php` | Enum status moderasi di events |
-| `app/Http/Controllers/User/ManagedMajelisController.php` | Referensi pola dual-controller untuk majelis |
-| `app/Http/Controllers/User/ManageEventController.php` | Referensi pola moderasi event yang sudah ada |
-| `app/Traits/HandlesImageUploads.php` | Trait upload gambar (dipakai form majelis dan guru) |
-| `routes/web.php` | Registrasi route baru |
-| `app/Http/Middleware/IsAdmin.php` | Middleware admin yang digunakan untuk route moderasi dan XP settings |
+| File                                                                                      | Relevansi                                                             |
+| ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `app/Models/User.php`                                                                     | Relasi assembly (hasOne → hasMany), total_khidmah_points, badge_title |
+| `app/Models/Contribution.php`                                                             | Model kontribusi dengan morphTo                                       |
+| `app/Models/Assembly.php`                                                                 | Model utama yang terdampak                                            |
+| `database/migrations/2026_06_01_211308_add_contributions_table.php`                       | Skema tabel contributions                                             |
+| `database/migrations/2026_06_01_211843_add_points_and_badge_field_to_users_table.php`     | Kolom XP dan badge di users                                           |
+| `database/migrations/2025_12_23_000111_add_user_id_to_assemblies_table.php`               | FK user_id di assemblies (nullable, no unique)                        |
+| `database/migrations/2026_06_01_215310_add_user_and_moderation_field_to_events_table.php` | Pola moderasi yang sudah ada di events                                |
+| `database/migrations/2026_06_01_224943_add_status_to_events_table.php`                    | Enum status moderasi di events                                        |
+| `app/Http/Controllers/User/ManagedMajelisController.php`                                  | Referensi pola dual-controller untuk majelis                          |
+| `app/Http/Controllers/User/ManageEventController.php`                                     | Referensi pola moderasi event yang sudah ada                          |
+| `app/Traits/HandlesImageUploads.php`                                                      | Trait upload gambar (dipakai form majelis dan guru)                   |
+| `routes/web.php`                                                                          | Registrasi route baru                                                 |
+| `app/Http/Middleware/IsAdmin.php`                                                         | Middleware admin yang digunakan untuk route moderasi dan XP settings  |

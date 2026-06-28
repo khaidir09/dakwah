@@ -45,7 +45,7 @@
                             class="form-input w-full @error('min_xp') border-red-500 @enderror"
                             required
                         />
-                        <p class="text-xs text-gray-400 mt-1">XP minimum agar kontributor berhak klaim. Default 501 (selaras gelar Khadam Banua).</p>
+                        <p class="text-xs text-gray-400 mt-1">XP minimum agar kontributor berhak klaim. Default 501 (selaras gelar Khadam Syaikhuna).</p>
                         @error('min_xp')
                             <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                         @enderror
