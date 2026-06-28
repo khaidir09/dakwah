@@ -12,14 +12,14 @@
                 <p class="text-sm text-emerald-700 dark:text-emerald-400 mt-1">
                     Reward {{ $rupiah }} telah ditransfer ke akun e-wallet Anda.
                     @if($latestClaim->transferred_at)
-                        <span class="block mt-1">Tanggal transfer: <span class="font-medium">{{ $latestClaim->transferred_at->translatedFormat('d F Y') }}</span></span>
+                        <span class="block mt-1">Tanggal transfer: <span class="font-medium">{{ $latestClaim->transferred_at->locale('id')->translatedFormat('d F Y') }}</span></span>
                     @endif
                 </p>
                 @if($latestClaim->transfer_proof_path)
                     <a href="{{ route('reward-klaim.bukti', $latestClaim) }}" target="_blank"
                        class="inline-block mt-2 text-sm font-medium text-emerald-700 dark:text-emerald-400 underline">Lihat bukti transfer</a>
                 @endif
-                <p class="text-xs text-emerald-600/80 dark:text-emerald-500 mt-2">Jazakallahu khairan atas kontribusi Anda untuk Syaikhuna.</p>
+                <p class="text-xs text-emerald-600/80 dark:text-emerald-500 mt-2">Jazakallahu khairan atas kontribusi Anda untuk Syaikhuna. Semoga bermanfaat untuk umat dan menjadi amal jariyah.</p>
             </div>
         </div>
     </div>
@@ -53,7 +53,7 @@
 
     @if($rewardEligible)
         {{-- Form pengajuan klaim --}}
-        <div x-data="{ open: {{ $errors->any() ? 'true' : 'false' }} }" class="bg-gradient-to-r from-amber-400 to-yellow-500 rounded-xl p-6 text-white">
+        <div x-data="{ open: {{ $errors->any() ? 'true' : 'false' }} }" class="bg-blue-600 rounded-xl p-6 text-white">
             <div class="sm:flex sm:items-center sm:justify-between gap-4">
                 <div>
                     <h3 class="text-lg font-bold flex items-center gap-2">⭐ Klaim Reward {{ $rupiah }}</h3>
@@ -62,7 +62,7 @@
                     </p>
                 </div>
                 <button type="button" @click="open = !open"
-                    class="mt-3 sm:mt-0 shrink-0 btn bg-white text-amber-600 hover:bg-amber-50 font-semibold px-5 py-2 rounded-lg">
+                    class="mt-3 sm:mt-0 shrink-0 btn bg-white text-blue-600 hover:bg-blue-50 font-semibold px-5 py-2 rounded-lg">
                     Klaim Reward
                 </button>
             </div>
@@ -99,7 +99,7 @@
                     </div>
 
                     <div class="flex justify-end">
-                        <button type="submit" class="btn bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6">
+                        <button type="submit" class="btn bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6">
                             Ajukan Klaim
                         </button>
                     </div>

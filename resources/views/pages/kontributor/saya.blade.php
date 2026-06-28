@@ -20,7 +20,7 @@
 
             {{-- XP Card --}}
             <div class="grid md:grid-cols-3 gap-4">
-                <div class="col-span-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl p-6 text-white">
+                <div class="md:col-span-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl p-6 text-white">
                     <p class="text-sm opacity-80">Gelar Anda</p>
                     <h3 class="text-2xl font-bold mt-1">{{ $user->badge_title }}</h3>
                     <p class="text-sm opacity-80 mt-3">Total XP Khidmah</p>
