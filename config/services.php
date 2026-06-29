@@ -52,4 +52,10 @@ return [
         'default_id' => env('OPEN_NOTEBOOK_DEFAULT_ID'),
     ],
 
+    'whatsapp' => [
+        // Nomor admin tujuan konfirmasi pembayaran pustaka berbayar.
+        // Format internasional tanpa tanda '+', mis. 62812xxxxxxx.
+        'admin_number' => env('WHATSAPP_ADMIN_NUMBER'),
+    ],
+
 ];

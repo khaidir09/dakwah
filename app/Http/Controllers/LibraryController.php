@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Library;
 use App\Traits\ImageUploadTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class LibraryController extends Controller
 {
@@ -31,21 +32,18 @@ class LibraryController extends Controller
             'file' => 'required|file|mimes:pdf|max:10240', // 10MB max
             'cover_image' => 'nullable|image|max:2048',
             'price_type' => 'required|in:free,paid',
+            'price' => 'nullable|integer|min:0|required_if:price_type,paid',
         ]);
 
         $dataToCreate = $validatedData;
-        $dataToCreate['slug'] = Str::slug($validatedData['title']) . '-' . Str::random(6);
+        $dataToCreate['slug'] = Str::slug($validatedData['title']).'-'.Str::random(6);
         $dataToCreate['is_active'] = true;
+        $dataToCreate['price'] = $validatedData['price_type'] === 'paid' ? $validatedData['price'] : null;
 
-        // Handle PDF Upload
         if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('libraries/files', $filename, 'public');
-            $dataToCreate['file_path'] = $path;
+            $dataToCreate['file_path'] = $this->storePdf($request->file('file'), $validatedData['price_type']);
         }
 
-        // Handle Cover Image Upload
         if ($request->hasFile('cover_image')) {
             $dataToCreate['cover_image'] = $this->handleImageUpload(
                 $request->file('cover_image'),
@@ -55,7 +53,6 @@ class LibraryController extends Controller
             );
         }
 
-        // Remove 'file' from dataToCreate as it's not a column
         unset($dataToCreate['file']);
 
         Library::create($dataToCreate);
@@ -77,30 +74,35 @@ class LibraryController extends Controller
             'file' => 'nullable|file|mimes:pdf|max:10240',
             'cover_image' => 'nullable|image|max:2048',
             'price_type' => 'required|in:free,paid',
-            'is_active' => 'sometimes|boolean'
+            'price' => 'nullable|integer|min:0|required_if:price_type,paid',
+            'is_active' => 'sometimes|boolean',
         ]);
 
         $dataToUpdate = $validatedData;
+        $newPriceType = $validatedData['price_type'];
+        $oldDisk = $this->pdfDiskFor($library->price_type);
+        $newDisk = $this->pdfDiskFor($newPriceType);
 
-        // Only update slug if title changes
         if ($validatedData['title'] !== $library->title) {
-            $dataToUpdate['slug'] = Str::slug($validatedData['title']) . '-' . Str::random(6);
+            $dataToUpdate['slug'] = Str::slug($validatedData['title']).'-'.Str::random(6);
         }
 
-        // Handle PDF Upload
+        $dataToUpdate['price'] = $newPriceType === 'paid' ? $validatedData['price'] : null;
+
         if ($request->hasFile('file')) {
-            // Delete old file
-            if ($library->file_path && Storage::disk('public')->exists($library->file_path)) {
-                Storage::disk('public')->delete($library->file_path);
+            if ($library->file_path && Storage::disk($oldDisk)->exists($library->file_path)) {
+                Storage::disk($oldDisk)->delete($library->file_path);
             }
 
-            $file = $request->file('file');
-            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('libraries/files', $filename, 'public');
-            $dataToUpdate['file_path'] = $path;
+            $dataToUpdate['file_path'] = $this->storePdf($request->file('file'), $newPriceType);
+        } elseif ($oldDisk !== $newDisk && $library->file_path && Storage::disk($oldDisk)->exists($library->file_path)) {
+            // Status berbayar/gratis berubah tanpa ganti file: pindahkan file antar-disk.
+            $newPath = $this->pdfFolderFor($newPriceType).'/'.basename($library->file_path);
+            Storage::disk($newDisk)->put($newPath, Storage::disk($oldDisk)->get($library->file_path));
+            Storage::disk($oldDisk)->delete($library->file_path);
+            $dataToUpdate['file_path'] = $newPath;
         }
 
-        // Handle Cover Image Upload
         if ($request->hasFile('cover_image')) {
             $this->deleteImage($library->cover_image);
             $dataToUpdate['cover_image'] = $this->handleImageUpload(
@@ -115,14 +117,8 @@ class LibraryController extends Controller
 
         unset($dataToUpdate['file']);
 
-        // Handle is_active explicitly if not present (checkbox behavior) - actually boolean validation handles true/false/1/0.
-        // If the checkbox is unchecked, it might not send anything.
-        // In Laravel validation, 'sometimes|boolean' might skip if missing.
-        // Usually creating a hidden input with 0 helps, or checking request->has.
-        // Let's assume the form sends a value or we handle it.
-        // For now, I'll assume the form handles it correctly or passed as 1/0.
-        // If using standard HTML form submission for boolean:
-        if (!$request->has('is_active')) {
+        // Checkbox tidak terkirim saat tidak dicentang.
+        if (! $request->has('is_active')) {
             $dataToUpdate['is_active'] = 0;
         }
 
@@ -133,13 +129,34 @@ class LibraryController extends Controller
 
     public function destroy(Library $library)
     {
-        if ($library->file_path && Storage::disk('public')->exists($library->file_path)) {
-            Storage::disk('public')->delete($library->file_path);
+        $disk = $this->pdfDiskFor($library->price_type);
+        if ($library->file_path && Storage::disk($disk)->exists($library->file_path)) {
+            Storage::disk($disk)->delete($library->file_path);
         }
         $this->deleteImage($library->cover_image);
 
         $library->delete();
 
         return redirect()->route('libraries.index')->with('message', 'Pustaka berhasil dihapus!');
+    }
+
+    /**
+     * Simpan PDF ke disk yang sesuai: privat (local) untuk berbayar, publik untuk gratis.
+     */
+    private function storePdf(UploadedFile $file, string $priceType): string
+    {
+        $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
+
+        return $file->storeAs($this->pdfFolderFor($priceType), $filename, $this->pdfDiskFor($priceType));
+    }
+
+    private function pdfDiskFor(string $priceType): string
+    {
+        return $priceType === 'paid' ? 'local' : 'public';
+    }
+
+    private function pdfFolderFor(string $priceType): string
+    {
+        return $priceType === 'paid' ? 'libraries/paid' : 'libraries/files';
     }
 }

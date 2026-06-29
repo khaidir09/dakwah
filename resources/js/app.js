@@ -102,6 +102,10 @@ Chart.register({
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Penampil dokumen pustaka (dimuat hanya pada halaman viewer, code-split).
+    if (document.getElementById("pdf-viewer")) {
+        import("./pdf-viewer").then((m) => m.initPdfViewer());
+    }
     // Light switcher
     const lightSwitches = document.querySelectorAll(".light-switch");
     if (lightSwitches.length > 0) {

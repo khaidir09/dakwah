@@ -124,6 +124,12 @@ Route::get('/catatan-pengajian/{id}', [\App\Http\Controllers\User\CatatanPengaji
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/reward-klaim/{claim}/bukti', [\App\Http\Controllers\RewardProofController::class, 'show'])->name('reward-klaim.bukti');
 
+    // Pustaka berbayar
+    Route::post('/pustaka/{library}/beli', [\App\Http\Controllers\User\LibraryController::class, 'purchase'])->name('pustaka-purchase');
+    Route::get('/pustaka/{library}/baca', [\App\Http\Controllers\User\LibraryController::class, 'read'])->name('pustaka-read');
+    Route::get('/pustaka/{library}/dokumen', [\App\Http\Controllers\User\LibraryController::class, 'stream'])->name('pustaka-stream');
+    Route::get('/pustaka-saya', [\App\Http\Controllers\User\LibraryController::class, 'myLibraries'])->name('pustaka-saya');
+
     Route::get('/kelola-majelis/{id}', [ManagedMajelisController::class, 'edit'])->name('kelola-majelis.edit');
     Route::put('/kelola-majelis/{id}', [ManagedMajelisController::class, 'update'])->name('kelola-majelis.update');
     Route::get('/kelola-jadwal-majelis', [ManagedMajelisController::class, 'list'])->name('kelola-jadwal-majelis');
@@ -233,6 +239,11 @@ Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->gr
     Route::get('/reward-klaim', [AdminRewardClaimController::class, 'index'])->name('admin.reward-klaim.index');
     Route::put('/reward-klaim/{claim}/paid', [AdminRewardClaimController::class, 'markPaid'])->name('admin.reward-klaim.paid');
     Route::put('/reward-klaim/{claim}/reject', [AdminRewardClaimController::class, 'reject'])->name('admin.reward-klaim.reject');
+
+    // Verifikasi pembelian pustaka berbayar
+    Route::get('/library-purchases', [\App\Http\Controllers\Admin\LibraryPurchaseController::class, 'index'])->name('admin.library-purchases.index');
+    Route::put('/library-purchases/{purchase}/activate', [\App\Http\Controllers\Admin\LibraryPurchaseController::class, 'activate'])->name('admin.library-purchases.activate');
+    Route::put('/library-purchases/{purchase}/reject', [\App\Http\Controllers\Admin\LibraryPurchaseController::class, 'reject'])->name('admin.library-purchases.reject');
 
     Route::put('/majelis/{id}/moderasi', [ModerasiController::class, 'moderasiAssembly'])->name('admin.moderasi.majelis');
     Route::put('/majelis/{id}/revoke', [ModerasiController::class, 'revokeAssembly'])->name('admin.revoke.majelis');

@@ -66,12 +66,21 @@
                             @enderror
                         </div>
 
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="price">Harga (Rp)</label>
+                            <input id="price" class="form-input w-full @error('price') is-invalid @enderror" type="number" min="0" name="price" value="{{ old('price', $library->price) }}" placeholder="Contoh: 25000" />
+                            <div class="text-xs text-gray-500 mt-1">Wajib diisi jika tipe Berbayar. Kosongkan untuk Gratis.</div>
+                            @error('price')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                          <div>
                             <label class="block text-sm font-medium mb-2" for="file">File PDF</label>
                             <input id="file" class="form-input w-full @error('file') is-invalid @enderror" type="file" name="file" accept="application/pdf" />
                             <div class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah file. Format PDF, Maks 10MB.</div>
                             @if($library->file_path)
-                                <div class="text-xs text-blue-500 mt-1">File saat ini: <a href="{{ Storage::url($library->file_path) }}" target="_blank" class="underline">Lihat PDF</a></div>
+                                <div class="text-xs text-blue-500 mt-1">File saat ini: <a href="{{ route('pustaka-read', $library) }}" target="_blank" class="underline">Lihat PDF</a></div>
                             @endif
                             @error('file')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>

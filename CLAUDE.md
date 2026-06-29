@@ -151,6 +151,10 @@ ONESIGNAL_REST_API_KEY=
 OPEN_NOTEBOOK_BASE_URL=
 OPEN_NOTEBOOK_API_KEY=
 OPEN_NOTEBOOK_DEFAULT_ID=
+
+# Pustaka berbayar — nomor WhatsApp admin untuk konfirmasi pembayaran manual
+# (format internasional tanpa '+', mis. 62812xxxxxxx)
+WHATSAPP_ADMIN_NUMBER=
 ```
 
 Session driver defaults to `database` (`SESSION_DRIVER=database`).

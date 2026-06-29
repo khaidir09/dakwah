@@ -186,6 +186,19 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(RewardClaim::class);
     }
 
+    public function libraryPurchases()
+    {
+        return $this->hasMany(LibraryPurchase::class);
+    }
+
+    public function hasActiveLibraryPurchase(Library $library): bool
+    {
+        return $this->libraryPurchases()
+            ->where('library_id', $library->id)
+            ->where('status', LibraryPurchase::STATUS_ACTIVE)
+            ->exists();
+    }
+
     /**
      * Apakah user pernah berhasil menerima reward (klaim berstatus paid).
      * Reward bersifat sekali seumur hidup.
