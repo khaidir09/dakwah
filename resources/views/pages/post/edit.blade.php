@@ -88,6 +88,30 @@
                             <input id="cover_image" class="form-input w-full" type="file" name="cover_image" accept="image/*" />
                             @error('cover_image') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
                         </div>
+
+                        <!-- Attachment (Lampiran Unduhan) -->
+                        <div class="col-span-2">
+                            <label class="block text-sm font-medium mb-1" for="attachment">Lampiran Unduhan (PDF/Gambar, maks. 10 MB)</label>
+                            @if($post->attachment_path)
+                                <div class="mb-2 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                    <span>Lampiran saat ini: <span class="font-medium">{{ $post->attachment_filename }}</span></span>
+                                </div>
+                                <label class="flex items-center gap-2 mb-2 text-sm text-red-600 dark:text-red-400">
+                                    <input type="checkbox" name="remove_attachment" value="1" class="form-checkbox" />
+                                    Hapus lampiran ini
+                                </label>
+                            @endif
+                            <input id="attachment" class="form-input w-full" type="file" name="attachment" accept="application/pdf,image/jpeg,image/png" />
+                            <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Opsional. Mengunggah file baru akan mengganti lampiran lama.</p>
+                            @error('attachment') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
+
+                            <div class="mt-3">
+                                <label class="block text-sm font-medium mb-1" for="attachment_label">Label Lampiran (opsional)</label>
+                                <input id="attachment_label" class="form-input w-full" type="text" name="attachment_label" value="{{ old('attachment_label', $post->attachment_label) }}" placeholder="Contoh: Materi Kajian Bab 1" />
+                                @error('attachment_label') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
                         <!-- Content -->
                         <div class="col-span-2">
                             <div>

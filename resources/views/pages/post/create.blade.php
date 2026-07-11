@@ -92,6 +92,20 @@
                             @error('cover_image') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
                         </div>
 
+                        <!-- Attachment (Lampiran Unduhan) -->
+                        <div class="col-span-2">
+                            <label class="block text-sm font-medium mb-1" for="attachment">Lampiran Unduhan (PDF/Gambar, maks. 10 MB)</label>
+                            <input id="attachment" class="form-input w-full" type="file" name="attachment" accept="application/pdf,image/jpeg,image/png" />
+                            <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Opsional. File dapat diunduh pengunjung yang sudah login.</p>
+                            @error('attachment') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
+
+                            <div class="mt-3">
+                                <label class="block text-sm font-medium mb-1" for="attachment_label">Label Lampiran (opsional)</label>
+                                <input id="attachment_label" class="form-input w-full" type="text" name="attachment_label" value="{{ old('attachment_label') }}" placeholder="Contoh: Materi Kajian Bab 1" />
+                                @error('attachment_label') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+
                         <!-- Content -->
                         <div class="col-span-2">
                             <div>

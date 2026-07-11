@@ -72,6 +72,9 @@ Route::get('/pustaka', [\App\Http\Controllers\User\LibraryController::class, 'li
 Route::get('/pustaka/{library}', [\App\Http\Controllers\User\LibraryController::class, 'detail'])->name('pustaka-detail');
 Route::get('/tulisan', [\App\Http\Controllers\User\PostController::class, 'index'])->name('tulisan.list');
 Route::get('/tulisan/{slug}', [\App\Http\Controllers\User\PostController::class, 'detail'])->name('tulisan.detail');
+Route::get('/tulisan/{slug}/download', [\App\Http\Controllers\User\PostController::class, 'download'])
+    ->name('tulisan.download')
+    ->middleware('auth');
 Route::get('/artikel/{slug}', [\App\Http\Controllers\User\ArticleController::class, 'detail'])->name('artikel.detail');
 Route::get('/artikel/{slug}/download', [\App\Http\Controllers\User\ArticleController::class, 'download'])
     ->name('artikel.download')

@@ -25,9 +25,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        if (!Auth::user()->hasAnyRole(['Super Admin', 'Penulis'])) {
+        if (! Auth::user()->hasAnyRole(['Super Admin', 'Penulis'])) {
             abort(403, 'Anda tidak memiliki akses untuk membuat tulisan.');
         }
+
         return view('pages.post.create');
     }
 
@@ -36,7 +37,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Auth::user()->hasAnyRole(['Super Admin', 'Penulis'])) {
+        if (! Auth::user()->hasAnyRole(['Super Admin', 'Penulis'])) {
             abort(403, 'Anda tidak memiliki akses untuk membuat tulisan.');
         }
 
@@ -44,6 +45,8 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'attachment_label' => 'nullable|string|max:255',
             'status' => 'required|in:draft,published',
             'labels' => 'nullable|string', // Comma separated tags
             'source' => 'nullable|array',
@@ -55,10 +58,10 @@ class PostController extends Controller
         // Ensure slug uniqueness
         $count = Post::where('slug', $slug)->count();
         if ($count > 0) {
-            $slug = $slug . '-' . time();
+            $slug = $slug.'-'.time();
         }
 
-        $post = new Post();
+        $post = new Post;
         $post->user_id = Auth::id();
         $post->title = $validatedData['title'];
         $post->slug = $slug;
@@ -72,24 +75,28 @@ class PostController extends Controller
 
         if ($request->hasFile('cover_image')) {
             $file = $request->file('cover_image');
-            $filename = Str::uuid() . '.webp';
+            $filename = Str::uuid().'.webp';
 
             // Resize logic similar to Majelis
             $image = Image::read($file);
             $image->scaleDown(width: 800);
 
-            Storage::disk('public')->put('posts/' . $filename, $image->toWebp(80));
-            $post->cover_image = 'posts/' . $filename;
+            Storage::disk('public')->put('posts/'.$filename, $image->toWebp(80));
+            $post->cover_image = 'posts/'.$filename;
         }
+
+        $this->handleAttachmentUpload($request, $post);
 
         $post->save();
 
         // Handle Labels
-        if (!empty($validatedData['labels'])) {
+        if (! empty($validatedData['labels'])) {
             $labelNames = array_map('trim', explode(',', $validatedData['labels']));
             $labelIds = [];
             foreach ($labelNames as $name) {
-                if (empty($name)) continue;
+                if (empty($name)) {
+                    continue;
+                }
                 $slug = Str::slug($name);
                 $label = Label::firstOrCreate(
                     ['slug' => $slug],
@@ -116,11 +123,11 @@ class PostController extends Controller
         $post = Post::with('labels')->findOrFail($id);
 
         // Authorization check
-        if (!Auth::user()->hasAnyRole(['Super Admin', 'Penulis'])) {
+        if (! Auth::user()->hasAnyRole(['Super Admin', 'Penulis'])) {
             abort(403, 'Anda tidak memiliki akses.');
         }
 
-        if (!Auth::user()->hasRole('Super Admin') && $post->user_id !== Auth::id()) {
+        if (! Auth::user()->hasRole('Super Admin') && $post->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -135,11 +142,11 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         // Authorization check
-        if (!Auth::user()->hasAnyRole(['Super Admin', 'Penulis'])) {
+        if (! Auth::user()->hasAnyRole(['Super Admin', 'Penulis'])) {
             abort(403, 'Anda tidak memiliki akses.');
         }
 
-        if (!Auth::user()->hasRole('Super Admin') && $post->user_id !== Auth::id()) {
+        if (! Auth::user()->hasRole('Super Admin') && $post->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -147,6 +154,9 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'attachment_label' => 'nullable|string|max:255',
+            'remove_attachment' => 'nullable|boolean',
             'status' => 'required|in:draft,published',
             'labels' => 'nullable|string',
             'source' => 'nullable|array',
@@ -160,7 +170,7 @@ class PostController extends Controller
         $post->status = $validatedData['status'];
         $post->source = $validatedData['source'] ?? null;
 
-        if ($post->status === 'published' && !$post->published_at) {
+        if ($post->status === 'published' && ! $post->published_at) {
             $post->published_at = now();
         }
 
@@ -171,14 +181,16 @@ class PostController extends Controller
             }
 
             $file = $request->file('cover_image');
-            $filename = Str::uuid() . '.webp';
+            $filename = Str::uuid().'.webp';
 
             $image = Image::read($file);
             $image->scaleDown(width: 800);
 
-            Storage::disk('public')->put('posts/' . $filename, $image->toWebp(80));
-            $post->cover_image = 'posts/' . $filename;
+            Storage::disk('public')->put('posts/'.$filename, $image->toWebp(80));
+            $post->cover_image = 'posts/'.$filename;
         }
+
+        $this->handleAttachmentUpload($request, $post);
 
         $post->save();
 
@@ -187,7 +199,9 @@ class PostController extends Controller
             $labelNames = array_map('trim', explode(',', $validatedData['labels']));
             $labelIds = [];
             foreach ($labelNames as $name) {
-                if (empty($name)) continue;
+                if (empty($name)) {
+                    continue;
+                }
                 $slug = Str::slug($name);
                 $label = Label::firstOrCreate(
                     ['slug' => $slug],
@@ -214,11 +228,11 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        if (!Auth::user()->hasAnyRole(['Super Admin', 'Penulis'])) {
+        if (! Auth::user()->hasAnyRole(['Super Admin', 'Penulis'])) {
             abort(403, 'Anda tidak memiliki akses.');
         }
 
-        if (!Auth::user()->hasRole('Super Admin') && $post->user_id !== Auth::id()) {
+        if (! Auth::user()->hasRole('Super Admin') && $post->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -226,9 +240,46 @@ class PostController extends Controller
             Storage::disk('public')->delete($post->cover_image);
         }
 
+        if ($post->attachment_path) {
+            Storage::disk('local')->delete($post->attachment_path);
+        }
+
         $post->labels()->detach();
         $post->delete();
 
         return redirect()->back()->with('success', 'Tulisan berhasil dihapus.');
+    }
+
+    /**
+     * Simpan/ganti/hapus lampiran unduhan pada tulisan.
+     *
+     * Lampiran disimpan di disk lokal privat (bukan public) sehingga hanya bisa
+     * diunduh lewat route ber-gate login. File lama dihapus saat diganti/dihapus.
+     */
+    private function handleAttachmentUpload(Request $request, Post $post): void
+    {
+        $hasNewFile = $request->hasFile('attachment');
+        $shouldRemove = $request->boolean('remove_attachment');
+
+        // Buang lampiran lama saat diganti file baru atau saat diminta hapus.
+        if (($hasNewFile || $shouldRemove) && $post->attachment_path) {
+            Storage::disk('local')->delete($post->attachment_path);
+            $post->attachment_path = null;
+            $post->attachment_filename = null;
+            $post->attachment_label = null;
+        }
+
+        if ($hasNewFile) {
+            $file = $request->file('attachment');
+            $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
+            $file->storeAs('post-attachments', $filename, 'local');
+
+            $post->attachment_path = 'post-attachments/'.$filename;
+            $post->attachment_filename = $file->getClientOriginalName();
+            $post->attachment_label = $request->input('attachment_label') ?: null;
+        } elseif ($post->attachment_path) {
+            // Lampiran dipertahankan — perbarui label saja. Label tanpa file diabaikan.
+            $post->attachment_label = $request->input('attachment_label') ?: null;
+        }
     }
 }
