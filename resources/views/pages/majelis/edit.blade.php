@@ -19,9 +19,9 @@
                 @method('PUT')
                 <div class="bg-white dark:bg-gray-800 p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
                     <div class="grid md:grid-cols-2 gap-6">
-                        @if (session('status'))
+                        @if (session('message'))
                             <div class="px-4 py-2 rounded-lg text-sm bg-green-500 text-white relative" role="alert">
-                                <span class="block sm:inline">{{ session('status') }}</span>
+                                <span class="block sm:inline">{{ session('message') }}</span>
                             </div>
                         @endif
 
@@ -99,7 +99,7 @@
 
                         <div>
                             <label class="block text-sm font-medium mb-2" for="maps">Maps</label>
-                            <input id="maps" class="form-input w-full @error('maps') is-invalid @enderror" type="text" name="maps" value="{{ old('maps', $majelis->maps) }}" required/>
+                            <input id="maps" class="form-input w-full @error('maps') is-invalid @enderror" type="text" name="maps" value="{{ old('maps', $majelis->maps) }}"/>
                             @error('maps')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror

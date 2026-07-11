@@ -18,9 +18,9 @@
                 @csrf
                 <div class="bg-white dark:bg-gray-800 p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
                     <div class="grid md:grid-cols-2 gap-6">
-                        @if (session('status'))
+                        @if (session('message'))
                             <div class="px-4 py-2 rounded-lg text-sm bg-green-500 text-white relative" role="alert">
-                                <span class="block sm:inline">{{ session('status') }}</span>
+                                <span class="block sm:inline">{{ session('message') }}</span>
                             </div>
                         @endif
 

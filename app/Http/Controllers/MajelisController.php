@@ -116,7 +116,7 @@ class MajelisController extends Controller
             'teacher_id'   => 'nullable|required_without:custom_leader_name|exists:teachers,id',
             'custom_leader_name' => 'nullable|required_without:teacher_id|string|max:255',
             'alamat'       => 'required|string',
-            'maps'         => 'required|string|max:255',
+            'maps'         => 'nullable|string|max:255',
             'gambar'       => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
             'province' => 'nullable|string|max:20',
             'city' => 'nullable|string|max:20',
