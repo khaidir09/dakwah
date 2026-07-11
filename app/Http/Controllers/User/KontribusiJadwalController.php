@@ -17,7 +17,7 @@ class KontribusiJadwalController extends Controller
         $majelisList = Assembly::where('user_id', Auth::id())
             ->where(function ($q) {
                 $q->whereNull('contribution_status')
-                  ->orWhere('contribution_status', 'approved');
+                    ->orWhere('contribution_status', 'approved');
             })
             ->get();
 
@@ -33,15 +33,14 @@ class KontribusiJadwalController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validated = $request->validate(array_merge([
             'nama_jadwal' => 'required|string|max:255',
             'assembly_id' => 'required|exists:assemblies,id',
-            'teacher_id'  => 'required|exists:teachers,id',
-            'waktu'       => 'required',
-            'deskripsi'   => 'nullable|string',
-            'hari'        => 'required|string|max:50',
-            'access'      => 'required|string|in:Umum,Ikhwan,Akhwat',
-        ]);
+            'teacher_id' => 'required|exists:teachers,id',
+            'waktu' => 'required',
+            'deskripsi' => 'nullable|string',
+            'access' => 'required|string|in:Umum,Ikhwan,Akhwat',
+        ], Schedule::recurrenceRules($request->input('recurrence_type'))));
 
         $assembly = Assembly::where('id', $validated['assembly_id'])
             ->where('user_id', Auth::id())
@@ -54,13 +53,13 @@ class KontribusiJadwalController extends Controller
         $validated['contributor_user_id'] = Auth::id();
         $validated['contribution_status'] = 'pending';
 
-        $jadwal = Schedule::create($validated);
+        $jadwal = Schedule::create(Schedule::normalizeRecurrence($validated));
 
         Contribution::create([
-            'user_id'           => Auth::id(),
-            'contributable_id'  => $jadwal->id,
-            'contributable_type'=> Schedule::class,
-            'points_earned'     => 0,
+            'user_id' => Auth::id(),
+            'contributable_id' => $jadwal->id,
+            'contributable_type' => Schedule::class,
+            'points_earned' => 0,
         ]);
 
         return redirect()->route('kontributor.saya')
@@ -74,7 +73,7 @@ class KontribusiJadwalController extends Controller
         $majelisList = Assembly::where('user_id', Auth::id())
             ->where(function ($q) {
                 $q->whereNull('contribution_status')
-                  ->orWhere('contribution_status', 'approved');
+                    ->orWhere('contribution_status', 'approved');
             })
             ->get();
 
@@ -87,15 +86,14 @@ class KontribusiJadwalController extends Controller
     {
         $jadwal = Schedule::where('contributor_user_id', Auth::id())->findOrFail($id);
 
-        $validated = $request->validate([
+        $validated = $request->validate(array_merge([
             'nama_jadwal' => 'required|string|max:255',
             'assembly_id' => 'required|exists:assemblies,id',
-            'teacher_id'  => 'required|exists:teachers,id',
-            'waktu'       => 'required',
-            'deskripsi'   => 'nullable|string',
-            'hari'        => 'required|string|max:50',
-            'access'      => 'required|string|in:Umum,Ikhwan,Akhwat',
-        ]);
+            'teacher_id' => 'required|exists:teachers,id',
+            'waktu' => 'required',
+            'deskripsi' => 'nullable|string',
+            'access' => 'required|string|in:Umum,Ikhwan,Akhwat',
+        ], Schedule::recurrenceRules($request->input('recurrence_type'))));
 
         $assembly = Assembly::where('id', $validated['assembly_id'])
             ->where('user_id', Auth::id())
@@ -107,10 +105,10 @@ class KontribusiJadwalController extends Controller
 
         if ($jadwal->contribution_status === 'rejected') {
             $validated['contribution_status'] = 'pending';
-            $validated['rejection_reason']    = null;
+            $validated['rejection_reason'] = null;
         }
 
-        $jadwal->update($validated);
+        $jadwal->update(Schedule::normalizeRecurrence($validated));
 
         return redirect()->route('kontributor.saya')
             ->with('success', 'Jadwal berhasil diperbarui.');

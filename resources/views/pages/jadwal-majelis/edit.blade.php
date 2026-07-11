@@ -69,22 +69,7 @@
                             @enderror
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-2" for="waktu">Hari <span class="text-red-500">*</span></label>
-                            <select id="hari" class="form-select w-full @error('hari') is-invalid @enderror" name="hari" required>
-                                <option value="{{ old('hari', $jadwal->hari) }}">{{ $jadwal->hari }}</option>
-                                <option value="Senin">Senin</option>
-                                <option value="Selasa">Selasa</option>
-                                <option value="Rabu">Rabu</option>
-                                <option value="Kamis">Kamis</option>
-                                <option value="Jumat">Jumat</option>
-                                <option value="Sabtu">Sabtu</option>
-                                <option value="Minggu">Minggu</option>
-                            </select>
-                            @error('hari')
-                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        @include('pages.jadwal-majelis._recurrence-fields', ['jadwal' => $jadwal])
 
                         <div>
                             <label class="block text-sm font-medium mb-2" for="access">Akses Jamaah <span class="text-red-500">*</span></label>

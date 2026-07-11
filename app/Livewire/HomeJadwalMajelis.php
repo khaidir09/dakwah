@@ -2,25 +2,29 @@
 
 namespace App\Livewire;
 
-use Carbon\Carbon;
-use Livewire\Component;
 use App\Models\Schedule;
-use Livewire\WithPagination;
+use Carbon\Carbon;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class HomeJadwalMajelis extends Component
 {
     use WithPagination;
 
     public $paginate = 10;
+
     public $search;
 
     // Filter Properties
     public $selectedType = null;
+
     public $selectedProvince = null;
+
     public $selectedCity = null;
+
     public $selectedDistrict = null;
 
     protected $updatesQueryString = ['search'];
@@ -86,8 +90,9 @@ class HomeJadwalMajelis extends Component
         // 4. Dapatkan nama hari yang sesuai dari array map
         $hariIni = $mapHari[$hariIniAngka];
 
-        // Prepare Query
-        $query = Schedule::with('teacher', 'assembly')->where('hari', $hariIni);
+        // Prepare Query — hanya jadwal mingguan yang masuk widget "Jadwal Hari Ini";
+        // jadwal berkala ditampilkan di seksi "Jadwal Berkala" pada halaman daftar.
+        $query = Schedule::with('teacher', 'assembly')->weekly()->where('hari', $hariIni);
 
         // Apply Filters
         if ($this->selectedType) {
@@ -117,7 +122,7 @@ class HomeJadwalMajelis extends Component
 
         // Jika ada pencarian, tambahkan kondisi where
         if ($this->search) {
-            $searchTerm = '%' . $this->search . '%';
+            $searchTerm = '%'.$this->search.'%';
 
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('nama_jadwal', 'like', $searchTerm)->orWhere('deskripsi', 'like', $searchTerm)->orWhere('hari', 'like', $searchTerm)

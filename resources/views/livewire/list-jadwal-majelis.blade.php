@@ -195,4 +195,80 @@
     <div class="mt-8">
         {{ $schedules->links() }}
     </div>
+
+    @if ($berkalaSchedules->isNotEmpty())
+        <div class="mt-10">
+            <header class="mb-4">
+                <h2 class="text-xl md:text-2xl text-gray-800 dark:text-gray-100 font-bold">Jadwal Berkala</h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Jadwal yang tidak berulang setiap pekan (bulanan, dua kali sebulan, atau mengikuti kalender Hijriah).</p>
+            </header>
+
+            <div class="grid grid-cols-12 gap-4">
+                @foreach ($berkalaSchedules as $schedule)
+                    <div class="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-xs rounded-xl overflow-hidden">
+                        <div class="flex flex-col h-full">
+                            <div class="grow p-5">
+                                <div class="flex justify-between items-start">
+                                    <header>
+                                        <div class="flex mb-2">
+                                            <a class="relative inline-flex items-start mr-5" href="{{ route('guru-detail', $schedule->teacher) }}">
+                                                @if($schedule->teacher && $schedule->teacher->foto != null)
+                                                    <img class="rounded-full w-16 h-16 object-cover" src="{{ Storage::url($schedule->teacher->foto) }}" alt="{{ $schedule->teacher->name }}" />
+                                                @else
+                                                    <div class="w-16 h-16 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-full text-gray-400">
+                                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
+                                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                                        </svg>
+                                                    </div>
+                                                @endif
+                                            </a>
+                                            <div class="mt-1 pr-1">
+                                                <a class="inline-flex text-gray-800 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white" href="{{ route('guru-detail', $schedule->teacher) }}">
+                                                    <h2 class="text-xl leading-snug justify-center font-semibold">{{ $schedule->teacher?->name }}</h2>
+                                                </a>
+                                                <div>{{ $schedule->nama_jadwal }}</div>
+                                            </div>
+                                        </div>
+                                    </header>
+                                    <div class="relative inline-flex shrink-0">
+                                        @php
+                                            $accessColor = match($schedule->access) {
+                                                'Umum' => 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+                                                'Ikhwan' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                                                'Akhwat' => 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+                                                default => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
+                                            };
+                                        @endphp
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $accessColor }}">
+                                            {{ $schedule->access }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                                        {{ $schedule->recurrence_label }} &middot; {{ $schedule->waktu_formatted }} WITA
+                                    </span>
+                                </div>
+                                @if($schedule->deskripsi)
+                                    <div class="mt-2">
+                                        <div class="text-sm">{{ $schedule->deskripsi }}</div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="border-t border-gray-100 dark:border-gray-700/60">
+                                <div class="flex divide-x divide-gray-100 dark:divide-gray-700/60">
+                                    <a class="block flex-1 text-center text-sm text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium px-3 py-4" href="{{ route('majelis-detail', $schedule->assembly->id) }}">
+                                        <span>{{ $schedule->assembly->nama_majelis }}</span>
+                                    </a>
+                                    <a class="block flex-1 text-center text-sm text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 font-medium px-3 py-4" href="{{ route('jadwal-majelis-detail', $schedule->id) }}">
+                                        <span>Detail</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 </div>

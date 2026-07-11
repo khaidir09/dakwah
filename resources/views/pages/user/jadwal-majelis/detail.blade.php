@@ -54,7 +54,7 @@
                                     </div>
                                     <div>
                                         <span class="text-gray-500 block">Waktu:</span>
-                                        <span class="font-medium text-gray-800 dark:text-gray-100">{{ $schedule->hari }}, {{ $schedule->waktu_formatted }}</span>
+                                        <span class="font-medium text-gray-800 dark:text-gray-100">{{ $schedule->recurrence_label }}, {{ $schedule->waktu_formatted }} WITA</span>
                                     </div>
                                     <div>
                                         <span class="text-gray-500 block">Status:</span>

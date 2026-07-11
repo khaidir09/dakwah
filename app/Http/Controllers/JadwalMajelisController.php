@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Teacher;
 use App\Models\Assembly;
 use App\Models\Schedule;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class JadwalMajelisController extends Controller
@@ -15,6 +15,7 @@ class JadwalMajelisController extends Controller
     public function index()
     {
         $jadwal = Schedule::with('assembly')->get();
+
         return view('pages.jadwal-majelis.index', compact('jadwal'));
     }
 
@@ -25,6 +26,7 @@ class JadwalMajelisController extends Controller
     {
         $majelis = Assembly::all();
         $teachers = Teacher::where('wafat_masehi', null)->get();
+
         return view('pages.jadwal-majelis.create', compact('majelis', 'teachers'));
     }
 
@@ -33,17 +35,16 @@ class JadwalMajelisController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validatedData = $request->validate(array_merge([
             'nama_jadwal' => 'required|string|max:255',
             'assembly_id' => 'required|exists:assemblies,id',
             'teacher_id' => 'required|exists:teachers,id',
             'waktu' => 'required',
             'deskripsi' => 'string|nullable',
-            'hari' => 'required|string|max:50',
             'access' => 'required|string|in:Umum,Ikhwan,Akhwat',
-        ]);
+        ], Schedule::recurrenceRules($request->input('recurrence_type'))));
 
-        Schedule::create($validatedData);
+        Schedule::create(Schedule::normalizeRecurrence($validatedData));
 
         return redirect()->route('jadwal-majelis.index')->with('message', 'Jadwal majelis berhasil ditambahkan!');
     }
@@ -64,6 +65,7 @@ class JadwalMajelisController extends Controller
         $jadwal = Schedule::with('assembly')->findOrFail($id);
         $majelis = Assembly::all();
         $teachers = Teacher::where('wafat_masehi', null)->get();
+
         return view('pages.jadwal-majelis.edit', compact('jadwal', 'majelis', 'teachers'));
     }
 
@@ -72,18 +74,17 @@ class JadwalMajelisController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validatedData = $request->validate([
+        $validatedData = $request->validate(array_merge([
             'nama_jadwal' => 'required|string|max:255',
             'assembly_id' => 'required|exists:assemblies,id',
             'teacher_id' => 'required|exists:teachers,id',
             'deskripsi' => 'string|nullable',
             'waktu' => 'required',
-            'hari' => 'required',
             'access' => 'required|string|in:Umum,Ikhwan,Akhwat',
-        ]);
+        ], Schedule::recurrenceRules($request->input('recurrence_type'))));
 
         $jadwal = Schedule::findOrFail($id);
-        $jadwal->update($validatedData);
+        $jadwal->update(Schedule::normalizeRecurrence($validatedData));
 
         return redirect()->route('jadwal-majelis.index')->with('message', 'Jadwal majelis berhasil diperbarui!');
     }

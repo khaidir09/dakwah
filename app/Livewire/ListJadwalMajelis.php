@@ -3,25 +3,29 @@
 namespace App\Livewire;
 
 use App\Models\Schedule;
-use App\Models\ScheduleNote;
-use Livewire\Component;
-use Livewire\WithPagination;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class ListJadwalMajelis extends Component
 {
     use WithPagination;
 
     public $paginate = 10;
+
     public $search;
+
     public $access = '';
 
     // Filter Properties
     public $selectedType = null;
+
     public $selectedProvince = null;
+
     public $selectedCity = null;
+
     public $selectedDistrict = null;
 
     protected $updatesQueryString = ['search', 'access'];
@@ -76,34 +80,18 @@ class ListJadwalMajelis extends Component
         $this->resetPage();
     }
 
-    public function render()
+    protected function applyFilters($query)
     {
-        $schedules_count = Schedule::count();
-        $query = Schedule::with('teacher', 'assembly')->withCount('notes')->orderByRaw("
-            CASE hari
-                WHEN 'Senin' THEN 1
-                WHEN 'Selasa' THEN 2
-                WHEN 'Rabu' THEN 3
-                WHEN 'Kamis' THEN 4
-                WHEN 'Jumat' THEN 5
-                WHEN 'Sabtu' THEN 6
-                WHEN 'Minggu' THEN 7
-                ELSE 8
-            END
-        ");
-
         if ($this->access) {
             $query->where('access', $this->access);
         }
 
-        // Apply Filters
         if ($this->selectedType) {
             $query->whereHas('assembly', function ($q) {
                 $q->where('tipe', $this->selectedType);
             });
         }
 
-        // Apply Region Filters
         if ($this->selectedProvince) {
             $query->whereHas('assembly', function ($q) {
                 $q->where('province_code', $this->selectedProvince);
@@ -122,9 +110,8 @@ class ListJadwalMajelis extends Component
             });
         }
 
-        // Jika ada pencarian, tambahkan kondisi where
         if ($this->search) {
-            $searchTerm = '%' . $this->search . '%';
+            $searchTerm = '%'.$this->search.'%';
 
             $query->where(function ($subQuery) use ($searchTerm) {
                 $subQuery->where('nama_jadwal', 'like', $searchTerm)->orWhere('deskripsi', 'like', $searchTerm)->orWhere('hari', 'like', $searchTerm)
@@ -136,10 +123,37 @@ class ListJadwalMajelis extends Component
             });
         }
 
+        return $query;
+    }
+
+    public function render()
+    {
+        $schedules_count = Schedule::count();
+
+        // Daftar utama: hanya jadwal mingguan, diurutkan per hari.
+        $query = Schedule::with('teacher', 'assembly')->withCount('notes')->weekly()->orderByRaw("
+            CASE hari
+                WHEN 'Senin' THEN 1
+                WHEN 'Selasa' THEN 2
+                WHEN 'Rabu' THEN 3
+                WHEN 'Kamis' THEN 4
+                WHEN 'Jumat' THEN 5
+                WHEN 'Sabtu' THEN 6
+                WHEN 'Minggu' THEN 7
+                ELSE 8
+            END
+        ");
+        $this->applyFilters($query);
+
         // Ambil hasil akhir dengan paginasi
         $schedules = $query->simplePaginate($this->paginate);
 
         $schedule_notes_count = $schedules->pluck('notes_count', 'id')->toArray();
+
+        // Seksi "Jadwal Berkala": jadwal non-mingguan yang sudah tampil publik.
+        $berkalaQuery = Schedule::with('teacher', 'assembly')->berkala()->publiclyVisible();
+        $this->applyFilters($berkalaQuery);
+        $berkalaSchedules = $berkalaQuery->get();
 
         // Fetch Data for Dropdowns
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
@@ -160,6 +174,7 @@ class ListJadwalMajelis extends Component
             'districts' => $districts,
             'types' => ['Majelis', 'Mesjid', 'Langgar', 'Musholla'],
             'schedule_notes_count' => $schedule_notes_count,
+            'berkalaSchedules' => $berkalaSchedules,
         ]);
     }
 }

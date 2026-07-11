@@ -39,15 +39,7 @@
                 @error('teacher_id')<div class="text-xs mt-1 text-red-500">{{ $message }}</div>@enderror
             </div>
 
-            <div>
-                <label class="block text-sm font-medium mb-2">Hari <span class="text-red-500">*</span></label>
-                <select class="form-select w-full" name="hari" required>
-                    @foreach(['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Ahad'] as $h)
-                        <option value="{{ $h }}" {{ old('hari', $jadwal?->hari) == $h ? 'selected' : '' }}>{{ $h }}</option>
-                    @endforeach
-                </select>
-                @error('hari')<div class="text-xs mt-1 text-red-500">{{ $message }}</div>@enderror
-            </div>
+            @include('pages.jadwal-majelis._recurrence-fields', ['jadwal' => $jadwal])
 
             <div>
                 <label class="block text-sm font-medium mb-2">Waktu <span class="text-red-500">*</span></label>
