@@ -27,6 +27,12 @@
                             </div>
                         </div>
 
+                        @if($biography->contribution_status && $biography->contribution_status !== 'approved')
+                            <div class="mb-6 p-4 rounded-xl bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300 text-sm">
+                                Manaqib ini sedang menunggu moderasi admin. Hanya Anda yang dapat melihat halaman ini.
+                            </div>
+                        @endif
+
                         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6">
 
                             <!-- Header -->
@@ -77,6 +83,22 @@
 
                             <!-- Atribusi kontributor -->
                             <x-kontributor.attribution :user="$biography->contributor" class="mb-6" />
+
+                            <!-- Foto bersama kontributor dengan guru -->
+                            @if($biography->foto_bersama)
+                                <figure class="mb-6 border border-gray-100 dark:border-gray-700/60 rounded-xl overflow-hidden">
+                                    <img src="{{ Storage::url($biography->foto_bersama) }}"
+                                         alt="{{ $biography->foto_bersama_caption }}"
+                                         loading="lazy"
+                                         class="w-full h-auto object-contain bg-gray-50 dark:bg-gray-900">
+                                    <figcaption class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 italic">
+                                        {{ $biography->foto_bersama_caption }}
+                                        @if($biography->contributor)
+                                            <span class="not-italic">— dokumentasi {{ $biography->contributor->name }}</span>
+                                        @endif
+                                    </figcaption>
+                                </figure>
+                            @endif
 
                             <!-- Description -->
                             <div class="format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-300 text-justify">

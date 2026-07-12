@@ -19,7 +19,6 @@ return new class extends Migration
     {
         Schema::table('assemblies', function (Blueprint $table) {
             $table->string('maps', 255)->nullable()->change();
-            $table->string('guru', 255)->nullable()->change();
         });
     }
 
@@ -27,7 +26,6 @@ return new class extends Migration
     {
         Schema::table('assemblies', function (Blueprint $table) {
             $table->string('maps', 255)->nullable(false)->change();
-            $table->string('guru', 255)->nullable(false)->change();
         });
     }
 };

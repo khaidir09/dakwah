@@ -25,17 +25,29 @@ class KhidmahService
                 return;
             }
 
-            $points = KontribusiXpSetting::pointsFor($contributionType);
+            $contribution = Contribution::where('contributable_id', $entity->id)
+                ->where('contributable_type', get_class($entity))
+                ->where('user_id', $userId)
+                ->first();
+
+            // Kontribusi yang pernah disetujui bisa kembali ke pending saat kontributor
+            // menyuntingnya. Persetujuan ulang hanya memulihkan status — XP tidak boleh
+            // ditambahkan lagi, kalau tidak XP bisa di-farming lewat edit berulang.
+            // Setelah revoke(), points_earned di-nolkan, sehingga XP boleh diberikan lagi.
+            $sudahPernahDapatXp = ($contribution?->points_earned ?? 0) > 0;
 
             $entity->contribution_status = 'approved';
             $entity->moderated_at = now();
             $entity->rejection_reason = null;
             $entity->save();
 
-            Contribution::where('contributable_id', $entity->id)
-                ->where('contributable_type', get_class($entity))
-                ->where('user_id', $userId)
-                ->update(['points_earned' => $points]);
+            if ($sudahPernahDapatXp) {
+                return;
+            }
+
+            $points = KontribusiXpSetting::pointsFor($contributionType);
+
+            $contribution?->update(['points_earned' => $points]);
 
             $user = User::find($userId);
             if (! $user) {
@@ -73,7 +85,7 @@ class KhidmahService
 
     public function revoke(Model $entity, string $contributionType, string $entityLabel, string $reason): void
     {
-        DB::transaction(function () use ($entity, $contributionType, $entityLabel, $reason) {
+        DB::transaction(function () use ($entity, $entityLabel, $reason) {
             if ($entity->contribution_status !== 'approved') {
                 return;
             }

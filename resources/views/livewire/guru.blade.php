@@ -79,6 +79,7 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Nama Guru</div></th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Kontributor</div></th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Domisili</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Foto Bersama</div></th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3"><div class="font-semibold text-left">Aksi</div></th>
                     </tr>
                 </thead>
@@ -89,6 +90,16 @@
                         <td class="px-2 first:pl-5 last:pr-5 py-3">{{ $item->name }}</td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 text-xs text-gray-500">{{ $item->contributor?->name }}</td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3">{{ $item->village?->name }}</td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3">
+                            @if($item->foto_bersama)
+                                <a href="{{ Storage::url($item->foto_bersama) }}" target="_blank" title="{{ $item->foto_bersama_caption }}">
+                                    <img class="w-16 h-16 object-cover rounded-md" src="{{ Storage::url($item->foto_bersama) }}" alt="Foto bersama">
+                                </a>
+                                <div class="text-xs text-gray-500 mt-1 max-w-40 truncate" title="{{ $item->foto_bersama_caption }}">{{ $item->foto_bersama_caption }}</div>
+                            @else
+                                <span class="text-gray-400">—</span>
+                            @endif
+                        </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3">
                             <div class="flex items-center gap-2">
                                 <form action="{{ route('admin.moderasi.guru', $item->id) }}" method="POST">
@@ -110,7 +121,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="px-5 py-8 text-center text-gray-400">Tidak ada data yang perlu dimoderasi.</td></tr>
+                    <tr><td colspan="6" class="px-5 py-8 text-center text-gray-400">Tidak ada data yang perlu dimoderasi.</td></tr>
                     @endforelse
                 </tbody>
             </table>

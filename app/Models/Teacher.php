@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Assembly;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Laravolt\Indonesia\Models\City;
-use Laravolt\Indonesia\Models\Village;
-use Illuminate\Database\Eloquent\Model;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
+use Laravolt\Indonesia\Models\Village;
 
 class Teacher extends Model
 {
@@ -27,7 +26,7 @@ class Teacher extends Model
         while (static::where('slug', $slug)->when($ignoreId, function ($q) use ($ignoreId) {
             $q->where('id', '!=', $ignoreId);
         })->exists()) {
-            $slug = $originalSlug . '-' . $count++;
+            $slug = $originalSlug.'-'.$count++;
         }
 
         return $slug;
@@ -51,6 +50,7 @@ class Teacher extends Model
 
     /**
      * Relasi ke Kota/Kabupaten
+     *
      * * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function city()
@@ -60,6 +60,7 @@ class Teacher extends Model
 
     /**
      * Relasi ke Kecamatan
+     *
      * * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function district()
@@ -69,6 +70,7 @@ class Teacher extends Model
 
     /**
      * Relasi ke Desa/Kelurahan
+     *
      * * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function village()
@@ -95,7 +97,24 @@ class Teacher extends Model
     {
         return $query->where(function ($q) {
             $q->whereNull('contribution_status')
-              ->orWhere('contribution_status', 'approved');
+                ->orWhere('contribution_status', 'approved');
         });
+    }
+
+    /**
+     * Konten yang belum/tidak disetujui hanya boleh dibuka oleh kontributor pemiliknya
+     * (sebagai pratinjau) dan Super Admin. Untuk publik, halamannya harus 404.
+     */
+    public function isVisibleTo(?User $user): bool
+    {
+        if (in_array($this->contribution_status, [null, 'approved'], true)) {
+            return true;
+        }
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->id === $this->contributor_user_id || $user->hasRole('Super Admin');
     }
 }

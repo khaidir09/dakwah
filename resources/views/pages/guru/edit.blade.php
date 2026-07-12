@@ -572,6 +572,26 @@
             </form>
         </div>
 
+        {{-- Di luar form utama: nested form adalah HTML invalid dan tidak akan tersubmit. --}}
+        @if($guru->foto_bersama)
+            <div class="mt-6 bg-white dark:bg-gray-800 p-6 shadow sm:rounded-md">
+                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Foto Bersama Guru</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                    Diunggah oleh kontributor {{ $guru->contributor?->name ?? '—' }}. Menghapus foto tidak mengubah status moderasi manaqib.
+                </p>
+
+                <img src="{{ Storage::url($guru->foto_bersama) }}" alt="{{ $guru->foto_bersama_caption }}" class="max-w-md h-auto rounded-lg border border-gray-200 dark:border-gray-700/60">
+                <p class="text-sm text-gray-500 dark:text-gray-400 italic mt-2">{{ $guru->foto_bersama_caption }}</p>
+
+                <form action="{{ route('admin.guru.foto-bersama.destroy', $guru->id) }}" method="POST" class="mt-4"
+                      onsubmit="return confirm('Hapus foto bersama ini?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn bg-red-500 hover:bg-red-600 text-white">Hapus Foto Bersama</button>
+                </form>
+            </div>
+        @endif
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>

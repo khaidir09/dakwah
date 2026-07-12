@@ -221,6 +221,7 @@ Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->gr
     Route::get('/schedule-notes', [\App\Http\Controllers\ScheduleNoteController::class, 'index'])->name('schedule-notes.index');
     Route::patch('/schedule-notes/{id}/approve', [\App\Http\Controllers\ScheduleNoteController::class, 'approve'])->name('schedule-notes.approve');
     Route::patch('/schedule-notes/{id}/reject', [\App\Http\Controllers\ScheduleNoteController::class, 'reject'])->name('schedule-notes.reject');
+    Route::delete('/guru/{id}/foto-bersama', [GuruController::class, 'destroyFotoBersama'])->name('admin.guru.foto-bersama.destroy');
     Route::resource('/guru', GuruController::class);
     Route::resource('/event', \App\Http\Controllers\EventController::class);
     Route::resource('/video', VideoController::class);

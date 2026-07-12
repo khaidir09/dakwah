@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Teacher;
 use App\Services\ImageService;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Laravolt\Indonesia\Models\Province;
-use Intervention\Image\Laravel\Facades\Image;
 
 class GuruController extends Controller
 {
@@ -18,12 +16,14 @@ class GuruController extends Controller
     {
         $this->imageService = $imageService;
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $guru = Teacher::all();
+
         return view('pages/guru/index', compact('guru'));
     }
 
@@ -33,6 +33,7 @@ class GuruController extends Controller
     public function create()
     {
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
+
         return view('pages/guru/create', compact('provinces'));
     }
 
@@ -109,6 +110,7 @@ class GuruController extends Controller
     {
         $guru = Teacher::findOrFail($id);
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
+
         return view('pages.guru.edit', compact('guru', 'provinces'));
     }
 
@@ -187,5 +189,23 @@ class GuruController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Cabut foto bersama yang bermasalah tanpa menolak seluruh manaqib —
+     * contribution_status sengaja tidak disentuh.
+     */
+    public function destroyFotoBersama(string $id)
+    {
+        $guru = Teacher::findOrFail($id);
+
+        $this->imageService->delete($guru->foto_bersama);
+
+        $guru->update([
+            'foto_bersama' => null,
+            'foto_bersama_caption' => null,
+        ]);
+
+        return redirect()->back()->with('message', 'Foto bersama berhasil dihapus.');
     }
 }
