@@ -26,6 +26,9 @@ class Majelis extends Component
     public function mount()
     {
         $this->search = request()->query('search', $this->search);
+        // $updatesQueryString adalah API Livewire v2 yang diabaikan Livewire 3,
+        // jadi tab harus dihidrasi manual agar deep-link ?tab=moderasi berfungsi.
+        $this->tab = request()->query('tab', $this->tab);
     }
 
     public function updatingSearch()

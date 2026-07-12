@@ -22,6 +22,7 @@ class Guru extends Component
     public function mount()
     {
         $this->search = request()->query('search', $this->search);
+        $this->tab = request()->query('tab', $this->tab);
     }
 
     public function updatingSearch()

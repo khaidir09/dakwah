@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\DataFeed;
+use App\Services\DashboardStatsService;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(DashboardStatsService $stats)
     {
-        $dataFeed = new DataFeed();
-
-        return view('pages/dashboard/dashboard', compact('dataFeed'));
+        return view('pages/dashboard/dashboard', [
+            'summary' => $stats->summary(),
+            'queues' => $stats->moderationQueues(),
+            'latestPending' => $stats->latestPending(),
+        ]);
     }
 
     /**

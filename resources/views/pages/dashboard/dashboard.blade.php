@@ -7,45 +7,22 @@
             <!-- Left: Title -->
             <div class="mb-4 sm:mb-0">
                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Dashboard</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Ringkasan konten, antrian moderasi, dan aktivitas terbaru.</p>
             </div>
 
         </div>
-        
+
         <!-- Cards -->
         <div class="grid grid-cols-12 gap-6">
 
-            <!-- Line chart (Acme Plus) -->
-            {{-- <x-dashboard.dashboard-card-01 :dataFeed="$dataFeed" /> --}}
+            @foreach ($summary['stats'] as $stat)
+                <x-dashboard.stat-card :label="$stat['label']" :total="$stat['total']" :current="$stat['current']"
+                    :percent="$stat['percent']" />
+            @endforeach
 
-            <!-- Line chart (Acme Advanced) -->
-            {{-- <x-dashboard.dashboard-card-02 :dataFeed="$dataFeed" /> --}}
+            <x-dashboard.moderation-panel :queues="$queues" :latestPending="$latestPending" />
 
-            <!-- Line chart (Acme Professional) -->
-            {{-- <x-dashboard.dashboard-card-03 :dataFeed="$dataFeed" /> --}}
-
-            <!-- Bar chart (Direct vs Indirect) -->
-            <x-dashboard.dashboard-card-04 />
-
-            <!-- Line chart (Real Time Value) -->
-            <x-dashboard.dashboard-card-05 />
-
-            <!-- Doughnut chart (Top Countries) -->
-            <x-dashboard.dashboard-card-06 />
-
-            <!-- Table (Top Channels) -->
-            <x-dashboard.dashboard-card-07 />
-
-            <!-- Line chart (Sales Over Time)  -->
-            <x-dashboard.dashboard-card-08 />
-
-            <!-- Stacked bar chart (Sales VS Refunds) -->
-            <x-dashboard.dashboard-card-09 />
-
-            <!-- Card (Recent Activity) -->
-            <x-dashboard.dashboard-card-10 />
-            
-            <!-- Card (Income/Expenses) -->
-            <x-dashboard.dashboard-card-11 />
+            <x-dashboard.activity-feed :activity="$summary['activity']" />
 
         </div>
 
