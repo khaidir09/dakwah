@@ -153,4 +153,61 @@ class HomeRamadhanTodayTest extends TestCase
         Livewire::test(HomeRamadhanToday::class)
             ->assertDontSee('Inactive Speaker');
     }
+
+    /** @test */
+    public function it_sorts_lectures_by_schedule_time_ascending()
+    {
+        $assembly = Assembly::create([
+            'nama_majelis' => 'Majelis Sort',
+            'deskripsi' => 'Desc',
+            'guru' => 'Guru',
+            'alamat' => 'Address',
+            'maps' => 'Maps',
+            'status' => 'Aktif',
+            'province_code' => 11,
+            'city_code' => 1101,
+            'district_code' => 110101,
+            'village_code' => 1101012001,
+        ]);
+
+        // Schedule A: 18:00
+        $scheduleA = RamadhanSchedule::create([
+            'assembly_id' => $assembly->id,
+            'hijri_year' => 1447,
+            'gregorian_start_date' => Carbon::today(),
+            'title' => 'Schedule A',
+            'is_active' => true,
+            'time' => '18:00:00',
+        ]);
+
+        // Schedule B: 16:00
+        $scheduleB = RamadhanSchedule::create([
+            'assembly_id' => $assembly->id,
+            'hijri_year' => 1447,
+            'gregorian_start_date' => Carbon::today(),
+            'title' => 'Schedule B',
+            'is_active' => true,
+            'time' => '16:00:00',
+        ]);
+
+        // Lecture A (Day 1)
+        RamadhanDailyLecture::create([
+            'ramadhan_schedule_id' => $scheduleA->id,
+            'day' => 1,
+            'custom_speaker_name' => 'Speaker A',
+            'title' => 'Lecture A',
+        ]);
+
+        // Lecture B (Day 1)
+        RamadhanDailyLecture::create([
+            'ramadhan_schedule_id' => $scheduleB->id,
+            'day' => 1,
+            'custom_speaker_name' => 'Speaker B',
+            'title' => 'Lecture B',
+        ]);
+
+        // Assert Order: Speaker B (16:00) then Speaker A (18:00)
+        Livewire::test(HomeRamadhanToday::class)
+            ->assertSeeInOrder(['Speaker B', 'Speaker A']);
+    }
 }
