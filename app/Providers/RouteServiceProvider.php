@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\AuthenticateApiClient;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -26,6 +27,18 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        // Sengaja dicari lewat prefix, bukan lewat atribut request yang diisi
+        // AuthenticateApiClient: Laravel menyusun ulang middleware berdasarkan
+        // prioritas sehingga throttle bisa berjalan lebih dulu. Efek sampingnya
+        // diinginkan — percobaan key salah tetap terhitung ke limit pemilik prefix.
+        RateLimiter::for('api-public', function (Request $request) {
+            $client = AuthenticateApiClient::resolveClient($request);
+
+            return $client
+                ? Limit::perMinute($client->rate_limit_per_minute)->by('api-client:'.$client->id)
+                : Limit::perMinute(60)->by($request->ip());
         });
 
         $this->routes(function () {

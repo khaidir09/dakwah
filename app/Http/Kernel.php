@@ -68,5 +68,8 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        'api.client' => \App\Http\Middleware\AuthenticateApiClient::class,
+        'api.version' => \App\Http\Middleware\AddApiVersionHeader::class,
+        'etag' => \App\Http\Middleware\SetsEtag::class,
     ];
 }
