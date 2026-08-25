@@ -22,7 +22,8 @@ class HomeUpcomingHaul extends Component
                 $day = $parsed['day'];
 
                 // Query 1: Remaining days in Current Month
-                $currentMonthHauls = Teacher::where('wafat_hijriah_month', $month)
+                $currentMonthHauls = Teacher::publiclyVisible()
+                    ->where('wafat_hijriah_month', $month)
                     ->where('wafat_hijriah_day', '>=', $day)
                     ->orderBy('wafat_hijriah_day', 'asc')
                     ->get();
@@ -31,7 +32,8 @@ class HomeUpcomingHaul extends Component
                 // Handle Wrap Around (12 -> 1)
                 $nextMonth = ($month == 12) ? 1 : $month + 1;
 
-                $nextMonthHauls = Teacher::where('wafat_hijriah_month', $nextMonth)
+                $nextMonthHauls = Teacher::publiclyVisible()
+                    ->where('wafat_hijriah_month', $nextMonth)
                     ->orderBy('wafat_hijriah_day', 'asc')
                     ->get();
 

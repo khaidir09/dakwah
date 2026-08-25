@@ -1,4 +1,16 @@
 <x-user-layout>
+    @php
+        $domisiliGuru = $teacher->domisili && $teacher->domisili !== '-' ? ' di '.$teacher->domisili : '';
+    @endphp
+    @section('title', $seo->title($teacher->name))
+    @section('meta_description', $seo->description($teacher->biografi, 'Profil, biografi, dan jadwal pengajian '.$teacher->name.$domisiliGuru.'.'))
+    @section('meta_image', $seo->image($teacher->foto, 'guru'))
+    @section('og_type', 'profile')
+
+    @push('jsonld')
+        {{ $schema->person($teacher) }}
+    @endpush
+
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">
@@ -19,7 +31,7 @@
                             <div class="flex justify-between items-center mb-6">
                                 <!-- Title -->
                                 <header>
-                                    <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Detail Guru</h1>
+                                    <p class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Detail Guru</p>
                                 </header>
 
                                 <div>
@@ -43,7 +55,7 @@
 
                                             <!-- Avatar -->
                                             <div class="inline-flex -ml-1 -mt-1 mb-4 sm:mb-0">
-                                                <img class="rounded-full border-4 border-white dark:border-gray-900" src="{{ Storage::url($teacher->foto) }}" width="128" height="128" alt="Avatar" />
+                                                <img class="rounded-full border-4 border-white dark:border-gray-900" src="{{ Storage::url($teacher->foto) }}" width="128" height="128" alt="Foto {{ $teacher->name }}" />
                                             </div>
                                 
                                             <!-- Actions -->

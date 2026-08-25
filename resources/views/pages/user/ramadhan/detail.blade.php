@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', $schedule->title)
+    @section('title', $seo->title($schedule->title))
+    @section('meta_description', $seo->description($schedule->description, 'Jadwal Ramadhan '.$schedule->title.' di '.($schedule->assembly->nama_majelis ?? 'majelis').'.'))
+    @section('meta_image', $seo->image($schedule->assembly->gambar ?? null, 'ramadhan'))
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">

@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'api.client' => \App\Http\Middleware\AuthenticateApiClient::class,
         'api.version' => \App\Http\Middleware\AddApiVersionHeader::class,
         'etag' => \App\Http\Middleware\SetsEtag::class,
+        'noindex' => \App\Http\Middleware\AddNoindexHeader::class,
     ];
 }

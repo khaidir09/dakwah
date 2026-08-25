@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', 'Jadwal Ramadhan')
+    @section('title', $seo->title('Jadwal Ramadhan'))
+    @section('meta_description', $seo->description(null, 'Jadwal kajian dan kegiatan Ramadhan di majelis se-Kalimantan.'))
+    @section('meta_image', $seo->image(null, 'ramadhan'))
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">
@@ -29,7 +31,7 @@
                                         <div class="flex items-start justify-between mb-4">
                                             <div class="flex items-center gap-3">
                                                 @if($schedule->assembly->gambar)
-                                                     <img class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700" src="{{ $schedule->assembly->gambar_thumb_url }}" alt="{{ $schedule->assembly->nama_majelis }}">
+                                                     <img class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700" src="{{ $schedule->assembly->gambar_thumb_url }}" width="40" height="40" loading="lazy" alt="Gambar {{ $schedule->assembly->nama_majelis }}">
                                                 @else
                                                      <div class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm ring-2 ring-gray-100 dark:ring-gray-700">
                                                         {{ substr($schedule->assembly->nama_majelis, 0, 2) }}

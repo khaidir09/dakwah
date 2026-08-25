@@ -20,7 +20,7 @@
             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-shadow">
                 <a href="{{ route('artikel.detail', $article->slug) }}" class="block">
                     @if ($article->cover_image)
-                        <img src="{{ Storage::url($article->cover_image) }}" alt="{{ $article->title }}" class="w-full h-48 object-cover">
+                        <img src="{{ Storage::url($article->cover_image) }}" alt="{{ $article->title }}" loading="lazy" class="w-full h-48 object-cover">
                     @endif
                 </a>
                 <div class="p-4">

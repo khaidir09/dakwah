@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasRouteSlug;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\Village;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,11 @@ use Laravolt\Indonesia\Models\Province;
 
 class Assembly extends Model
 {
+    use HasRouteSlug;
+
+    /** Kolom sumber slug URL — lihat HasRouteSlug. */
+    public const ROUTE_SLUG_SOURCE = 'nama_majelis';
+
     protected $guarded = [];
 
     public function schedule()
@@ -116,5 +122,22 @@ class Assembly extends Model
             $q->whereNull('contribution_status')
               ->orWhere('contribution_status', 'approved');
         });
+    }
+
+    /**
+     * Konten yang belum/tidak disetujui hanya boleh dibuka oleh pemiliknya
+     * (sebagai pratinjau) dan Super Admin. Untuk publik, halamannya harus 404.
+     */
+    public function isVisibleTo(?User $user): bool
+    {
+        if (in_array($this->contribution_status, [null, 'approved'], true)) {
+            return true;
+        }
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->id === $this->user_id || $user->hasRole('Super Admin');
     }
 }

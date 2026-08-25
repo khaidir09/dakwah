@@ -11,9 +11,9 @@ class GuruController extends Controller
 {
     public function list()
     {
-        $teachers = Teacher::all();
-
-        return view('pages/user/guru/list', compact('teachers'));
+        // Daftar guru dirender oleh <livewire:list-guru />, yang memfilter
+        // sendiri lewat Teacher::publiclyVisible().
+        return view('pages/user/guru/list');
     }
 
     public function detail(Teacher $teacher)
@@ -33,6 +33,7 @@ class GuruController extends Controller
             ELSE 8 END";
 
         $schedules = Schedule::with('teacher')
+            ->publiclyVisible()
             ->where('teacher_id', $teacher->id)
             ->orderByRaw($urutanHari)
             ->get();

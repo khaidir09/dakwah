@@ -46,7 +46,7 @@ class ListEvent extends Component
         }
 
         $query->where('date', '>=', now())
-            ->whereNotNull('moderated_at');
+            ->publiclyVisible();
 
         $events_count = $query->count();
         $events = $query->simplePaginate($this->paginate);

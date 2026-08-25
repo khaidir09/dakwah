@@ -28,7 +28,7 @@
                 <!-- Cover Image -->
                 <a href="{{ route('pustaka-detail', $library->slug) }}" class="block h-80 w-full relative overflow-hidden group">
                     @if($library->cover_image)
-                        <img class="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-105" src="{{ Storage::url($library->cover_image) }}" alt="{{ $library->title }}">
+                        <img class="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-105" src="{{ Storage::url($library->cover_image) }}" loading="lazy" alt="Sampul {{ $library->title }}">
                     @else
                         <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-400">
                              <svg class="w-16 h-16 fill-current" viewBox="0 0 24 24">

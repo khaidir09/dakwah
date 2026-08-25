@@ -59,7 +59,7 @@
                         <header>                
                             <div class="flex justify-center mb-2">
                                 <a class="relative inline-flex items-start" href="{{ route('guru-detail', $teacher) }}">
-                                    <img class="rounded-full" src="{{ Storage::url($teacher->foto) }}" width="64" height="64" alt="{{ $teacher->name }}" />
+                                    <img class="rounded-full" src="{{ Storage::url($teacher->foto) }}" width="64" height="64" loading="lazy" alt="{{ $teacher->name }}" />
                                 </a>
                             </div>
                             <div class="text-center">

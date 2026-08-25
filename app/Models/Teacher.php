@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\District;
@@ -35,6 +36,16 @@ class Teacher extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function getFotoUrlAttribute(): ?string
+    {
+        return $this->foto ? Storage::url($this->foto) : null;
+    }
+
+    public function getFotoBersamaUrlAttribute(): ?string
+    {
+        return $this->foto_bersama ? Storage::url($this->foto_bersama) : null;
     }
 
     public function assemblies()

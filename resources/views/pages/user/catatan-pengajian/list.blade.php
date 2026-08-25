@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', 'Catatan Pengajian')
+    @section('title', $seo->title('Catatan Pengajian'))
+    @section('meta_description', $seo->description(null, 'Catatan pengajian yang dibagikan jamaah dari majelis ilmu di Kalimantan.'))
+    @section('meta_image', $seo->image(null, 'catatan'))
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">

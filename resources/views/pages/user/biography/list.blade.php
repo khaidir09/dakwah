@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', 'Manaqib Ulama')
+    @section('title', $seo->title('Manaqib Ulama'))
+    @section('meta_description', $seo->description(null, 'Manaqib dan riwayat hidup para ulama Kalimantan dalam silsilah keilmuan Banjar.'))
+    @section('meta_image', $seo->image(null, 'manaqib'))
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">

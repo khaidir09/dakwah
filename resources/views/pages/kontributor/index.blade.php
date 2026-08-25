@@ -1,5 +1,6 @@
 <x-user-layout>
-    @section('title', 'Program Kontributor Syaikhuna')
+    @section('title', $seo->title('Program Kontributor'))
+    @section('meta_description', $seo->description(null, 'Ikut melengkapi data majelis, guru, jadwal, dan acara keislaman di Kalimantan bersama Syaikhuna.'))
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Hero Section -->
         <div class="relative bg-emerald-900 overflow-hidden">

@@ -1,5 +1,11 @@
 <x-user-layout>
-    @section('title', 'Beranda')
+    @section('title', $seo->title('Jadwal Majelis & Pengajian Kalimantan'))
+    @section('meta_description', $seo->description(null))
+    @section('meta_image', $seo->image(null, 'beranda'))
+
+    @push('jsonld')
+        {{ $schema->website() }}
+    @endpush
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">

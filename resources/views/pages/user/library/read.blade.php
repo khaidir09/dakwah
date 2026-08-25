@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', $library->title)
+    @section('title', $seo->title($library->title))
+    {{-- Halaman baca terkunci per pembelian; jangan sampai isinya terindeks. --}}
+    @section('meta_robots', 'noindex, nofollow')
 
     @push('styles')
         <style>

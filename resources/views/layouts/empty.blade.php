@@ -14,9 +14,8 @@
         <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet" />
+        {{-- Deklarasi @font-face ada di resources/css/app.css. crossorigin wajib pada preload font — tanpa itu berkasnya diunduh dua kali. --}}
+        <link rel="preload" href="{{ asset('fonts/inter-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Syaikhuna</title>
+        <title>@yield('title', config('app.name', 'Syaikhuna'))</title>
+        <meta name="robots" content="noindex, nofollow">
 
         <!-- Favicon -->
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
@@ -14,9 +15,8 @@
         <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet" />
+        {{-- Deklarasi @font-face ada di resources/css/app.css. crossorigin wajib pada preload font — tanpa itu berkasnya diunduh dua kali. --}}
+        <link rel="preload" href="{{ asset('fonts/inter-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
 
         @stack('styles')
 

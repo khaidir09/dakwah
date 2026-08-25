@@ -66,7 +66,7 @@
                 <div class="flex flex-col h-full">
                     <!-- Image -->
                     <div class="relative">
-                        <img class="w-full" src="{{ $assembly->gambar_thumb_url }}" width="301" height="226" alt="Application 22" />
+                        <img class="w-full" src="{{ $assembly->gambar_thumb_url }}" width="301" height="226" loading="lazy" alt="Gambar {{ $assembly->nama_majelis }}" />
                         @if($assembly->is_followed)
                             <div class="absolute top-0 right-0 mt-2 mr-2">
                                 <div class="text-xs font-semibold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-full shadow flex items-center gap-1 border border-emerald-200">
@@ -84,7 +84,7 @@
                         <div class="grow">
                             <header class="mb-2">
                                 <div class="flex justify-between items-start mb-1">
-                                    <a href="{{ route('majelis-detail', $assembly->id) }}">
+                                    <a href="{{ route('majelis-detail', $assembly->route_slug) }}">
                                         <h3 class="text-lg text-gray-800 dark:text-gray-100 font-semibold">{{ $assembly->nama_majelis }}</h3>
                                     </a>
                                     @if($assembly->tipe)

@@ -1,5 +1,8 @@
 <x-user-layout>
-    @section('title', $post->title)
+    @section('title', $seo->title($post->title))
+    @section('meta_description', $seo->description($post->content, 'Tulisan '.$post->title.' di Syaikhuna.'))
+    @section('meta_image', $seo->image($post->cover_image, 'tulisan'))
+    @section('og_type', 'article')
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
         <div class="xl:flex">
             <!-- Left + Middle content -->

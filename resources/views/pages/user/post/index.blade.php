@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', 'Tulisan')
+    @section('title', $seo->title('Tulisan'))
+    @section('meta_description', $seo->description(null, 'Tulisan dan artikel keislaman dari para penulis dan kontributor Syaikhuna.'))
+    @section('meta_image', $seo->image(null, 'tulisan'))
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
         <div class="xl:flex">
             <!-- Left + Middle content -->

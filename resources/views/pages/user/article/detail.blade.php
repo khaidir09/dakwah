@@ -1,8 +1,8 @@
 <x-user-layout>
-    @section('title', $article->title)
-    @if($article->cover_image)
-        @section('meta_image', asset(Storage::url($article->cover_image)))
-    @endif
+    @section('title', $seo->title($article->title))
+    @section('meta_description', $seo->description($article->subtitle ?: $article->content, 'Artikel ilmiah '.$article->title.' oleh '.$article->author_name.'.'))
+    @section('meta_image', $seo->image($article->cover_image, 'artikel'))
+    @section('og_type', 'article')
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
         <div class="xl:flex">
             <!-- Left + Middle content -->

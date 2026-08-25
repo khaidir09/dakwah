@@ -20,6 +20,7 @@ use App\Http\Controllers\MajelisController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RamadhanController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\User\GuruController as UserGuruController;
@@ -54,17 +55,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', 'beranda');
+// Beranda tinggal di root; /beranda dipertahankan sebagai redirect permanen
+// karena URL itu sudah tersebar di tautan lama.
+Route::get('/', [HomeController::class, 'index'])->name('beranda');
+Route::redirect('/beranda', '/', 301);
 
-Route::get('/beranda', [HomeController::class, 'index'])->name('beranda');
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+
 Route::get('/majelis', [UserMajelisController::class, 'list'])->name('majelis-list');
 Route::get('/jadwal-majelis', [UserJadwalMajelisController::class, 'list'])->name('jadwal-majelis-list');
-Route::get('/jadwal-majelis/{id}', [UserJadwalMajelisController::class, 'detail'])->name('jadwal-majelis-detail');
-Route::get('/majelis/{id}', [UserMajelisController::class, 'detail'])->name('majelis-detail');
+Route::get('/jadwal-majelis/{jadwal}', [UserJadwalMajelisController::class, 'detail'])->name('jadwal-majelis-detail');
+Route::get('/majelis/{majelis}', [UserMajelisController::class, 'detail'])->name('majelis-detail');
 Route::get('/guru', [UserGuruController::class, 'list'])->name('guru-list');
 Route::get('/guru/{teacher}', [UserGuruController::class, 'detail'])->name('guru-detail');
 Route::get('/video', [UserVideoController::class, 'list'])->name('video-list');
 Route::get('/event', [UserEventController::class, 'list'])->name('event-list');
+Route::get('/event/{event}', [UserEventController::class, 'detail'])->name('event-detail');
 Route::get('/wirid', [UserWiridController::class, 'list'])->name('wirid-list');
 Route::get('/manaqib', [\App\Http\Controllers\User\BiographyController::class, 'list'])->name('manaqib-list');
 Route::get('/manaqib/{slug}', [\App\Http\Controllers\User\BiographyController::class, 'detail'])->name('manaqib-detail');
@@ -74,16 +80,16 @@ Route::get('/tulisan', [\App\Http\Controllers\User\PostController::class, 'index
 Route::get('/tulisan/{slug}', [\App\Http\Controllers\User\PostController::class, 'detail'])->name('tulisan.detail');
 Route::get('/tulisan/{slug}/download', [\App\Http\Controllers\User\PostController::class, 'download'])
     ->name('tulisan.download')
-    ->middleware('auth');
+    ->middleware(['noindex', 'auth']);
 Route::get('/artikel/{slug}', [\App\Http\Controllers\User\ArticleController::class, 'detail'])->name('artikel.detail');
 Route::get('/artikel/{slug}/download', [\App\Http\Controllers\User\ArticleController::class, 'download'])
     ->name('artikel.download')
-    ->middleware('auth');
+    ->middleware(['noindex', 'auth']);
 
 Route::get('/jadwal-ramadhan', [\App\Http\Controllers\User\RamadhanController::class, 'index'])->name('ramadhan-list');
 Route::get('/jadwal-ramadhan/{id}', [\App\Http\Controllers\User\RamadhanController::class, 'detail'])->name('ramadhan-detail');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['noindex', 'auth'])->group(function () {
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
     })->name('verification.notice');
@@ -91,7 +97,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
 
-        return redirect('/beranda');
+        return redirect()->route('beranda');
     })->middleware('signed')->name('verification.verify');
 
     Route::post('/email/verification-notification', function (Request $request) {
@@ -124,7 +130,7 @@ Route::get('/get-villages/{district_code}', [DependantDropdownController::class,
 Route::get('/catatan-pengajian', [\App\Http\Controllers\User\CatatanPengajianController::class, 'index'])->name('catatan-pengajian.list');
 Route::get('/catatan-pengajian/{id}', [\App\Http\Controllers\User\CatatanPengajianController::class, 'show'])->name('catatan-pengajian.detail');
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['noindex', 'auth:sanctum', 'verified'])->group(function () {
     Route::get('/reward-klaim/{claim}/bukti', [\App\Http\Controllers\RewardProofController::class, 'show'])->name('reward-klaim.bukti');
 
     // Pustaka berbayar
@@ -212,7 +218,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 });
 
-Route::middleware(['auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
+Route::middleware(['noindex', 'auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth:sanctum', 'verified'])->name('dashboard');
     Route::resource('/majelis', MajelisController::class);
     Route::resource('/jadwal-majelis', JadwalMajelisController::class);

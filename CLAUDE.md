@@ -52,9 +52,10 @@ Tests use SQLite in-memory; the database is automatically switched in `phpunit.x
 
 - **Framework**: Laravel 11 with TALL stack (Tailwind CSS v4, Alpine.js via Livewire, Livewire 3)
 - **Auth**: Jetstream + Fortify (2FA, email verify, API tokens) + Google OAuth (Socialite)
-- **Roles**: Spatie Laravel Permission v6 — dua role yang digunakan:
-  - `Super Admin` — akses penuh ke semua area admin
-  - `Penulis` — hanya bisa membuat dan mengedit tulisan miliknya sendiri (`kelola-tulisan`); assign via `php artisan app:make-author {email}`
+- **Roles**: Spatie Laravel Permission v6 — tiga role yang digunakan:
+    - `Super Admin` — akses penuh ke semua area admin
+    - `Penulis` — hanya bisa membuat dan mengedit tulisan miliknya sendiri (`kelola-tulisan`); assign via `php artisan app:make-author {email}`
+    - `Kontributor` - pengguna yang mengikuti program kontributor dan ingin berbagi konten
 - **Database**: MySQL (dev), SQLite in-memory (tests)
 - **Images**: Intervention Image — generates both `large` and `thumb` variants in `public/` disk
 - **HTML sanitization**: mews/purifier — use `clean()` helper on all user-supplied HTML content
@@ -148,7 +149,7 @@ ONESIGNAL_APP_ID=
 ONESIGNAL_REST_API_KEY=
 
 # Open Notebook AI (external FastAPI)
-OPEN_NOTEBOOK_BASE_URL=
+OPEN_NOTEBOOK_API_URL=
 OPEN_NOTEBOOK_API_KEY=
 OPEN_NOTEBOOK_DEFAULT_ID=
 
@@ -231,7 +232,6 @@ Sebuah tugas belum selesai sampai:
 - implementasi mengikuti arsitektur yang ada;
 - tidak ada perubahan di luar scope;
 - test terkait lulus;
-- lint dan type check lulus;
 - build lulus jika relevan;
 - tidak ada credential atau debug code tertinggal;
 - git diff sudah diperiksa;

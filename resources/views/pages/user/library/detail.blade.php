@@ -1,5 +1,8 @@
 <x-user-layout>
-    @section('title', $library->title)
+    @section('title', $seo->title($library->title))
+    @section('meta_description', $seo->description($library->description, 'Pustaka '.$library->title.' kategori '.$library->category.' di Syaikhuna.'))
+    @section('meta_image', $seo->image($library->cover_image, 'pustaka'))
+    @section('og_type', 'book')
 
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
         <div class="xl:flex">

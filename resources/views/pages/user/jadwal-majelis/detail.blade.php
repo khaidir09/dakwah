@@ -1,4 +1,12 @@
 <x-user-layout>
+    @php
+        $majelisJadwal = $schedule->assembly->nama_majelis ?? 'majelis';
+        $guruJadwal = $schedule->teacher->name ?? null;
+    @endphp
+    @section('title', $seo->title($schedule->nama_jadwal))
+    @section('meta_description', $seo->description($schedule->deskripsi, $schedule->nama_jadwal.' di '.$majelisJadwal.' setiap '.$schedule->hari.($guruJadwal ? ' bersama '.$guruJadwal : '').'.'))
+    @section('meta_image', $seo->image($schedule->assembly->gambar ?? null, 'jadwal'))
+
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">
@@ -19,7 +27,7 @@
                             <div class="flex justify-between items-center mb-6">
                                 <!-- Title -->
                                 <header>
-                                    <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Detail Jadwal</h1>
+                                    <p class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Detail Jadwal</p>
                                 </header>
 
                                 <div>
@@ -40,13 +48,13 @@
 
                             <!-- Schedule Info -->
                             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-5">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">{{ $schedule->nama_jadwal }}</h2>
+                                <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">{{ $schedule->nama_jadwal }}</h1>
                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{{ $schedule->deskripsi }}</p>
 
                                 <div class="grid grid-cols-2 gap-4 text-sm mb-4">
                                     <div>
                                         <span class="text-gray-500 block">Majelis:</span>
-                                        <a href="{{ route('majelis-detail', $schedule->assembly_id) }}" class="font-medium text-emerald-500 hover:text-emerald-600">{{ $schedule->assembly->nama_majelis }}</a>
+                                        <a href="{{ route('majelis-detail', $schedule->assembly->route_slug) }}" class="font-medium text-emerald-500 hover:text-emerald-600">{{ $schedule->assembly->nama_majelis }}</a>
                                     </div>
                                     <div>
                                         <span class="text-gray-500 block">Penceramah:</span>
@@ -65,7 +73,7 @@
 
                             <!-- Catatan -->
                             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-5">
-                                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">Catatan Jadwal</h3>
+                                <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">Catatan Jadwal</h2>
 
                                 @auth
                                     <!-- Form Tambah Catatan -->

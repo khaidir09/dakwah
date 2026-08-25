@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasRouteSlug;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\Village;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +11,10 @@ use Laravolt\Indonesia\Models\Province;
 
 class Event extends Model
 {
+    use HasRouteSlug;
+
+    public const ROUTE_SLUG_SOURCE = 'name';
+
     protected $guarded = [];
 
     public function assembly()
@@ -60,11 +65,51 @@ class Event extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * Acara yang sudah dilepas ke publik: pernah dimoderasi (atau dibuat langsung
+     * oleh Super Admin, yang mengisi `moderated_at` tanpa mengubah `status`) dan
+     * tidak ditolak.
+     *
+     * `moderated_at` saja tidak cukup: ModerasiController::revokeEvent() juga
+     * mengisinya saat menolak, sehingga acara yang ditolak ikut lolos.
+     * `status = 'approved'` saja juga tidak cukup: acara buatan Super Admin
+     * tetap bernilai default 'pending' sehingga akan hilang dari kanal publik.
+     */
     public function scopePubliclyVisible($query)
     {
-        return $query->where(function ($q) {
-            $q->whereNull('status')
-              ->orWhere('status', 'approved');
-        });
+        return $query->whereNotNull('moderated_at')
+            ->where(function ($q) {
+                $q->whereNull('status')
+                    ->orWhere('status', '!=', 'rejected');
+            });
+    }
+
+    /**
+     * Syarat halaman detail publik, yang lebih ketat daripada daftar acara:
+     * selain lolos moderasi, acara juga harus terbuka untuk umum. Acara "Khusus"
+     * sengaja tetap tampil di daftar (keputusan produk lama) tetapi tidak
+     * mendapat halaman sendiri yang dapat diindeks.
+     *
+     * Pemilik dan Super Admin tetap dapat membukanya sebagai pratinjau, sama
+     * seperti Teacher, Assembly, dan Schedule.
+     */
+    public function isVisibleTo(?User $user): bool
+    {
+        if ($this->isPubliclyVisible()) {
+            return true;
+        }
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->id === $this->user_id || $user->hasRole('Super Admin');
+    }
+
+    public function isPubliclyVisible(): bool
+    {
+        return $this->moderated_at !== null
+            && $this->status !== 'rejected'
+            && $this->access === 'Umum';
     }
 }

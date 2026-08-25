@@ -39,7 +39,7 @@ class ScheduleNoteTest extends TestCase
             'hari' => 'Senin',
         ]);
 
-        $response = $this->get(route('jadwal-majelis-detail', $schedule->id));
+        $response = $this->get(route('jadwal-majelis-detail', $schedule->route_slug));
 
         $response->assertStatus(200);
         $response->assertSee('Test Jadwal');

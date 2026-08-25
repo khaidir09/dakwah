@@ -1,5 +1,9 @@
 <x-user-layout>
-    @section('title', 'Profil ' . $kontributor->name)
+    @section('title', $seo->title('Profil '.$kontributor->name))
+    @section('meta_description', $seo->description(null, 'Profil kontributor '.$kontributor->name.' beserta kontribusinya di Syaikhuna.'))
+    {{-- Profil kontributor berpotensi berkonten tipis; jangan diindeks, tetapi
+         tautannya tetap boleh diikuti agar konten kontribusinya terjangkau. --}}
+    @section('meta_robots', 'noindex, follow')
 
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
@@ -129,7 +133,7 @@
                             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">Majelis <span class="ml-1 inline-flex items-center justify-center min-w-[1.5rem] px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">{{ $assemblies->count() }}</span></h2>
                             <div class="grid grid-cols-12 gap-4">
                                 @foreach($assemblies as $assembly)
-                                    <a href="{{ route('majelis-detail', $assembly->id) }}" class="col-span-full md:col-span-6 bg-white dark:bg-gray-800 shadow-xs rounded-xl border border-gray-100 dark:border-gray-700/60 hover:border-emerald-300 dark:hover:border-emerald-700 transition">
+                                    <a href="{{ route('majelis-detail', $assembly->route_slug) }}" class="col-span-full md:col-span-6 bg-white dark:bg-gray-800 shadow-xs rounded-xl border border-gray-100 dark:border-gray-700/60 hover:border-emerald-300 dark:hover:border-emerald-700 transition">
                                         <div class="p-5">
                                             <div class="flex justify-between items-start mb-1">
                                                 <h3 class="text-lg text-gray-800 dark:text-gray-100 font-semibold">{{ $assembly->nama_majelis }}</h3>
@@ -168,7 +172,7 @@
                                             default => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
                                         };
                                     @endphp
-                                    <a href="{{ route('jadwal-majelis-detail', $schedule->id) }}" class="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-xs rounded-xl border border-gray-100 dark:border-gray-700/60 hover:border-emerald-300 dark:hover:border-emerald-700 transition">
+                                    <a href="{{ route('jadwal-majelis-detail', $schedule->route_slug) }}" class="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-xs rounded-xl border border-gray-100 dark:border-gray-700/60 hover:border-emerald-300 dark:hover:border-emerald-700 transition">
                                         <div class="p-5">
                                             <div class="flex justify-between items-start gap-3">
                                                 <div class="flex">

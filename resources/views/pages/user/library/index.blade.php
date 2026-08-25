@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', 'Pustaka')
+    @section('title', $seo->title('Pustaka Kitab & Bacaan Islami'))
+    @section('meta_description', $seo->description(null, 'Pustaka kitab dan bacaan islami digital yang dapat dibaca langsung di Syaikhuna.'))
+    @section('meta_image', $seo->image(null, 'pustaka'))
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">

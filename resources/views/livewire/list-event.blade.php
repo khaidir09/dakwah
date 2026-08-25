@@ -40,6 +40,7 @@
                         src="{{ Storage::url($event->image) }}"
                         width="220"
                         height="236"
+                        loading="{{ $loop->first ? 'eager' : 'lazy' }}"
                         alt="{{ $event->name }}"
                         @click.prevent="previewImage = '{{ Storage::url($event->image) }}'; previewOpen = true"
                     />
@@ -55,7 +56,15 @@
                     <div class="grow">
                         <div class="text-sm font-semibold text-emerald-500 uppercase mb-2">{{ \Carbon\Carbon::parse($event->date)->locale('id')->translatedFormat('D, d M Y') }}</div>
                         <div class="inline-flex mb-2">
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $event->name }}</h3>
+                            {{-- Acara "Khusus" tetap tampil di daftar tetapi tidak punya
+                                 halaman detail publik, jadi jangan ditautkan ke 404. --}}
+                            @if ($event->isPubliclyVisible())
+                                <a href="{{ route('event-detail', $event->route_slug) }}" class="text-lg font-bold text-gray-800 dark:text-gray-100 hover:text-emerald-600 dark:hover:text-emerald-400">
+                                    <h3>{{ $event->name }}</h3>
+                                </a>
+                            @else
+                                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">{{ $event->name }}</h3>
+                            @endif
                         </div>
                         <div class="text-sm line-clamp-2">{{ $event->village->name }}, {{ $event->district->name }}</div>
                         {{-- Lokasi --}}
@@ -123,7 +132,7 @@
                 <span class="sr-only">Close</span>
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
              </button>
-             <img :src="previewImage" class="rounded shadow-2xl object-contain max-h-[85vh] w-auto" alt="Event Preview">
+             <img :src="previewImage" class="rounded shadow-2xl object-contain max-h-[85vh] w-auto" alt="">
         </div>
     </div>
 </div>

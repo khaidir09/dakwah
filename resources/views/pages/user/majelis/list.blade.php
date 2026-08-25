@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', 'Daftar Majelis')
+    @section('title', $seo->title('Daftar Majelis Ilmu'))
+    @section('meta_description', $seo->description(null, 'Direktori majelis ilmu, mesjid, dan langgar di Kalimantan beserta jadwal pengajian rutinnya.'))
+    @section('meta_image', $seo->image(null, 'majelis'))
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">

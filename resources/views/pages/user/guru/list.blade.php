@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', 'Daftar Guru')
+    @section('title', $seo->title('Daftar Guru & Ulama'))
+    @section('meta_description', $seo->description(null, 'Direktori guru dan ulama di Kalimantan Selatan, Tengah, dan Timur beserta jadwal pengajiannya.'))
+    @section('meta_image', $seo->image(null, 'guru'))
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">

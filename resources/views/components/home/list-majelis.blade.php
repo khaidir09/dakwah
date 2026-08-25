@@ -20,7 +20,7 @@
                 <!-- Card body -->
                 <div class="grow">
                     <header class="mb-2">
-                        <a href="{{ route('majelis-detail', $assembly->id) }}">
+                        <a href="{{ route('majelis-detail', $assembly->route_slug) }}">
                             <h3 class="text-lg text-gray-800 dark:text-gray-100 font-semibold mb-1">{{ $assembly->nama_majelis }}</h3>
                         </a>
                         <div class="font-semibold">Pengasuh : {{ $assembly->teacher->name }}</div>

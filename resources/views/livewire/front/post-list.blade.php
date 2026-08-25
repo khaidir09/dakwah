@@ -20,7 +20,7 @@
             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl overflow-hidden hover:shadow-md transition-shadow">
                 <a href="{{ route('tulisan.detail', $post->slug) }}" class="block">
                     @if ($post->cover_image)
-                        <img src="{{ Storage::url($post->cover_image) }}" alt="{{ $post->title }}" class="w-full h-48 object-cover">
+                        <img src="{{ Storage::url($post->cover_image) }}" alt="{{ $post->title }}" loading="lazy" class="w-full h-48 object-cover">
                     @endif
                 </a>
                 <div class="p-4">

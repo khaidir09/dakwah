@@ -1,5 +1,8 @@
 <x-user-layout>
-    @section('title', $biography->name)
+    @section('title', $seo->title('Manaqib '.$biography->name))
+    @section('meta_description', $seo->description($biography->biografi, 'Manaqib dan riwayat hidup '.$biography->name.'.'))
+    @section('meta_image', $seo->image($biography->foto, 'manaqib'))
+    @section('og_type', 'profile')
 
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
@@ -19,7 +22,7 @@
                         <div class="flex justify-between items-center mb-6">
                             <!-- Title -->
                             <header>
-                                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Manaqib Ulama</h1>
+                                <p class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Manaqib Ulama</p>
                             </header>
 
                             <div>

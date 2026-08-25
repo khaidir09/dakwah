@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', 'Kumpulan Amalan')
+    @section('title', $seo->title('Kumpulan Amalan & Wirid'))
+    @section('meta_description', $seo->description(null, 'Kumpulan amalan, wirid, dan doa dalam tradisi keilmuan ulama Banjar.'))
+    @section('meta_image', $seo->image(null, 'amalan'))
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">

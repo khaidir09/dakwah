@@ -6,23 +6,28 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('title', config('app.name', 'Syaikhuna'))</title>
-        <meta name="description" content="@yield('meta_description', 'Platform informasi jadwal majelis & acara terkini, profil ulama, dan konten islami.')">
-        <meta name="keywords" content="@yield('meta_keywords', 'majelis, muallim, banjar, jadwal pengajian, syaikhuna, acara haul, amalan')">
+        <meta name="description" content="@yield('meta_description', \App\Services\SeoService::DEFAULT_DESCRIPTION)">
         <meta name="author" content="@yield('meta_author', config('app.name', 'Syaikhuna'))">
+        @hasSection('meta_robots')
+            <meta name="robots" content="@yield('meta_robots')">
+        @endif
+        <link rel="canonical" href="@yield('canonical', $seo->canonical())">
 
         <!-- Open Graph / Facebook -->
+        <meta property="og:site_name" content="{{ config('app.name', 'Syaikhuna') }}">
+        <meta property="og:locale" content="id_ID">
         <meta property="og:type" content="@yield('og_type', 'website')">
-        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:url" content="@yield('canonical', $seo->canonical())">
         <meta property="og:title" content="@yield('title', config('app.name', 'Syaikhuna'))">
-        <meta property="og:description" content="@yield('meta_description', 'Platform informasi jadwal majelis & acara terkini, profil ulama, dan konten islami.')">
-        <meta property="og:image" content="@yield('meta_image', asset('images/android-chrome-512x512.png'))">
+        <meta property="og:description" content="@yield('meta_description', \App\Services\SeoService::DEFAULT_DESCRIPTION)">
+        <meta property="og:image" content="@yield('meta_image', $seo->image())">
 
         <!-- Twitter -->
-        <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="{{ url()->current() }}">
-        <meta property="twitter:title" content="@yield('title', config('app.name', 'Syaikhuna'))">
-        <meta property="twitter:description" content="@yield('meta_description', 'Platform informasi jadwal majelis & acara terkini, profil ulama, dan konten islami.')">
-        <meta property="twitter:image" content="@yield('meta_image', asset('images/android-chrome-512x512.png'))">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:url" content="@yield('canonical', $seo->canonical())">
+        <meta name="twitter:title" content="@yield('title', config('app.name', 'Syaikhuna'))">
+        <meta name="twitter:description" content="@yield('meta_description', \App\Services\SeoService::DEFAULT_DESCRIPTION)">
+        <meta name="twitter:image" content="@yield('meta_image', $seo->image())">
 
         <!-- Favicon -->
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
@@ -31,11 +36,15 @@
         <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet" />
+        {{-- Deklarasi @font-face ada di resources/css/app.css. crossorigin wajib pada preload font — tanpa itu berkasnya diunduh dua kali. --}}
+        <link rel="preload" href="{{ asset('fonts/inter-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
+
+        <!-- Structured data -->
+        {{ $schema->organization() }}
+        @stack('jsonld')
 
         @stack('styles')
+        @stack('head')
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])

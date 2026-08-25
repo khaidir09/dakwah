@@ -1,6 +1,8 @@
 <x-user-layout>
-    @section('title', 'Catatan Pengajian: ' . ($note->schedule->assembly->nama_majelis ?? 'Majelis'))
-    @section('meta_description', Str::limit(strip_tags($note->content), 150))
+    @section('title', $seo->title('Catatan Pengajian: '.($note->schedule->assembly->nama_majelis ?? 'Majelis')))
+    @section('meta_description', $seo->description($note->content, 'Catatan pengajian dari '.($note->schedule->assembly->nama_majelis ?? 'majelis').' di Syaikhuna.'))
+    @section('meta_image', $seo->image(null, 'catatan'))
+    @section('og_type', 'article')
 
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 

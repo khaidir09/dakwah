@@ -1,5 +1,7 @@
 <x-user-layout>
-    @section('title', 'Video Kajian')
+    @section('title', $seo->title('Video Kajian'))
+    @section('meta_description', $seo->description(null, 'Kumpulan video kajian dan ceramah para ulama Kalimantan.'))
+    @section('meta_image', $seo->image(null, 'video'))
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">

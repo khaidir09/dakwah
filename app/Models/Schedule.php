@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasRouteSlug;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
 
 class Schedule extends Model
 {
+    use HasRouteSlug;
+
+    /** Kolom sumber slug URL — lihat HasRouteSlug. */
+    public const ROUTE_SLUG_SOURCE = 'nama_jadwal';
+
     protected $guarded = [];
 
     protected $casts = [
@@ -136,6 +142,23 @@ class Schedule extends Model
             $q->whereNull('contribution_status')
                 ->orWhere('contribution_status', 'approved');
         });
+    }
+
+    /**
+     * Konten yang belum/tidak disetujui hanya boleh dibuka oleh kontributor
+     * pemiliknya (sebagai pratinjau) dan Super Admin. Untuk publik, 404.
+     */
+    public function isVisibleTo(?User $user): bool
+    {
+        if (in_array($this->contribution_status, [null, 'approved'], true)) {
+            return true;
+        }
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->id === $this->contributor_user_id || $user->hasRole('Super Admin');
     }
 
     public function getWaktuFormattedAttribute()

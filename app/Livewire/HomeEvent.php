@@ -14,7 +14,7 @@ class HomeEvent extends Component
         $query = Event::orderBy('date', 'asc');
 
         $query->where('date', '>=', now())
-            ->whereNotNull('moderated_at');
+            ->publiclyVisible();
         $events = $query->take(6)->get();
 
         return view('livewire.home-event', [

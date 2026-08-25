@@ -1,4 +1,8 @@
 <x-user-layout>
+    @section('title', $seo->title($assembly->nama_majelis))
+    @section('meta_description', $seo->description($assembly->deskripsi, 'Jadwal pengajian dan profil '.$assembly->nama_majelis.' di '.$assembly->alamat.', dipimpin '.$assembly->leader_name.'.'))
+    @section('meta_image', $seo->image($assembly->gambar, 'majelis'))
+
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
         <div class="xl:flex">
@@ -19,7 +23,7 @@
                             <div class="flex justify-between items-center mb-6">
                                 <!-- Title -->
                                 <header>
-                                    <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Detail Majelis</h1>
+                                    <p class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Detail Majelis</p>
                                 </header>
 
                                 <div>
@@ -156,11 +160,14 @@
                                                                         {{ $item->hari }}, {{ $item->waktu_formatted }} WITA
                                                                     </div>
                                                                     <!-- Avatars group -->
-                                                                    <a href="{{ route('guru-detail', $item->teacher) }}">
-                                                                        <div class="flex items-center">
-                                                                            <img class="rounded-full border-2 border-white w-8 h-8 object-cover dark:border-gray-800 box-content mr-1" src="{{ Storage::url($item->teacher->foto) }}" alt="{{ $item->teacher->name }}" /> <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->teacher->name }}</span>
-                                                                        </div>
-                                                                    </a>
+                                                                    {{-- schedules.teacher_id nullable; tanpa penjaga ini route('guru-detail', null) melempar 500. --}}
+                                                                    @if($item->teacher)
+                                                                        <a href="{{ route('guru-detail', $item->teacher) }}">
+                                                                            <div class="flex items-center">
+                                                                                <img class="rounded-full border-2 border-white w-8 h-8 object-cover dark:border-gray-800 box-content mr-1" src="{{ Storage::url($item->teacher->foto) }}" width="32" height="32" loading="lazy" alt="Foto {{ $item->teacher->name }}" /> <span class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $item->teacher->name }}</span>
+                                                                            </div>
+                                                                        </a>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -193,7 +200,12 @@
                                                                     <!-- Position -->
                                                                     <div>
                                                                         <div class="font-medium text-gray-800 dark:text-gray-100">
-                                                                            {{ $event->name }}
+                                                                            {{-- Acara "Khusus" tidak punya halaman detail publik. --}}
+                                                                            @if ($event->isPubliclyVisible())
+                                                                                <a href="{{ route('event-detail', $event->route_slug) }}" class="hover:text-emerald-600 dark:hover:text-emerald-400">{{ $event->name }}</a>
+                                                                            @else
+                                                                                {{ $event->name }}
+                                                                            @endif
                                                                         </div>
                                                                         <div class="flex flex-wrap items-center space-x-2">
                                                                             <div>{{ \Carbon\Carbon::parse($event->date)->locale('id')->translatedFormat('d F Y, H:i') }}</div>

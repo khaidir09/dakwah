@@ -1,2 +1,22 @@
+# Syaikhuna — https://syaikhuna.id
+#
+# robots.txt hanya mengatur perayapan, bukan keamanan. Kontrol sebenarnya ada
+# pada middleware `auth` dan `is_admin`.
+#
+# Yang di-Disallow di sini hanyalah area yang memang tertutup untuk anonim.
+# Halaman yang boleh dirayapi tetapi tidak boleh diindeks (mis. profil
+# kontributor) memakai <meta name="robots" content="noindex"> — memblokirnya di
+# sini justru membuat mesin telusur tidak pernah membaca tag itu.
+
 User-agent: *
-Disallow:
+Allow: /
+
+Disallow: /admin/
+Disallow: /kelola-
+Disallow: /kontributor/saya
+Disallow: /favorit-saya
+Disallow: /pustaka-saya
+Disallow: /pengaturan-akun
+Disallow: /registrasi-majelis
+
+Sitemap: https://syaikhuna.id/sitemap.xml

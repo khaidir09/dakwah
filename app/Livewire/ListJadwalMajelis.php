@@ -128,10 +128,10 @@ class ListJadwalMajelis extends Component
 
     public function render()
     {
-        $schedules_count = Schedule::count();
+        $schedules_count = Schedule::publiclyVisible()->count();
 
-        // Daftar utama: hanya jadwal mingguan, diurutkan per hari.
-        $query = Schedule::with('teacher', 'assembly')->withCount('notes')->weekly()->orderByRaw("
+        // Daftar utama: hanya jadwal mingguan yang sudah tampil publik, diurutkan per hari.
+        $query = Schedule::with('teacher', 'assembly')->withCount('notes')->weekly()->publiclyVisible()->orderByRaw("
             CASE hari
                 WHEN 'Senin' THEN 1
                 WHEN 'Selasa' THEN 2
