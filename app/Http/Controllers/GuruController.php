@@ -45,6 +45,7 @@ class GuruController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'biografi' => 'required|string',
+            'manaqib' => 'nullable|string',
             'source' => 'nullable|array',
             'source.*.name' => 'required_with:source|string',
             'source.*.url' => 'nullable|url',
@@ -62,6 +63,9 @@ class GuruController extends Controller
         ]);
 
         $dataToCreate = $validatedData;
+        $dataToCreate['manaqib'] = filled($validatedData['manaqib'] ?? null)
+            ? clean($validatedData['manaqib'])
+            : null;
 
         if ($request->hasFile('foto')) {
             $dataToCreate['foto'] = $this->imageService->upload(
@@ -122,6 +126,7 @@ class GuruController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'biografi' => 'required|string',
+            'manaqib' => 'nullable|string',
             'source' => 'nullable|array',
             'source.*.name' => 'required_with:source|string',
             'source.*.url' => 'nullable|url',
@@ -141,6 +146,9 @@ class GuruController extends Controller
         $guru = Teacher::findOrFail($id);
 
         $dataToUpdate = $validatedData;
+        $dataToUpdate['manaqib'] = filled($validatedData['manaqib'] ?? null)
+            ? clean($validatedData['manaqib'])
+            : null;
 
         if ($request->hasFile('foto')) {
             $dataToUpdate['foto'] = $this->imageService->upload(

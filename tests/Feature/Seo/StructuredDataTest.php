@@ -30,16 +30,21 @@ class StructuredDataTest extends PublicPageTestCase
     }
 
     /**
-     * Mengarang profil media sosial merusak kepercayaan entitas; sampai proyek
-     * benar-benar menyimpannya, properti ini harus absen.
+     * `sameAs` adalah klaim identitas: isinya harus URL profil penuh yang benar-
+     * benar dimiliki proyek, bukan nama akun. Yang dijaga di sini bentuknya,
+     * bukan sekadar keberadaannya.
      *
      * @test
      */
-    public function organization_tidak_mengarang_profil_media_sosial(): void
+    public function organization_menyebut_profil_resmi_sebagai_url_penuh(): void
     {
         $organization = $this->cari($this->blok($this->get(route('beranda'))->getContent()), 'Organization');
 
-        $this->assertArrayNotHasKey('sameAs', $organization);
+        $this->assertContains('https://www.instagram.com/syaikhuna.id', $organization['sameAs']);
+
+        foreach ($organization['sameAs'] as $profil) {
+            $this->assertStringStartsWith('https://', $profil, "[$profil] bukan URL absolut.");
+        }
     }
 
     /** @test */

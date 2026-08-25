@@ -71,6 +71,8 @@ Dikerjakan bertahap sesuai [RS13](#risiko-dan-trade-off).
 | 4 | `/sitemap.xml` dinamis + `robots.txt` | **Selesai** — 13 test di `tests/Feature/Seo/SitemapTest.php` + 3 di `RobotsTxtTest.php`; tanpa migration |
 | 5 | Halaman detail acara + structured data JSON-LD | **Selesai** — 15 test di `tests/Feature/Seo/EventDetailTest.php` + 11 di `StructuredDataTest.php`; **butuh migration** |
 | 6 | Performa (font lokal, lazy image, pagination) + heading & `alt` | **Selesai** — 11 test di `tests/Feature/Seo/PageStructureTest.php`; tanpa migration |
+| 7 | Meta robots & canonical query string (bagian 11) | **Selesai** — 7 test di `tests/Feature/Seo/NoindexTest.php`; tanpa migration |
+| 8 | Pemisahan konten `/guru` dan `/manaqib` (bagian 6) | **Selesai** — 11 test di `tests/Feature/Seo/ManaqibTest.php`; **butuh migration** |
 
 Tahap 1–2 tidak memerlukan migration dan tidak mengubah satu pun URL, sehingga aman dirilis lebih dulu. Tahap 3 adalah rilis pertama yang membawa migration dan mengubah URL — jalankan checklist [Verifikasi End-to-End](#verifikasi-end-to-end) sebelum melepasnya.
 
@@ -275,6 +277,16 @@ Nama route `beranda` **dipertahankan** agar seluruh `route('beranda')` di view d
 
 Pendekatan bersyarat ini penting: tanpa itu, menerbitkan dua URL berbeda sebelum kontennya benar-benar berbeda justru memperburuk duplikasi.
 
+#### Catatan implementasi
+
+- **"Kosong" diputuskan oleh `Teacher::hasManaqib()`, bukan `filled()`.** Editor WYSIWYG menyimpan `<p></p>` (kadang `<p>&nbsp;</p>`) untuk kolom yang diisi lalu dikosongkan lagi, sehingga `filled()` akan menganggapnya terisi — dan halaman yang tampak kosong ikut mengaku kanonik atas dirinya sendiri serta masuk sitemap sebagai duplikat. Method ini menilai teks setelah tag dibuang dan entitas didekode, mengikuti preseden rule `biografi` di `KontribusiGuruController::rules()`. Dikunci test dengan empat bentuk markup kosong.
+- **Konsekuensi pada sitemap:** karena `hasManaqib()` tidak dapat dinyatakan sebagai kondisi SQL, `SitemapController::teachers()` menyaring di PHP setelah query. Dapat diterima pada skala tabel `teachers`; ambang peringatan 10.000 URL sudah ada bila suatu saat tidak lagi memadai.
+- **`Person` hanya terbit di `/manaqib/{slug}` saat manaqib terisi**, dengan `url` menunjuk halaman itu sendiri (bukan `/guru/{slug}`) agar sejalan dengan canonical-nya. Selama kosong, halaman ini kanonik ke `/guru/{slug}` dan tidak menerbitkan `Person` sama sekali — dua entitas untuk satu ulama justru memperparah duplikasi.
+- **`StructuredDataService::person()` menerima parameter `$description` ketiga.** Tanpa itu, JSON-LD di halaman manaqib akan mengulang deskripsi dari `biografi` — menggemakan halaman guru persis di halaman yang sedang dibedakan darinya. Halaman manaqib kini mengirim isinya sendiri.
+- **Form memakai `<x-wysiwyg-editor>` yang sudah ada**, bukan menyalin toolbar TipTap sepanjang ~370 baris yang tertanam di `pages/guru/create.blade.php` dan `edit.blade.php`. Toolbar itu terikat pada id elemen tetap (`toggleBoldButton`, `wysiwyg-example`) sehingga secara teknis tidak dapat dipakai dua kali dalam satu halaman. Komponennya menurunkan seluruh id dari `name`, jadi aman berdampingan.
+- **`clean()` dijalankan saat menyimpan** di `GuruController::store()`/`update()` dan `KontribusiGuruController::store()`/`update()`, sesuai aturan keamanan proyek. Nilai kosong disimpan sebagai `NULL`, bukan string kosong, agar `hasManaqib()` punya satu bentuk "kosong" saja.
+- **`/manaqib` (halaman daftar) tidak diubah** — tetap menampilkan seluruh guru. Menyaringnya menjadi hanya yang bermanaqib akan menyembunyikan konten yang selama ini terlihat, dan itu keputusan produk, bukan SEO.
+
 ### 7. Halaman detail acara `/event/{id}-{slug}` (baru)
 
 Prasyarat untuk `Event` structured data — saat ini `Event` tidak punya halaman detail publik sama sekali (`routes/web.php:67` hanya list, dan `User\EventController::list()` bahkan tidak memuat data).
@@ -404,7 +416,7 @@ Dibuat `app/Services/StructuredDataService.php`. Semua output di-`json_encode` d
 #### Catatan implementasi
 
 - Dibagikan ke seluruh view sebagai `$schema` lewat `AppServiceProvider`, mengikuti pola `$seo`. `Organization` dicetak langsung di `layouts/user.blade.php`; halaman menambahkan skemanya sendiri lewat `@push('jsonld')`.
-- **`sameAs` dihilangkan.** Proyek ini tidak menyimpan URL media sosial resmi di mana pun — tidak di config, tidak di database. Mengarangnya justru merusak kepercayaan entitas di mata mesin telusur. Begitu tautan resminya tersedia, tambahkan sebagai konstanta di `StructuredDataService`, sejajar dengan `AREA_SERVED`.
+- **`sameAs` berisi satu profil resmi**: `https://www.instagram.com/syaikhuna.id`, disimpan sebagai konstanta `SOCIAL_PROFILES` di `StructuredDataService`, sejajar dengan `AREA_SERVED`. Semula properti ini dihilangkan karena proyek tidak menyimpan URL media sosial di mana pun, dan mengarangnya merusak kepercayaan entitas. Aturan yang berlaku saat menambah profil baru: hanya akun yang benar-benar dimiliki, dan selalu URL penuh — bukan nama akun. Dikunci test `organization_menyebut_profil_resmi_sebagai_url_penuh`.
 - **`Person` belum dipasang di `/manaqib/{slug}`.** Selama kolom `manaqib` belum ada (bagian 6), kedua halaman masih merender biografi yang sama dan sama-sama mengaku kanonik atas dirinya sendiri. Menerbitkan dua entitas `Person` untuk satu ulama di dua URL justru memperparah masalah duplikasi yang dokumen ini hendak selesaikan. Pasang bersamaan dengan canonical bersyarat di bagian 6.
 - **Keamanan output**: `json_encode` memakai `JSON_HEX_TAG` (plus `HEX_AMP`/`HEX_APOS`/`HEX_QUOT`), sehingga tag penutup `script` yang menyelinap lewat nama entitas tidak dapat memutus blok. Dikunci test `nama_yang_mengandung_tag_script_tidak_memecah_blok_json_ld`.
 - **Properti tanpa data dihilangkan**, bukan dikirim bernilai `null` — berlaku untuk `deathDate` (E15), `image`, `description`, `homeLocation`, dan `organizer`.
@@ -800,3 +812,4 @@ Ditemukan selama analisis, **tidak** ditangani dokumen ini, dicatat agar tidak h
 10. `app/Http/Controllers/User/EventController::list()` mengembalikan view tanpa memuat data apa pun; seluruh logika ada di `app/Livewire/ListEvent.php` — pola yang tidak konsisten dengan controller publik lain.
 11. **Blok "Who to follow" berisi pengguna palsu.** `components/community/feed-right-content.blade.php:32-77` merender empat pengguna fiktif ("User 01"–"User 05") dengan avatar template, dan komponen ini tampil di **setiap** halaman daftar publik serta beranda. Sisa template yang terlanjur jadi konten publik; menghapus atau menggantinya dengan majelis/guru sungguhan adalah keputusan produk.
 12. `components/home/list-majelis.blade.php` dan `components/home/jadwal-majelis.blade.php` tidak dirujuk dari mana pun — beranda memakai komponen Livewire. Keduanya masih menyimpan gambar dan `alt` template.
+13. **`GuruController` (admin) tidak memanggil `clean()` pada `biografi` saat menyimpan** (`:64`, `:147`) — pembersihan hanya terjadi saat dirender (`{!! clean(...) !!}`). `KontribusiGuruController` sudah benar. Bertentangan dengan aturan keamanan CLAUDE.md, meski dampaknya tertahan karena semua penampil memanggil `clean()`. Kolom `manaqib` sudah dibersihkan saat simpan di kedua controller; `biografi` sebaiknya menyusul dalam perubahan tersendiri.

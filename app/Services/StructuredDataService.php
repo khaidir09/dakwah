@@ -20,6 +20,15 @@ use Illuminate\Support\HtmlString;
  */
 class StructuredDataService
 {
+    /**
+     * Profil resmi Syaikhuna. Hanya akun yang benar-benar dimiliki proyek yang
+     * boleh masuk ke sini — `sameAs` adalah klaim identitas, dan mengarangnya
+     * merusak kepercayaan entitas di mata mesin telusur.
+     */
+    private const SOCIAL_PROFILES = [
+        'https://www.instagram.com/syaikhuna.id',
+    ];
+
     /** Wilayah layanan Syaikhuna. */
     private const AREA_SERVED = [
         'Kalimantan Selatan',
@@ -31,14 +40,10 @@ class StructuredDataService
 
     /**
      * Identitas penerbit; dipasang di seluruh halaman publik lewat layout.
-     *
-     * `sameAs` (profil media sosial resmi) belum disertakan karena proyek ini
-     * belum menyimpannya di mana pun — mengarang URL profil justru merusak
-     * kepercayaan entitas di mata mesin telusur.
      */
     public function organization(): HtmlString
     {
-        return $this->script([
+        $data = [
             '@context' => 'https://schema.org',
             '@type' => 'Organization',
             'name' => config('app.name', 'Syaikhuna'),
@@ -48,7 +53,13 @@ class StructuredDataService
                 fn (string $nama) => ['@type' => 'AdministrativeArea', 'name' => $nama],
                 self::AREA_SERVED
             ),
-        ]);
+        ];
+
+        if (self::SOCIAL_PROFILES !== []) {
+            $data['sameAs'] = self::SOCIAL_PROFILES;
+        }
+
+        return $this->script($data);
     }
 
     /**
@@ -68,7 +79,13 @@ class StructuredDataService
         ]);
     }
 
-    public function person(Teacher $teacher, ?string $canonicalPath = null): HtmlString
+    /**
+     * @param  string|null  $canonicalPath  URL entitas; default halaman guru.
+     * @param  string|null  $description  Sumber deskripsi; default `biografi`.
+     *                                    Halaman manaqib mengirim isi manaqib agar
+     *                                    deskripsinya tidak menggemakan halaman guru.
+     */
+    public function person(Teacher $teacher, ?string $canonicalPath = null, ?string $description = null): HtmlString
     {
         $data = [
             '@context' => 'https://schema.org',
@@ -78,8 +95,10 @@ class StructuredDataService
             'jobTitle' => 'Ulama',
         ];
 
-        if (filled($teacher->biografi)) {
-            $data['description'] = $this->seo->description($teacher->biografi);
+        $sumberDeskripsi = $description ?? $teacher->biografi;
+
+        if (filled($sumberDeskripsi)) {
+            $data['description'] = $this->seo->description($sumberDeskripsi);
         }
 
         if (filled($teacher->foto)) {

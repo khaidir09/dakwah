@@ -463,6 +463,19 @@
                             @error('biografi') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
                         </div>
 
+                        <div class="mt-6">
+                            <label class="block text-sm font-medium mb-2" for="manaqib">Manaqib</label>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                                Riwayat hidup mendalam: sanad keilmuan, guru-guru, karya, wafat, dan lokasi makam.
+                                Boleh dikosongkan &mdash; selama kosong, halaman <code>/manaqib/{slug}</code> menampilkan
+                                biografi di atas dan kanoniknya menunjuk ke <code>/guru/{slug}</code>.
+                            </p>
+                            {{-- Memakai komponen editor yang sama dengan form kontributor; toolbar
+                                 raksasa di atas terikat pada id tetap sehingga tidak bisa dipakai dua kali. --}}
+                            <x-wysiwyg-editor name="manaqib" :value="old('manaqib', $guru->manaqib)" />
+                            @error('manaqib') <div class="text-xs mt-1 text-red-500">{{ $message }}</div> @enderror
+                        </div>
+
                         <div class="mt-4">
                             <label class="block text-sm font-medium mb-2" for="maps">Maps (Embed)</label>
                             <textarea class="form-input w-full @error('maps') is-invalid @enderror" name="maps" id="maps" cols="30" rows="3">{{ old('maps', $guru->maps) }}</textarea>

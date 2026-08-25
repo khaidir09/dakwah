@@ -104,21 +104,34 @@ class SitemapController extends Controller
     }
 
     /**
-     * Manaqib (`/manaqib/{slug}`) belum masuk sitemap: kolom `manaqib` belum ada,
-     * sehingga halaman itu masih merender `biografi` yang sama persis dengan
-     * `/guru/{slug}` — duplikat yang tidak boleh didaftarkan.
+     * `/manaqib/{slug}` hanya didaftarkan bila kolom `manaqib` benar-benar terisi.
+     * Selama kosong, halaman itu merender `biografi` yang sama persis dengan
+     * `/guru/{slug}` dan kanoniknya menunjuk ke sana — duplikat yang tidak boleh
+     * masuk sitemap.
      */
     private function teachers(): array
     {
-        return Teacher::query()
+        $teachers = Teacher::query()
             ->publiclyVisible()
             ->whereNotNull('slug')
             ->where('slug', '!=', '')
-            ->select('id', 'slug', 'updated_at')
+            ->select('id', 'slug', 'manaqib', 'updated_at')
             ->orderBy('id')
-            ->get()
-            ->map(fn (Teacher $teacher) => $this->entry('guru-detail', $teacher->slug, $teacher->updated_at, 'monthly'))
-            ->all();
+            ->get();
+
+        $entri = [];
+
+        foreach ($teachers as $teacher) {
+            $entri[] = $this->entry('guru-detail', $teacher->slug, $teacher->updated_at, 'monthly');
+
+            // hasManaqib() menilai teks setelah tag dibuang, jadi tidak dapat
+            // dinyatakan sebagai kondisi SQL.
+            if ($teacher->hasManaqib()) {
+                $entri[] = $this->entry('manaqib-detail', $teacher->slug, $teacher->updated_at, 'monthly');
+            }
+        }
+
+        return $entri;
     }
 
     private function assemblies(): array

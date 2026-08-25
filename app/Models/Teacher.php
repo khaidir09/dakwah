@@ -113,6 +113,21 @@ class Teacher extends Model
     }
 
     /**
+     * Apakah manaqib benar-benar berisi teks yang terbaca.
+     *
+     * Bukan sekadar `filled()`: editor WYSIWYG menyimpan `<p></p>` (kadang berisi
+     * `&nbsp;`) untuk kolom yang dikosongkan lagi. Tanpa pemeriksaan ini, halaman
+     * manaqib yang tampak kosong akan mengaku kanonik atas dirinya sendiri dan
+     * masuk sitemap sebagai duplikat `/guru/{slug}`.
+     */
+    public function hasManaqib(): bool
+    {
+        $teks = html_entity_decode(strip_tags((string) $this->manaqib), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        return (string) preg_replace('/[\s\x{00A0}]+/u', '', $teks) !== '';
+    }
+
+    /**
      * Konten yang belum/tidak disetujui hanya boleh dibuka oleh kontributor pemiliknya
      * (sebagai pratinjau) dan Super Admin. Untuk publik, halamannya harus 404.
      */

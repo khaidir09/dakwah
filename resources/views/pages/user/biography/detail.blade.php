@@ -1,8 +1,27 @@
 <x-user-layout>
+    @php
+        $manaqibTerisi = $biography->hasManaqib();
+        $isiManaqib = $manaqibTerisi ? $biography->manaqib : $biography->biografi;
+
+        // Selama manaqib kosong, halaman ini merender biografi yang sama persis
+        // dengan /guru/{slug}. Kanoniknya menunjuk ke sana dan URL-nya tidak
+        // didaftarkan di sitemap; begitu manaqib terisi, halaman ini berdiri sendiri.
+        $jalurKanonik = $manaqibTerisi
+            ? route('manaqib-detail', $biography->slug, false)
+            : route('guru-detail', $biography->slug, false);
+    @endphp
+
     @section('title', $seo->title('Manaqib '.$biography->name))
-    @section('meta_description', $seo->description($biography->biografi, 'Manaqib dan riwayat hidup '.$biography->name.'.'))
+    @section('meta_description', $seo->description($isiManaqib, 'Manaqib dan riwayat hidup '.$biography->name.'.'))
     @section('meta_image', $seo->image($biography->foto, 'manaqib'))
     @section('og_type', 'profile')
+    @section('canonical', $seo->canonical($jalurKanonik))
+
+    @if($manaqibTerisi)
+        @push('jsonld')
+            {{ $schema->person($biography, $jalurKanonik, $isiManaqib) }}
+        @endpush
+    @endif
 
     <div class="px-4 sm:px-6 lg:px-8 py-8 md:py-0 w-full max-w-[96rem] mx-auto">
 
@@ -105,7 +124,7 @@
 
                             <!-- Description -->
                             <div class="format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-300 text-justify">
-                                {!! clean($biography->biografi) !!}
+                                {!! clean($isiManaqib) !!}
                             </div>
 
                             @if(!empty($biography->source) && is_array($biography->source))

@@ -40,6 +40,16 @@
         </div>
 
         <div class="mt-6">
+            <label class="block text-sm font-medium mb-2">Manaqib</label>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                Riwayat hidup mendalam: sanad keilmuan, guru-guru, karya, wafat, dan lokasi makam.
+                Boleh dikosongkan — selama kosong, halaman manaqib menampilkan biografi di atas.
+            </p>
+            <x-wysiwyg-editor name="manaqib" :value="old('manaqib', $guru?->manaqib)" />
+            @error('manaqib')<div class="text-xs mt-1 text-red-500">{{ $message }}</div>@enderror
+        </div>
+
+        <div class="mt-6">
             <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Domisili Guru</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>

@@ -30,6 +30,9 @@ class KontribusiGuruController extends Controller
         );
 
         $validated['biografi'] = clean($validated['biografi']);
+        $validated['manaqib'] = filled($validated['manaqib'] ?? null)
+            ? clean($validated['manaqib'])
+            : null;
 
         if ($request->hasFile('foto')) {
             $validated['foto'] = $this->imageService->upload($request->file('foto'), 'guru', 'cover', 600, 600);
@@ -85,6 +88,9 @@ class KontribusiGuruController extends Controller
         );
 
         $validated['biografi'] = clean($validated['biografi']);
+        $validated['manaqib'] = filled($validated['manaqib'] ?? null)
+            ? clean($validated['manaqib'])
+            : null;
 
         if ($request->hasFile('foto')) {
             $validated['foto'] = $this->imageService->upload($request->file('foto'), 'guru', 'cover', 600, 600, 80, $guru->foto);
@@ -165,6 +171,7 @@ class KontribusiGuruController extends Controller
                     }
                 },
             ],
+            'manaqib' => 'nullable|string|max:65000',
             'foto' => 'nullable|image|max:2048',
             'maps' => 'nullable|string',
             'tahun_lahir' => 'nullable|integer',
