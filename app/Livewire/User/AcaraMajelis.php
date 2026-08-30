@@ -26,7 +26,10 @@ class AcaraMajelis extends Component
     {
         // Pastikan ID ada
         if ($this->event_id_to_delete) {
-            $event = Event::find($this->event_id_to_delete);
+            // Wajib lewat query ter-scope: `event_id_to_delete` berasal dari klien,
+            // sehingga `Event::find()` polos membuat siapa pun yang login dapat
+            // menghapus acara milik majelis lain.
+            $event = $this->ownedEvents()->find($this->event_id_to_delete);
 
             if ($event) {
                 $event->delete();
@@ -42,20 +45,28 @@ class AcaraMajelis extends Component
 
     public function render()
     {
-        $events_count = Event::whereHas('assembly', function ($assemblyQuery) {
-            $assemblyQuery->where('user_id', Auth::user()->id);
-        })->count();
-        $query = Event::with('assembly')
-            ->whereHas('assembly', function ($assemblyQuery) {
-                $assemblyQuery->where('user_id', Auth::user()->id);
-            })->orderBy('date', 'asc');
+        $events_count = $this->ownedEvents()->count();
 
-        // Ambil hasil akhir dengan paginasi
-        $events = $query->simplePaginate($this->paginate);
+        $events = $this->ownedEvents()
+            ->with('assembly')
+            ->orderBy('date', 'asc')
+            ->simplePaginate($this->paginate);
 
         return view('livewire.user.acara-majelis', [
             'events_count' => $events_count,
             'events' => $events
         ]);
+    }
+
+    /**
+     * Satu-satunya definisi "acara milik saya" di komponen ini: acara yang
+     * majelisnya dimiliki pengguna yang sedang login. Dipakai untuk menampilkan
+     * maupun menghapus, supaya keduanya tidak bisa lagi berbeda.
+     */
+    private function ownedEvents()
+    {
+        return Event::whereHas('assembly', function ($assemblyQuery) {
+            $assemblyQuery->where('user_id', Auth::id());
+        });
     }
 }
