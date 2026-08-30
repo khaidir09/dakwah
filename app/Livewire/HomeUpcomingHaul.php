@@ -71,7 +71,7 @@ class HomeUpcomingHaul extends Component
         $months = [
             'muharram' => 1,
             'safar' => 2,
-            'rabiul awal' => 3,
+            'rabiulawal' => 3,
             'rabiul akhir' => 4,
             'jumadil awal' => 5,
             'jumadil akhir' => 6,
