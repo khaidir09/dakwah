@@ -91,7 +91,7 @@ Route::get('/artikel/{slug}/download', [\App\Http\Controllers\User\ArticleContro
 Route::get('/jadwal-ramadhan', [\App\Http\Controllers\User\RamadhanController::class, 'index'])->name('ramadhan-list');
 Route::get('/jadwal-ramadhan/{id}', [\App\Http\Controllers\User\RamadhanController::class, 'detail'])->name('ramadhan-detail');
 
-Route::middleware(['noindex', 'auth'])->group(function () {
+Route::middleware(['noindex', 'auth', 'auth.web_session'])->group(function () {
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
     })->name('verification.notice');
@@ -132,7 +132,7 @@ Route::get('/get-villages/{district_code}', [DependantDropdownController::class,
 Route::get('/catatan-pengajian', [\App\Http\Controllers\User\CatatanPengajianController::class, 'index'])->name('catatan-pengajian.list');
 Route::get('/catatan-pengajian/{id}', [\App\Http\Controllers\User\CatatanPengajianController::class, 'show'])->name('catatan-pengajian.detail');
 
-Route::middleware(['noindex', 'auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['noindex', 'auth:sanctum', 'auth.web_session', 'verified'])->group(function () {
     Route::get('/reward-klaim/{claim}/bukti', [\App\Http\Controllers\RewardProofController::class, 'show'])->name('reward-klaim.bukti');
 
     // Pustaka berbayar
@@ -226,7 +226,7 @@ Route::middleware(['noindex', 'auth:sanctum', 'verified'])->group(function () {
     });
 });
 
-Route::middleware(['noindex', 'auth:sanctum', 'verified', 'is_admin'])->prefix('admin')->group(function () {
+Route::middleware(['noindex', 'auth:sanctum', 'auth.web_session', 'verified', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth:sanctum', 'verified'])->name('dashboard');
     Route::resource('/majelis', MajelisController::class);
     Route::resource('/jadwal-majelis', JadwalMajelisController::class);

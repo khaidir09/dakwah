@@ -102,7 +102,7 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'middleware' => ['web', \App\Http\Middleware\ForceRememberLogin::class],
 
     /*
     |--------------------------------------------------------------------------

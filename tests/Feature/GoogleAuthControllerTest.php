@@ -4,10 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Mockery;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
-use Mockery;
 
 class GoogleAuthControllerTest extends TestCase
 {
@@ -111,5 +112,82 @@ class GoogleAuthControllerTest extends TestCase
         $response->assertSessionHas('incomplete_profile', true);
 
         $this->assertDatabaseHas('users', ['email' => 'new@example.com']);
+    }
+
+    /**
+     * Menyiapkan mock Socialite untuk satu akun Google.
+     */
+    private function mockGoogleUser(string $email, string $name = 'Test User', int $id = 1234567890): void
+    {
+        $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
+        $abstractUser->shouldReceive('getId')
+            ->andReturn($id)
+            ->shouldReceive('getEmail')
+            ->andReturn($email)
+            ->shouldReceive('getName')
+            ->andReturn($name);
+
+        $abstractUser->id = $id;
+        $abstractUser->email = $email;
+        $abstractUser->name = $name;
+
+        $provider = Mockery::mock('Laravel\Socialite\Contracts\Provider');
+        $provider->shouldReceive('user')->andReturn($abstractUser);
+
+        Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
+    }
+
+    public function test_login_google_menerbitkan_cookie_remember(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'gender' => 'Laki-laki',
+            'birth_year' => 1990,
+            'province_code' => '12',
+            'remember_token' => null,
+        ]);
+
+        $this->mockGoogleUser('test@example.com');
+
+        $response = $this->get('auth/google');
+
+        $this->assertAuthenticatedAs($user);
+        $response->assertCookie(Auth::guard('web')->getRecallerName());
+        $this->assertNotNull($user->fresh()->remember_token);
+    }
+
+    public function test_login_google_menerbitkan_cookie_remember_untuk_pengguna_baru(): void
+    {
+        $this->mockGoogleUser('baru@example.com', 'Pengguna Baru');
+
+        $response = $this->get('auth/google');
+
+        $this->assertAuthenticated();
+        $response->assertCookie(Auth::guard('web')->getRecallerName());
+        $this->assertNotNull(User::where('email', 'baru@example.com')->sole()->remember_token);
+    }
+
+    /**
+     * Jalur Google tidak melewati PrepareAuthenticatedSession milik Fortify, jadi
+     * regenerasi ID sesi harus dilakukan controller sendiri — kalau tidak, ID sesi
+     * pra-login terbawa ke sesi terautentikasi yang kini berumur panjang.
+     */
+    public function test_login_google_meregenerasi_id_sesi(): void
+    {
+        User::factory()->create([
+            'email' => 'test@example.com',
+            'gender' => 'Laki-laki',
+            'birth_year' => 1990,
+            'province_code' => '12',
+        ]);
+
+        $this->mockGoogleUser('test@example.com');
+
+        $this->startSession();
+        $idSebelum = session()->getId();
+
+        $this->get('auth/google');
+
+        $this->assertNotSame($idSebelum, session()->getId());
     }
 }
