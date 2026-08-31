@@ -98,6 +98,17 @@
                             </div>
                         </a>
                     </li>
+                    <!-- Pengaturan Poster AI -->
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(request()->routeIs('admin.poster-settings.*')){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
+                        <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('admin.poster-settings.*')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('admin.poster-settings.index') }}">
+                            <div class="flex items-center">
+                                <svg class="shrink-0 fill-current @if(request()->routeIs('admin.poster-settings.*')){{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                    <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm0 14H2V2h12v12ZM5 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm8 7H3l2.5-4 2 2.5L10 6l3 6Z" />
+                                </svg>
+                                <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pengaturan Poster AI</span>
+                            </div>
+                        </a>
+                    </li>
                     <!-- Pengguna -->
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(in_array(Request::segment(1), ['dashboard'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
                         <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['dashboard'])){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('dashboard') }}">

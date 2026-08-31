@@ -58,4 +58,13 @@ return [
         'admin_number' => env('WHATSAPP_ADMIN_NUMBER'),
     ],
 
+    'gemini' => [
+        // Generative Language API (Google AI Studio) untuk poster acara.
+        'api_key' => env('GEMINI_API_KEY'),
+        'image_model' => env('GEMINI_IMAGE_MODEL', 'gemini-2.5-flash-image'),
+        // Detik. Harus lebih kecil dari max_execution_time PHP, kalau tidak
+        // proses mati sebelum timeout HTTP tercapai dan kegagalan tidak tercatat.
+        'timeout' => (int) env('GEMINI_TIMEOUT', 60),
+    ],
+
 ];

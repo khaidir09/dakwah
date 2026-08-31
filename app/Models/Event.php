@@ -6,6 +6,7 @@ use App\Models\Concerns\HasRouteSlug;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\Village;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
 
@@ -63,6 +64,35 @@ class Event extends Model
     public function contributor()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function posterGenerations()
+    {
+        return $this->hasMany(EventPosterGeneration::class);
+    }
+
+    /**
+     * Poster hasil AI disimpan dua varian (`events/large/...` dan `events/thumb/...`),
+     * sedangkan poster yang diunggah manual — termasuk seluruh data lama — hanya satu
+     * berkas flat `events/...`. Accessor ini menyerap perbedaan itu agar view tidak
+     * perlu tahu asal posternya.
+     */
+    public function getImageThumbUrlAttribute(): ?string
+    {
+        if (! $this->image) {
+            return null;
+        }
+
+        return Storage::url(
+            str_contains($this->image, '/large/')
+                ? str_replace('/large/', '/thumb/', $this->image)
+                : $this->image
+        );
+    }
+
+    public function getImageLargeUrlAttribute(): ?string
+    {
+        return $this->image ? Storage::url($this->image) : null;
     }
 
     /**

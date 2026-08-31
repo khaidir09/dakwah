@@ -78,6 +78,8 @@
                                 @enderror
                             </div>
 
+                            <x-poster-ai-generator :quota="$posterQuota" />
+
                         </div>
                     </div>
 

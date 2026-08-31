@@ -85,6 +85,8 @@
                                     <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <x-poster-ai-generator :quota="$posterQuota" :event-id="$event->id" />
                         </div>
                     </div>
 

@@ -65,6 +65,8 @@
                 @error('image')<div class="text-xs mt-1 text-red-500">{{ $message }}</div>@enderror
             </div>
 
+            <x-poster-ai-generator :quota="$posterQuota" :event-id="$acara?->id" />
+
             {{-- Nama lokasi manual (disembunyikan jika majelis dipilih) --}}
             <div id="location-wrapper">
                 <label class="block text-sm font-medium mb-2" for="location">Nama Lokasi (Tempat) <span class="text-red-500">*</span></label>

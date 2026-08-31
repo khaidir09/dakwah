@@ -10,13 +10,13 @@
         <article class="flex flex-col sm:flex-row bg-white dark:bg-gray-800 shadow-xs rounded-xl overflow-hidden">
             <!-- Image -->
             <div class="block w-full h-48 sm:h-auto sm:w-56 xl:sidebar-expanded:w-40 2xl:sidebar-expanded:w-56 shrink-0 group relative">
-                <img class="w-full h-full cursor-pointer transition-opacity group-hover:opacity-90"
-                    src="{{ Storage::url($event->image) }}"
+                <img class="w-full h-full object-cover cursor-pointer transition-opacity group-hover:opacity-90"
+                    src="{{ $event->image_thumb_url }}"
                     width="220"
                     height="236"
                     loading="{{ $loop->first ? 'eager' : 'lazy' }}"
                     alt="{{ $event->name }}"
-                    @click.prevent="previewImage = '{{ Storage::url($event->image) }}'; previewOpen = true"
+                    @click.prevent="previewImage = '{{ $event->image_large_url }}'; previewOpen = true"
                 />
                 <!-- Search icon overlay hint -->
                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20 pointer-events-none">

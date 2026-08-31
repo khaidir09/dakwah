@@ -46,8 +46,10 @@
 
                             <article class="bg-white dark:bg-gray-800 shadow-sm rounded-xl overflow-hidden">
                                 @if ($event->image)
-                                    <img class="w-full max-h-[28rem] object-cover"
-                                        src="{{ Storage::url($event->image) }}"
+                                    {{-- object-contain, bukan cover: poster potret 9:16 harus terbaca utuh,
+                                         bukan terpotong jadi pita horizontal. --}}
+                                    <img class="w-full max-h-[36rem] object-contain bg-gray-100 dark:bg-gray-900"
+                                        src="{{ $event->image_large_url }}"
                                         alt="Poster acara {{ $event->name }}">
                                 @endif
 

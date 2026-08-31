@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Assembly;
 use App\Models\Contribution;
 use App\Models\Event;
+use App\Services\GeminiPosterService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,11 +17,14 @@ use Laravolt\Indonesia\Models\Province;
 
 class KontribusiAcaraController extends Controller
 {
+    public function __construct(private GeminiPosterService $poster) {}
+
     public function create()
     {
         return view('pages.kontributor.acara.create', [
             'majelisList' => $this->eligibleAssemblies(),
             'provinces' => $this->provinces(),
+            'posterQuota' => $this->poster->quotaFor(Auth::user()),
         ]);
     }
 
@@ -43,7 +47,18 @@ class KontribusiAcaraController extends Controller
             $data['image'] = $path;
         }
 
+        // Poster AI hanya dipakai bila kontributor tidak mengunggah berkas sendiri.
+        $generation = $request->hasFile('image')
+            ? null
+            : $this->poster->claimGeneration($request->input('generation_id'), Auth::id());
+
+        if ($generation) {
+            $data['image'] = $generation->image_path;
+        }
+
         $acara = Event::create($data);
+
+        $generation?->update(['event_id' => $acara->id]);
 
         Contribution::create([
             'user_id' => Auth::id(),
@@ -64,6 +79,7 @@ class KontribusiAcaraController extends Controller
             'acara' => $acara,
             'majelisList' => $this->eligibleAssemblies(),
             'provinces' => $this->provinces(),
+            'posterQuota' => $this->poster->quotaFor(Auth::user()),
         ]);
     }
 
@@ -84,6 +100,14 @@ class KontribusiAcaraController extends Controller
 
         if ($path = $this->handleImageUpload($request, $acara->image)) {
             $data['image'] = $path;
+        } else {
+            $generation = $this->poster->claimGeneration($request->input('generation_id'), Auth::id(), $acara->id);
+
+            if ($generation && $generation->image_path !== $acara->image) {
+                $this->poster->deletePoster($acara->image);
+                $data['image'] = $generation->image_path;
+                $generation->update(['event_id' => $acara->id]);
+            }
         }
 
         if ($acara->status === 'rejected') {
@@ -209,9 +233,8 @@ class KontribusiAcaraController extends Controller
         $img = Image::read($request->file('image'))->scaleDown(800)->toWebp(80);
         Storage::disk('public')->put('events/'.$filename, (string) $img);
 
-        if ($oldImagePath) {
-            Storage::disk('public')->delete($oldImagePath);
-        }
+        // Poster lama bisa berasal dari generator AI yang menyimpan varian thumb.
+        $this->poster->deletePoster($oldImagePath);
 
         return 'events/'.$filename;
     }

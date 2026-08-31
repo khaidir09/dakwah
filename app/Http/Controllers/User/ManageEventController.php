@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Event;
 use App\Models\Assembly;
+use App\Services\GeminiPosterService;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -15,6 +16,8 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class ManageEventController extends Controller
 {
+    public function __construct(private GeminiPosterService $poster) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -28,7 +31,9 @@ class ManageEventController extends Controller
      */
     public function create()
     {
-        return view('pages.user.kelola-acara.tambah-acara');
+        return view('pages.user.kelola-acara.tambah-acara', [
+            'posterQuota' => $this->poster->quotaFor(Auth::user()),
+        ]);
     }
 
     /**
@@ -84,8 +89,19 @@ class ManageEventController extends Controller
             $dataToCreate['image'] = 'events/' . $filename;
         }
 
+        // Poster AI hanya dipakai bila pengguna tidak mengunggah berkas sendiri.
+        $generation = $request->hasFile('image')
+            ? null
+            : $this->poster->claimGeneration($request->input('generation_id'), Auth::id());
+
+        if ($generation) {
+            $dataToCreate['image'] = $generation->image_path;
+        }
+
         // 6. Buat record baru di database
         $event = Event::create($dataToCreate);
+
+        $generation?->update(['event_id' => $event->id]);
 
         Contribution::create([
             'user_id' => Auth::id(),
@@ -115,7 +131,10 @@ class ManageEventController extends Controller
         if (!$assembly || $event->assembly_id !== $assembly->id) {
             abort(403, 'Unauthorized');
         }
-        return view('pages.user.kelola-acara.edit-acara', compact('event'));
+        return view('pages.user.kelola-acara.edit-acara', [
+            'event' => $event,
+            'posterQuota' => $this->poster->quotaFor(Auth::user()),
+        ]);
     }
 
     /**
@@ -154,11 +173,9 @@ class ManageEventController extends Controller
             // B. Simpan Gambar Baru
             Storage::disk('public')->put('events/' . $filename, (string) $thumb);
 
-            // C. Hapus Gambar Lama (PENTING)
-            if ($event->image) {
-                // Hapus file 'large' (sesuai path di database)
-                Storage::disk('public')->delete($event->image);
-            }
+            // C. Hapus Gambar Lama (PENTING) — termasuk varian thumb bila poster
+            // lama berasal dari generator AI.
+            $this->poster->deletePoster($event->image);
 
             // D. Update array data dengan path baru
             $dataToUpdate['image'] = 'events/' . $filename;
@@ -166,6 +183,14 @@ class ManageEventController extends Controller
             // Jika tidak ada file baru, hapus 'image' dari array
             // agar tidak menimpa file yang ada dengan nilai null.
             unset($dataToUpdate['image']);
+
+            $generation = $this->poster->claimGeneration($request->input('generation_id'), Auth::id(), $event->id);
+
+            if ($generation && $generation->image_path !== $event->image) {
+                $this->poster->deletePoster($event->image);
+                $dataToUpdate['image'] = $generation->image_path;
+                $generation->update(['event_id' => $event->id]);
+            }
         }
 
         // 7. Update data event

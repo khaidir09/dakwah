@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ModerasiController;
+use App\Http\Controllers\Admin\PosterSettingController;
 use App\Http\Controllers\Admin\RewardClaimController as AdminRewardClaimController;
 use App\Http\Controllers\Admin\RewardSettingController;
 use App\Http\Controllers\Admin\XpSettingController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\RamadhanController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\EventController as UserEventController;
+use App\Http\Controllers\User\EventPosterController;
 use App\Http\Controllers\User\GuruController as UserGuruController;
 use App\Http\Controllers\User\JadwalMajelisController as UserJadwalMajelisController;
 use App\Http\Controllers\User\KontribusiAcaraController;
@@ -147,6 +149,12 @@ Route::middleware(['noindex', 'auth:sanctum', 'verified'])->group(function () {
     Route::get('/kelola-jadwal-majelis/{id}/edit', [ManagedMajelisController::class, 'editSchedule'])->name('kelola-jadwal-majelis.edit');
     Route::put('/kelola-jadwal-majelis/{id}', [ManagedMajelisController::class, 'updateSchedule'])->name('kelola-jadwal-majelis.update');
 
+    // Pembuatan poster acara dengan AI. throttle adalah pagar terhadap klik beruntun
+    // dan berlaku di atas kuota bulanan, bukan menggantikannya.
+    Route::post('/poster-acara/generate', [EventPosterController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('poster-acara.generate');
+
     Route::get('/kelola-acara-majelis', [ManageEventController::class, 'index'])->name('kelola-acara-majelis');
     Route::get('/kelola-acara-majelis/create', [ManageEventController::class, 'create'])->name('kelola-acara-majelis.create');
     Route::post('/kelola-acara-majelis', [ManageEventController::class, 'store'])->name('kelola-acara-majelis.store');
@@ -245,6 +253,9 @@ Route::middleware(['noindex', 'auth:sanctum', 'verified', 'is_admin'])->prefix('
 
     Route::get('/pengaturan/reward', [RewardSettingController::class, 'index'])->name('admin.reward-settings.index');
     Route::put('/pengaturan/reward', [RewardSettingController::class, 'update'])->name('admin.reward-settings.update');
+
+    Route::get('/pengaturan/poster', [PosterSettingController::class, 'index'])->name('admin.poster-settings.index');
+    Route::put('/pengaturan/poster', [PosterSettingController::class, 'update'])->name('admin.poster-settings.update');
 
     Route::get('/reward-klaim', [AdminRewardClaimController::class, 'index'])->name('admin.reward-klaim.index');
     Route::put('/reward-klaim/{claim}/paid', [AdminRewardClaimController::class, 'markPaid'])->name('admin.reward-klaim.paid');
