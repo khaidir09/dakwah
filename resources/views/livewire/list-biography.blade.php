@@ -31,7 +31,7 @@
                                 </a>
                             </header>
                             <div class="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3">
-                                {!! strip_tags($bio->biografi) !!}
+                                {!! strip_tags($bio->manaqib) !!}
                             </div>
                             <a href="{{ route('manaqib-detail', $bio->slug) }}" class="inline-flex items-center text-sm font-medium text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400">
                                 Selengkapnya &rarr;
