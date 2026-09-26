@@ -54,7 +54,7 @@
                             @endif
 
                             <div class="format lg:format-lg dark:format-invert format-blue max-w-none prose dark:prose-invert text-gray-600 dark:text-gray-300 text-justify">
-                                {!! clean($post->content) !!}
+                                {!! clean($post->content, 'rich_text') !!}
                             </div>
 
                             @if ($post->source && is_array($post->source) && count($post->source) > 0)

@@ -48,9 +48,8 @@
     const toolbar = document.getElementById(editorId + '-toolbar');
 
     if (textarea && holder) {
-        // Toolbar sengaja dibatasi pada format yang lolos HTML.Allowed di config/purifier.php.
-        // Heading, blockquote, hr, highlight, code, gambar, dan iframe akan dibuang clean()
-        // saat dirender, jadi tombolnya tidak disediakan.
+        // Toolbar sengaja dibuat sederhana untuk kontributor: hanya format dasar. Format
+        // lanjutan (heading, blockquote, gambar, YouTube, dll.) tersedia di komponen rich-editor.
         const editor = new Editor({
             element: holder,
             extensions: [

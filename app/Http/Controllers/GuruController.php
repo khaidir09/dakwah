@@ -64,7 +64,7 @@ class GuruController extends Controller
 
         $dataToCreate = $validatedData;
         $dataToCreate['manaqib'] = filled($validatedData['manaqib'] ?? null)
-            ? clean($validatedData['manaqib'])
+            ? clean($validatedData['manaqib'], 'rich_text')
             : null;
 
         if ($request->hasFile('foto')) {
@@ -147,7 +147,7 @@ class GuruController extends Controller
 
         $dataToUpdate = $validatedData;
         $dataToUpdate['manaqib'] = filled($validatedData['manaqib'] ?? null)
-            ? clean($validatedData['manaqib'])
+            ? clean($validatedData['manaqib'], 'rich_text')
             : null;
 
         if ($request->hasFile('foto')) {

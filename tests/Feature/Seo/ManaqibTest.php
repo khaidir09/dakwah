@@ -181,6 +181,52 @@ class ManaqibTest extends PublicPageTestCase
     }
 
     /** @test */
+    public function format_editor_lengkap_bertahan_saat_manaqib_disimpan(): void
+    {
+        $this->actingAs($this->superAdmin())
+            ->post(route('guru.store'), [
+                'name' => 'Guru Manaqib Berformat',
+                'biografi' => '<p>Biografi.</p>',
+                'manaqib' => '<h2 style="text-align: center">Sanad Keilmuan</h2>'
+                    .'<blockquote><p>Kutipan nasihat.</p></blockquote><hr>'
+                    .'<p><s>coret</s> <mark style="background-color: #ffc078">stabilo</mark> <code>kode</code></p>'
+                    .'<div data-youtube-video=""><iframe src="https://www.youtube.com/embed/KaLxCiilHns"></iframe></div>'
+                    .'<iframe src="https://evil.example/embed/x"></iframe>'
+                    .'<p onclick="alert(1)" style="position: fixed">z</p><script>alert(1)</script>',
+            ])
+            ->assertRedirect();
+
+        $manaqib = Teacher::where('name', 'Guru Manaqib Berformat')->firstOrFail()->manaqib;
+
+        $this->assertStringContainsString('<h2 style="text-align:center;">Sanad Keilmuan</h2>', $manaqib);
+        $this->assertStringContainsString('<blockquote>', $manaqib);
+        $this->assertStringContainsString('<hr', $manaqib);
+        $this->assertStringContainsString('<s>coret</s>', $manaqib);
+        $this->assertStringContainsString('<mark style="background-color:#ffc078;">stabilo</mark>', $manaqib);
+        $this->assertStringContainsString('<code>kode</code>', $manaqib);
+        $this->assertStringContainsString('src="https://www.youtube.com/embed/KaLxCiilHns"', $manaqib);
+
+        $this->assertStringNotContainsString('evil.example', $manaqib);
+        $this->assertStringNotContainsString('onclick', $manaqib);
+        $this->assertStringNotContainsString('position', $manaqib);
+        $this->assertStringNotContainsString('<script>', $manaqib);
+    }
+
+    /** @test */
+    public function heading_manaqib_tampil_di_halaman_publik(): void
+    {
+        $guru = $this->makeTeacher([
+            'name' => 'Guru Heading Manaqib',
+            'manaqib' => '<h2>Guru-guru Beliau</h2><blockquote><p>Nasihat beliau.</p></blockquote>',
+        ]);
+
+        $this->get(route('manaqib-detail', $guru->slug))
+            ->assertOk()
+            ->assertSee('<h2>Guru-guru Beliau</h2>', false)
+            ->assertSee('<blockquote>', false);
+    }
+
+    /** @test */
     public function manaqib_boleh_dikosongkan_admin(): void
     {
         $this->actingAs($this->superAdmin())

@@ -30,6 +30,17 @@ return [
             'AutoFormat.AutoParagraph' => true,
             'AutoFormat.RemoveEmpty'   => true,
         ],
+        // Untuk konten dari editor TipTap lengkap (biografi, manaqib, tulisan): heading,
+        // blockquote, hr, code, coret, stabilo, dan embed YouTube ikut dipertahankan.
+        'rich_text' => [
+            'HTML.Doctype'             => 'HTML 4.01 Transitional',
+            'HTML.Allowed'             => 'div,b,strong,i,em,u,s,mark[style],a[href|title],ul,ol,li,p[style],br,span[style],img[width|height|alt|src],h1[style],h2[style],h3[style],h4[style],h5[style],h6[style],blockquote,hr,code,pre,iframe[src|width|height|allowfullscreen]',
+            'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,padding-left,color,background-color,text-align',
+            'HTML.SafeIframe'          => true,
+            'URI.SafeIframeRegexp'     => '%^(https?:)?//(www\.)?(youtube\.com|youtube-nocookie\.com)/embed/%',
+            'AutoFormat.AutoParagraph' => true,
+            'AutoFormat.RemoveEmpty'   => true,
+        ],
         'test'    => [
             'Attr.EnableID' => 'true',
         ],

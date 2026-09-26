@@ -29,9 +29,9 @@ class KontribusiGuruController extends Controller
             $this->messages()
         );
 
-        $validated['biografi'] = clean($validated['biografi']);
+        $validated['biografi'] = clean($validated['biografi'], 'rich_text');
         $validated['manaqib'] = filled($validated['manaqib'] ?? null)
-            ? clean($validated['manaqib'])
+            ? clean($validated['manaqib'], 'rich_text')
             : null;
 
         if ($request->hasFile('foto')) {
@@ -87,9 +87,9 @@ class KontribusiGuruController extends Controller
             $this->messages()
         );
 
-        $validated['biografi'] = clean($validated['biografi']);
+        $validated['biografi'] = clean($validated['biografi'], 'rich_text');
         $validated['manaqib'] = filled($validated['manaqib'] ?? null)
-            ? clean($validated['manaqib'])
+            ? clean($validated['manaqib'], 'rich_text')
             : null;
 
         if ($request->hasFile('foto')) {
