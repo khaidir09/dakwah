@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assembly;
+use App\Models\Book;
 use App\Models\Library;
 use App\Models\Post;
 use App\Models\Schedule;
@@ -54,6 +55,7 @@ class SitemapController extends Controller
         'tulisan.list',
         'manaqib-list',
         'pustaka-list',
+        'kitab-list',
         'wirid-list',
         'video-list',
         'catatan-pengajian.list',
@@ -80,6 +82,7 @@ class SitemapController extends Controller
             $this->posts(),
             $this->articles(),
             $this->libraries(),
+            $this->books(),
             $this->scheduleNotes(),
         );
 
@@ -200,6 +203,17 @@ class SitemapController extends Controller
             ->orderBy('id')
             ->get()
             ->map(fn (Library $library) => $this->entry('pustaka-detail', $library->slug, $library->updated_at, 'monthly'))
+            ->all();
+    }
+
+    private function books(): array
+    {
+        return Book::query()
+            ->active()
+            ->select('id', 'slug', 'updated_at')
+            ->orderBy('id')
+            ->get()
+            ->map(fn (Book $book) => $this->entry('kitab-detail', $book->slug, $book->updated_at, 'monthly'))
             ->all();
     }
 

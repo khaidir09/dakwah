@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -102,6 +103,52 @@ class Teacher extends Model
     public function contribution()
     {
         return $this->morphOne(Contribution::class, 'contributable');
+    }
+
+    public function books()
+    {
+        return $this->belongsToMany(Book::class)
+            ->withPivot('role', 'sort_order')
+            ->withTimestamps();
+    }
+
+    /**
+     * Status wafat diturunkan dari data wafat yang tercatat; guru yang wafatnya
+     * belum dicatat akan terbaca "masih hidup". Logika ini harus sama persis
+     * dengan scopeWafat()/scopeMasihHidup().
+     */
+    public function isWafat(): bool
+    {
+        return filled($this->wafat_masehi) || filled($this->wafat_hijriah_year);
+    }
+
+    /**
+     * Tahun wafat untuk label singkat: Masehi bila ada, selain itu Hijriah.
+     */
+    public function tahunWafat(): ?string
+    {
+        if (filled($this->wafat_masehi)) {
+            return Carbon::parse($this->wafat_masehi)->year.' M';
+        }
+
+        if (filled($this->wafat_hijriah_year)) {
+            return $this->wafat_hijriah_year.' H';
+        }
+
+        return null;
+    }
+
+    public function scopeWafat($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNotNull('wafat_masehi')
+                ->orWhereNotNull('wafat_hijriah_year');
+        });
+    }
+
+    public function scopeMasihHidup($query)
+    {
+        return $query->whereNull('wafat_masehi')->whereNull('wafat_hijriah_year');
     }
 
     public function scopePubliclyVisible($query)

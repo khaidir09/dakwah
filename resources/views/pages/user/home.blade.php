@@ -62,6 +62,9 @@
                             <!-- Haul Terdekat -->
                             <livewire:home-upcoming-haul />
 
+                            <!-- Kitab Ulama unggulan -->
+                            <livewire:home-kitab-unggulan />
+
                         </div>
 
                     </div>

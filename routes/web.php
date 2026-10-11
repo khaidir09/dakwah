@@ -78,6 +78,8 @@ Route::get('/manaqib', [\App\Http\Controllers\User\BiographyController::class, '
 Route::get('/manaqib/{slug}', [\App\Http\Controllers\User\BiographyController::class, 'detail'])->name('manaqib-detail');
 Route::get('/pustaka', [\App\Http\Controllers\User\LibraryController::class, 'list'])->name('pustaka-list');
 Route::get('/pustaka/{library}', [\App\Http\Controllers\User\LibraryController::class, 'detail'])->name('pustaka-detail');
+Route::get('/kitab', [\App\Http\Controllers\User\BookController::class, 'list'])->name('kitab-list');
+Route::get('/kitab/{book}', [\App\Http\Controllers\User\BookController::class, 'detail'])->name('kitab-detail');
 Route::get('/tulisan', [\App\Http\Controllers\User\PostController::class, 'index'])->name('tulisan.list');
 Route::get('/tulisan/{slug}', [\App\Http\Controllers\User\PostController::class, 'detail'])->name('tulisan.detail');
 Route::get('/tulisan/{slug}/download', [\App\Http\Controllers\User\PostController::class, 'download'])
@@ -242,6 +244,7 @@ Route::middleware(['noindex', 'auth:sanctum', 'auth.web_session', 'verified', 'i
     Route::resource('/wirid', WiridController::class);
     Route::resource('/doa', DoaController::class);
     Route::resource('/libraries', \App\Http\Controllers\LibraryController::class);
+    Route::resource('/kitab', \App\Http\Controllers\BookController::class)->except('show')->names('admin.kitab');
     Route::resource('/ramadhan-schedules', RamadhanController::class);
     Route::resource('/roles', \App\Http\Controllers\RoleController::class);
     Route::resource('/permissions', \App\Http\Controllers\PermissionController::class);

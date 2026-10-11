@@ -160,7 +160,19 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                
+
+                                            <!-- Karya -->
+                                            @if($books->isNotEmpty())
+                                                <div>
+                                                    <h2 class="text-gray-800 dark:text-gray-100 font-semibold mb-2">Karya</h2>
+                                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                                        @foreach ($books as $item)
+                                                            <x-kitab.card :book="$item['book']" :roles="$item['roles']" />
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endif
+
                                             <!-- Departments -->
                                             <div>
                                                 <h2 class="text-gray-800 dark:text-gray-100 font-semibold mb-2">Jadwal Rutinan</h2>

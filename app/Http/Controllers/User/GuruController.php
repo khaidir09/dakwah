@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Book;
 use App\Models\Schedule;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,19 @@ class GuruController extends Controller
             ->orderByRaw($urutanHari)
             ->get();
 
-        return view('pages/user/guru/detail', compact('teacher', 'schedules'));
+        // Satu kitab bisa muncul lebih dari sekali bila guru memegang beberapa peran di dalamnya.
+        $books = $teacher->books()
+            ->active()
+            ->with('specialization')
+            ->orderByDesc('books.created_at')
+            ->get()
+            ->groupBy('id')
+            ->map(fn ($rows) => [
+                'book' => $rows->first(),
+                'roles' => $rows->map(fn ($book) => Book::ROLES[$book->pivot->role] ?? $book->pivot->role)->unique()->implode(', '),
+            ])
+            ->values();
+
+        return view('pages/user/guru/detail', compact('teacher', 'schedules', 'books'));
     }
 }

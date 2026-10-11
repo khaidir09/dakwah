@@ -68,7 +68,7 @@ Tests use SQLite in-memory; the database is automatically switched in `phpunit.x
 
 Three tiers defined in `routes/web.php`:
 
-1. **Public** — browsable without login: majelis, guru, video, event, wirid, pustaka, tulisan, manaqib, jadwal-majelis, artikel
+1. **Public** — browsable without login: majelis, guru, video, event, wirid, pustaka, kitab, tulisan, manaqib, jadwal-majelis, artikel
 2. **Authenticated + verified** (`auth:sanctum` + `verified`) — self-service: kelola-majelis, kelola-acara-majelis, kelola-tulisan, kelola-mitra, kelola-artikel-ilmiah, account settings, favorites, schedule notes
 3. **Admin** (`/admin/*`, `IsAdmin` middleware) — requires `Super Admin` role via Spatie; full CRUD over all content
 
@@ -95,6 +95,7 @@ Events (`ManageEventController`) and ScheduleNotes (`ScheduleNoteController`) fo
 | `ScheduleNote`               | Community study notes per session; has visibility (Public/Private) and moderation status |
 | `Event`                      | Assembly events with image, location, moderation status, and contributions               |
 | `Library`                    | PDF library entries; may have a podcast audio and an AI `notebook_id` for RAG            |
+| `Book`                       | Kitab karya ulama (katalog, admin-only); many-to-many ke Teacher dengan peran, opsional tautan ke Library |
 | `ScientificArticle`          | Academic papers from Foundations; may have `notebook_id` for AI chat                     |
 | `Foundation`                 | Partner institution; many-to-many with Users (foundation admins)                         |
 | `Wirid`                      | Islamic recitation/prayer; users can like/save                                           |

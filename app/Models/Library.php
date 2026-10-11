@@ -41,6 +41,11 @@ class Library extends Model
         return $this->hasMany(LibraryPurchase::class);
     }
 
+    public function books(): HasMany
+    {
+        return $this->hasMany(Book::class);
+    }
+
     public function isFree(): bool
     {
         return $this->price_type !== 'paid';

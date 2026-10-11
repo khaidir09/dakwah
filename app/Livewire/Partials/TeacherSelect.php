@@ -3,6 +3,7 @@
 namespace App\Livewire\Partials;
 
 use App\Models\Teacher;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class TeacherSelect extends Component
@@ -12,9 +13,19 @@ class TeacherSelect extends Component
     public $selectedTeacherName = '';
     public $fieldName = 'teacher_id';
 
-    public function mount($selectedId = null, $fieldName = 'teacher_id')
+    // Default menyaring guru yang sudah wafat (perilaku form jadwal majelis).
+    // Form kitab butuh sebaliknya karena kebanyakan pengarang sudah wafat.
+    #[Locked]
+    public $includeWafat = false;
+
+    #[Locked]
+    public $onlyPublic = false;
+
+    public function mount($selectedId = null, $fieldName = 'teacher_id', $includeWafat = false, $onlyPublic = false)
     {
         $this->fieldName = $fieldName;
+        $this->includeWafat = (bool) $includeWafat;
+        $this->onlyPublic = (bool) $onlyPublic;
 
         if ($selectedId) {
             $this->selectedTeacherId = $selectedId;
@@ -48,7 +59,8 @@ class TeacherSelect extends Component
         // or if the search text is effectively new input
         if (strlen($this->search) >= 2 && !$this->selectedTeacherId) {
              $teachers = Teacher::where('name', 'like', '%' . $this->search . '%')
-                ->where('wafat_masehi', null)
+                ->when(! $this->includeWafat, fn ($q) => $q->where('wafat_masehi', null))
+                ->when($this->onlyPublic, fn ($q) => $q->publiclyVisible())
                 ->take(10)
                 ->get();
         }
