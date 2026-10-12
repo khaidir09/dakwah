@@ -110,7 +110,7 @@
                                     @endif
 
                                     @if ($book->description)
-                                        <div class="mt-6 prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
+                                        <div class="mt-6 prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 text-justify">
                                             {!! clean($book->description, 'rich_text') !!}
                                         </div>
                                     @endif
