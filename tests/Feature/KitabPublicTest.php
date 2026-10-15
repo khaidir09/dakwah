@@ -71,7 +71,11 @@ class KitabPublicTest extends PublicPageTestCase
         $response = $this->get(route('kitab-detail', $book))->assertOk();
 
         $response->assertSee('سبيل المهتدين')
-            ->assertSee(route('guru-detail', $masehi))
+            ->assertSee(route('manaqib-detail', $masehi->slug))
+            ->assertDontSee(route('guru-detail', $masehi))
+            ->assertSee(route('manaqib-detail', $hijriah->slug))
+            ->assertSee(route('guru-detail', $hidup))
+            ->assertDontSee(route('manaqib-detail', $hidup->slug))
             ->assertSee('wafat 1812 M')
             ->assertSee('wafat 1227 H')
             ->assertSee('Guru Hidup')

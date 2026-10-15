@@ -86,7 +86,7 @@
                                                         <h2 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">{{ $label }}</h2>
                                                         <div class="space-y-2">
                                                             @foreach ($teachersByRole[$role] as $teacher)
-                                                                <a href="{{ route('guru-detail', $teacher) }}" class="flex items-center group">
+                                                                <a href="{{ $teacher->isWafat() ? route('manaqib-detail', $teacher->slug) : route('guru-detail', $teacher) }}" class="flex items-center group">
                                                                     @if ($teacher->foto_url)
                                                                         <img class="w-10 h-10 rounded-full object-cover mr-3" src="{{ $teacher->foto_url }}" alt="{{ $teacher->name }}" loading="lazy">
                                                                     @else
