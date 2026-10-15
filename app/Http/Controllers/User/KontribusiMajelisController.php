@@ -17,7 +17,7 @@ class KontribusiMajelisController extends Controller
 
     public function create()
     {
-        $teachers = Teacher::publiclyVisible()->where('wafat_masehi', null)->get();
+        $teachers = Teacher::publiclyVisible()->masihHidup()->get();
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
 
         return view('pages.kontributor.majelis.create', compact('teachers', 'provinces'));
@@ -81,7 +81,7 @@ class KontribusiMajelisController extends Controller
             ->whereNotNull('contribution_status')
             ->findOrFail($id);
 
-        $teachers = Teacher::publiclyVisible()->where('wafat_masehi', null)->get();
+        $teachers = Teacher::publiclyVisible()->masihHidup()->get();
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
 
         return view('pages.kontributor.majelis.edit', compact('majelis', 'teachers', 'provinces'));

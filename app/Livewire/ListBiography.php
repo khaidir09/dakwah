@@ -29,8 +29,8 @@ class ListBiography extends Component
 
     public function render()
     {
-        $teachers_count = Teacher::publiclyVisible()->where('wafat_hijriah_year', '!=', null)->count();
-        $query = Teacher::publiclyVisible()->where('wafat_hijriah_year', '!=', null);
+        $teachers_count = Teacher::publiclyVisible()->wafat()->count();
+        $query = Teacher::publiclyVisible()->wafat();
 
         // Maybe default sorting by name or created_at?
         $query->latest();

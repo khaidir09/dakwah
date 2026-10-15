@@ -28,7 +28,7 @@ class MajelisController extends Controller
      */
     public function create()
     {
-        $teachers = Teacher::where('wafat_masehi', null)->get();
+        $teachers = Teacher::masihHidup()->get();
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
         return view('pages/majelis/create', compact('teachers', 'provinces'));
     }
@@ -99,7 +99,7 @@ class MajelisController extends Controller
     public function edit(string $id)
     {
         $majelis = Assembly::findOrFail($id);
-        $teachers = Teacher::where('wafat_masehi', null)->get();
+        $teachers = Teacher::masihHidup()->get();
         $provinces = Province::whereIn('code', [62, 63, 64])->pluck('name', 'code');
         return view('pages.majelis.edit', compact('majelis', 'teachers', 'provinces'));
     }

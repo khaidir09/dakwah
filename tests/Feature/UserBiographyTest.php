@@ -17,6 +17,7 @@ class UserBiographyTest extends TestCase
             'slug' => 'wali-test',
             'biografi' => 'Deskripsi',
             'domisili' => '-',
+            'wafat_masehi' => '2023-01-01',
             'foto' => 'test.jpg'
         ]);
 

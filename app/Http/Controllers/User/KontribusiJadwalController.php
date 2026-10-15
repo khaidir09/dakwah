@@ -21,7 +21,7 @@ class KontribusiJadwalController extends Controller
             })
             ->get();
 
-        $teachers = Teacher::publiclyVisible()->where('wafat_masehi', null)->get();
+        $teachers = Teacher::publiclyVisible()->masihHidup()->get();
 
         if ($majelisList->isEmpty()) {
             return redirect()->route('kontributor.saya')
@@ -77,7 +77,7 @@ class KontribusiJadwalController extends Controller
             })
             ->get();
 
-        $teachers = Teacher::publiclyVisible()->where('wafat_masehi', null)->get();
+        $teachers = Teacher::publiclyVisible()->masihHidup()->get();
 
         return view('pages.kontributor.jadwal.edit', compact('jadwal', 'majelisList', 'teachers'));
     }

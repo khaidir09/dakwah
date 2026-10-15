@@ -104,7 +104,7 @@
                                             <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">{{ $teacher->name }}</h3>
                                             @if($teacher->tahun_lahir)
                                                 <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                                    @if($teacher->wafat_masehi === null)
+                                                    @if(! $teacher->isWafat())
                                                         {{ $teacher->tahun_lahir }} ({{ date('Y') - $teacher->tahun_lahir }} tahun)
                                                     @else
                                                         {{ $teacher->tahun_lahir }}
@@ -115,10 +115,10 @@
                                                 <div class="text-sm font-medium mt-2 text-gray-600 dark:text-gray-300">{{ $teacher->village->name }}</div>
                                             @endif
                                             <div class="mt-3">
-                                                @if($teacher->wafat_masehi === null)
+                                                @if(! $teacher->isWafat())
                                                     <span class="text-xs inline-flex font-medium bg-violet-500/20 text-violet-600 rounded-full px-2.5 py-1">Aktif</span>
                                                 @else
-                                                    <span class="text-xs inline-flex font-medium bg-red-500/20 text-red-700 rounded-full px-2.5 py-1">Wafat {{ $teacher->wafat_masehi }}</span>
+                                                    <span class="text-xs inline-flex font-medium bg-red-500/20 text-red-700 rounded-full px-2.5 py-1">Wafat {{ $teacher->wafat_masehi ?? $teacher->tahunWafat() }}</span>
                                                 @endif
                                             </div>
                                         </div>

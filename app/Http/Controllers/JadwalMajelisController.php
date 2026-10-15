@@ -25,7 +25,7 @@ class JadwalMajelisController extends Controller
     public function create()
     {
         $majelis = Assembly::all();
-        $teachers = Teacher::where('wafat_masehi', null)->get();
+        $teachers = Teacher::masihHidup()->get();
 
         return view('pages.jadwal-majelis.create', compact('majelis', 'teachers'));
     }
@@ -64,7 +64,7 @@ class JadwalMajelisController extends Controller
     {
         $jadwal = Schedule::with('assembly')->findOrFail($id);
         $majelis = Assembly::all();
-        $teachers = Teacher::where('wafat_masehi', null)->get();
+        $teachers = Teacher::masihHidup()->get();
 
         return view('pages.jadwal-majelis.edit', compact('jadwal', 'majelis', 'teachers'));
     }

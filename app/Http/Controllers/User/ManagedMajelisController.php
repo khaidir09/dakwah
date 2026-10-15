@@ -100,7 +100,7 @@ class ManagedMajelisController extends Controller
             abort(403);
         }
 
-        $teachers = Teacher::where('wafat_masehi', null)->get();
+        $teachers = Teacher::masihHidup()->get();
         return view('pages.user.kelola-majelis.edit-jadwal', compact('schedule', 'teachers'));
     }
 

@@ -172,7 +172,7 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left">
-                                    @if ($item->wafat_masehi === null && $item->tahun_lahir)
+                                    @if (! $item->isWafat() && $item->tahun_lahir)
                                         {{ $item->tahun_lahir }} ({{ date('Y') - $item->tahun_lahir }} tahun)
                                     @else
                                         {{ $item->tahun_lahir }}
@@ -183,10 +183,10 @@
                                 <div class="text-left">{{ $item->village?->name }}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                @if ($item->wafat_masehi === null)
+                                @if (! $item->isWafat())
                                     <div class="text-sm inline-flex font-medium bg-violet-500/20 text-violet-600 rounded-full text-center px-2.5 py-1">Aktif</div>
                                 @else
-                                    <div class="text-sm inline-flex font-medium bg-red-500/20 text-red-700 rounded-full text-center px-2.5 py-1">Wafat {{ $item->wafat_masehi }}</div>
+                                    <div class="text-sm inline-flex font-medium bg-red-500/20 text-red-700 rounded-full text-center px-2.5 py-1">Wafat {{ $item->wafat_masehi ?? $item->tahunWafat() }}</div>
                                 @endif
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

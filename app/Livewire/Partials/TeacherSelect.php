@@ -59,7 +59,7 @@ class TeacherSelect extends Component
         // or if the search text is effectively new input
         if (strlen($this->search) >= 2 && !$this->selectedTeacherId) {
              $teachers = Teacher::where('name', 'like', '%' . $this->search . '%')
-                ->when(! $this->includeWafat, fn ($q) => $q->where('wafat_masehi', null))
+                ->when(! $this->includeWafat, fn ($q) => $q->masihHidup())
                 ->when($this->onlyPublic, fn ($q) => $q->publiclyVisible())
                 ->take(10)
                 ->get();

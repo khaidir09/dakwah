@@ -36,6 +36,22 @@ class TeacherSelectTest extends TestCase
     }
 
     /** @test */
+    public function it_does_not_search_teachers_with_only_hijri_death_year()
+    {
+        Teacher::create([
+            'name' => 'Ustadz Almarhum Hijriah',
+            'biografi' => 'Bio',
+            'foto' => 'foto.jpg',
+            'domisili' => 'Jakarta',
+            'wafat_hijriah_year' => 1426,
+        ]);
+
+        Livewire::test(TeacherSelect::class)
+            ->set('search', 'Almarhum')
+            ->assertDontSee('Ustadz Almarhum Hijriah');
+    }
+
+    /** @test */
     public function it_searches_teachers()
     {
         $teacher = Teacher::create([

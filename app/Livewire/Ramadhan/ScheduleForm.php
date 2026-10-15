@@ -179,7 +179,7 @@ class ScheduleForm extends Component
         }
 
         return view('livewire.ramadhan.schedule-form', [
-            'teachers' => Teacher::where('wafat_hijriah_year', '=', null)->orderBy('name')->get(['id', 'name']),
+            'teachers' => Teacher::masihHidup()->orderBy('name')->get(['id', 'name']),
             'assemblies' => $assemblies,
         ]);
     }
