@@ -1,0 +1,207 @@
+{
+  "name": "Syaikhuna — A1 Jadwal Majelis Harian",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 4 * * *"
+            }
+          ]
+        }
+      },
+      "id": "syk-0001-60b0a7ca",
+      "name": "Setiap 04:30 WITA",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "syk-0002-fb801986",
+              "name": "base_url",
+              "value": "https://syaikhuna.id",
+              "type": "string"
+            },
+            {
+              "id": "syk-0003-9b4f0000",
+              "name": "telegram_chat_id",
+              "value": "@GANTI_USERNAME_CHANNEL",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "syk-0004-a2574385",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  { city_code: '6371', nama: 'Kota Banjarmasin' },\n  { city_code: '6372', nama: 'Kota Banjarbaru' },\n  { city_code: '6303', nama: 'Kabupaten Banjar' },\n  { city_code: '6304', nama: 'Kabupaten Barito Kuala' },\n  { city_code: '6301', nama: 'Kabupaten Tanah Laut' },\n  { city_code: '6305', nama: 'Kabupaten Tapin' },\n  { city_code: '6306', nama: 'Kabupaten Hulu Sungai Selatan' },\n  { city_code: '6307', nama: 'Kabupaten Hulu Sungai Tengah' },\n  { city_code: '6308', nama: 'Kabupaten Hulu Sungai Utara' },\n  { city_code: '6311', nama: 'Kabupaten Balangan' },\n  { city_code: '6309', nama: 'Kabupaten Tabalong' },\n  { city_code: '6310', nama: 'Kabupaten Tanah Bumbu' },\n  { city_code: '6302', nama: 'Kabupaten Kotabaru' },\n].map((json) => ({ json }));"
+      },
+      "id": "syk-0005-6b2626a4",
+      "name": "Daftar Kota",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config').first().json.base_url }}/api/v1/jadwal-majelis",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "city_code",
+              "value": "={{ $json.city_code }}"
+            },
+            {
+              "name": "days",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 1500
+            }
+          }
+        }
+      },
+      "id": "syk-0006-e1e33651",
+      "name": "Ambil Jadwal per Kota",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];\nconst HARI = ['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];\nconst esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\nconst tanggalPanjang = (ymd) => {\n  const [y, m, d] = ymd.split('-').map(Number);\n  const dow = new Date(Date.UTC(y, m - 1, d)).getUTCDay();\n  return HARI[dow] + ', ' + d + ' ' + BULAN[m - 1] + ' ' + y;\n};\n\n// Batas pesan Telegram 4096 karakter; sisakan ruang untuk judul lanjutan.\nconst MAKS = 3800;\nconst config = $('Config').first().json;\nconst kota = $('Daftar Kota').all().map((i) => i.json);\nconst responses = $input.all().map((i) => i.json);\n\n// Satu kota gagal (error/timeout) tidak boleh menggagalkan kota lain,\n// tapi bila semuanya gagal, workflow harus error agar terlihat di n8n.\nconst berhasil = responses.filter((r) => Array.isArray(r.data));\nif (berhasil.length === 0) {\n  throw new Error('Semua request jadwal-majelis gagal: ' + JSON.stringify(responses[0]).slice(0, 300));\n}\n\nconst pesan = [];\nresponses.forEach((res, i) => {\n  if (!Array.isArray(res.data) || res.data.length === 0) return;\n  const namaKota = (kota.find((k) => k.city_code === res.meta?.city_code) ?? kota[i]).nama;\n\n  const judul = '🕌 <b>Jadwal Majelis Hari Ini</b>\\n'\n    + '📍 <b>' + esc(namaKota) + '</b>\\n'\n    + '🗓 ' + tanggalPanjang(res.meta.from) + '\\n';\n  const penutup = '\\n<a href=\"' + esc(config.base_url) + '/jadwal-majelis\">Lihat semua jadwal di Syaikhuna</a>';\n\n  const baris = res.data.map((j) => {\n    const nama = j.url ? '<a href=\"' + esc(j.url) + '\">' + esc(j.nama_jadwal) + '</a>' : esc(j.nama_jadwal);\n    const info = [j.majelis?.nama, j.guru?.nama].filter(Boolean).map(esc).join(' · ');\n    const akses = j.access && j.access !== 'Umum' ? ' <i>(' + esc(j.access) + ')</i>' : '';\n    const peta = j.majelis?.maps ? '\\n   🗺 <a href=\"' + esc(j.majelis.maps) + '\">Peta lokasi</a>' : '';\n    return '⏰ <b>' + (j.waktu ? esc(j.waktu) + ' WITA' : 'Waktu menyusul') + '</b>' + akses + '\\n   ' + nama\n      + (info ? '\\n   ' + info : '') + peta;\n  });\n\n  let isi = judul + (res.meta.is_ramadhan ? '<i>Jadwal yang libur selama Ramadan tidak ditampilkan.</i>\\n' : '') + '\\n';\n  let bagian = 1;\n  for (const b of baris) {\n    if ((isi + b + '\\n\\n' + penutup).length > MAKS) {\n      pesan.push(isi.trimEnd());\n      bagian++;\n      isi = '🕌 <b>' + esc(namaKota) + '</b> (lanjutan ' + bagian + ')\\n\\n';\n    }\n    isi += b + '\\n\\n';\n  }\n  pesan.push((isi + penutup.trimStart()).trimEnd());\n});\n\nreturn pesan.map((text) => ({ json: { text } }));"
+      },
+      "id": "syk-0007-e2d6d6d0",
+      "name": "Susun Pesan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Config').first().json.telegram_chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML",
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "syk-0008-c19b4785",
+      "name": "Kirim ke Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1100,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    }
+  ],
+  "connections": {
+    "Setiap 04:30 WITA": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Daftar Kota",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daftar Kota": {
+      "main": [
+        [
+          {
+            "node": "Ambil Jadwal per Kota",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ambil Jadwal per Kota": {
+      "main": [
+        [
+          {
+            "node": "Susun Pesan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Susun Pesan": {
+      "main": [
+        [
+          {
+            "node": "Kirim ke Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Makassar",
+    "saveManualExecutions": true
+  },
+  "tags": []
+}

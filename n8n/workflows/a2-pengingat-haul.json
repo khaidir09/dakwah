@@ -1,0 +1,171 @@
+{
+  "name": "Syaikhuna — A2 Pengingat Haul",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 * * *"
+            }
+          ]
+        }
+      },
+      "id": "syk-0009-adb23d1d",
+      "name": "Setiap 06:00 WITA",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "syk-0010-bf43f9a6",
+              "name": "base_url",
+              "value": "https://syaikhuna.id",
+              "type": "string"
+            },
+            {
+              "id": "syk-0011-92de8100",
+              "name": "telegram_chat_id",
+              "value": "@GANTI_USERNAME_CHANNEL",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "syk-0012-7c4c14a3",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config').first().json.base_url }}/api/v1/haul",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "50"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "syk-0013-6c102b05",
+      "name": "Ambil Haul Terdekat",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];\nconst HARI = ['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];\nconst esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\nconst tanggalPanjang = (ymd) => {\n  const [y, m, d] = ymd.split('-').map(Number);\n  const dow = new Date(Date.UTC(y, m - 1, d)).getUTCDay();\n  return HARI[dow] + ', ' + d + ' ' + BULAN[m - 1] + ' ' + y;\n};\n\nconst config = $('Config').first().json;\nconst PENGINGAT = { 7: 'Sepekan lagi', 1: 'Besok', 0: 'Hari ini' };\n\nconst data = $input.first().json.data;\nif (!Array.isArray(data)) {\n  throw new Error('Respons /haul tidak berisi data: ' + JSON.stringify($input.first().json).slice(0, 300));\n}\n\nreturn data\n  .filter((g) => g.hari_menuju_haul in PENGINGAT)\n  .map((g) => {\n    const wafat = [g.wafat_hijriah_label ? esc(g.wafat_hijriah_label) + ' H' : null, g.wafat_masehi ? tanggalPanjang(g.wafat_masehi).split(', ')[1] + ' M' : null]\n      .filter(Boolean).join(' / ');\n    const text = '🤲 <b>Haul ' + esc(g.nama) + '</b>\\n'\n      + '⏳ <b>' + PENGINGAT[g.hari_menuju_haul] + '</b>: ' + tanggalPanjang(g.haul_berikutnya_masehi) + '\\n'\n      + (wafat ? '🕯 Wafat: ' + wafat + '\\n' : '')\n      + '\\nMari kita hadiahkan Al-Fatihah untuk beliau, semoga Allah meninggikan derajatnya dan kita mendapat keberkahan ilmunya.\\n\\n'\n      + '<i>Tanggal dihitung dengan kalender Hijriah aritmatis, mungkin berbeda satu hari dari penetapan setempat.</i>\\n\\n'\n      + '📖 <a href=\"' + esc(g.url) + '\">Baca manaqib beliau</a>';\n    return { json: { text } };\n  });"
+      },
+      "id": "syk-0014-911da502",
+      "name": "Saring H-7, H-1, H-0",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Config').first().json.telegram_chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML",
+          "disable_web_page_preview": false
+        }
+      },
+      "id": "syk-0015-e858b62a",
+      "name": "Kirim ke Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    }
+  ],
+  "connections": {
+    "Setiap 06:00 WITA": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Ambil Haul Terdekat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ambil Haul Terdekat": {
+      "main": [
+        [
+          {
+            "node": "Saring H-7, H-1, H-0",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Saring H-7, H-1, H-0": {
+      "main": [
+        [
+          {
+            "node": "Kirim ke Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Makassar",
+    "saveManualExecutions": true
+  },
+  "tags": []
+}

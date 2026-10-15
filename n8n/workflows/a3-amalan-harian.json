@@ -1,0 +1,238 @@
+{
+  "name": "Syaikhuna — A3 Amalan Harian",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "15 5 * * *"
+            }
+          ]
+        }
+      },
+      "id": "syk-0016-d9e44141",
+      "name": "Setiap 05:15 WITA",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "syk-0017-a7b76f2c",
+              "name": "base_url",
+              "value": "https://syaikhuna.id",
+              "type": "string"
+            },
+            {
+              "id": "syk-0018-b311899a",
+              "name": "telegram_chat_id",
+              "value": "@GANTI_USERNAME_CHANNEL",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "syk-0019-e1ba77ea",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config').first().json.base_url }}/api/v1/wirid",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "per_page",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "syk-0020-efe01d7a",
+      "name": "Hitung Total Amalan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "const total = $input.first().json.meta?.total;\nif (!total) {\n  throw new Error('Respons /wirid tidak berisi meta.total: ' + JSON.stringify($input.first().json).slice(0, 300));\n}\n// Rotasi berurutan per hari (WITA) agar tiap amalan bergiliran tanpa berulang\n// sampai seluruh daftar habis; tidak butuh penyimpanan state di n8n.\nconst hariKe = Math.floor((Date.now() + 8 * 3600 * 1000) / 86400000);\nreturn [{ json: { page: (hariKe % total) + 1 } }];"
+      },
+      "id": "syk-0021-74941ef5",
+      "name": "Pilih Amalan Hari Ini",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Config').first().json.base_url }}/api/v1/wirid",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "per_page",
+              "value": "1"
+            },
+            {
+              "name": "page",
+              "value": "={{ $json.page }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "syk-0022-eb2c3ee0",
+      "name": "Ambil Amalan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];\nconst HARI = ['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];\nconst esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\nconst tanggalPanjang = (ymd) => {\n  const [y, m, d] = ymd.split('-').map(Number);\n  const dow = new Date(Date.UTC(y, m - 1, d)).getUTCDay();\n  return HARI[dow] + ', ' + d + ' ' + BULAN[m - 1] + ' ' + y;\n};\n\nconst MAKS = 4000;\nconst w = $input.first().json.data?.[0];\nif (!w) {\n  throw new Error('Respons /wirid halaman terpilih kosong');\n}\n\nconst label = w.kategori === 'doa' ? 'Doa' : 'Wirid';\nconst meta = [w.waktu ? 'Waktu: ' + esc(w.waktu) : null, w.jumlah ? 'Dibaca ' + esc(w.jumlah) + '×' : null].filter(Boolean).join(' · ');\n\nconst kepala = '📿 <b>' + label + ' Hari Ini</b>\\n\\n<b>' + esc(w.nama) + '</b>\\n' + (meta ? '<i>' + meta + '</i>\\n' : '') + '\\n'\n  + esc(w.arab_text) + '\\n\\n'\n  + (w.arti_text ? '<b>Artinya:</b>\\n<i>' + esc(w.arti_text) + '</i>\\n\\n' : '');\nconst kaki = '📖 <a href=\"' + esc(w.url) + '\">Selengkapnya di Syaikhuna</a>';\n\nlet deskripsi = w.deskripsi_text ? esc(w.deskripsi_text) : '';\nconst sisa = MAKS - kepala.length - kaki.length - 4;\nif (deskripsi.length > sisa) {\n  deskripsi = sisa > 20 ? deskripsi.slice(0, sisa - 1).replace(/&[a-z]*$/, '') + '…' : '';\n}\n\nreturn [{ json: { text: kepala + (deskripsi ? deskripsi + '\\n\\n' : '') + kaki } }];"
+      },
+      "id": "syk-0023-2fe79760",
+      "name": "Susun Pesan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Config').first().json.telegram_chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML",
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "syk-0024-aa428add",
+      "name": "Kirim ke Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1320,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    }
+  ],
+  "connections": {
+    "Setiap 05:15 WITA": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Hitung Total Amalan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hitung Total Amalan": {
+      "main": [
+        [
+          {
+            "node": "Pilih Amalan Hari Ini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pilih Amalan Hari Ini": {
+      "main": [
+        [
+          {
+            "node": "Ambil Amalan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ambil Amalan": {
+      "main": [
+        [
+          {
+            "node": "Susun Pesan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Susun Pesan": {
+      "main": [
+        [
+          {
+            "node": "Kirim ke Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Makassar",
+    "saveManualExecutions": true
+  },
+  "tags": []
+}
