@@ -12,7 +12,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('jadwal:remind')->everyFifteenMinutes()->withoutOverlapping();
+        $schedule->command('jadwal:remind --subuh')->dailyAt('21:00');
+        $schedule->command('haul:remind')->dailyAt('06:00');
     }
 
     /**

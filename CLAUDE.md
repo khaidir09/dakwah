@@ -42,7 +42,12 @@ php artisan test --filter=TestName  # Run a single test
 php artisan majelis:invite           # Generate signed URL onboarding majelis (default: 1440 menit)
 php artisan majelis:invite 60        # Link valid 60 menit
 php artisan app:make-author {email}  # Assign role Penulis ke user
+php artisan jadwal:remind            # Push pengingat ke pengikut majelis, 2 jam sebelum jadwal (scheduler: tiap 15 menit)
+php artisan jadwal:remind --subuh    # Pengingat malam sebelumnya untuk jadwal besok sebelum 07:00 (scheduler: 21:00)
+php artisan haul:remind              # Satu push ke semua pelanggan: haul hari ini & besok (scheduler: 06:00)
 ```
+
+Push terjadwal di atas hanya jalan bila cron server memanggil `php artisan schedule:run` tiap menit.
 
 Tests use SQLite in-memory; the database is automatically switched in `phpunit.xml`.
 
