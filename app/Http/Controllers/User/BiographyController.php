@@ -19,6 +19,8 @@ class BiographyController extends Controller
 
         abort_unless($biography->isVisibleTo(Auth::user()), 404);
 
-        return view('pages.user.biography.detail', compact('biography'));
+        $books = $biography->karyaPublik();
+
+        return view('pages.user.biography.detail', compact('biography', 'books'));
     }
 }

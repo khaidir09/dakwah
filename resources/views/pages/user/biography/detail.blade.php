@@ -146,6 +146,18 @@
                                 </div>
                             @endif
 
+                            <!-- Karya -->
+                            @if($books->isNotEmpty())
+                                <div class="mt-4 border-t pt-4 border-gray-100 dark:border-gray-700/60">
+                                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-3">Karya</h3>
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                        @foreach ($books as $item)
+                                            <x-kitab.card :book="$item['book']" :roles="$item['roles']" />
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
                             <!-- Map -->
                             @if($biography->maps)
                                 <div class="mt-4 border-t pt-4 border-gray-100 dark:border-gray-700/60">

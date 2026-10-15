@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravolt\Indonesia\Models\City;
@@ -110,6 +111,25 @@ class Teacher extends Model
         return $this->belongsToMany(Book::class)
             ->withPivot('role', 'sort_order')
             ->withTimestamps();
+    }
+
+    /**
+     * Kitab aktif karya guru ini untuk halaman publik, satu entri per kitab.
+     * Satu kitab bisa muncul lebih dari sekali bila guru memegang beberapa peran di dalamnya.
+     */
+    public function karyaPublik(): Collection
+    {
+        return $this->books()
+            ->active()
+            ->with('specialization')
+            ->orderByDesc('books.created_at')
+            ->get()
+            ->groupBy('id')
+            ->map(fn ($rows) => [
+                'book' => $rows->first(),
+                'roles' => $rows->map(fn ($book) => Book::ROLES[$book->pivot->role] ?? $book->pivot->role)->unique()->implode(', '),
+            ])
+            ->values();
     }
 
     /**

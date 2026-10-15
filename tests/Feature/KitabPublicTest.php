@@ -171,6 +171,22 @@ class KitabPublicTest extends PublicPageTestCase
         $this->get(route('guru-detail', $tanpaKitab))->assertOk()->assertDontSee('Karya</h2>', false);
     }
 
+    public function test_manaqib_menampilkan_karya_dengan_peran(): void
+    {
+        $teacher = $this->makeTeacher(['name' => 'Syekh Arsyad']);
+        $tanpaKitab = $this->makeTeacher(['name' => 'Guru Tanpa Kitab']);
+        $this->makeBook([[$teacher, 'pengarang'], [$teacher, 'pensyarah']], ['title' => 'Kitab Dua Peran']);
+        $this->makeBook([[$teacher, 'pengarang']], ['title' => 'Kitab Draf', 'is_active' => false]);
+
+        $response = $this->get(route('manaqib-detail', $teacher->slug))->assertOk();
+        $response->assertSee('Karya</h3>', false)
+            ->assertSee('Pengarang, Pensyarah')
+            ->assertDontSee('Kitab Draf');
+        $this->assertSame(1, substr_count($response->getContent(), 'Kitab Dua Peran</h3>'));
+
+        $this->get(route('manaqib-detail', $tanpaKitab->slug))->assertOk()->assertDontSee('Karya</h3>', false);
+    }
+
     public function test_widget_beranda_hanya_kitab_aktif_unggulan_maksimal_enam(): void
     {
         Cache::forget(HomeKitabUnggulan::CACHE_KEY);
