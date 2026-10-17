@@ -30,6 +30,7 @@ class LibraryController extends Controller
             'category' => 'required|string|max:255',
             'description' => 'required|string',
             'file' => 'required|file|mimes:pdf|max:10240', // 10MB max
+            'preview_file' => 'exclude_unless:price_type,paid|nullable|file|mimes:pdf|max:10240',
             'cover_image' => 'nullable|image|max:2048',
             'price_type' => 'required|in:free,paid',
             'price' => 'nullable|integer|min:0|required_if:price_type,paid',
@@ -44,6 +45,10 @@ class LibraryController extends Controller
             $dataToCreate['file_path'] = $this->storePdf($request->file('file'), $validatedData['price_type']);
         }
 
+        if (isset($validatedData['preview_file'])) {
+            $dataToCreate['preview_file_path'] = $this->storePreviewPdf($validatedData['preview_file']);
+        }
+
         if ($request->hasFile('cover_image')) {
             $dataToCreate['cover_image'] = $this->handleImageUpload(
                 $request->file('cover_image'),
@@ -53,7 +58,7 @@ class LibraryController extends Controller
             );
         }
 
-        unset($dataToCreate['file']);
+        unset($dataToCreate['file'], $dataToCreate['preview_file']);
 
         Library::create($dataToCreate);
 
@@ -72,6 +77,8 @@ class LibraryController extends Controller
             'category' => 'required|string|max:255',
             'description' => 'required|string',
             'file' => 'nullable|file|mimes:pdf|max:10240',
+            'preview_file' => 'exclude_unless:price_type,paid|nullable|file|mimes:pdf|max:10240',
+            'remove_preview' => 'sometimes|boolean',
             'cover_image' => 'nullable|image|max:2048',
             'price_type' => 'required|in:free,paid',
             'price' => 'nullable|integer|min:0|required_if:price_type,paid',
@@ -103,6 +110,14 @@ class LibraryController extends Controller
             $dataToUpdate['file_path'] = $newPath;
         }
 
+        // Pratinjau hanya untuk pustaka berbayar: ikut dihapus bila tipe menjadi gratis.
+        if ($newPriceType !== 'paid' || isset($validatedData['preview_file']) || ! empty($validatedData['remove_preview'])) {
+            $this->deletePreviewPdf($library);
+            $dataToUpdate['preview_file_path'] = isset($validatedData['preview_file'])
+                ? $this->storePreviewPdf($validatedData['preview_file'])
+                : null;
+        }
+
         if ($request->hasFile('cover_image')) {
             $this->deleteImage($library->cover_image);
             $dataToUpdate['cover_image'] = $this->handleImageUpload(
@@ -115,7 +130,7 @@ class LibraryController extends Controller
             unset($dataToUpdate['cover_image']);
         }
 
-        unset($dataToUpdate['file']);
+        unset($dataToUpdate['file'], $dataToUpdate['preview_file'], $dataToUpdate['remove_preview']);
 
         // Checkbox tidak terkirim saat tidak dicentang.
         if (! $request->has('is_active')) {
@@ -133,6 +148,7 @@ class LibraryController extends Controller
         if ($library->file_path && Storage::disk($disk)->exists($library->file_path)) {
             Storage::disk($disk)->delete($library->file_path);
         }
+        $this->deletePreviewPdf($library);
         $this->deleteImage($library->cover_image);
 
         $library->delete();
@@ -148,6 +164,21 @@ class LibraryController extends Controller
         $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
 
         return $file->storeAs($this->pdfFolderFor($priceType), $filename, $this->pdfDiskFor($priceType));
+    }
+
+    /**
+     * Pratinjau selalu di disk privat agar hanya bisa dibaca lewat penampil web.
+     */
+    private function storePreviewPdf(UploadedFile $file): string
+    {
+        return $file->storeAs('libraries/preview', Str::uuid().'.'.$file->getClientOriginalExtension(), 'local');
+    }
+
+    private function deletePreviewPdf(Library $library): void
+    {
+        if ($library->preview_file_path && Storage::disk('local')->exists($library->preview_file_path)) {
+            Storage::disk('local')->delete($library->preview_file_path);
+        }
     }
 
     private function pdfDiskFor(string $priceType): string

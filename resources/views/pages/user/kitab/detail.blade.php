@@ -43,7 +43,9 @@
                                         @if ($book->library && $book->library->is_active)
                                             <a href="{{ route('pustaka-detail', $book->library) }}" class="btn w-full bg-emerald-500 hover:bg-emerald-600 text-white">
                                                 Baca di Pustaka
-                                                @if ($book->library->isPaid())
+                                                @if ($book->library->hasPreview())
+                                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-white/90 text-emerald-700">Pratinjau gratis</span>
+                                                @elseif ($book->library->isPaid())
                                                     <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Berbayar</span>
                                                 @endif
                                             </a>

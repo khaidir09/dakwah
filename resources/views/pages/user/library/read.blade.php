@@ -38,8 +38,17 @@
 
         <h1 class="text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100 mb-4 truncate">{{ $library->title }}</h1>
 
+        @if($isPreview)
+            <div class="mb-4 flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/30">
+                <p class="flex-1 text-sm text-indigo-800 dark:text-indigo-200">
+                    Anda membaca <strong>pratinjau gratis</strong>. Versi lengkap: Rp {{ number_format($library->price, 0, ',', '.') }}.
+                </p>
+                <a href="#pratinjau-selesai" class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Dapatkan versi lengkap</a>
+            </div>
+        @endif
+
         <div id="pdf-viewer"
-             data-src="{{ route('pustaka-stream', $library) }}"
+             data-src="{{ $streamUrl }}"
              class="flex flex-col h-[calc(100vh-11rem)] min-h-[420px] bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700/60 rounded-xl overflow-hidden">
 
             {{-- Toolbar --}}
@@ -97,6 +106,14 @@
                 <div id="pdf-scroll" class="relative flex-1 overflow-y-auto p-3 sm:p-6">
                     <p id="pdf-status" class="text-center text-gray-500 py-10">Memuat dokumen…</p>
                     <div id="pdf-pages" class="w-full"></div>
+
+                    @if($isPreview)
+                        <div id="pratinjau-selesai" class="max-w-md mx-auto mt-6 p-6 text-center bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700/60 shadow-sm">
+                            <p class="font-semibold text-gray-800 dark:text-gray-100 mb-1">Pratinjau selesai</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Lanjutkan membaca {{ $library->title }} secara lengkap.</p>
+                            @include('pages.user.library._purchase-button')
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

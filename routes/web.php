@@ -78,6 +78,9 @@ Route::get('/manaqib', [\App\Http\Controllers\User\BiographyController::class, '
 Route::get('/manaqib/{slug}', [\App\Http\Controllers\User\BiographyController::class, 'detail'])->name('manaqib-detail');
 Route::get('/pustaka', [\App\Http\Controllers\User\LibraryController::class, 'list'])->name('pustaka-list');
 Route::get('/pustaka/{library}', [\App\Http\Controllers\User\LibraryController::class, 'detail'])->name('pustaka-detail');
+// Pratinjau gratis pustaka berbayar (mis. Bab I): terbuka tanpa login.
+Route::get('/pustaka/{library}/pratinjau', [\App\Http\Controllers\User\LibraryController::class, 'preview'])->middleware('noindex')->name('pustaka-preview');
+Route::get('/pustaka/{library}/pratinjau/dokumen', [\App\Http\Controllers\User\LibraryController::class, 'streamPreview'])->middleware(['noindex', 'throttle:30,1'])->name('pustaka-preview-stream');
 Route::get('/kitab', [\App\Http\Controllers\User\BookController::class, 'list'])->name('kitab-list');
 Route::get('/kitab/{book}', [\App\Http\Controllers\User\BookController::class, 'detail'])->name('kitab-detail');
 Route::get('/tulisan', [\App\Http\Controllers\User\PostController::class, 'index'])->name('tulisan.list');

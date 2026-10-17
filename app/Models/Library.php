@@ -16,6 +16,7 @@ class Library extends Model
         'category',
         'description',
         'file_path',
+        'preview_file_path',
         'cover_image',
         'price_type',
         'price',
@@ -54,6 +55,14 @@ class Library extends Model
     public function isPaid(): bool
     {
         return $this->price_type === 'paid';
+    }
+
+    /**
+     * Pratinjau gratis hanya bermakna untuk pustaka berbayar.
+     */
+    public function hasPreview(): bool
+    {
+        return $this->isPaid() && filled($this->preview_file_path);
     }
 
     /**

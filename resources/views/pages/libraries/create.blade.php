@@ -84,6 +84,15 @@
                         </div>
 
                         <div>
+                            <label class="block text-sm font-medium mb-2" for="preview_file">File Pratinjau Gratis (Opsional)</label>
+                            <input id="preview_file" class="form-input w-full @error('preview_file') is-invalid @enderror" type="file" name="preview_file" accept="application/pdf" />
+                            <div class="text-xs text-gray-500 mt-1">Hanya untuk tipe Berbayar. PDF berisi bagian yang boleh dibaca gratis (mis. Bab I), Maks 10MB.</div>
+                            @error('preview_file')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div>
                             <label class="block text-sm font-medium mb-2" for="cover_image">Cover Buku (Opsional)</label>
                             <input id="cover_image" class="form-input w-full @error('cover_image') is-invalid @enderror" type="file" name="cover_image" accept="image/*" />
                              <div class="text-xs text-gray-500 mt-1">Format Gambar (JPG, PNG), Maks 2MB</div>

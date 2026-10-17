@@ -74,7 +74,40 @@ class LibraryController extends Controller
             abort(404);
         }
 
-        return view('pages.user.library.read', compact('library'));
+        return view('pages.user.library.read', [
+            'library' => $library,
+            'streamUrl' => route('pustaka-stream', $library),
+            'isPreview' => false,
+        ]);
+    }
+
+    /**
+     * Penampil pratinjau gratis (mis. Bab I) pustaka berbayar, terbuka tanpa login.
+     * Pemilik akses langsung diarahkan ke versi lengkap; admin tetap bisa melihat pratinjau.
+     */
+    public function preview(Library $library)
+    {
+        $user = Auth::user();
+        $isAdmin = (bool) $user?->hasRole('Super Admin');
+
+        abort_unless($library->hasPreview() && ($library->is_active || $isAdmin), 404);
+
+        if (! $isAdmin && $library->file_path && $library->isAccessibleBy($user)) {
+            return redirect()->route('pustaka-read', $library);
+        }
+
+        return view('pages.user.library.read', [
+            'library' => $library,
+            'streamUrl' => route('pustaka-preview-stream', $library),
+            'isPreview' => true,
+        ]);
+    }
+
+    public function streamPreview(Request $request, Library $library)
+    {
+        abort_unless($library->hasPreview() && ($library->is_active || Auth::user()?->hasRole('Super Admin')), 404);
+
+        return $this->pdfResponse($request, 'local', $library->preview_file_path, $library->slug.'-pratinjau.pdf');
     }
 
     /**
@@ -88,19 +121,25 @@ class LibraryController extends Controller
             abort(403);
         }
 
+        return $this->pdfResponse($request, $library->isPaid() ? 'local' : 'public', $library->file_path, $library->slug.'.pdf');
+    }
+
+    /**
+     * Hanya menerima XHR (dari PDF.js) agar URL tidak bisa dibuka langsung sebagai tab PDF.
+     */
+    private function pdfResponse(Request $request, string $disk, ?string $path, string $filename)
+    {
         if ($request->header('X-Requested-With') !== 'XMLHttpRequest') {
             abort(403);
         }
 
-        $disk = $library->isPaid() ? 'local' : 'public';
-
-        if (! $library->file_path || ! Storage::disk($disk)->exists($library->file_path)) {
+        if (! $path || ! Storage::disk($disk)->exists($path)) {
             abort(404);
         }
 
         return Storage::disk($disk)->response(
-            $library->file_path,
-            $library->slug.'.pdf',
+            $path,
+            $filename,
             [
                 'Content-Type' => 'application/pdf',
                 'Cache-Control' => 'private, no-store',

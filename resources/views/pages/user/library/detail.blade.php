@@ -51,29 +51,19 @@
                                                 @endauth
                                             @else
                                                 {{-- Pustaka berbayar --}}
-                                                @auth
-                                                    @if($library->isAccessibleBy(auth()->user()))
-                                                        <a href="{{ route('pustaka-read', $library) }}" target="_blank" class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white">
-                                                            <span>Baca</span>
-                                                        </a>
-                                                        <p class="text-xs text-gray-400 mt-2 text-center">Baca online &mdash; tidak tersedia untuk diunduh.</p>
-                                                    @elseif($library->purchases()->where('user_id', auth()->id())->where('status', 'pending')->exists())
-                                                        <button disabled class="btn w-full bg-yellow-100 text-yellow-800 cursor-not-allowed">
-                                                            Menunggu verifikasi pembayaran
-                                                        </button>
-                                                    @else
-                                                        <form method="POST" action="{{ route('pustaka-purchase', $library) }}">
-                                                            @csrf
-                                                            <button type="submit" class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white">
-                                                                Beli (Rp {{ number_format($library->price, 0, ',', '.') }})
-                                                            </button>
-                                                        </form>
-                                                    @endif
-                                                @else
-                                                    <a href="{{ route('login') }}" class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white">
-                                                        <span>Login untuk Membeli</span>
+                                                @if($library->isAccessibleBy(auth()->user()))
+                                                    <a href="{{ route('pustaka-read', $library) }}" target="_blank" class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white">
+                                                        <span>Baca</span>
                                                     </a>
-                                                @endauth
+                                                    <p class="text-xs text-gray-400 mt-2 text-center">Baca online &mdash; tidak tersedia untuk diunduh.</p>
+                                                @else
+                                                    @if($library->hasPreview())
+                                                        <a href="{{ route('pustaka-preview', $library) }}" class="btn w-full mb-2 bg-white dark:bg-gray-800 border-indigo-200 dark:border-indigo-500/40 hover:border-indigo-300 text-indigo-600 dark:text-indigo-300">
+                                                            Baca Pratinjau Gratis
+                                                        </a>
+                                                    @endif
+                                                    @include('pages.user.library._purchase-button')
+                                                @endif
                                             @endif
                                         @else
                                             <button disabled class="btn w-full bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed">
