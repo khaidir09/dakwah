@@ -158,6 +158,26 @@ class Teacher extends Model
         return null;
     }
 
+    /**
+     * Tahun wafat Masehi sebagai angka, untuk perhitungan (mis. masa hak cipta kitab).
+     * Bila hanya tahun Hijriah yang tercatat, dipakai tahun Masehi PALING AKHIR yang
+     * mungkin dicakup tahun Hijriah itu (satu tahun Hijriah melintasi dua tahun Masehi),
+     * agar perhitungan turunan selalu condong ke "masih dilindungi".
+     */
+    public function tahunWafatMasehi(): ?int
+    {
+        if (filled($this->wafat_masehi)) {
+            return Carbon::parse($this->wafat_masehi)->year;
+        }
+
+        if (filled($this->wafat_hijriah_year)) {
+            // Epoch Hijriah ≈ 622,54 M; satu tahun Hijriah ≈ 0,970224 tahun Masehi.
+            return (int) floor(622.54 + (int) $this->wafat_hijriah_year * 0.970224);
+        }
+
+        return null;
+    }
+
     public function scopeWafat($query)
     {
         return $query->where(function ($q) {

@@ -62,6 +62,7 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="font-semibold text-left">Guru</div></th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="font-semibold text-left">Bidang</div></th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="font-semibold text-left">Status</div></th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="font-semibold text-left">Hak Cipta</div></th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="font-semibold text-left">Aksi</div></th>
                     </tr>
                 </thead>
@@ -95,6 +96,29 @@
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Unggulan</span>
                                 @endif
                             </td>
+                            @php
+                                $copyrightStatus = $item->copyrightStatus();
+                                $publicDomainYear = $item->publicDomainYear();
+                            @endphp
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <span @class([
+                                    'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
+                                    'bg-green-100 text-green-800' => $copyrightStatus === 'domain_publik',
+                                    'bg-amber-100 text-amber-800' => $copyrightStatus === 'dilindungi',
+                                    'bg-gray-100 text-gray-600' => $copyrightStatus === 'belum_diketahui',
+                                ])>{{ $item->copyright_status_label }}</span>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    @if ($copyrightStatus === 'domain_publik')
+                                        sejak 1 Jan {{ $publicDomainYear }}
+                                    @elseif ($publicDomainYear)
+                                        hingga 31 Des {{ $publicDomainYear - 1 }}
+                                    @elseif ($copyrightStatus === 'dilindungi')
+                                        pencipta belum tercatat wafat
+                                    @else
+                                        tanpa pengarang/pensyarah
+                                    @endif
+                                </div>
+                            </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex items-center space-x-2">
                                     <a href="{{ route('kitab-detail', $item) }}" target="_blank" class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400">Lihat</a>
@@ -105,7 +129,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-5 py-6 text-center text-gray-500">Belum ada data kitab.</td>
+                            <td colspan="7" class="px-5 py-6 text-center text-gray-500">Belum ada data kitab.</td>
                         </tr>
                     @endforelse
                 </tbody>

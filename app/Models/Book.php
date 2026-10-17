@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -30,6 +31,21 @@ class Book extends Model
         'penerjemah' => 'Penerjemah',
         'pentahqiq' => 'Pentahqiq',
     ];
+
+    public const COPYRIGHT_STATUSES = [
+        'domain_publik' => 'Domain Publik',
+        'dilindungi' => 'Dilindungi',
+        'belum_diketahui' => 'Belum Diketahui',
+    ];
+
+    /**
+     * Peran yang dihitung sebagai pencipta karya. Hak penerjemah/pentahqiq melekat
+     * pada edisi tertentu, bukan pada kitab yang dicatat di katalog.
+     */
+    public const COPYRIGHT_CREATOR_ROLES = ['pengarang', 'pensyarah'];
+
+    /** UU 28/2014 Pasal 58: seumur hidup pencipta + 70 tahun. */
+    public const COPYRIGHT_TERM_YEARS = 70;
 
     protected $fillable = [
         'title',
@@ -128,6 +144,49 @@ class Book extends Model
     public function primaryTeacher(): ?Teacher
     {
         return $this->teachers->firstWhere('pivot.role', 'pengarang') ?? $this->teachers->first();
+    }
+
+    /**
+     * Tahun (1 Januari) kitab masuk domain publik. Masa perlindungan dihitung sejak
+     * 1 Januari tahun berikutnya setelah pencipta terakhir wafat (UU 28/2014 Pasal 58).
+     * Null bila tidak ada pencipta atau ada pencipta yang belum tercatat wafat.
+     */
+    public function publicDomainYear(): ?int
+    {
+        $creators = $this->copyrightCreators();
+
+        if ($creators->isEmpty()) {
+            return null;
+        }
+
+        $deathYears = $creators->map(fn (Teacher $teacher) => $teacher->tahunWafatMasehi());
+
+        if ($deathYears->contains(null)) {
+            return null;
+        }
+
+        return $deathYears->max() + self::COPYRIGHT_TERM_YEARS + 1;
+    }
+
+    public function copyrightStatus(): string
+    {
+        if ($this->copyrightCreators()->isEmpty()) {
+            return 'belum_diketahui';
+        }
+
+        $publicDomainYear = $this->publicDomainYear();
+
+        return $publicDomainYear !== null && now()->year >= $publicDomainYear ? 'domain_publik' : 'dilindungi';
+    }
+
+    public function getCopyrightStatusLabelAttribute(): string
+    {
+        return self::COPYRIGHT_STATUSES[$this->copyrightStatus()];
+    }
+
+    private function copyrightCreators(): Collection
+    {
+        return $this->teachers->whereIn('pivot.role', self::COPYRIGHT_CREATOR_ROLES);
     }
 
     public function isVisibleTo(?User $user): bool
