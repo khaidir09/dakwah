@@ -44,9 +44,11 @@
                                 <option value="">Pilih Kategori</option>
                                 <option value="Fikih" {{ old('category', $library->category) == 'Fikih' ? 'selected' : '' }}>Fikih</option>
                                 <option value="Tasawuf" {{ old('category', $library->category) == 'Tasawuf' ? 'selected' : '' }}>Tasawuf</option>
+                                <option value="Tauhid" {{ old('category', $library->category) == 'Tauhid' ? 'selected' : '' }}>Tauhid</option>
                                 <option value="Sejarah" {{ old('category', $library->category) == 'Sejarah' ? 'selected' : '' }}>Sejarah</option>
                                 <option value="Hadits" {{ old('category', $library->category) == 'Hadits' ? 'selected' : '' }}>Hadits</option>
                                 <option value="Tafsir" {{ old('category', $library->category) == 'Tafsir' ? 'selected' : '' }}>Tafsir</option>
+                                <option value="Studi Al-Quran" {{ old('category', $library->category) == 'Studi Al-Quran' ? 'selected' : '' }}>Studi Al-Qur'an</option>
                                 <option value="Amalan" {{ old('category', $library->category) == 'Amalan' ? 'selected' : '' }}>Amalan (Ratib, Maulid, dll)</option>
                                 <option value="Lainnya" {{ old('category', $library->category) == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                             </select>
