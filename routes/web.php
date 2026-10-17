@@ -272,6 +272,13 @@ Route::middleware(['noindex', 'auth:sanctum', 'auth.web_session', 'verified', 'i
     Route::put('/library-purchases/{purchase}/activate', [\App\Http\Controllers\Admin\LibraryPurchaseController::class, 'activate'])->name('admin.library-purchases.activate');
     Route::put('/library-purchases/{purchase}/reject', [\App\Http\Controllers\Admin\LibraryPurchaseController::class, 'reject'])->name('admin.library-purchases.reject');
 
+    // Laporan & transfer bagi hasil pustaka berbayar
+    Route::get('/bagi-hasil', [\App\Http\Controllers\Admin\LibraryRevenueController::class, 'index'])->name('admin.library-revenue.index');
+    Route::get('/bagi-hasil/transfer/{payout}/bukti', [\App\Http\Controllers\Admin\LibraryRevenueController::class, 'proof'])->name('admin.library-revenue.proof');
+    Route::get('/bagi-hasil/{library}', [\App\Http\Controllers\Admin\LibraryRevenueController::class, 'show'])->name('admin.library-revenue.show');
+    Route::get('/bagi-hasil/{library}/laporan', [\App\Http\Controllers\Admin\LibraryRevenueController::class, 'report'])->name('admin.library-revenue.report');
+    Route::post('/bagi-hasil/{library}/transfer', [\App\Http\Controllers\Admin\LibraryRevenueController::class, 'markPaid'])->name('admin.library-revenue.mark-paid');
+
     Route::put('/majelis/{id}/moderasi', [ModerasiController::class, 'moderasiAssembly'])->name('admin.moderasi.majelis');
     Route::put('/majelis/{id}/revoke', [ModerasiController::class, 'revokeAssembly'])->name('admin.revoke.majelis');
     Route::put('/guru/{id}/moderasi', [ModerasiController::class, 'moderasiTeacher'])->name('admin.moderasi.guru');

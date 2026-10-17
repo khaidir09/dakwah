@@ -75,6 +75,23 @@
                             @enderror
                         </div>
 
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="payee_name">Penerima Bagi Hasil</label>
+                            <input id="payee_name" class="form-input w-full @error('payee_name') is-invalid @enderror" type="text" name="payee_name" value="{{ old('payee_name', $library->payee_name) }}" maxlength="255" placeholder="Contoh: Ustadz Fulan" />
+                            @error('payee_name')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="author_share_percent">Bagian Penulis (%)</label>
+                            <input id="author_share_percent" class="form-input w-full @error('author_share_percent') is-invalid @enderror" type="number" min="0" max="100" name="author_share_percent" value="{{ old('author_share_percent', $library->author_share_percent) }}" placeholder="Contoh: 70" />
+                            <div class="text-xs text-gray-500 mt-1">Hanya untuk tipe Berbayar. Isi keduanya agar pustaka masuk laporan bagi hasil. Perubahan tidak memengaruhi bulan yang transfernya sudah dicatat.</div>
+                            @error('author_share_percent')
+                                <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                          <div>
                             <label class="block text-sm font-medium mb-2" for="file">File PDF</label>
                             <input id="file" class="form-input w-full @error('file') is-invalid @enderror" type="file" name="file" accept="application/pdf" />

@@ -20,6 +20,8 @@ class Library extends Model
         'cover_image',
         'price_type',
         'price',
+        'payee_name',
+        'author_share_percent',
         'is_active',
         'visit_count',
         'like_count',
@@ -30,6 +32,7 @@ class Library extends Model
     protected $casts = [
         'podcast_metadata' => 'array',
         'price' => 'integer',
+        'author_share_percent' => 'integer',
     ];
 
     public function getRouteKeyName()
@@ -40,6 +43,11 @@ class Library extends Model
     public function purchases(): HasMany
     {
         return $this->hasMany(LibraryPurchase::class);
+    }
+
+    public function payouts(): HasMany
+    {
+        return $this->hasMany(LibraryPayout::class);
     }
 
     public function books(): HasMany

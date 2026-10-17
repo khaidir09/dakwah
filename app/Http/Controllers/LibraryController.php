@@ -34,6 +34,8 @@ class LibraryController extends Controller
             'cover_image' => 'nullable|image|max:2048',
             'price_type' => 'required|in:free,paid',
             'price' => 'nullable|integer|min:0|required_if:price_type,paid',
+            'payee_name' => 'exclude_unless:price_type,paid|nullable|string|max:255|required_with:author_share_percent',
+            'author_share_percent' => 'exclude_unless:price_type,paid|nullable|integer|min:0|max:100|required_with:payee_name',
         ]);
 
         $dataToCreate = $validatedData;
@@ -82,6 +84,8 @@ class LibraryController extends Controller
             'cover_image' => 'nullable|image|max:2048',
             'price_type' => 'required|in:free,paid',
             'price' => 'nullable|integer|min:0|required_if:price_type,paid',
+            'payee_name' => 'exclude_unless:price_type,paid|nullable|string|max:255|required_with:author_share_percent',
+            'author_share_percent' => 'exclude_unless:price_type,paid|nullable|integer|min:0|max:100|required_with:payee_name',
             'is_active' => 'sometimes|boolean',
         ]);
 
@@ -95,6 +99,12 @@ class LibraryController extends Controller
         }
 
         $dataToUpdate['price'] = $newPriceType === 'paid' ? $validatedData['price'] : null;
+
+        // Bagi hasil hanya untuk pustaka berbayar.
+        if ($newPriceType !== 'paid') {
+            $dataToUpdate['payee_name'] = null;
+            $dataToUpdate['author_share_percent'] = null;
+        }
 
         if ($request->hasFile('file')) {
             if ($library->file_path && Storage::disk($oldDisk)->exists($library->file_path)) {
