@@ -130,6 +130,30 @@ class KitabPublicTest extends PublicPageTestCase
         $this->get(route('kitab-detail', $book))->assertOk()->assertDontSee('Baca di Pustaka');
     }
 
+    public function test_detail_menampilkan_kitab_lainnya_yang_aktif_sebidang_didahulukan(): void
+    {
+        $fiqih = Specialization::forceCreate(['name' => 'FIQIH']);
+        $tasawuf = Specialization::forceCreate(['name' => 'TASAWUF']);
+        $teacher = $this->makeTeacher();
+        $book = $this->makeBook([[$teacher, 'pengarang']], ['title' => 'Kitab Utama', 'specialization_id' => $fiqih->id]);
+        $this->makeBook([[$teacher, 'pengarang']], ['title' => 'Kitab Sebidang', 'specialization_id' => $fiqih->id, 'created_at' => now()->subDay()]);
+        $this->makeBook([[$teacher, 'pengarang']], ['title' => 'Kitab Lain Bidang', 'specialization_id' => $tasawuf->id]);
+        $this->makeBook([[$teacher, 'pengarang']], ['title' => 'Kitab Draf Lain', 'is_active' => false]);
+
+        $this->get(route('kitab-detail', $book))
+            ->assertOk()
+            ->assertSee('Kitab Lainnya')
+            ->assertSeeInOrder(['Kitab Sebidang', 'Kitab Lain Bidang'])
+            ->assertDontSee('Kitab Draf Lain');
+    }
+
+    public function test_kitab_lainnya_disembunyikan_bila_tidak_ada_kitab_lain(): void
+    {
+        $book = $this->makeBook([[$this->makeTeacher(), 'pengarang']]);
+
+        $this->get(route('kitab-detail', $book))->assertOk()->assertDontSee('Kitab Lainnya');
+    }
+
     public function test_filter_status_guru_bidang_dan_pencarian(): void
     {
         $fiqih = Specialization::forceCreate(['name' => 'FIQIH']);

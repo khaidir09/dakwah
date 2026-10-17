@@ -117,6 +117,21 @@
                                 </div>
                             </div>
                         </article>
+
+                        @if ($otherBooks->isNotEmpty())
+                            <section class="mt-8">
+                                <header class="mb-4 flex justify-between items-center">
+                                    <h2 class="text-xl md:text-2xl text-gray-800 dark:text-gray-100 font-bold">Kitab Lainnya</h2>
+                                    <a href="{{ route('kitab-list') }}" class="text-sm font-medium text-emerald-500 hover:text-emerald-600">Lihat semua -&gt;</a>
+                                </header>
+
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                    @foreach ($otherBooks as $otherBook)
+                                        <x-kitab.card :book="$otherBook" />
+                                    @endforeach
+                                </div>
+                            </section>
+                        @endif
                     </div>
                 </div>
             </div>

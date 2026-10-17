@@ -27,7 +27,20 @@ class BookController extends Controller
 
         $teachersByRole = $book->teachers->groupBy('pivot.role');
 
-        return view('pages.user.kitab.detail', compact('book', 'teachersByRole'));
+        // Kitab sebidang ilmu didahulukan, sisanya diisi kitab terbaru.
+        $otherBooks = Book::query()
+            ->active()
+            ->whereKeyNot($book->getKey())
+            ->with([
+                'teachers' => fn ($q) => $q->publiclyVisible(),
+                'specialization',
+            ])
+            ->when($book->specialization_id, fn ($q, $specializationId) => $q->orderByRaw('specialization_id = ? desc', [$specializationId]))
+            ->latest()
+            ->take(4)
+            ->get();
+
+        return view('pages.user.kitab.detail', compact('book', 'teachersByRole', 'otherBooks'));
     }
 
     /**
