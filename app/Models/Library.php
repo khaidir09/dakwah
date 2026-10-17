@@ -20,6 +20,7 @@ class Library extends Model
         'cover_image',
         'price_type',
         'price',
+        'show_price',
         'payee_name',
         'author_share_percent',
         'is_active',
@@ -32,6 +33,7 @@ class Library extends Model
     protected $casts = [
         'podcast_metadata' => 'array',
         'price' => 'integer',
+        'show_price' => 'boolean',
         'author_share_percent' => 'integer',
     ];
 

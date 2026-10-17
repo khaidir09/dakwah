@@ -54,7 +54,7 @@ class LibraryController extends Controller
 
         if (empty($adminNumber)) {
             return redirect()->route('pustaka-detail', $library)
-                ->with('message', 'Permintaan pembelian tercatat. Admin akan menghubungi Anda untuk konfirmasi pembayaran.');
+                ->with('message', 'Permintaan pembelian tercatat dengan harga Rp'.number_format((int) $purchase->price, 0, ',', '.').'. Admin akan menghubungi Anda untuk konfirmasi pembayaran.');
         }
 
         return redirect()->away($this->whatsappUrl($adminNumber, $library, $purchase, $user->name));

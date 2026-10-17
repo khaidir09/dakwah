@@ -20,6 +20,10 @@
                             </a>
                         </div>
 
+                        @if(session('message'))
+                            <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg text-sm">{{ session('message') }}</div>
+                        @endif
+
                         <article class="bg-white dark:bg-gray-800 p-6 shadow-md rounded-xl border border-gray-100 dark:border-gray-700/60">
                             <div class="flex flex-col md:flex-row gap-8">
                                 <!-- Cover -->

@@ -41,7 +41,7 @@
         @if($isPreview)
             <div class="mb-4 flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/30">
                 <p class="flex-1 text-sm text-indigo-800 dark:text-indigo-200">
-                    Anda membaca <strong>pratinjau gratis</strong>. Versi lengkap: Rp {{ number_format($library->price, 0, ',', '.') }}.
+                    Anda membaca <strong>pratinjau gratis</strong>.@if($library->show_price) Versi lengkap: Rp {{ number_format($library->price, 0, ',', '.') }}.@endif
                 </p>
                 <a href="#pratinjau-selesai" class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Dapatkan versi lengkap</a>
             </div>

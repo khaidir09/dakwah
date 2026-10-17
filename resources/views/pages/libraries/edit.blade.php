@@ -70,6 +70,11 @@
                             <label class="block text-sm font-medium mb-2" for="price">Harga (Rp)</label>
                             <input id="price" class="form-input w-full @error('price') is-invalid @enderror" type="number" min="0" name="price" value="{{ old('price', $library->price) }}" placeholder="Contoh: 25000" />
                             <div class="text-xs text-gray-500 mt-1">Wajib diisi jika tipe Berbayar. Kosongkan untuk Gratis.</div>
+                            <div class="flex items-center mt-2">
+                                <input id="show_price" type="checkbox" class="form-checkbox" name="show_price" value="1" @checked(old('_token') ? old('show_price') : $library->show_price)>
+                                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Tampilkan harga di halaman publik</span>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">Jika tidak dicentang, harga baru disebutkan lewat WhatsApp saat calon pembeli menekan Beli.</div>
                             @error('price')
                                 <div class="text-xs mt-1 text-red-500">{{ $message }}</div>
                             @enderror
