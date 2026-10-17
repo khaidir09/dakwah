@@ -42,6 +42,25 @@ class KitabPublicTest extends PublicPageTestCase
             ->assertDontSee('Kitab Draf');
     }
 
+    public function test_daftar_menampilkan_ajakan_usulan_kitab_ke_whatsapp_admin(): void
+    {
+        config(['services.whatsapp.admin_number' => '6281234567890']);
+
+        $this->get(route('kitab-list'))
+            ->assertOk()
+            ->assertSee('Usulkan Kitab')
+            ->assertSee('https://wa.me/6281234567890?text=', false);
+    }
+
+    public function test_ajakan_usulan_kitab_disembunyikan_bila_nomor_admin_kosong(): void
+    {
+        config(['services.whatsapp.admin_number' => null]);
+
+        $this->get(route('kitab-list'))
+            ->assertOk()
+            ->assertDontSee('Usulkan Kitab');
+    }
+
     public function test_detail_draf_hanya_untuk_super_admin(): void
     {
         $teacher = $this->makeTeacher();
