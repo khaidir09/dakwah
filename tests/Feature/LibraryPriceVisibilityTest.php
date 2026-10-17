@@ -68,20 +68,37 @@ class LibraryPriceVisibilityTest extends TestCase
             ->assertDontSee('75.000');
     }
 
-    public function test_pesan_whatsapp_tetap_menyebut_harga_saat_disembunyikan(): void
+    public function test_pesan_whatsapp_tanpa_harga_saat_disembunyikan(): void
     {
         config(['services.whatsapp.admin_number' => '6281234567890']);
         $library = $this->library(['show_price' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
-            ->post(route('pustaka-purchase', $library));
+        $location = $this->actingAs(User::factory()->create())
+            ->post(route('pustaka-purchase', $library))
+            ->headers->get('Location');
 
-        $location = $response->headers->get('Location');
         $this->assertStringStartsWith('https://wa.me/6281234567890', $location);
+        $this->assertStringContainsString(rawurlencode('Judul: Buku Ustadz'), $location);
+        $this->assertStringNotContainsString(rawurlencode('Harga:'), $location);
+        $this->assertStringNotContainsString('75.000', rawurldecode($location));
+
+        // Harga tetap tercatat untuk laporan bagi hasil.
+        $this->assertSame(75000, $library->purchases()->sole()->price);
+    }
+
+    public function test_pesan_whatsapp_menyebut_harga_saat_ditampilkan(): void
+    {
+        config(['services.whatsapp.admin_number' => '6281234567890']);
+        $library = $this->library();
+
+        $location = $this->actingAs(User::factory()->create())
+            ->post(route('pustaka-purchase', $library))
+            ->headers->get('Location');
+
         $this->assertStringContainsString(rawurlencode('Harga: Rp75.000'), $location);
     }
 
-    public function test_tanpa_nomor_whatsapp_harga_disebut_di_pesan_konfirmasi(): void
+    public function test_tanpa_nomor_whatsapp_pesan_konfirmasi_tanpa_harga(): void
     {
         config(['services.whatsapp.admin_number' => null]);
         $library = $this->library(['show_price' => false]);
@@ -93,7 +110,8 @@ class LibraryPriceVisibilityTest extends TestCase
 
         $this->actingAs($user)
             ->get(route('pustaka-detail', $library))
-            ->assertSee('Permintaan pembelian tercatat dengan harga Rp75.000');
+            ->assertSee('Permintaan pembelian tercatat. Admin akan menghubungi Anda')
+            ->assertDontSee('75.000');
     }
 
     public function test_admin_mengatur_tampilan_harga(): void

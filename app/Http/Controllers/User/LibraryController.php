@@ -54,7 +54,7 @@ class LibraryController extends Controller
 
         if (empty($adminNumber)) {
             return redirect()->route('pustaka-detail', $library)
-                ->with('message', 'Permintaan pembelian tercatat dengan harga Rp'.number_format((int) $purchase->price, 0, ',', '.').'. Admin akan menghubungi Anda untuk konfirmasi pembayaran.');
+                ->with('message', 'Permintaan pembelian tercatat. Admin akan menghubungi Anda untuk konfirmasi pembayaran.');
         }
 
         return redirect()->away($this->whatsappUrl($adminNumber, $library, $purchase, $user->name));
@@ -164,9 +164,10 @@ class LibraryController extends Controller
 
     private function whatsappUrl(string $adminNumber, Library $library, LibraryPurchase $purchase, string $userName): string
     {
+        // Harga yang disembunyikan baru disampaikan admin saat membalas chat.
         $message = "Assalamu'alaikum, saya ingin membeli pustaka berikut:\n"
             ."Judul: {$library->title}\n"
-            .'Harga: Rp'.number_format((int) $purchase->price, 0, ',', '.')."\n"
+            .($library->show_price ? 'Harga: Rp'.number_format((int) $purchase->price, 0, ',', '.')."\n" : '')
             ."Nama: {$userName}\n"
             ."Kode permintaan: #{$purchase->id}";
 

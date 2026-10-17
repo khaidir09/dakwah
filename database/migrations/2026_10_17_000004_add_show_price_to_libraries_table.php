@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('libraries', function (Blueprint $table) {
-            // Bila false, harga tidak tampil di halaman publik dan baru disebutkan lewat WhatsApp saat membeli.
+            // Bila false, harga tidak tampil di halaman maupun pesan WhatsApp otomatis; admin menyampaikannya saat membalas chat.
             $table->boolean('show_price')->default(true)->after('price');
         });
     }
