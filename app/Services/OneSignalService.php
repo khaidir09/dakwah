@@ -38,8 +38,12 @@ class OneSignalService
             'app_id' => $this->appId,
             'headings' => ['en' => $title],
             'contents' => ['en' => $message],
-            'data' => $data,
         ];
+
+        // Array kosong ter-encode sebagai JSON [] dan ditolak OneSignal; field data wajib berupa objek.
+        if (!empty($data)) {
+            $payload['data'] = $data;
+        }
 
         if (!empty($userIds)) {
             // Using include_aliases to target users by the external_id set via OneSignal.login()
@@ -97,8 +101,11 @@ class OneSignalService
             'headings' => ['en' => $title],
             'contents' => ['en' => $message],
             'included_segments' => ['Total Subscriptions'],
-            'data' => $data,
         ];
+
+        if (!empty($data)) {
+            $payload['data'] = $data;
+        }
 
         if ($url) {
             $payload['url'] = $url;

@@ -50,4 +50,36 @@ class OneSignalServiceTest extends TestCase
             return $request->data()['included_segments'][0] == 'Total Subscriptions';
         });
     }
+
+    public function test_empty_data_is_omitted_from_payload()
+    {
+        Config::set('services.onesignal.app_id', 'test_app_id');
+        Config::set('services.onesignal.rest_api_key', 'test_api_key');
+
+        Http::fake([
+            'onesignal.com/*' => Http::response(['id' => 'test_id'], 200),
+        ]);
+
+        $service = new OneSignalService();
+        $service->sendNotification('Title', 'Message', ['1']);
+        $service->sendToAll('Title', 'Message');
+
+        Http::assertSentCount(2);
+        Http::assertSent(fn ($request) => !array_key_exists('data', json_decode($request->body(), true)));
+        Http::assertNotSent(fn ($request) => str_contains($request->body(), '"data":[]'));
+    }
+
+    public function test_non_empty_data_is_sent_as_json_object()
+    {
+        Config::set('services.onesignal.app_id', 'test_app_id');
+        Config::set('services.onesignal.rest_api_key', 'test_api_key');
+
+        Http::fake([
+            'onesignal.com/*' => Http::response(['id' => 'test_id'], 200),
+        ]);
+
+        (new OneSignalService())->sendToAll('Title', 'Message', null, ['type' => 'haul']);
+
+        Http::assertSent(fn ($request) => str_contains($request->body(), '"data":{"type":"haul"}'));
+    }
 }
