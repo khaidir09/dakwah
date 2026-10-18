@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ModerasiController;
 use App\Http\Controllers\Admin\PosterSettingController;
+use App\Http\Controllers\Admin\PushNotificationController;
 use App\Http\Controllers\Admin\RewardClaimController as AdminRewardClaimController;
 use App\Http\Controllers\Admin\RewardSettingController;
 use App\Http\Controllers\Admin\XpSettingController;
@@ -262,6 +263,9 @@ Route::middleware(['noindex', 'auth:sanctum', 'auth.web_session', 'verified', 'i
 
     Route::get('/pengaturan/poster', [PosterSettingController::class, 'index'])->name('admin.poster-settings.index');
     Route::put('/pengaturan/poster', [PosterSettingController::class, 'update'])->name('admin.poster-settings.update');
+
+    Route::get('/notifikasi-push', [PushNotificationController::class, 'index'])->name('admin.push-notifications.index');
+    Route::post('/notifikasi-push', [PushNotificationController::class, 'send'])->name('admin.push-notifications.send');
 
     Route::get('/reward-klaim', [AdminRewardClaimController::class, 'index'])->name('admin.reward-klaim.index');
     Route::put('/reward-klaim/{claim}/paid', [AdminRewardClaimController::class, 'markPaid'])->name('admin.reward-klaim.paid');
