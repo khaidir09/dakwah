@@ -29,8 +29,8 @@ class LibraryController extends Controller
             'title' => 'required|string|max:255',
             'category' => 'required|string|max:255',
             'description' => 'required|string',
-            'file' => 'required|file|mimes:pdf|max:10240', // 10MB max
-            'preview_file' => 'exclude_unless:price_type,paid|nullable|file|mimes:pdf|max:10240',
+            'file' => 'required|file|mimes:pdf|max:51200', // 50MB max
+            'preview_file' => 'exclude_unless:price_type,paid|nullable|file|mimes:pdf|max:51200',
             'cover_image' => 'nullable|image|max:2048',
             'price_type' => 'required|in:free,paid',
             'price' => 'nullable|integer|min:0|required_if:price_type,paid',
@@ -40,7 +40,7 @@ class LibraryController extends Controller
         ]);
 
         $dataToCreate = $validatedData;
-        $dataToCreate['slug'] = Str::slug($validatedData['title']).'-'.Str::random(6);
+        $dataToCreate['slug'] = Str::slug($validatedData['title']) . '-' . Str::random(6);
         $dataToCreate['is_active'] = true;
         $dataToCreate['price'] = $validatedData['price_type'] === 'paid' ? $validatedData['price'] : null;
         // Checkbox tidak terkirim saat tidak dicentang.
@@ -81,8 +81,8 @@ class LibraryController extends Controller
             'title' => 'required|string|max:255',
             'category' => 'required|string|max:255',
             'description' => 'required|string',
-            'file' => 'nullable|file|mimes:pdf|max:10240',
-            'preview_file' => 'exclude_unless:price_type,paid|nullable|file|mimes:pdf|max:10240',
+            'file' => 'nullable|file|mimes:pdf|max:51200',
+            'preview_file' => 'exclude_unless:price_type,paid|nullable|file|mimes:pdf|max:51200',
             'remove_preview' => 'sometimes|boolean',
             'cover_image' => 'nullable|image|max:2048',
             'price_type' => 'required|in:free,paid',
@@ -99,7 +99,7 @@ class LibraryController extends Controller
         $newDisk = $this->pdfDiskFor($newPriceType);
 
         if ($validatedData['title'] !== $library->title) {
-            $dataToUpdate['slug'] = Str::slug($validatedData['title']).'-'.Str::random(6);
+            $dataToUpdate['slug'] = Str::slug($validatedData['title']) . '-' . Str::random(6);
         }
 
         $dataToUpdate['price'] = $newPriceType === 'paid' ? $validatedData['price'] : null;
@@ -119,7 +119,7 @@ class LibraryController extends Controller
             $dataToUpdate['file_path'] = $this->storePdf($request->file('file'), $newPriceType);
         } elseif ($oldDisk !== $newDisk && $library->file_path && Storage::disk($oldDisk)->exists($library->file_path)) {
             // Status berbayar/gratis berubah tanpa ganti file: pindahkan file antar-disk.
-            $newPath = $this->pdfFolderFor($newPriceType).'/'.basename($library->file_path);
+            $newPath = $this->pdfFolderFor($newPriceType) . '/' . basename($library->file_path);
             Storage::disk($newDisk)->put($newPath, Storage::disk($oldDisk)->get($library->file_path));
             Storage::disk($oldDisk)->delete($library->file_path);
             $dataToUpdate['file_path'] = $newPath;
@@ -176,7 +176,7 @@ class LibraryController extends Controller
      */
     private function storePdf(UploadedFile $file, string $priceType): string
     {
-        $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
+        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
 
         return $file->storeAs($this->pdfFolderFor($priceType), $filename, $this->pdfDiskFor($priceType));
     }
@@ -186,7 +186,7 @@ class LibraryController extends Controller
      */
     private function storePreviewPdf(UploadedFile $file): string
     {
-        return $file->storeAs('libraries/preview', Str::uuid().'.'.$file->getClientOriginalExtension(), 'local');
+        return $file->storeAs('libraries/preview', Str::uuid() . '.' . $file->getClientOriginalExtension(), 'local');
     }
 
     private function deletePreviewPdf(Library $library): void
